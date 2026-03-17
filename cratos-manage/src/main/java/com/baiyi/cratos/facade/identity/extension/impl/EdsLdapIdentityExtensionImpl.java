@@ -14,7 +14,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsLdapIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.baiyi.cratos.eds.ldap.repo.LdapGroupRepo;
@@ -52,13 +52,13 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
 
     public EdsLdapIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
                                         EdsInstanceWrapper edsInstanceWrapper, UserService userService,
-                                        UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
+                                        UserWrapper userWrapper, EdsProviderHolderFactory edsProviderHolderFactory,
                                         EdsAssetService edsAssetService, EdsFacade edsFacade,
                                         EdsAssetIndexService edsAssetIndexService, TagService tagService,
                                         BusinessTagService businessTagService, LdapPersonRepo ldapPersonRepo,
                                         LdapGroupRepo ldapGroupRepo) {
         super(
-                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
+                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, edsProviderHolderFactory,
                 edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService
         );
         this.ldapPersonRepo = ldapPersonRepo;
@@ -113,7 +113,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         LdapPerson.Person person = EdsIdentityConverter.toLdapPerson(user);
         person.setUserPassword(password);
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsProviderHolderFactory.createHolder(
                     createLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
             if (ldapPersonRepo.checkPersonInLdap(
                     holder.getInstance()
@@ -155,7 +155,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         LdapPerson.Person person = EdsIdentityConverter.toLdapPerson(user);
         person.setUserPassword(password);
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsProviderHolderFactory.createHolder(
                     resetLdapUserPassword.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
             if (!ldapPersonRepo.checkPersonInLdap(
                     holder.getInstance()
@@ -189,9 +189,9 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         }
         final String username = deleteLdapIdentity.getUsername();
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsProviderHolderFactory.createHolder(
                     deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) edsProviderHolderFactory.createHolder(
                     deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             EdsConfigs.Ldap ldap = holder.getInstance()
                     .getConfig();
@@ -239,7 +239,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         final String username = deleteLdapIdentity.getUsername();
         // 删除用户
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsProviderHolderFactory.createHolder(
                     deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
             EdsConfigs.Ldap ldap = ldapPersonHolder.getInstance()
                     .getConfig();
@@ -263,7 +263,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         }
         // 删除组
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) edsProviderHolderFactory.createHolder(
                     deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             EdsConfigs.Ldap ldap = ldapGroupHolder.getInstance()
                     .getConfig();
@@ -293,7 +293,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
             EdsIdentityException.runtime("User {} does not exist.", addLdapUserToGroup.getUsername());
         }
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) edsProviderHolderFactory.createHolder(
                     addLdapUserToGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             final EdsConfigs.Ldap ldap = ldapGroupHolder.getInstance()
                     .getConfig();
@@ -325,7 +325,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
             EdsIdentityException.runtime("User {} does not exist.", removeLdapUserFromGroup.getUsername());
         }
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) edsProviderHolderFactory.createHolder(
                     removeLdapUserFromGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             final EdsConfigs.Ldap ldap = ldapGroupHolder.getInstance()
                     .getConfig();
@@ -354,7 +354,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                                     EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder) {
         // 导入person资产（重写索引）
         LdapPerson.Person person = ldapPersonRepo.findPerson(ldap, EdsIdentityConverter.toLdapPerson(user));
-        EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsProviderHolderFactory.createHolder(
                 hasEdsInstanceId.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
         ldapPersonHolder.getProvider()
                 .importAsset(ldapGroupHolder.getInstance(), person);
@@ -367,7 +367,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
     public Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
         getEdsInstance(queryLdapGroups);
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapGroup.Group>) edsProviderHolderFactory.createHolder(
                     queryLdapGroups.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             final EdsConfigs.Ldap ldap = ldapGroupHolder.getInstance()
                     .getConfig();

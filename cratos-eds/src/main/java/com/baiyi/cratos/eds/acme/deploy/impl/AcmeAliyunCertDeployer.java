@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -40,11 +40,11 @@ public class AcmeAliyunCertDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> 
     private final EdsInstanceService edsInstanceService;
     private final UserService userService;
 
-    public AcmeAliyunCertDeployer(EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+    public AcmeAliyunCertDeployer(EdsProviderHolderFactory edsProviderHolderFactory,
                                   AliyunCertRepo aliyunCertRepo, AcmeDomainService acmeDomainService,
                                   AcmeCertificateDeploymentService acmeCertificateDeploymentService,
                                   EdsInstanceService edsInstanceService, UserService userService) {
-        super(edsInstanceProviderHolderBuilder);
+        super(edsProviderHolderFactory);
         this.aliyunCertRepo = aliyunCertRepo;
         this.acmeDomainService = acmeDomainService;
         this.acmeCertificateDeploymentService = acmeCertificateDeploymentService;

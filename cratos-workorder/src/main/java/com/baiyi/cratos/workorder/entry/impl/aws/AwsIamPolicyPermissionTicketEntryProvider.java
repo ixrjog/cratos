@@ -21,7 +21,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -49,7 +49,7 @@ import java.util.Optional;
 public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryProvider<AwsModel.AwsPolicy, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsIdentityFacade edsIdentityFacade;
     private final AwsIamPolicyRepo awsIamPolicyRepo;
     private final AwsIamUserRepo awsIamUserRepo;
@@ -59,12 +59,12 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
                                                      WorkOrderService workOrderService,
 
                                                      EdsInstanceService edsInstanceService,
-                                                     EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                     EdsProviderHolderFactory edsProviderHolderFactory,
                                                      EdsIdentityFacade edsIdentityFacade,
                                                      AwsIamPolicyRepo awsIamPolicyRepo, AwsIamUserRepo awsIamUserRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsIdentityFacade = edsIdentityFacade;
         this.awsIamPolicyRepo = awsIamPolicyRepo;
         this.awsIamUserRepo = awsIamUserRepo;
@@ -79,7 +79,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsModel.AwsPolicy awsPolicy) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, Policy> policyHolder = (EdsInstanceProviderHolder<EdsConfigs.Aws, Policy>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, Policy> policyHolder = (EdsInstanceProviderHolder<EdsConfigs.Aws, Policy>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_POLICY.name());
         EdsConfigs.Aws aws = policyHolder.getInstance()
                 .getConfig();
@@ -98,7 +98,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
             // 在最后一条entry执行同步资产
             if (isLastEntry(entry)) {
                 User iamUser = awsIamUserRepo.getUser(aws, iamUsername);
-                EdsInstanceProviderHolder<EdsConfigs.Aws, User> iamUserHolder = (EdsInstanceProviderHolder<EdsConfigs.Aws, User>) edsInstanceProviderHolderBuilder.newHolder(
+                EdsInstanceProviderHolder<EdsConfigs.Aws, User> iamUserHolder = (EdsInstanceProviderHolder<EdsConfigs.Aws, User>) edsProviderHolderFactory.createHolder(
                         entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
                 iamUserHolder.importAsset(iamUser);
             }

@@ -18,7 +18,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -47,15 +47,15 @@ import java.util.Optional;
 public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<AliyunOnsV5Model.Topic, WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     public AliyunOnsTopicTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                              WorkOrderTicketService workOrderTicketService,
                                              WorkOrderService workOrderService, EdsInstanceService edsInstanceService,
-                                             EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+                                             EdsProviderHolderFactory edsProviderHolderFactory) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunOnsV5Model.Topic topic) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();

@@ -12,11 +12,10 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
@@ -37,19 +36,19 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AZURE_D
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AZURE, assetTypeOf = EdsAssetTypeEnum.AZURE_USER)
 public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Azure, GraphUserModel.User> {
 
-    public AzureIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
-                                 EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
-                                 UserService userService, UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
-                                 EdsInstanceProviderHolderBuilder holderBuilder) {
+    public AzureIdentityProvider(EdsAssetService edsAssetService, EdsAssetWrapper edsAssetWrapper,
+                                 EdsAssetIndexService edsAssetIndexService, UserService userService,
+                                 UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
+                                 EdsProviderHolderFactory edsProviderHolderFactory) {
         super(
-                edsInstanceService, edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper,
-                instanceWrapper, holderBuilder
+                edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper, instanceWrapper,
+                edsProviderHolderFactory
         );
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Azure config, EdsInstance instance,
-                                                       User user, String password) {
+    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Azure config, EdsInstance instance, User user,
+                                                       String password) {
         throw new CloudIdentityException("Operation not supported.");
     }
 
@@ -70,7 +69,7 @@ public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsConfigs.Azure config = (EdsConfigs.Azure) holderBuilder.newHolder(
+        EdsConfigs.Azure config = (EdsConfigs.Azure) edsProviderHolderFactory.createHolder(
                         asset.getInstanceId(),
                         getAccountAssetType()
                 )
@@ -88,7 +87,7 @@ public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsConfigs.Azure config = (EdsConfigs.Azure) holderBuilder.newHolder(
+        EdsConfigs.Azure config = (EdsConfigs.Azure) edsProviderHolderFactory.createHolder(
                         blockCloudAccount.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getConfig();

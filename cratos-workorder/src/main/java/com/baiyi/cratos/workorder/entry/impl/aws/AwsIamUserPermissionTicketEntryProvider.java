@@ -21,7 +21,7 @@ import com.baiyi.cratos.eds.aws.repo.iam.AwsMFADeviceRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
@@ -57,7 +57,7 @@ import static com.baiyi.cratos.eds.aws.repo.iam.AwsMFADeviceRepo.SERIAL_NUMBER_T
 public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProvider<AwsModel.AwsAccount, WorkOrderTicketParam.AddCreateAwsIamUserTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final UserService userService;
@@ -71,7 +71,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                                                    WorkOrderTicketService workOrderTicketService,
                                                    WorkOrderService workOrderService,
                                                    EdsInstanceService edsInstanceService,
-                                                   EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                   EdsProviderHolderFactory edsProviderHolderFactory,
                                                    BusinessTagFacade businessTagFacade, TagService tagService,
                                                    UserService userService,
                                                    CreateAwsIamUserNoticeSender createAliyunRamUserNoticeSender,
@@ -79,7 +79,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                                                    AwsMFADelegate awsMFADelegate) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.businessTagFacade = businessTagFacade;
         this.tagService = tagService;
         this.userService = userService;
@@ -99,7 +99,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsModel.AwsAccount awsAccount) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();
@@ -207,7 +207,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .map(AwsModel.AwsAccount::getEdsInstance)
                 .map(EdsInstanceVO.EdsInstance::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Eds instanceId is null"));
-        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                 param.getDetail()
                         .getEdsInstance()
                         .getId(), EdsAssetTypeEnum.AWS_IAM_USER.name()

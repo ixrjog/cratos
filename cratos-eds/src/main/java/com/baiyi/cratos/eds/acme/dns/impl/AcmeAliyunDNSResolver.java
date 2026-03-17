@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.acme.dns.impl;
 
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
+import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.eds.acme.dns.BaseAcmeDNSResolver;
 import com.baiyi.cratos.eds.acme.model.AcmeDnsRecord;
@@ -9,7 +10,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.service.EdsAssetService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +34,8 @@ import java.util.stream.Collectors;
 public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
 
     public AcmeAliyunDNSResolver(EdsAssetService edsAssetService,
-                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
-        super(edsAssetService, edsInstanceProviderHolderBuilder);
+                                 EdsProviderHolderFactory edsProviderHolderFactory) {
+        super(edsAssetService, edsProviderHolderFactory);
     }
 
     @Override
@@ -57,11 +58,11 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
         if (CollectionUtils.isEmpty(records)) {
             return;
         }
+        if (records.size() > 2) {
+            EdsAcmeException.runtime("查询到的ACME记录 _acme-challenge 超过2条");
+        }
         // 删除所有匹配的记录
         for (DescribeDomainRecordsResponseBody.Record record : records) {
-            if (records.size() >= 2) {
-                log.info("删除操作被终止：记录超过最大值存在风险");
-            }
             AliyunDnsRepo.deleteDomainRecord(config, record.getRecordId());
             log.info("Deleted ACME challenge record: {}", record.getRr());
         }

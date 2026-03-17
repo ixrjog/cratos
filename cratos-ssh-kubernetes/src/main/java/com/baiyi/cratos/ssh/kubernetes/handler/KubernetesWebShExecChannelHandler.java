@@ -22,7 +22,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
@@ -80,7 +80,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
 
     public KubernetesWebShExecChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
                                              KubernetesRemoteInvoker kubernetesRemoteInvokeHandler,
-                                             EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                             EdsProviderHolderFactory edsProviderHolderFactory,
                                              EdsInstanceService edsInstanceService,
                                              SshAuditProperties sshAuditProperties, PodCommandAuditor podCommandAuditor,
                                              AccessControlFacade accessControlFacade,
@@ -90,7 +90,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                                              NotificationTemplateService notificationTemplateService,
                                              UserService userService, EnvFacade envFacade) {
         super(
-                simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
+                simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsProviderHolderFactory,
                 edsInstanceService, sshAuditProperties, accessControlFacade, applicationService
         );
         this.podCommandAuditor = podCommandAuditor;

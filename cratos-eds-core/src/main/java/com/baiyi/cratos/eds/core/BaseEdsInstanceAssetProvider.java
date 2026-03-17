@@ -17,7 +17,7 @@ import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.AssetUtils;
@@ -55,12 +55,12 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
     private final ConfigCredTemplate configCredTemplate;
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
     private final AssetToBusinessObjectUpdater assetToBusinessObjectUpdater;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory holderBuilder;
 
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
     protected EdsInstanceProviderHolder<C, A> getHolder(int instanceId) {
-        return (EdsInstanceProviderHolder<C, A>) holderBuilder.newHolder(instanceId, getAssetType());
+        return (EdsInstanceProviderHolder<C, A>) holderBuilder.createHolder(instanceId, getAssetType());
     }
 
     /**

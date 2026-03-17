@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.core.config.base.HasAcme;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.config.model.common.EdsCommonConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,11 +27,11 @@ public abstract class BaseAcmeDeployer<Config extends HasEdsConfig> implements A
 
     public static final String CERT_NAME_TPL = "{}-{}-expires-{}";
 
-    protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
 
     @SuppressWarnings("unchecked")
     protected Config getEdsConfig(EdsInstance edsInstance) {
-        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsProviderHolderFactory.createHolder(
                 edsInstance.getId(), getAssetTypeEnum().name());
         return holder.getInstance()
                 .getConfig();

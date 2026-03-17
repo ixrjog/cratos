@@ -23,8 +23,6 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/12 09:53
@@ -54,7 +52,7 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationDeploymentModel.DeleteDeploymentPod deleteDeploymentPod = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
+        // String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
         return MarkdownUtils.createTableRow(instance.getInstanceName(), entry.getNamespace(),
                 deleteDeploymentPod.getAsset()
                         .getName(), deleteDeploymentPod.getPodName(), deleteDeploymentPod.getDeleteOperationTime());

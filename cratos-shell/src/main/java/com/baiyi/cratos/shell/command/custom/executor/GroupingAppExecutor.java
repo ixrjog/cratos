@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
@@ -40,7 +40,7 @@ public class GroupingAppExecutor {
     private final EdsAssetService assetService;
     private final SshShellHelper helper;
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     // 按规则平衡分组副本数
@@ -129,8 +129,8 @@ public class GroupingAppExecutor {
 
     public EdsConfigs.Kubernetes getConfig(int instanceId, String assetType) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
-        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(instanceId,
-                assetType);
+        EdsInstanceProviderHolder<?, ?> providerHolder = edsProviderHolderFactory.createHolder(instanceId,
+                                                                                               assetType);
         return (EdsConfigs.Kubernetes) providerHolder.getInstance()
                 .getConfig();
     }

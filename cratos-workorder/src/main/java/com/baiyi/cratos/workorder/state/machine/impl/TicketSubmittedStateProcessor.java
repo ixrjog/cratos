@@ -9,7 +9,9 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.StateForward;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.annotation.TransitionGuard;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
@@ -27,6 +29,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @TicketStates(state = TicketState.SUBMITTED, target = TicketState.IN_APPROVAL)
+@TransitionGuard
+@StateForward
 public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
     private final WorkOrderApprovalNoticeSender workOrderApprovalNoticeSender;
@@ -39,28 +43,19 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
                                          WorkOrderTicketEntryService workOrderTicketEntryService,
                                          TicketWorkflowFacade ticketWorkflowFacade,
                                          WorkOrderApprovalNoticeSender approvalNotificationHelper) {
-        super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
+        super(
+                userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
-                ticketWorkflowFacade);
+                ticketWorkflowFacade
+        );
         this.workOrderApprovalNoticeSender = approvalNotificationHelper;
-    }
-
-    @Override
-    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-        return true;
-    }
-
-    @Override
-    protected boolean nextState(TicketStateChangeAction action,
-                                TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
-        return true;
     }
 
     @Override
     protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
         // 发布订阅关系
         WorkOrderTicket ticket = getTicketByNo(event.getBody()
-                .getTicketNo());
+                                                       .getTicketNo());
         workOrderTicketSubscriberFacade.publish(ticket);
         // 发送通知
         if (ticket.getNodeId() == 0) {

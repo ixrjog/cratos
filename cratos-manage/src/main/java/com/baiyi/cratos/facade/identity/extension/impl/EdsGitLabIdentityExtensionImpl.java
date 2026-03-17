@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsGitLabIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
@@ -39,11 +39,11 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
 
     public EdsGitLabIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
                                           EdsInstanceWrapper edsInstanceWrapper, UserService userService,
-                                          UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
+                                          UserWrapper userWrapper, EdsProviderHolderFactory edsProviderHolderFactory,
                                           EdsAssetService edsAssetService, EdsFacade edsFacade,
                                           EdsAssetIndexService edsAssetIndexService, TagService tagService,
                                           BusinessTagService businessTagService) {
-        super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
+        super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, edsProviderHolderFactory,
                 edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
     }
 
@@ -82,7 +82,7 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
     public void blockGitLabIdentity(EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity) {
         EdsInstance instance = getEdsInstance(blockGitLabIdentity);
         try {
-            EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User>) edsProviderHolderFactory.createHolder(
                     blockGitLabIdentity.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name());
 
             org.gitlab4j.api.models.User gitLabUser = GitLabUserRepo.getUser(holder.getInstance()
@@ -100,7 +100,7 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
     }
 
     private EdsIdentityVO.AccountLoginDetails toAccountLogin(EdsAsset asset, String username) {
-        EdsConfigs.GitLab gitLab = (EdsConfigs.GitLab) holderBuilder.newHolder(
+        EdsConfigs.GitLab gitLab = (EdsConfigs.GitLab) edsProviderHolderFactory.createHolder(
                         asset.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name())
                 .getInstance()
                 .getConfig();

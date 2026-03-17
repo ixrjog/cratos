@@ -14,7 +14,7 @@ import java.util.Objects;
  * &#064;Date  2025/3/19 13:48
  * &#064;Version 1.0
  */
-public interface TicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry> extends BaseBusiness.IBusinessTypeAnnotate {
+public interface TicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry<?>> extends BaseBusiness.IBusinessTypeAnnotate {
 
     WorkOrderTicketEntry addEntry(EntryParam param);
 

@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
 import com.baiyi.cratos.service.CredentialService;
@@ -24,22 +24,22 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public abstract class BaseEdsConfigLoader<C extends HasEdsConfig> {
 
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory holderBuilder;
     private final EdsInstanceService edsInstanceService;
     private final EdsConfigService edsConfigService;
     private final ConfigCredTemplate configCredTemplate;
     private final CredentialService credService;
 
     public void importInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
-        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(importInstanceAsset.getInstanceId(),
-                importInstanceAsset.getAssetType());
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.createHolder(importInstanceAsset.getInstanceId(),
+                                                                                    importInstanceAsset.getAssetType());
         providerHolder.importAssets();
     }
 
     @SuppressWarnings("unchecked")
     public C getConfig(int instanceId, String assetType) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
-        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(instanceId, assetType);
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.createHolder(instanceId, assetType);
         return (C) providerHolder.getInstance()
                 .getConfig();
     }

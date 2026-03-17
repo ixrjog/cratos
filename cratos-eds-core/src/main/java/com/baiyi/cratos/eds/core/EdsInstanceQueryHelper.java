@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TagService;
@@ -38,7 +38,7 @@ public class EdsInstanceQueryHelper {
     private final EdsInstanceService edsInstanceService;
     private final TagService tagService;
     private final BusinessTagService businessTagService;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory holderBuilder;
 
     public List<EdsInstance> queryInstance(EdsInstanceTypeEnum[] instanceTypes, String tag) {
         return Arrays.stream(instanceTypes)
@@ -134,7 +134,7 @@ public class EdsInstanceQueryHelper {
     public List<? extends EdsInstanceProviderHolder<?, ?>> buildHolder(List<EdsInstance> edsInstanceList,
                                                                        String assetType) {
         return edsInstanceList.stream()
-                .map(e -> holderBuilder.newHolder(e.getId(), assetType))
+                .map(e -> holderBuilder.createHolder(e.getId(), assetType))
                 .toList();
     }
 

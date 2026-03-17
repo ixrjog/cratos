@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.shell.PromptColor;
@@ -55,19 +55,19 @@ public class EdsKubernetesDeploymentIstioCommand extends AbstractCommand {
 
     private final EdsAssetService edsAssetService;
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     public static final String SIDECAR_ISTIO_IO_INJECT = "sidecar.istio.io/inject";
     public final static String[] TABLE_FIELD_NAME = {"Eds Instance", "Namespace", "Deployment", "Istio"};
 
     public EdsKubernetesDeploymentIstioCommand(SshShellHelper helper, SshShellProperties properties,
                                                EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
-                                               EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+                                               EdsProviderHolderFactory edsProviderHolderFactory) {
         super(helper, properties, properties.getCommands()
                 .getAsset());
         this.edsInstanceService = edsInstanceService;
         this.edsAssetService = edsAssetService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
     }
 
     @ShellMethod(key = COMMAND_ISTIO_LIST, value = "List istio configuration")
@@ -87,7 +87,7 @@ public class EdsKubernetesDeploymentIstioCommand extends AbstractCommand {
             helper.printError("Eds instance incorrect type.");
             return;
         }
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 edsInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         // 不分页
         EdsInstanceParam.AssetPageQuery pageQuery = EdsInstanceParam.AssetPageQuery.builder()

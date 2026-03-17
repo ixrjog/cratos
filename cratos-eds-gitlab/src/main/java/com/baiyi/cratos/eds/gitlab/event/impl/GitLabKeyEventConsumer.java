@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.gitlab.event.BaseGitLabEventConsumer;
 import com.baiyi.cratos.eds.gitlab.event.enums.GitLabEventName;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabSshKeyRepo;
@@ -34,7 +34,7 @@ public class GitLabKeyEventConsumer extends BaseGitLabEventConsumer<SshKey> {
 
     private final static GitLabEventName[] EVENT_NAME_ENUMS = {GitLabEventName.KEY_CREATE, GitLabEventName.KEY_DESTROY};
 
-    public GitLabKeyEventConsumer(EdsInstanceProviderHolderBuilder holderBuilder,
+    public GitLabKeyEventConsumer(EdsProviderHolderFactory holderBuilder,
                                   EdsAssetIndexService edsAssetIndexService, EdsAssetService edsAssetService) {
         super(holderBuilder, edsAssetIndexService, edsAssetService);
     }

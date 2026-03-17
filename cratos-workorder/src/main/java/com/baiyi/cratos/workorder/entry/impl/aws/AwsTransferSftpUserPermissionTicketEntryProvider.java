@@ -23,7 +23,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsTransferRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -63,7 +63,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
     private final BusinessTagService businessTagService;
     private final TagService tagService;
     private final EdsAssetService edsAssetService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final BusinessTagFacade businessTagFacade;
 
     interface ConfigMap {
@@ -77,14 +77,14 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
                                                             EdsInstanceService edsInstanceService,
                                                             BusinessTagService businessTagService,
                                                             TagService tagService, EdsAssetService edsAssetService,
-                                                            EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                            EdsProviderHolderFactory edsProviderHolderFactory,
                                                             BusinessTagFacade businessTagFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.businessTagService = businessTagService;
         this.tagService = tagService;
         this.edsAssetService = edsAssetService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.businessTagFacade = businessTagFacade;
     }
 
@@ -92,7 +92,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsTransferModel.SFTPUser sftpUser) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_TRANSFER_SERVER.name());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();
@@ -148,7 +148,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
         AwsTransferModel.SFTPUser sftpUser = Optional.of(param)
                 .map(WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry::getDetail)
                 .orElseThrow(() -> new WorkOrderTicketException("SFTP user detail is null"));
-        EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_TRANSFER_SERVER.name());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();
@@ -206,10 +206,9 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
-        AwsTransferModel.SFTPUser sftpUser = loadAs(entry);
-        String endpoint = sftpUser.getTransferServerEndpoint();
-        String transferLogin = Joiner.on("@")
-                .join(sftpUser.getUsername(), endpoint);
+        // AwsTransferModel.SFTPUser sftpUser = loadAs(entry);
+        // String endpoint = sftpUser.getTransferServerEndpoint();
+        // String transferLogin = Joiner.on("@").join(sftpUser.getUsername(), endpoint);
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())

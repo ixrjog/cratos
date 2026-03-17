@@ -20,7 +20,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -55,7 +55,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
     private final EdsInstanceService edsInstanceService;
     private final AliyunRamUserRepo aliyunRamUserRepo;
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetIndexService edsAssetIndexService;
 
     public AliyunRamPolicyPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
@@ -64,13 +64,13 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
                                                         EdsInstanceService edsInstanceService,
                                                         AliyunRamUserRepo aliyunRamUserRepo,
                                                         AliyunRamPolicyRepo aliyunRamPolicyRepo,
-                                                        EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                        EdsProviderHolderFactory edsProviderHolderFactory,
                                                         EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
@@ -83,7 +83,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunModel.AliyunPolicy aliyunPolicy) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy> policyHolder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy> policyHolder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_POLICY.name());
         EdsConfigs.Aliyun aliyun = policyHolder.getInstance()
                 .getConfig();
@@ -105,7 +105,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
             }
             // 在最后一条entry执行
             if (isLastEntry(entry)) {
-                EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> ramUserHolder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+                EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> ramUserHolder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                         entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
                 ramUserHolder.importAsset(user);
             }
@@ -126,7 +126,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
                 .map(AliyunModel.AliyunPolicy::getAsset)
                 .map(EdsAssetVO.Asset::getInstanceId)
                 .orElseThrow(() -> new WorkOrderTicketException("Aliyun RAM policy asset is null"));
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetPolicyResponse.Policy>) edsProviderHolderFactory.createHolder(
                 instanceId, EdsAssetTypeEnum.ALIYUN_RAM_POLICY.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();

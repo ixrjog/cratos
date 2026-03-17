@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.baiyi.cratos.eds.ldap.repo.LdapPersonRepo;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -49,7 +49,7 @@ import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.USER_RESET_P
 @WorkOrderKey(key = WorkOrderKeys.USER_RESET_PASSWORD)
 public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddResetUserPasswordTicketEntry> {
 
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsInstanceService edsInstanceService;
     private final EdsIdentityFacade edsIdentityFacade;
     private final WorkOrderService workOrderService;
@@ -60,13 +60,13 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
     public UserResetPasswordTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                 WorkOrderTicketService workOrderTicketService,
                                                 WorkOrderService workOrderService,
-                                                EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                EdsProviderHolderFactory edsProviderHolderFactory,
                                                 EdsInstanceService edsInstanceService,
                                                 EdsIdentityFacade edsIdentityFacade, UserService userService,
                                                 ResetUserPasswordNoticeSender resetUserPasswordNoticeSender,
                                                 LdapPersonRepo ldapPersonRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsInstanceService = edsInstanceService;
         this.edsIdentityFacade = edsIdentityFacade;
         this.workOrderService = workOrderService;
@@ -90,7 +90,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
         }
         String newPassword = PasswordGenerator.generatePassword();
         for (EdsIdentityVO.LdapIdentity ldapIdentity : ldapIdentities) {
-            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsInstanceProviderHolderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsProviderHolderFactory.createHolder(
                     ldapIdentity.getInstance()
                             .getId(), EdsAssetTypeEnum.LDAP_PERSON.name());
             LdapPerson.Person person = LdapPerson.Person.builder()

@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.zabbix.result.ZbxEventResult;
@@ -46,7 +46,7 @@ public class AlertNotificationSender {
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory holderBuilder;
     private final BusinessTagService businessTagService;
     private final TagService tagService;
 
@@ -54,7 +54,7 @@ public class AlertNotificationSender {
     protected String language;
 
     public void sendAlertNotice(EdsAsset asset) {
-        EdsInstanceProviderHolder<EdsConfigs.Zabbix, ZbxEventResult.Event> zbxEventHolder = (EdsInstanceProviderHolder<EdsConfigs.Zabbix, ZbxEventResult.Event>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Zabbix, ZbxEventResult.Event> zbxEventHolder = (EdsInstanceProviderHolder<EdsConfigs.Zabbix, ZbxEventResult.Event>) holderBuilder.createHolder(
                 asset.getInstanceId(), EdsAssetTypeEnum.ZBX_EVENT.name());
         EdsConfigs.Zabbix zbx = zbxEventHolder.getInstance()
                 .getConfig();

@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.annotation.ToFQDN;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetService;
 import org.shredzone.acme4j.Order;
 import org.shredzone.acme4j.challenge.Dns01Challenge;
@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, ResourceRecordSet> {
 
     public AcmeAwsRoute53Resolver(EdsAssetService edsAssetService,
-                                  EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
-        super(edsAssetService, edsInstanceProviderHolderBuilder);
+                                  EdsProviderHolderFactory edsProviderHolderFactory) {
+        super(edsAssetService, edsProviderHolderFactory);
     }
 
     @Override

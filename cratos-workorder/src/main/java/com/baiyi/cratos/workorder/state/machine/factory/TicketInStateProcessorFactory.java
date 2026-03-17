@@ -15,7 +15,7 @@ import java.util.Optional;
  * @Version 1.0
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class TicketInStateProcessorFactory<Event extends WorkOrderTicketParam.HasTicketNo> {
+public class TicketInStateProcessorFactory {
 
     private static TicketStateProcessor stateProcessor;
 
@@ -24,7 +24,7 @@ public class TicketInStateProcessorFactory<Event extends WorkOrderTicketParam.Ha
         TicketInStateProcessorFactory.stateProcessor = stateProcessor;
     }
 
-    public static TicketStateProcessor getByState(TicketState ticketState) {
+    public static  TicketStateProcessor getByState(TicketState ticketState) {
         return Optional.ofNullable(stateProcessor.getByState(ticketState))
                 .orElseThrow(() -> new IllegalStateException(
                         "No state processor found for ticket state: " + ticketState));

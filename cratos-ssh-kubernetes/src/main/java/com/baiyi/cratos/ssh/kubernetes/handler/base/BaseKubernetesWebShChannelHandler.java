@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.facade.AccessControlFacade;
@@ -33,7 +33,7 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
 
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
     protected final KubernetesRemoteInvoker kubernetesRemoteInvokeHandler;
-    protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
     protected final EdsInstanceService edsInstanceService;
     protected final SshAuditProperties sshAuditProperties;
     private final AccessControlFacade accessControlFacade;
@@ -45,7 +45,7 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
         if (kubernetesMap.containsKey(edsInstanceId)) {
             return kubernetesMap.get(edsInstanceId);
         }
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 edsInstanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         kubernetesMap.put(edsInstanceId, holder.getInstance()
                 .getConfig());

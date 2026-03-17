@@ -1,6 +1,9 @@
 package com.baiyi.cratos.eds.dns.impl;
 
-import com.amazonaws.services.route53.model.*;
+import com.amazonaws.services.route53.model.Change;
+import com.amazonaws.services.route53.model.ChangeAction;
+import com.amazonaws.services.route53.model.ResourceRecord;
+import com.amazonaws.services.route53.model.ResourceRecordSet;
 import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -9,8 +12,6 @@ import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
-import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.eds.aws.enums.Route53RoutingPolicyEnum;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -18,19 +19,20 @@ import com.baiyi.cratos.eds.core.annotation.ToFQDN;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
+import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -46,8 +48,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
 
     public AwsRoute53Resolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                               TrafficRecordTargetService trafficRecordTargetService,
-                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
-        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsInstanceProviderHolderBuilder);
+                              EdsProviderHolderFactory edsProviderHolderFactory) {
+        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsProviderHolderFactory);
     }
 
     @Override

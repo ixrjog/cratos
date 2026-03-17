@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseEdsInspectionTask;
@@ -54,13 +54,13 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
                                                DingtalkService dingtalkService,
                                                EdsInstanceQueryHelper edsInstanceQueryHelper,
                                                EdsConfigService edsConfigService,
-                                               EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                               EdsProviderHolderFactory edsProviderHolderFactory,
                                                EdsInstanceService edsInstanceService,
                                                ConfigCredTemplate configCredTemplate,
                                                CredentialService credentialService, EdsAssetService edsAssetService) {
         super(
                 notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService,
-                edsInstanceProviderHolderBuilder, edsInstanceService, configCredTemplate, credentialService
+                edsProviderHolderFactory, edsInstanceService, configCredTemplate, credentialService
         );
         this.edsAssetService = edsAssetService;
     }

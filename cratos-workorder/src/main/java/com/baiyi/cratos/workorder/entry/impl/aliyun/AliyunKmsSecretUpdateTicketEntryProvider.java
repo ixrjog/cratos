@@ -19,7 +19,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -53,7 +53,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryProvider<AliyunKmsModel.UpdateSecret, WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetIndexService edsAssetIndexService;
     private final StringEncryptor stringEncryptor;
     private final LanguageUtils languageUtils;
@@ -62,12 +62,12 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
                                                     WorkOrderTicketService workOrderTicketService,
                                                     WorkOrderService workOrderService,
                                                     EdsInstanceService edsInstanceService,
-                                                    EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                    EdsProviderHolderFactory edsProviderHolderFactory,
                                                     EdsAssetIndexService edsAssetIndexService,
                                                     StringEncryptor stringEncryptor, LanguageUtils languageUtils) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsAssetIndexService = edsAssetIndexService;
         this.stringEncryptor = stringEncryptor;
         this.languageUtils = languageUtils;
@@ -79,7 +79,7 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
                                     WorkOrderTicketEntry entry) {
         AliyunKmsModel.UpdateSecret updateSecret = param.getDetail();
         // 校验Secret是否存在
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
@@ -109,7 +109,7 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
                 .build();
         // 再次验证，避免重复申请versionId冲突
         this.verifyEntryParam(param, entry);
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
@@ -136,8 +136,8 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
         if (instance == null) {
             WorkOrderTicketException.runtime("Instance not found: " + instanceId);
         }
-        WorkOrderTicket ticket = workOrderTicketService.getById(addUpdateAliyunKmsSecretTicketEntry.getTicketId());
-        String username = ticket.getUsername();
+        // WorkOrderTicket ticket = workOrderTicketService.getById(addUpdateAliyunKmsSecretTicketEntry.getTicketId());
+        // String username = ticket.getUsername();
         EdsAssetIndex endpointIndex = edsAssetIndexService.getByAssetIdAndName(
                 addUpdateAliyunKmsSecretTicketEntry.getDetail()
                         .getSecret()

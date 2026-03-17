@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
@@ -50,7 +50,7 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                              EdsAssetIndexFacade edsAssetIndexFacade,
                                              AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                             EdsInstanceProviderHolderBuilder holderBuilder,
+                                             EdsProviderHolderFactory holderBuilder,
                                              KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                              KubernetesServiceRepo kubernetesServiceRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,

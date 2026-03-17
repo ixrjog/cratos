@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesException;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNodeRepo;
 import com.baiyi.cratos.facade.kubernetes.KubernetesNodeDetailsFacade;
@@ -36,7 +36,7 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
 
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceWrapper edsInstanceWrapper;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final KubernetesNodeRepo kubernetesNodeRepo;
 
     @Override
@@ -53,7 +53,7 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
             EdsKubernetesNodeParam.QueryEdsKubernetesNodeDetails queryEdsKubernetesNodeDetails) {
         try {
             EdsInstance kubernetesInstance = getEdsInstanceByName(queryEdsKubernetesNodeDetails.getInstanceName());
-            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Node> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Node>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Node> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Node>) edsProviderHolderFactory.createHolder(
                     kubernetesInstance.getId(), EdsAssetTypeEnum.KUBERNETES_NODE.name());
             EdsConfigs.Kubernetes kubernetes = holder.getInstance()
                     .getConfig();

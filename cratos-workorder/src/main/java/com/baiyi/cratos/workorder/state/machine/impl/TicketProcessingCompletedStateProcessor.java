@@ -9,7 +9,9 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.StateForward;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.annotation.TransitionGuard;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
@@ -29,6 +31,8 @@ import java.util.List;
  */
 @Component
 @TicketStates(state = TicketState.PROCESSING_COMPLETED, target = TicketState.COMPLETED)
+@TransitionGuard
+@StateForward
 public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
     private final WorkOrderCompletionNoticeSender workOrderCompletionNoticeSender;
@@ -45,16 +49,6 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
         this.workOrderCompletionNoticeSender = applicantNotificationHelper;
-    }
-
-    @Override
-    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-        return true;
-    }
-
-    protected boolean nextState(TicketStateChangeAction action,
-                                TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
-        return true;
     }
 
     @Override

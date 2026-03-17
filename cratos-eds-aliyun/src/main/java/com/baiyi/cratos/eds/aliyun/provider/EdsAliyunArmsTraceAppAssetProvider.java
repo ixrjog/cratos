@@ -16,7 +16,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.EnvFacade;
@@ -54,9 +54,9 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
                                               ConfigCredTemplate configCredTemplate,
                                               EdsAssetIndexFacade edsAssetIndexFacade,
                                               AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                              EdsInstanceProviderHolderBuilder holderBuilder, EnvFacade envFacade) {
+                                              EdsProviderHolderFactory edsProviderHolderFactory, EnvFacade envFacade) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+                assetToBusinessObjectUpdater, edsProviderHolderFactory);
         this.envFacade = envFacade;
     }
 

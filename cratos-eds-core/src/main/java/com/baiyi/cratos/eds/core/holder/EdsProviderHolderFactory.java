@@ -21,12 +21,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EdsInstanceProviderHolderBuilder {
+public class EdsProviderHolderFactory {
 
     private final EdsInstanceService edsInstanceService;
     private final EdsConfigService edsConfigService;
 
-    public EdsInstanceProviderHolder<?, ?> newHolder(Integer instanceId, String assetType) {
+    public EdsInstanceProviderHolder<?, ?> createHolder(Integer instanceId, String assetType) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         HasEdsConfig edsConfigModel = null;
         if (IdentityUtils.hasIdentity(edsInstance.getConfigId())) {

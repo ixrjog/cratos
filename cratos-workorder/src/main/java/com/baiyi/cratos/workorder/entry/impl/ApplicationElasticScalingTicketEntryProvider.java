@@ -97,7 +97,6 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
-        //ApplicationReplicasModel.ApplicationConfigurationChange configurationChange = loadAs(entry);
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
@@ -247,7 +246,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationReplicasModel.ApplicationConfigurationChange applicationConfigurationChange) throws WorkOrderTicketException {
-        // 只读条目无需处理
+        // ReadOnly 只读条目无需处理
     }
 
     @Override

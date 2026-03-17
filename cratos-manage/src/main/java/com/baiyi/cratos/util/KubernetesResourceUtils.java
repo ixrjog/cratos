@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -42,13 +42,13 @@ public class KubernetesResourceUtils {
     private static final String MEMORY = "memory";
     private static final String EMPTY_VALUE = "--";
 
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetService edsAssetService;
 
     public String printKubernetesResourceTable(int instanceId) {
         List<EdsAsset> assets = edsAssetService.queryInstanceAssets(
                 instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
 
         PrettyTable prettyTable = PrettyTable.fieldNames(TABLE_FIELD_NAME);

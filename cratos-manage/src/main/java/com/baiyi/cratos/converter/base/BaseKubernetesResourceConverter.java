@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public abstract class BaseKubernetesResourceConverter<Resource, S> implements KubernetesResourceConverter<Resource> {
 
     protected final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     protected final EdsAssetService edsAssetService;
 
     abstract protected EdsAssetTypeEnum getEdsAssetType();
@@ -50,8 +50,8 @@ public abstract class BaseKubernetesResourceConverter<Resource, S> implements Ku
     private EdsInstanceProviderHolder<EdsConfigs.Kubernetes, S> getEdsInstanceProvider(int instanceId) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         EdsAssetTypeEnum edsAssetTypeEnum = getEdsAssetType();
-        return (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, S>) holderBuilder.newHolder(instanceId,
-                edsAssetTypeEnum.name());
+        return (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, S>) edsProviderHolderFactory.createHolder(instanceId,
+                                                                                                           edsAssetTypeEnum.name());
     }
 
 }

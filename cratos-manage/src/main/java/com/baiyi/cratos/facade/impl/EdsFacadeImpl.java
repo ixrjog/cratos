@@ -28,7 +28,7 @@ import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.EdsScheduleFacade;
@@ -73,7 +73,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsConfigWrapper edsConfigWrapper;
     private final BusinessCredentialFacade businessCredentialFacade;
     private final EdsAssetWrapper edsAssetWrapper;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetIndexService edsAssetIndexService;
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
     private final EdsScheduleFacade edsScheduleFacade;
@@ -312,7 +312,7 @@ public class EdsFacadeImpl implements EdsFacade {
      */
     @Override
     public EdsInstanceProviderHolder<?, ?> buildHolder(Integer instanceId, String assetType) {
-        return holderBuilder.newHolder(instanceId, assetType);
+        return edsProviderHolderFactory.createHolder(instanceId, assetType);
     }
 
     @Override

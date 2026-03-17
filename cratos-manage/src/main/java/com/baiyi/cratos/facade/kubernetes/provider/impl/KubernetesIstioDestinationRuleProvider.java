@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.provider.impl;
 
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.EdsIstioDestinationRuleAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIstioDestinationRuleRepo;
 import com.baiyi.cratos.facade.kubernetes.provider.BaseKubernetesResourceProvider;
@@ -20,9 +20,9 @@ public class KubernetesIstioDestinationRuleProvider extends BaseKubernetesResour
     private final KubernetesIstioDestinationRuleRepo kubernetesIstioDestinationRuleRepo;
 
     public KubernetesIstioDestinationRuleProvider(EdsInstanceService edsInstanceService,
-                                                  EdsInstanceProviderHolderBuilder holderBuilder,
+                                                  EdsProviderHolderFactory edsProviderHolderFactory,
                                                   KubernetesIstioDestinationRuleRepo kubernetesIstioDestinationRuleRepo) {
-        super(edsInstanceService, holderBuilder);
+        super(edsInstanceService, edsProviderHolderFactory);
         this.kubernetesIstioDestinationRuleRepo = kubernetesIstioDestinationRuleRepo;
     }
 

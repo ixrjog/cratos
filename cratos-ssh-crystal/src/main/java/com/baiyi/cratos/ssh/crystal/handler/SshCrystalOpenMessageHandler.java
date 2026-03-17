@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
@@ -53,11 +53,11 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                                         SshAuditProperties sshAuditProperties,
                                         SimpleSshSessionFacade simpleSshSessionFacade,
                                         SshProxyHostHolder proxyHostHolder,
-                                        EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+                                        EdsProviderHolderFactory edsProviderHolderFactory) {
         super(
                 edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
-                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder, edsInstanceProviderHolderBuilder
+                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder, edsProviderHolderFactory
         );
     }
 

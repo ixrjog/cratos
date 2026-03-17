@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.provider.impl;
 
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.EdsKubernetesDeploymentAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import com.baiyi.cratos.facade.kubernetes.provider.BaseKubernetesResourceProvider;
@@ -20,9 +20,9 @@ public class KubernetesIngressProvider extends BaseKubernetesResourceProvider<Ed
     private final KubernetesIngressRepo kubernetesIngressRepo;
 
     public KubernetesIngressProvider(EdsInstanceService edsInstanceService,
-                                     EdsInstanceProviderHolderBuilder holderBuilder,
+                                     EdsProviderHolderFactory edsProviderHolderFactory,
                                      KubernetesIngressRepo kubernetesIngressRepo) {
-        super(edsInstanceService, holderBuilder);
+        super(edsInstanceService, edsProviderHolderFactory);
         this.kubernetesIngressRepo = kubernetesIngressRepo;
     }
 

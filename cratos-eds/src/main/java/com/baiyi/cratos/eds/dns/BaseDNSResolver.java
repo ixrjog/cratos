@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
@@ -31,7 +31,7 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
     protected final EdsAssetService edsAssetService;
     protected final TrafficRouteService trafficRouteService;
     protected final TrafficRecordTargetService trafficRecordTargetService;
-    protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
 
     private static final int MAX_LOAD_BALANCING = 3;
 
@@ -79,7 +79,7 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
 
     @SuppressWarnings("unchecked")
     protected Config getEdsConfig(TrafficRoute trafficRoute, EdsAssetTypeEnum assetTypeEnum) {
-        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsProviderHolderFactory.createHolder(
                 trafficRoute.getDnsResolverInstanceId(), assetTypeEnum.name());
         return holder.getInstance()
                 .getConfig();

@@ -17,7 +17,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
@@ -71,7 +71,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected final SshAuditProperties sshAuditProperties;
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
     private final SshProxyHostHolder proxyHostHolder;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     @Value("${cratos.language:en-us}")
     protected String language;
@@ -172,7 +172,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
         }
         EdsAssetTypeEnum assetType = EdsAssetTypeEnum.valueOf(edsAsset.getAssetType());
         if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(assetType)) {
-            EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) edsInstanceProviderHolderBuilder.newHolder(
+            EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) edsProviderHolderFactory.createHolder(
                     edsAsset.getInstanceId(), edsAsset.getAssetType());
             Node node = edsInstanceProviderHolder.getProvider()
                     .assetLoadAs(edsAsset.getOriginalModel());

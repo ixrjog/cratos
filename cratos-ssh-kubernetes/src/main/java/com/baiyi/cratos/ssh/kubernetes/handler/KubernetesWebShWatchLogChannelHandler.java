@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.facade.AccessControlFacade;
@@ -42,12 +42,12 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
 
     public KubernetesWebShWatchLogChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
                                                  KubernetesRemoteInvoker kubernetesRemoteInvokeHandler,
-                                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                 EdsProviderHolderFactory edsProviderHolderFactory,
                                                  EdsInstanceService edsInstanceService,
                                                  SshAuditProperties sshAuditProperties,
                                                  AccessControlFacade accessControlFacade,
                                                  ApplicationService applicationService) {
-        super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
+        super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsProviderHolderFactory,
                 edsInstanceService, sshAuditProperties, accessControlFacade, applicationService);
     }
 

@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.gitlab.event.enums.GitLabEventName;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public abstract class BaseGitLabEventConsumer<T> implements GitLabEventConsumer, InitializingBean {
 
-    protected final EdsInstanceProviderHolderBuilder holderBuilder;
+    protected final EdsProviderHolderFactory holderBuilder;
     protected final EdsAssetIndexService edsAssetIndexService;
     protected final EdsAssetService edsAssetService;
 
@@ -52,7 +52,7 @@ public abstract class BaseGitLabEventConsumer<T> implements GitLabEventConsumer,
     @Async
     @SuppressWarnings("unchecked")
     public void consumeEventV4(EdsInstance instance, GitLabEventParam.SystemHook systemHook) {
-        EdsInstanceProviderHolder<EdsConfigs.GitLab, GitLabEventParam.SystemHook> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, GitLabEventParam.SystemHook>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.GitLab, GitLabEventParam.SystemHook> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, GitLabEventParam.SystemHook>) holderBuilder.createHolder(
                 instance.getId(), EdsAssetTypeEnum.GITLAB_SYSTEM_HOOK.name());
         // 导入资产
         EdsAsset asset = holder.importAsset(systemHook);
@@ -63,7 +63,7 @@ public abstract class BaseGitLabEventConsumer<T> implements GitLabEventConsumer,
 
     @SuppressWarnings("unchecked")
     protected EdsInstanceProviderHolder<EdsConfigs.GitLab, T> getHolder(EdsInstance instance) {
-        return (EdsInstanceProviderHolder<EdsConfigs.GitLab, T>) holderBuilder.newHolder(
+        return (EdsInstanceProviderHolder<EdsConfigs.GitLab, T>) holderBuilder.createHolder(
                 instance.getId(), getAssetType());
     }
 

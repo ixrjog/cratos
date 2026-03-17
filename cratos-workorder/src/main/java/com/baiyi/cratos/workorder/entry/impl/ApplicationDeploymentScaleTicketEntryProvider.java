@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -23,11 +23,11 @@ public class ApplicationDeploymentScaleTicketEntryProvider extends DeploymentSca
     public ApplicationDeploymentScaleTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                          WorkOrderTicketService workOrderTicketService,
                                                          WorkOrderService workOrderService,
-                                                         EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                         EdsProviderHolderFactory edsProviderHolderFactory,
                                                          KubernetesDeploymentRepo kubernetesDeploymentRepo,
                                                          EdsInstanceService edsInstanceService,
                                                          EdsAssetIndexService edsAssetIndexService) {
-        super(workOrderTicketEntryService, workOrderTicketService, workOrderService, edsInstanceProviderHolderBuilder,
+        super(workOrderTicketEntryService, workOrderTicketService, workOrderService, edsProviderHolderFactory,
                 kubernetesDeploymentRepo, edsInstanceService, edsAssetIndexService);
     }
 

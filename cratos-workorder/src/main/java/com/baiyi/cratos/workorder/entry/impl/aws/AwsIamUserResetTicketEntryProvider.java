@@ -22,7 +22,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -54,7 +54,7 @@ import static com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo.NO_PASSWORD_RESET
 @WorkOrderKey(key = WorkOrderKeys.AWS_IAM_USER_RESET)
 public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<AwsModel.ResetAwsAccount, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry> {
 
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final UserService userService;
     private final WorkOrderService workOrderService;
     private final EdsIdentityFacade edsIdentityFacade;
@@ -64,12 +64,12 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
     public AwsIamUserResetTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                               WorkOrderTicketService workOrderTicketService,
                                               WorkOrderService workOrderService,
-                                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                              EdsProviderHolderFactory edsProviderHolderFactory,
                                               UserService userService, EdsIdentityFacade edsIdentityFacade,
                                               AwsIamUserRepo awsIamUserRepo,
                                               ResetAwsIamUserNoticeSender resetAwsIamUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.userService = userService;
         this.workOrderService = workOrderService;
         this.edsIdentityFacade = edsIdentityFacade;
@@ -86,7 +86,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsModel.ResetAwsAccount resetAwsAccount) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();

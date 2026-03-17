@@ -16,7 +16,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -47,7 +47,7 @@ import java.util.Optional;
 @WorkOrderKey(key = WorkOrderKeys.ALIMAIL_USER_RESET)
 public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntryProvider<EdsIdentityVO.MailAccount, WorkOrderTicketParam.AddResetAlimailUserTicketEntry> {
 
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsInstanceService edsInstanceService;
     private final EdsIdentityFacade edsIdentityFacade;
     private final WorkOrderService workOrderService;
@@ -57,13 +57,13 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
     public AlimailUserResetPasswordTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                        WorkOrderTicketService workOrderTicketService,
                                                        WorkOrderService workOrderService,
-                                                       EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                       EdsProviderHolderFactory edsProviderHolderFactory,
                                                        EdsInstanceService edsInstanceService,
                                                        EdsIdentityFacade edsIdentityFacade,
                                                        UserService userService,
                                                        ResetAlimailUserNoticeSender resetAlimailUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsInstanceService = edsInstanceService;
         this.edsIdentityFacade = edsIdentityFacade;
         this.workOrderService = workOrderService;
@@ -80,7 +80,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 EdsIdentityVO.MailAccount mailAccount) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Alimail, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Alimail, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Alimail, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Alimail, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIMAIL_USER.name());
         EdsConfigs.Alimail alimail = holder.getInstance()
                 .getConfig();

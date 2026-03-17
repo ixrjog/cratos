@@ -59,7 +59,7 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
     public String getTableTitle(WorkOrderTicketEntry entry) {
         List<Env> envs = queryEnv(GROUP_VALUE);
         StringBuilder row = new StringBuilder("| Group Name |");
-        envs.forEach(e -> row.append(" ")
+        envs.forEach(e -> row.append(" Env:")
                 .append(e.getEnvName()
                         .toUpperCase())
                 .append(" |"));

@@ -19,7 +19,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
@@ -54,7 +54,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
 
     private final EdsInstanceService edsInstanceService;
     private final AliyunRamUserRepo aliyunRamUserRepo;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final UserService userService;
@@ -66,14 +66,14 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                                                       WorkOrderService workOrderService,
                                                       EdsInstanceService edsInstanceService,
                                                       AliyunRamUserRepo aliyunRamUserRepo,
-                                                      EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                      EdsProviderHolderFactory edsProviderHolderFactory,
                                                       BusinessTagFacade businessTagFacade, TagService tagService,
                                                       UserService userService,
                                                       CreateAliyunRamUserNoticeSender createAliyunRamUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.businessTagFacade = businessTagFacade;
         this.tagService = tagService;
         this.userService = userService;
@@ -91,7 +91,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunModel.AliyunAccount aliyunAccount) throws WorkOrderTicketException {
         // 创建Aliyun RAM
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
@@ -180,7 +180,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                 .map(AliyunModel.AliyunAccount::getEdsInstance)
                 .map(EdsInstanceVO.EdsInstance::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Eds instanceId is null"));
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 param.getDetail()
                         .getEdsInstance()
                         .getId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name()

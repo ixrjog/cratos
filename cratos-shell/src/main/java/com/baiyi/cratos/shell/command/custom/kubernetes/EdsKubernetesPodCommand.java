@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -80,7 +80,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
     private static final String COMMAND_POD_VIEW_LOG = GROUP + "-view-log";
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final KubernetesPodRepo kubernetesPodRepo;
     private final KubernetesClientBuilder kubernetesClientBuilder;
     private final SimpleSshSessionFacade simpleSshSessionFacade;
@@ -97,14 +97,14 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
 
     public EdsKubernetesPodCommand(SshShellHelper helper, SshShellProperties properties,
                                    EdsInstanceService edsInstanceService,
-                                   EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                   EdsProviderHolderFactory edsProviderHolderFactory,
                                    KubernetesPodRepo kubernetesPodRepo, KubernetesClientBuilder kubernetesClientBuilder,
                                    SimpleSshSessionFacade simpleSshSessionFacade, SshAuditProperties sshAuditProperties,
                                    PodCommandAuditor podCommandAuditor) {
         super(helper, properties, properties.getCommands()
                 .getAsset());
         this.edsInstanceService = edsInstanceService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.kubernetesPodRepo = kubernetesPodRepo;
         this.kubernetesClientBuilder = kubernetesClientBuilder;
         this.simpleSshSessionFacade = simpleSshSessionFacade;
@@ -131,7 +131,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
             helper.printError("Eds instance incorrect type.");
             return;
         }
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 edsInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         EdsConfigs.Kubernetes kubernetes = edsInstanceProviderHolder.getInstance()
                 .getConfig();

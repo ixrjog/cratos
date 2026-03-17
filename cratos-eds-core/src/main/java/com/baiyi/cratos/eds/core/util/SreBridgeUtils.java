@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import static com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum.SRE_EVENTBRIDGE_E
 public class SreBridgeUtils {
 
     private static EdsInstanceService edsInstanceService;
-    private static EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private static EdsProviderHolderFactory edsProviderHolderFactory;
 
     @Autowired
     public void setEdsInstanceService(EdsInstanceService edsInstanceService) {
@@ -34,16 +34,16 @@ public class SreBridgeUtils {
     }
 
     @Autowired
-    public void setEdsInstanceProviderHolderBuilder(EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
-        setService(edsInstanceProviderHolderBuilder);
+    public void setEdsProviderHolderFactory(EdsProviderHolderFactory edsProviderHolderFactory) {
+        setService(edsProviderHolderFactory);
     }
 
     private static void setService(EdsInstanceService edsInstanceService) {
         SreBridgeUtils.edsInstanceService = edsInstanceService;
     }
 
-    private static void setService(EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
-        SreBridgeUtils.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+    private static void setService(EdsProviderHolderFactory edsProviderHolderFactory) {
+        SreBridgeUtils.edsProviderHolderFactory = edsProviderHolderFactory;
     }
 
     /**
@@ -60,7 +60,7 @@ public class SreBridgeUtils {
             }
             for (EdsInstance instance : instances) {
                 try {
-                    EdsInstanceProviderHolder<EdsConfigs.SreEventBridge, com.baiyi.cratos.domain.model.SreBridgeModel.Event> holder = (EdsInstanceProviderHolder<EdsConfigs.SreEventBridge, com.baiyi.cratos.domain.model.SreBridgeModel.Event>) edsInstanceProviderHolderBuilder.newHolder(
+                    EdsInstanceProviderHolder<EdsConfigs.SreEventBridge, com.baiyi.cratos.domain.model.SreBridgeModel.Event> holder = (EdsInstanceProviderHolder<EdsConfigs.SreEventBridge, com.baiyi.cratos.domain.model.SreBridgeModel.Event>) edsProviderHolderFactory.createHolder(
                             instance.getId(), SRE_EVENTBRIDGE_EVENT.name());
                     holder.importAsset(event);
                 } catch (Exception e) {

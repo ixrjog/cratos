@@ -6,13 +6,13 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.StateForward;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.annotation.TransitionGuard;
 import com.baiyi.cratos.workorder.enums.TicketState;
-import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @TicketStates(state = TicketState.APPROVAL_COMPLETED, target = TicketState.IN_PROGRESS)
+@TransitionGuard
+@StateForward
 public class TicketApprovalCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
     public TicketApprovalCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,
@@ -35,16 +37,6 @@ public class TicketApprovalCompletedStateProcessor extends BaseTicketStateProces
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
-    }
-
-    protected boolean nextState(TicketStateChangeAction action,
-                                TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
-        return true;
-    }
-
-    @Override
-    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-        return true;
     }
 
 }

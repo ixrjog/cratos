@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.gitlab.event.BaseGitLabEventConsumer;
 import com.baiyi.cratos.eds.gitlab.event.enums.GitLabEventName;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabProjectRepo;
@@ -33,7 +33,7 @@ public class GitLabProjectEventConsumer extends BaseGitLabEventConsumer<Project>
 
     private final static GitLabEventName[] EVENT_NAME_ENUMS = {GitLabEventName.PROJECT_CREATE, GitLabEventName.PROJECT_DESTROY, GitLabEventName.PROJECT_RENAME};
 
-    public GitLabProjectEventConsumer(EdsInstanceProviderHolderBuilder holderBuilder,
+    public GitLabProjectEventConsumer(EdsProviderHolderFactory holderBuilder,
                                       EdsAssetIndexService edsAssetIndexService, EdsAssetService edsAssetService) {
         super(holderBuilder, edsAssetIndexService, edsAssetService);
     }

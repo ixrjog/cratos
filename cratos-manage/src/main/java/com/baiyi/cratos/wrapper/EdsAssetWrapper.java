@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.BaseWrapper;
@@ -38,7 +38,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.EDS_ASSET_INDEX;
 @RequiredArgsConstructor
 public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, EdsAsset> implements BaseWrapper<EdsAssetVO.Asset> {
 
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetIndexService edsAssetIndexService;
 
     public static final boolean SKIP_LOAD_ASSET = true;
@@ -46,7 +46,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     @Override
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(EdsAssetVO.Asset vo) {
-        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(
+        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = edsProviderHolderFactory.createHolder(
                 vo.getInstanceId(),
                 vo.getAssetType()
         );
@@ -68,7 +68,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     }
 
     public void wrap(EdsAssetVO.Asset asset, boolean skipLoadAsset) {
-        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(
+        EdsInstanceProviderHolder<?, ?> providerHolder = edsProviderHolderFactory.createHolder(
                 asset.getInstanceId(),
                 asset.getAssetType()
         );
@@ -98,7 +98,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     private void wrapLoginServer(EdsAssetVO.Asset vo) {
         EdsAssetTypeEnum assetType = EdsAssetTypeEnum.valueOf(vo.getAssetType());
         if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(assetType)) {
-            EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) edsProviderHolderFactory.createHolder(
                     vo.getInstanceId(), vo.getAssetType());
             Node node = edsInstanceProviderHolder.getProvider()
                     .assetLoadAs(vo.getOriginalModel());

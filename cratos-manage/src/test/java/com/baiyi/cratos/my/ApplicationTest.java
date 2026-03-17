@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.ApplicationFacade;
@@ -61,7 +61,7 @@ public class ApplicationTest extends BaseUnit {
     private EdsAssetService edsAssetService;
 
     @Resource
-    private EdsInstanceProviderHolderBuilder holderBuilder;
+    private EdsProviderHolderFactory holderBuilder;
 
     @Resource
     private BusinessTagFacade businessTagFacade;
@@ -138,7 +138,7 @@ public class ApplicationTest extends BaseUnit {
         if (holders.containsKey(instanceId)) {
             return holders.get(instanceId);
         }
-        EdsInstanceProviderHolder<?, Deployment> holder = (EdsInstanceProviderHolder<?, Deployment>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<?, Deployment> holder = (EdsInstanceProviderHolder<?, Deployment>) holderBuilder.createHolder(
                 instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         holders.put(instanceId, holder);
         return holder;

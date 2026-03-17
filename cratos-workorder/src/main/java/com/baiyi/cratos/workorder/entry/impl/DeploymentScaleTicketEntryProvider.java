@@ -13,7 +13,7 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -45,7 +45,7 @@ import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.APPLICATION_
 @WorkOrderKey(key = WorkOrderKeys.APPLICATION_DEPLOYMENT_SCALE)
 public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> {
 
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final EdsInstanceService edsInstanceService;
     private final EdsAssetIndexService edsAssetIndexService;
@@ -53,12 +53,12 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
     public DeploymentScaleTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                               WorkOrderTicketService workOrderTicketService,
                                               WorkOrderService workOrderService,
-                                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                              EdsProviderHolderFactory edsProviderHolderFactory,
                                               KubernetesDeploymentRepo kubernetesDeploymentRepo,
                                               EdsInstanceService edsInstanceService,
                                               EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.edsInstanceService = edsInstanceService;
         this.edsAssetIndexService = edsAssetIndexService;
@@ -94,7 +94,7 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationDeploymentModel.DeploymentScale deploymentScale) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         EdsConfigs.Kubernetes kubernetes = holder.getInstance()
                 .getConfig();

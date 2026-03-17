@@ -7,6 +7,8 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.StateForward;
+import com.baiyi.cratos.workorder.annotation.TransitionGuard;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.event.TicketEvent;
@@ -17,6 +19,7 @@ import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.support.AopUtils;
 
 import java.util.Objects;
 
@@ -81,9 +84,17 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
      * @param hasTicketNo
      * @return
      */
-    protected abstract boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo);
+    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
+        return AopUtils.getTargetClass(this)
+                .getAnnotation(TransitionGuard.class)
+                .enabled();
+    }
 
-    protected abstract boolean nextState(TicketStateChangeAction action, TicketEvent<Event> event);
+    protected boolean nextState(TicketStateChangeAction action, TicketEvent<Event> event) {
+        return AopUtils.getTargetClass(this)
+                .getAnnotation(StateForward.class)
+                .enabled();
+    }
 
     protected void processing(TicketStateChangeAction action, TicketEvent<Event> event) {
     }

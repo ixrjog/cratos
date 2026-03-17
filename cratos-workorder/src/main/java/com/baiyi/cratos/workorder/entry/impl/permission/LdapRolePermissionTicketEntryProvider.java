@@ -13,7 +13,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.ldap.repo.LdapGroupRepo;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -44,15 +44,15 @@ import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.LDAP_ROLE_PE
 public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvider<LdapUserGroupModel.Role, WorkOrderTicketParam.AddLdapRolePermissionTicketEntry> {
 
     private final LdapGroupRepo ldapGroupRepo;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     public LdapRolePermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                  WorkOrderTicketService workOrderTicketService,
                                                  WorkOrderService workOrderService, LdapGroupRepo ldapGroupRepo,
-                                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+                                                 EdsProviderHolderFactory edsProviderHolderFactory) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.ldapGroupRepo = ldapGroupRepo;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 LdapUserGroupModel.Role role) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Ldap, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, ?>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Ldap, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, ?>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
         EdsConfigs.Ldap ldap = holder.getInstance()
                 .getConfig();

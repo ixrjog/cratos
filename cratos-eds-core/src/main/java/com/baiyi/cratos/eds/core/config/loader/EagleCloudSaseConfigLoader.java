@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.core.config.loader;
 
 import com.baiyi.cratos.eds.core.BaseEdsConfigLoader;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EagleCloudSaseConfigLoader extends BaseEdsConfigLoader<EdsConfigs.Sase> {
 
-    public EagleCloudSaseConfigLoader(EdsInstanceProviderHolderBuilder holderBuilder,
+    public EagleCloudSaseConfigLoader(EdsProviderHolderFactory holderBuilder,
                                       EdsInstanceService edsInstanceService, EdsConfigService edsConfigService,
                                       ConfigCredTemplate configCredTemplate, CredentialService credService) {
         super(holderBuilder, edsInstanceService, edsConfigService, configCredTemplate, credService);

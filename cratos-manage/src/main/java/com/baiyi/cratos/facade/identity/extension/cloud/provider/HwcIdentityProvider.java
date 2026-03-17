@@ -11,13 +11,12 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcIamRepo;
 import com.baiyi.cratos.eds.huaweicloud.cloud.util.HwcUserConvertor;
 import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
@@ -42,21 +41,25 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Hw
 
     public final static boolean ENABLE_MFA = true;
 
-    public HwcIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
-                               EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
-                               UserService userService, UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
-                               EdsInstanceProviderHolderBuilder holderBuilder) {
-        super(edsInstanceService, edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper,
-                instanceWrapper, holderBuilder);
+    public HwcIdentityProvider(EdsAssetService edsAssetService, EdsAssetWrapper edsAssetWrapper,
+                               EdsAssetIndexService edsAssetIndexService, UserService userService,
+                               UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
+                               EdsProviderHolderFactory edsProviderHolderFactory) {
+        super(
+                edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper, instanceWrapper,
+                edsProviderHolderFactory
+        );
     }
 
     @Override
     protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Hwc config, EdsInstance instance, User user,
                                                        String password) {
         try {
-            KeystoneCreateUserResult createUserResult = HwcIamRepo.createUser(config.getRegionId(), config, user,
-                    password);
-            EdsInstanceProviderHolder<EdsConfigs.Hwc, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsConfigs.Hwc, KeystoneListUsersResult>) holderBuilder.newHolder(
+            KeystoneCreateUserResult createUserResult = HwcIamRepo.createUser(
+                    config.getRegionId(), config, user,
+                    password
+            );
+            EdsInstanceProviderHolder<EdsConfigs.Hwc, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsConfigs.Hwc, KeystoneListUsersResult>) edsProviderHolderFactory.createHolder(
                     instance.getId(), getAccountAssetType());
             KeystoneListUsersResult iamUser = HwcUserConvertor.to(createUserResult);
             postImportAccountAsset(holder, iamUser);
@@ -83,8 +86,10 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Hw
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsConfigs.Hwc hwc = (EdsConfigs.Hwc) holderBuilder.newHolder(asset.getInstanceId(),
-                        getAccountAssetType())
+        EdsConfigs.Hwc hwc = (EdsConfigs.Hwc) edsProviderHolderFactory.createHolder(
+                        asset.getInstanceId(),
+                        getAccountAssetType()
+                )
                 .getInstance()
                 .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
@@ -92,15 +97,17 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Hw
                 .name(asset.getName())
                 .loginUsername(username)
                 .loginUrl(hwc.getIam()
-                        .toLoginUrl(hwc.getCred()
-                                .getUsername()))
+                                  .toLoginUrl(hwc.getCred()
+                                                      .getUsername()))
                 .build();
     }
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsConfigs.Hwc hwc = (EdsConfigs.Hwc) holderBuilder.newHolder(blockCloudAccount.getInstanceId(),
-                        getAccountAssetType())
+        EdsConfigs.Hwc hwc = (EdsConfigs.Hwc) edsProviderHolderFactory.createHolder(
+                        blockCloudAccount.getInstanceId(),
+                        getAccountAssetType()
+                )
                 .getInstance()
                 .getConfig();
         HwcIamRepo.blockUser(hwc.getRegionId(), hwc, blockCloudAccount.getAccountId());

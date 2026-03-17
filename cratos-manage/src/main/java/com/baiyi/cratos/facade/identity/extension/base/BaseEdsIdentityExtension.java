@@ -13,7 +13,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
@@ -43,7 +43,7 @@ public abstract class BaseEdsIdentityExtension {
     protected final EdsInstanceWrapper edsInstanceWrapper;
     protected final UserService userService;
     protected final UserWrapper userWrapper;
-    protected final EdsInstanceProviderHolderBuilder holderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
     protected final EdsAssetService edsAssetService;
     protected final EdsFacade edsFacade;
     protected final EdsAssetIndexService edsAssetIndexService;

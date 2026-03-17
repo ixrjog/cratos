@@ -19,7 +19,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
@@ -50,7 +50,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
 
     private final EdsInstanceService edsInstanceService;
     private final AliyunRamUserRepo aliyunRamUserRepo;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
@@ -63,7 +63,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                                                          WorkOrderService workOrderService,
                                                          EdsInstanceService edsInstanceService,
                                                          AliyunRamUserRepo aliyunRamUserRepo,
-                                                         EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                         EdsProviderHolderFactory edsProviderHolderFactory,
                                                          BusinessTagFacade businessTagFacade, TagService tagService,
                                                          AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo,
                                                          UserService userService,
@@ -71,7 +71,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.businessTagFacade = businessTagFacade;
         this.tagService = tagService;
         this.aliyunRamAccessKeyRepo = aliyunRamAccessKeyRepo;
@@ -85,7 +85,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunDataWorksModel.AliyunAccount aliyunAccount) throws WorkOrderTicketException {
         // 创建Aliyun RAM
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();

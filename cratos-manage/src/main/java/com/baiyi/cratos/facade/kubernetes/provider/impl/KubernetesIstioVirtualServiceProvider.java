@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.provider.impl;
 
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.EdsIstioVirtualServiceAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIstioVirtualServiceRepo;
 import com.baiyi.cratos.facade.kubernetes.provider.BaseKubernetesResourceProvider;
@@ -20,9 +20,9 @@ public class KubernetesIstioVirtualServiceProvider extends BaseKubernetesResourc
     private final KubernetesIstioVirtualServiceRepo kubernetesIstioVirtualServiceRepo;
 
     public KubernetesIstioVirtualServiceProvider(EdsInstanceService edsInstanceService,
-                                                 EdsInstanceProviderHolderBuilder holderBuilder,
+                                                 EdsProviderHolderFactory edsProviderHolderFactory,
                                                  KubernetesIstioVirtualServiceRepo kubernetesIstioVirtualServiceRepo) {
-        super(edsInstanceService, holderBuilder);
+        super(edsInstanceService, edsProviderHolderFactory);
         this.kubernetesIstioVirtualServiceRepo = kubernetesIstioVirtualServiceRepo;
     }
 

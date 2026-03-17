@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
@@ -21,9 +21,10 @@ import com.baiyi.cratos.service.NotificationTemplateService;
  * &#064;Date  2026/3/9 10:53
  * &#064;Version 1.0
  */
+@SuppressWarnings("unchecked")
 public abstract class BaseEdsInspectionTask<C extends HasEdsConfig> extends BaseInspectionTask {
 
-    protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
     protected final EdsInstanceService edsInstanceService;
     private final ConfigCredTemplate configCredTemplate;
     private final CredentialService credentialService;
@@ -31,11 +32,11 @@ public abstract class BaseEdsInspectionTask<C extends HasEdsConfig> extends Base
     public BaseEdsInspectionTask(NotificationTemplateService notificationTemplateService,
                                  DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
                                  EdsConfigService edsConfigService,
-                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                 EdsProviderHolderFactory edsProviderHolderFactory,
                                  EdsInstanceService edsInstanceService, ConfigCredTemplate configCredTemplate,
                                  CredentialService credentialService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsInstanceService = edsInstanceService;
         this.configCredTemplate = configCredTemplate;
         this.credentialService = credentialService;
@@ -44,7 +45,7 @@ public abstract class BaseEdsInspectionTask<C extends HasEdsConfig> extends Base
 
     public C getConfig(int instanceId, String assetType) {
         //EdsInstance edsInstance = edsInstanceService.getById(instanceId);
-        EdsInstanceProviderHolder<?, ?> providerHolder = edsInstanceProviderHolderBuilder.newHolder(instanceId, assetType);
+        EdsInstanceProviderHolder<?, ?> providerHolder = edsProviderHolderFactory.createHolder(instanceId, assetType);
         return (C) providerHolder.getInstance()
                 .getConfig();
     }

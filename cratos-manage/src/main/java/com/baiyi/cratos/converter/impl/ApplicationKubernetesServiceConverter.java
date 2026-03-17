@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesServiceRepo;
 import com.baiyi.cratos.facade.application.builder.KubernetesServiceBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -33,10 +33,10 @@ public class ApplicationKubernetesServiceConverter extends BaseKubernetesResourc
     private final KubernetesServiceRepo kubernetesServiceRepo;
 
     public ApplicationKubernetesServiceConverter(EdsInstanceService edsInstanceService,
-                                                 EdsInstanceProviderHolderBuilder holderBuilder,
+                                                 EdsProviderHolderFactory edsProviderHolderFactory,
                                                  EdsAssetService edsAssetService,
                                                  KubernetesServiceRepo kubernetesServiceRepo) {
-        super(edsInstanceService, holderBuilder, edsAssetService);
+        super(edsInstanceService, edsProviderHolderFactory, edsAssetService);
         this.kubernetesServiceRepo = kubernetesServiceRepo;
     }
 

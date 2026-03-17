@@ -20,7 +20,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.acme.AcmeCertificateService;
@@ -58,7 +58,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     private EdsAssetService edsAssetService;
 
     @Resource
-    private EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private EdsProviderHolderFactory edsProviderHolderFactory;
 
     @Resource
     private UserService userService;
@@ -88,7 +88,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     void test4() {
         EdsConfigs.Aliyun aliyun = getConfig(25);
         List<EdsAsset> assets = edsAssetService.queryInstanceAssets(114, EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 114, EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         for (EdsAsset asset : assets) {
             if (asset.getAssetKey()

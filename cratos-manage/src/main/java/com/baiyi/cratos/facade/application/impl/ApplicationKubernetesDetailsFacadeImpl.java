@@ -22,7 +22,7 @@ import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
@@ -82,7 +82,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
     private final ApplicationRedeployTokenHolder applicationRedeployTokenHolder;
     private final EdsAssetService edsAssetService;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final KubernetesPodRepo kubernetesPodRepo;
     private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
     private final EdsArmsFacade edsArmsFacade;
@@ -225,7 +225,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             if (Objects.isNull(deploymentAsset)) {
                 return;
             }
-            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                     deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
             try {
                 Pod pod = kubernetesPodRepo.get(
@@ -313,7 +313,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             if (Objects.isNull(deploymentAsset)) {
                 return;
             }
-            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                     deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
             final String cluster = Optional.ofNullable(holder)
                     .map(EdsInstanceProviderHolder::getInstance)

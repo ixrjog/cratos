@@ -21,7 +21,7 @@ import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.EdsAliyunKmsFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.service.*;
@@ -50,7 +50,7 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
     private final EdsAssetService edsAssetService;
     private final TagService tagService;
     private final EdsFacade edsFacade;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsInstanceService edsInstanceService;
     private final BusinessTagFacade businessTagFacade;
 
@@ -83,7 +83,7 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
         if (CollectionUtils.isEmpty(assets)) {
             return List.of();
         }
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsProviderHolderFactory.createHolder(
                 assets.getFirst()
                         .getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         List<AliyunKmsVO.Secret> secrets = Lists.newArrayList();

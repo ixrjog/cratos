@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabGroupFacade;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabProjectFacade;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabUserFacade;
@@ -35,7 +35,7 @@ public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends
 
     protected final EdsInstanceService edsInstanceService;
     protected final EdsAssetIndexService edsAssetIndexService;
-    protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
     private final GitLabUserFacade gitLabUserFacade;
     protected final GitLabProjectFacade gitLabProjectFacade;
     protected final GitLabGroupFacade gitLabGroupFacade;
@@ -46,7 +46,7 @@ public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends
                                                    WorkOrderService workOrderService,
                                                    EdsInstanceService edsInstanceService,
                                                    EdsAssetIndexService edsAssetIndexService,
-                                                   EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                   EdsProviderHolderFactory edsProviderHolderFactory,
                                                    GitLabUserFacade gitLabUserFacade,
                                                    GitLabProjectFacade gitLabProjectFacade,
                                                    GitLabGroupFacade gitLabGroupFacade,
@@ -54,7 +54,7 @@ public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsAssetIndexService = edsAssetIndexService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.gitLabUserFacade = gitLabUserFacade;
         this.gitLabProjectFacade = gitLabProjectFacade;
         this.gitLabGroupFacade = gitLabGroupFacade;

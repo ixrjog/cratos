@@ -17,7 +17,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
@@ -62,7 +62,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     private final CommandExecWrapper commandExecWrapper;
     private final KubernetesPodExec kubernetesPodExec;
     private final KubernetesPodRepo kubernetesPodRepo;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetService edsAssetService;
     private final CommandExecNoticeFacade commandExecNoticeFacade;
 
@@ -253,7 +253,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         CommandExecModel.ExecTarget execTarget = CommandExecModel.loadAs(commandExec);
         String namespace = execTarget.getInstance()
                 .getNamespace();
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?>) edsProviderHolderFactory.createHolder(
                 execTarget.getInstance()
                         .getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
         );

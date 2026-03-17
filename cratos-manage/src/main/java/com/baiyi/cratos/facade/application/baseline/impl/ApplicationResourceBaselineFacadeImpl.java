@@ -8,17 +8,16 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleCommited;
 import com.baiyi.cratos.domain.annotation.Committing;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
-import com.baiyi.cratos.facade.tag.TagFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineRedeployingFacade;
 import com.baiyi.cratos.facade.application.baseline.factory.BaselineMemberProcessorFactory;
@@ -58,11 +57,10 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     private final ApplicationResourceBaselineMemberService baselineMemberService;
     private final ApplicationResourceService applicationResourceService;
     private final TagService tagService;
-    private final TagFacade tagFacade;
     private final BusinessTagFacade businessTagFacade;
     private final BusinessTagService businessTagService;
     private final EdsAssetService edsAssetService;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final ApplicationResourceBaselineRedeployingFacade deploymentRedeployFacade;
 
@@ -317,7 +315,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (holders.containsKey(instanceId)) {
             return holders.get(instanceId);
         }
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         holders.put(instanceId, holder);
         return holder;

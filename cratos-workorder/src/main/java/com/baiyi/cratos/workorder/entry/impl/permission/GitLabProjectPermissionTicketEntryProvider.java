@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabGroupFacade;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabProjectFacade;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabUserFacade;
@@ -53,13 +53,13 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
                                                       WorkOrderService workOrderService,
                                                       EdsInstanceService edsInstanceService,
                                                       EdsAssetIndexService edsAssetIndexService,
-                                                      EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                      EdsProviderHolderFactory edsProviderHolderFactory,
                                                       GitLabUserFacade gitLabUserFacade,
                                                       GitLabProjectFacade gitLabProjectFacade,
                                                       GitLabGroupFacade gitLabGroupFacade,
                                                       EdsAssetService edsAssetService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService, edsInstanceService,
-                edsAssetIndexService, edsInstanceProviderHolderBuilder, gitLabUserFacade, gitLabProjectFacade,
+                edsAssetIndexService, edsProviderHolderFactory, gitLabUserFacade, gitLabProjectFacade,
                 gitLabGroupFacade, edsAssetService);
     }
 
@@ -84,7 +84,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 GitLabPermissionModel.Permission projectPermission) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.GitLab, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, ?>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.GitLab, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, ?>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_PROJECT.name());
         EdsConfigs.GitLab gitLab = holder.getInstance()
                 .getConfig();

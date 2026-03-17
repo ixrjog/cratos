@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkIdentityExtension;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.service.*;
@@ -45,13 +45,13 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
 
     public EdsDingtalkIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
                                             EdsInstanceWrapper edsInstanceWrapper, UserService userService,
-                                            UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
+                                            UserWrapper userWrapper, EdsProviderHolderFactory edsProviderHolderFactory,
                                             EdsAssetService edsAssetService, EdsFacade edsFacade,
                                             EdsAssetIndexService edsAssetIndexService, TagService tagService,
                                             BusinessTagService businessTagService,
                                             BusinessAssetBoundService businessAssetBoundService) {
         super(
-                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
+                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, edsProviderHolderFactory,
                 edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService
         );
         this.businessAssetBoundService = businessAssetBoundService;

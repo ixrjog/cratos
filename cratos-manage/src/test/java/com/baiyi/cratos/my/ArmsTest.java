@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
@@ -44,7 +44,7 @@ public class ArmsTest extends BaseUnit {
     private ApplicationService applicationService;
 
     @Resource
-    private EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private EdsProviderHolderFactory edsProviderHolderFactory;
     @Resource
     private KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
@@ -76,7 +76,7 @@ public class ArmsTest extends BaseUnit {
     void test2() {
         List<EdsAsset> deployments = edsAssetService.queryInstanceAssets(103,
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 103, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
 
         for (EdsAsset deploymentAsset : deployments) {

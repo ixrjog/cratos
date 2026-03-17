@@ -14,11 +14,10 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
@@ -44,13 +43,15 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aw
     private final AwsIamUserRepo iamUserRepo;
     private final AwsIamPolicyRepo iamPolicyRepo;
 
-    public AwsIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
-                               EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
-                               UserService userService, UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
-                               EdsInstanceProviderHolderBuilder holderBuilder, AwsIamUserRepo iamUserRepo,
+    public AwsIdentityProvider(EdsAssetService edsAssetService, EdsAssetWrapper edsAssetWrapper,
+                               EdsAssetIndexService edsAssetIndexService, UserService userService,
+                               UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
+                               EdsProviderHolderFactory edsProviderHolderFactory, AwsIamUserRepo iamUserRepo,
                                AwsIamPolicyRepo iamPolicyRepo) {
-        super(edsInstanceService, edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper,
-                instanceWrapper, holderBuilder);
+        super(
+                edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper, instanceWrapper,
+                edsProviderHolderFactory
+        );
         this.iamUserRepo = iamUserRepo;
         this.iamPolicyRepo = iamPolicyRepo;
     }
@@ -65,10 +66,12 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aw
     @Override
     public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
         try {
-            EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                     instance.getId(), getAccountAssetType());
-            com.amazonaws.services.identitymanagement.model.User iamUser = iamUserRepo.getUser(holder.getInstance()
-                    .getConfig(), username);
+            com.amazonaws.services.identitymanagement.model.User iamUser = iamUserRepo.getUser(
+                    holder.getInstance()
+                            .getConfig(), username
+            );
             if (Objects.isNull(iamUser)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
@@ -80,7 +83,7 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aw
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();
@@ -92,18 +95,20 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aw
 
     @Override
     public void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();
-        com.amazonaws.services.identitymanagement.model.User user = iamUserRepo.getUser(aws,
-                blockCloudAccount.getAccount());
+        com.amazonaws.services.identitymanagement.model.User user = iamUserRepo.getUser(
+                aws,
+                blockCloudAccount.getAccount()
+        );
         holder.importAsset(user);
     }
 
     @Override
     protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();
@@ -120,7 +125,7 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aw
 
     @Override
     protected void revokePermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
-        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         EdsConfigs.Aws aws = holder.getInstance()
                 .getConfig();
@@ -142,18 +147,20 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aw
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsConfigs.Aws aws = (EdsConfigs.Aws) holderBuilder.newHolder(asset.getInstanceId(),
-                        getAccountAssetType())
+        EdsConfigs.Aws aws = (EdsConfigs.Aws) edsProviderHolderFactory.createHolder(
+                        asset.getInstanceId(),
+                        getAccountAssetType()
+                )
                 .getInstance()
                 .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .username(username)
                 .name(asset.getName())
                 .accountId(aws.getCred()
-                        .getId())
+                                   .getId())
                 .loginUsername(username)
                 .loginUrl(aws.getIam()
-                        .toLoginUrl())
+                                  .toLoginUrl())
                 .build();
     }
 

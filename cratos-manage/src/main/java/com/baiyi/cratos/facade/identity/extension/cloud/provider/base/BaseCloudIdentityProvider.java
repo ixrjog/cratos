@@ -10,12 +10,11 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
@@ -40,21 +39,20 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @RequiredArgsConstructor
 public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Account> implements CloudIdentityProvider, InitializingBean {
 
-    private final EdsInstanceService edsInstanceService;
     protected final EdsAssetService edsAssetService;
     protected final EdsAssetWrapper edsAssetWrapper;
     protected final EdsAssetIndexService edsAssetIndexService;
     private final UserService userService;
     protected final UserWrapper userWrapper;
     protected final EdsInstanceWrapper instanceWrapper;
-    protected final EdsInstanceProviderHolderBuilder holderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
     public final static boolean CREATE_LOGIN_PROFILE = true;
 
     @SuppressWarnings("unchecked")
     @Override
     public EdsIdentityVO.CloudAccount createCloudAccount(EdsInstance instance,
                                                          EdsIdentityParam.CreateCloudAccount createCloudAccount) {
-        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         User user = userService.getByUsername(createCloudAccount.getUsername());
         EdsIdentityVO.CloudAccount cloudAccount = getAccount(instance, user, user.getUsername());

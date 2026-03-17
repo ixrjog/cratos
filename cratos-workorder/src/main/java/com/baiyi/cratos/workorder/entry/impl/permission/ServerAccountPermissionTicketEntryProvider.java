@@ -48,7 +48,7 @@ public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryP
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
         StringBuilder row = new StringBuilder("| ServerAccount Name |");
         businessPermission.getRoleMembers()
-                .forEach(e -> row.append(" ")
+                .forEach(e -> row.append(" Env:")
                         .append(e.getRole()
                                 .toUpperCase())
                         .append(" |"));

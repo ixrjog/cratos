@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.service.ApplicationService;
@@ -62,7 +62,7 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
     private final EdsInstanceService edsInstanceService;
     private final ApplicationService applicationService;
     private final EdsAssetService edsAssetService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final EdsAssetIndexService edsAssetIndexService;
 
@@ -72,14 +72,14 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                                                            EdsInstanceService edsInstanceService,
                                                            ApplicationService applicationService,
                                                            EdsAssetService edsAssetService,
-                                                           EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                           EdsProviderHolderFactory edsProviderHolderFactory,
                                                            KubernetesDeploymentRepo kubernetesDeploymentRepo,
                                                            EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.applicationService = applicationService;
         this.edsAssetService = edsAssetService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.edsAssetIndexService = edsAssetIndexService;
     }
@@ -93,7 +93,7 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationDeploymentModel.DeploymentJvmSpec deploymentJvmSpec = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
+        // String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
         //  String APPLICATION_DEPLOYMENT_JVM_SPEC = "| Application Name | Instance Name | Namespace | Deployment | Spec | New Java Opts |";
         return MarkdownUtils.createTableRow(
                 deploymentJvmSpec.getApplicationName(), instance.getInstanceName(), deploymentJvmSpec.getNamespace(),
@@ -116,7 +116,7 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationDeploymentModel.DeploymentJvmSpec deploymentJvmSpec) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         EdsConfigs.Kubernetes kubernetes = holder.getInstance()
                 .getConfig();

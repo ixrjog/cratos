@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentV
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.facade.application.builder.KubernetesDeploymentBuilder;
@@ -44,11 +44,11 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
     private final KubernetesPodRepo kubernetesPodRepo;
 
     public ApplicationKubernetesDeploymentConverter(EdsInstanceService edsInstanceService,
-                                                    EdsInstanceProviderHolderBuilder holderBuilder,
+                                                    EdsProviderHolderFactory edsProviderHolderFactory,
                                                     EdsAssetService edsAssetService,
                                                     KubernetesDeploymentRepo kubernetesDeploymentRepo,
                                                     KubernetesPodRepo kubernetesPodRepo) {
-        super(edsInstanceService, holderBuilder, edsAssetService);
+        super(edsInstanceService, edsProviderHolderFactory, edsAssetService);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.kubernetesPodRepo = kubernetesPodRepo;
     }

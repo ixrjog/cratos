@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
@@ -34,7 +34,7 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
     private final ApplicationResourceService applicationResourceService;
     private final EdsAssetService edsAssetService;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     @Override
     public Deployment queryApplicationResourceKubernetesDeployment(
@@ -67,7 +67,7 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
 
     @SuppressWarnings("unchecked")
     private Deployment getDeployment(String namespace, EdsAsset edsAsset) {
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?>) edsProviderHolderFactory.createHolder(
                 edsAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         return kubernetesDeploymentRepo.get(holder.getInstance()
                 .getConfig(), namespace, edsAsset.getName());

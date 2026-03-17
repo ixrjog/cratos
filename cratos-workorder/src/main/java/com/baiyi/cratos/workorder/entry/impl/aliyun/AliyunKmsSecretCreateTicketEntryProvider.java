@@ -19,7 +19,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -60,7 +60,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CONTENT
 public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryProvider<AliyunKmsModel.CreateSecret, WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetIndexService edsAssetIndexService;
     private final StringEncryptor stringEncryptor;
     private final LanguageUtils languageUtils;
@@ -70,13 +70,13 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                                                     WorkOrderTicketService workOrderTicketService,
                                                     WorkOrderService workOrderService,
                                                     EdsInstanceService edsInstanceService,
-                                                    EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                    EdsProviderHolderFactory edsProviderHolderFactory,
                                                     EdsAssetIndexService edsAssetIndexService,
                                                     StringEncryptor stringEncryptor, LanguageUtils languageUtils,
                                                     EdsAssetService edsAssetService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsAssetIndexService = edsAssetIndexService;
         this.stringEncryptor = stringEncryptor;
         this.languageUtils = languageUtils;
@@ -88,7 +88,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                                     WorkOrderTicketEntry entry) {
         AliyunKmsModel.CreateSecret createSecret = param.getDetail();
         // 校验Secret是否存在
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
@@ -115,7 +115,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 .build();
         // 再次验证，避免重复申请
         this.verifyEntryParam(param, entry);
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();

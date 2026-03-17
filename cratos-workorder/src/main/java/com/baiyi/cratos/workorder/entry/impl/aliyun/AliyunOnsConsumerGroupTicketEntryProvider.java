@@ -18,7 +18,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -47,16 +47,16 @@ import java.util.Optional;
 public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryProvider<AliyunOnsV5Model.ConsumerGroup, WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     public AliyunOnsConsumerGroupTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                      WorkOrderTicketService workOrderTicketService,
                                                      WorkOrderService workOrderService,
                                                      EdsInstanceService edsInstanceService,
-                                                     EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+                                                     EdsProviderHolderFactory edsProviderHolderFactory) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunOnsV5Model.ConsumerGroup consumerGroup) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();

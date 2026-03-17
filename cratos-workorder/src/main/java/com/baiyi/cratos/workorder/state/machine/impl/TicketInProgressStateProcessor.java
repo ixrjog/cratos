@@ -10,7 +10,9 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.StateForward;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.annotation.TransitionGuard;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.ApprovalStatus;
@@ -35,6 +37,8 @@ import java.util.List;
  */
 @Component
 @TicketStates(state = TicketState.IN_PROGRESS, target = TicketState.PROCESSING_COMPLETED)
+@TransitionGuard
+@StateForward
 public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
     public TicketInProgressStateProcessor(UserService userService, WorkOrderService workOrderService,
@@ -47,16 +51,6 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
-    }
-
-    @Override
-    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-        return true;
-    }
-
-    protected boolean nextState(TicketStateChangeAction action,
-                                TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
-        return true;
     }
 
     @Override

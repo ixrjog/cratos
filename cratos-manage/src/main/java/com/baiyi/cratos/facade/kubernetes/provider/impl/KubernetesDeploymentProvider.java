@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.provider.impl;
 
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.EdsKubernetesDeploymentAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.facade.kubernetes.provider.BaseKubernetesResourceProvider;
@@ -20,9 +20,9 @@ public class KubernetesDeploymentProvider extends BaseKubernetesResourceProvider
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     public KubernetesDeploymentProvider(EdsInstanceService edsInstanceService,
-                                        EdsInstanceProviderHolderBuilder holderBuilder,
+                                        EdsProviderHolderFactory edsProviderHolderFactory,
                                         KubernetesDeploymentRepo kubernetesDeploymentRepo) {
-        super(edsInstanceService, holderBuilder);
+        super(edsInstanceService, edsProviderHolderFactory);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
     }
 

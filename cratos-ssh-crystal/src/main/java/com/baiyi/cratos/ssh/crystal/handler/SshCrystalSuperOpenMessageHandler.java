@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
@@ -53,12 +53,12 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                                              SshAuditProperties sshAuditProperties,
                                              SimpleSshSessionFacade simpleSshSessionFacade,
                                              SshProxyHostHolder proxyHostHolder,
-                                             EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                             EdsProviderHolderFactory edsProviderHolderFactory,
                                              RbacUserRoleFacade rbacUserRoleFacade) {
         super(
                 edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
-                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder, edsInstanceProviderHolderBuilder
+                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder, edsProviderHolderFactory
         );
         this.rbacUserRoleFacade = rbacUserRoleFacade;
     }

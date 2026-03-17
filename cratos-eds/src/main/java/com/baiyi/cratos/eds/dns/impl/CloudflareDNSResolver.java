@@ -14,7 +14,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
 import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -42,8 +42,8 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
 
     public CloudflareDNSResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                                  TrafficRecordTargetService trafficRecordTargetService,
-                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
-        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsInstanceProviderHolderBuilder);
+                                 EdsProviderHolderFactory edsProviderHolderFactory) {
+        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsProviderHolderFactory);
     }
 
     @Override

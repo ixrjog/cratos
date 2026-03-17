@@ -67,7 +67,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
         StringBuilder row = new StringBuilder("| Group Name |");
         businessPermission.getRoleMembers()
-                .forEach(e -> row.append(" ")
+                .forEach(e -> row.append(" Env:")
                         .append(e.getRole()
                                 .toUpperCase())
                         .append(" |"));

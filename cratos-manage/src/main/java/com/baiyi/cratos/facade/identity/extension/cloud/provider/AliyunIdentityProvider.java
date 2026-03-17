@@ -17,11 +17,10 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
@@ -48,25 +47,29 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs
     private final AliyunRamPolicyRepo ramPolicyRepo;
     public final static boolean ENABLE_MFA = true;
 
-    public AliyunIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
-                                  EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
-                                  UserService userService, UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
-                                  EdsInstanceProviderHolderBuilder holderBuilder, AliyunRamUserRepo ramUserRepo,
+    public AliyunIdentityProvider(EdsAssetService edsAssetService, EdsAssetWrapper edsAssetWrapper,
+                                  EdsAssetIndexService edsAssetIndexService, UserService userService,
+                                  UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
+                                  EdsProviderHolderFactory edsProviderHolderFactory, AliyunRamUserRepo ramUserRepo,
                                   AliyunRamPolicyRepo ramPolicyRepo) {
-        super(edsInstanceService, edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper,
-                instanceWrapper, holderBuilder);
+        super(
+                edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper, instanceWrapper,
+                edsProviderHolderFactory
+        );
         this.ramUserRepo = ramUserRepo;
         this.ramPolicyRepo = ramPolicyRepo;
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Aliyun config, EdsInstance instance,
-                                                       User user, String password) {
+    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Aliyun config, EdsInstance instance, User user,
+                                                       String password) {
         try {
-            CreateUserResponse.User createUser = ramUserRepo.createUser(config.getRegionId(), config, user, password,
-                    CREATE_LOGIN_PROFILE, ENABLE_MFA);
+            CreateUserResponse.User createUser = ramUserRepo.createUser(
+                    config.getRegionId(), config, user, password,
+                    CREATE_LOGIN_PROFILE, ENABLE_MFA
+            );
             GetUserResponse.User ramUser = ramUserRepo.getUser(config, user.getUsername());
-            EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                     instance.getId(), getAccountAssetType());
             postImportAccountAsset(holder, ramUser);
             return this.getAccount(instance, user, user.getUsername());
@@ -77,7 +80,7 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs
 
     @Override
     protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
@@ -95,7 +98,7 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs
 
     @Override
     protected void revokePermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
@@ -118,7 +121,7 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsConfigs.Aliyun aliyun = (EdsConfigs.Aliyun) holderBuilder.newHolder(
+        EdsConfigs.Aliyun aliyun = (EdsConfigs.Aliyun) edsProviderHolderFactory.createHolder(
                         asset.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getConfig();
@@ -126,21 +129,24 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs
                 .username(username)
                 .name(asset.getName())
                 .loginUsername(aliyun.getRam()
-                        .toUsername(username))
+                                       .toUsername(username))
                 .loginUrl(aliyun.getRam()
-                        .toLoginUrl())
+                                  .toLoginUrl())
                 .build();
     }
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsConfigs.Aliyun aliyun = (EdsConfigs.Aliyun) holderBuilder.newHolder(
+        EdsConfigs.Aliyun aliyun = (EdsConfigs.Aliyun) edsProviderHolderFactory.createHolder(
                         blockCloudAccount.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getConfig();
         try {
-            GetLoginProfileResponse.LoginProfile loginProfile = ramUserRepo.getLoginProfile(aliyun.getRegionId(),
-                    aliyun, blockCloudAccount.getAccount());
+            GetLoginProfileResponse.LoginProfile loginProfile = ramUserRepo.getLoginProfile(
+                    aliyun.getRegionId(),
+                    aliyun,
+                    blockCloudAccount.getAccount()
+            );
             if (Objects.nonNull(loginProfile)) {
                 ramUserRepo.deleteLoginProfile(aliyun.getRegionId(), aliyun, blockCloudAccount.getAccount());
             }
@@ -155,7 +161,7 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs
 
     @Override
     public void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 instance.getId(), getAccountAssetType());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();

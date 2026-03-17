@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcElbRepo;
@@ -33,9 +33,9 @@ public class AcmeHuaweiCloudElbCertDeployer extends BaseAcmeDeployer<EdsConfigs.
     private final AcmeDomainService acmeDomainService;
     private final UserService userService;
 
-    public AcmeHuaweiCloudElbCertDeployer(EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+    public AcmeHuaweiCloudElbCertDeployer(EdsProviderHolderFactory edsProviderHolderFactory,
                                           AcmeDomainService acmeDomainService, UserService userService) {
-        super(edsInstanceProviderHolderBuilder);
+        super(edsProviderHolderFactory);
         this.acmeDomainService = acmeDomainService;
         this.userService = userService;
     }

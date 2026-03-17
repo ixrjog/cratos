@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dingtalk.sender.DingtalkMessageSender;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.facade.message.builder.AsyncSendMessageAgency;
@@ -29,7 +29,7 @@ public class EdsDingtalkMessageFacadeImpl implements EdsDingtalkMessageFacade {
 
     private final DingtalkMessageSender dingtalkMessageSender;
     private final EdsIdentityFacade edsIdentityFacade;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     @Override
     public void sendToDingtalkUser(User sendToUser, NotificationTemplate notificationTemplate, String msgText) {
@@ -50,7 +50,7 @@ public class EdsDingtalkMessageFacadeImpl implements EdsDingtalkMessageFacade {
     @SuppressWarnings("unchecked")
     private void sendToDingtalkUser(EdsIdentityVO.DingtalkIdentity dingtalkIdentity,
                                     NotificationTemplate notificationTemplate, String msgText) {
-        EdsInstanceProviderHolder<EdsConfigs.Dingtalk, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Dingtalk, ?>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Dingtalk, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Dingtalk, ?>) edsProviderHolderFactory.createHolder(
                 dingtalkIdentity.getInstance()
                         .getId(), EdsAssetTypeEnum.DINGTALK_USER.name());
         EdsConfigs.Dingtalk dingtalk = holder.getInstance()

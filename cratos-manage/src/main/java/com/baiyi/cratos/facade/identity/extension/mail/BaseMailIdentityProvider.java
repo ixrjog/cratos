@@ -7,11 +7,9 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
@@ -34,14 +32,12 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MA
 @RequiredArgsConstructor
 public abstract class BaseMailIdentityProvider<Config extends HasEdsConfig, Account> implements MailIdentityProvider, InitializingBean {
 
-    private final EdsInstanceService edsInstanceService;
     protected final EdsAssetService edsAssetService;
     protected final EdsAssetWrapper edsAssetWrapper;
     protected final EdsAssetIndexService edsAssetIndexService;
-    private final UserService userService;
     protected final UserWrapper userWrapper;
     protected final EdsInstanceWrapper instanceWrapper;
-    protected final EdsInstanceProviderHolderBuilder holderBuilder;
+    protected final EdsProviderHolderFactory edsProviderHolderFactory;
 
     protected EdsAsset queryAccountAsset(int instanceId, User user) {
         List<EdsAssetIndex> indices = edsAssetIndexService.queryInstanceIndexByNameAndValue(instanceId, USER_MAIL,

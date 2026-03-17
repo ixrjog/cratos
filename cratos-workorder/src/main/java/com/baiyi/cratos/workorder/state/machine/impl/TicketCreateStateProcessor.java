@@ -14,7 +14,9 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.StateForward;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.annotation.TransitionGuard;
 import com.baiyi.cratos.workorder.builder.TicketBuilder;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
@@ -35,6 +37,8 @@ import java.util.Objects;
  */
 @Component
 @TicketStates(state = TicketState.CREATE, target = TicketState.NEW)
+@TransitionGuard
+@StateForward(enabled = false)
 public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.CreateTicket> {
 
     private final RbacRoleFacade rbacRoleFacade;

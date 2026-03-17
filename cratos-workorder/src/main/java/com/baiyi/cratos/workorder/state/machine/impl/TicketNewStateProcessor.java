@@ -10,6 +10,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.annotation.TransitionGuard;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
@@ -35,6 +36,7 @@ import java.util.Optional;
  */
 @Component
 @TicketStates(state = TicketState.NEW, target = TicketState.SUBMITTED)
+@TransitionGuard
 public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SubmitTicket> {
 
     public TicketNewStateProcessor(UserService userService, WorkOrderService workOrderService,
@@ -83,11 +85,6 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
     @Override
     protected boolean nextState(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SubmitTicket> event) {
         return TicketStateChangeAction.SUBMIT.equals(action);
-    }
-
-    @Override
-    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-        return true;
     }
 
     @Override

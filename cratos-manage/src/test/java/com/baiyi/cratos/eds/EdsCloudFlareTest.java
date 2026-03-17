@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareZoneRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.*;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class EdsCloudFlareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
     private EdsAssetService edsAssetService;
 
     @Resource
-    private EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private EdsProviderHolderFactory edsProviderHolderFactory;
 
     @Resource
     private TrafficLayerDomainRecordService trafficLayerDomainRecordService;
@@ -86,7 +86,7 @@ public class EdsCloudFlareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
     @Test
     void test3() {
         List<EdsAsset> assets = edsAssetService.queryInstanceAssets(95, EdsAssetTypeEnum.CLOUDFLARE_DNS_RECORD.name());
-        EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> holder = (EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> holder = (EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord>) edsProviderHolderFactory.createHolder(
                 95, EdsAssetTypeEnum.CLOUDFLARE_DNS_RECORD.name());
         for (EdsAsset asset : assets) {
             CloudFlareDns.DnsRecord dnsRecord = holder.getProvider()

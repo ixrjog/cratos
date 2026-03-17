@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
@@ -37,7 +37,7 @@ public class EdsAzureDirectoryRoleAssetProvider extends BaseEdsInstanceAssetProv
                                               ConfigCredTemplate configCredTemplate,
                                               EdsAssetIndexFacade edsAssetIndexFacade,
                                               AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                              EdsInstanceProviderHolderBuilder holderBuilder) {
+                                              EdsProviderHolderFactory holderBuilder) {
         super(
                 edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 assetToBusinessObjectUpdater, holderBuilder

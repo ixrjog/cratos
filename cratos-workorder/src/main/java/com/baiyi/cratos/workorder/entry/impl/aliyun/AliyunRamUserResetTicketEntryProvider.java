@@ -22,7 +22,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -58,7 +58,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
     private final EdsInstanceService edsInstanceService;
     private final AliyunRamUserRepo aliyunRamUserRepo;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     private final UserService userService;
     private final WorkOrderService workOrderService;
@@ -72,14 +72,14 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                                                  WorkOrderService workOrderService,
                                                  EdsInstanceService edsInstanceService,
                                                  AliyunRamUserRepo aliyunRamUserRepo,
-                                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                 EdsProviderHolderFactory edsProviderHolderFactory,
                                                  UserService userService,
                                                  ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender,
                                                  EdsIdentityFacade edsIdentityFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.userService = userService;
         this.workOrderService = workOrderService;
         this.resetAliyunRamUserNoticeSender = resetAliyunRamUserNoticeSender;
@@ -96,7 +96,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunModel.ResetAliyunAccount resetAliyunAccount) throws WorkOrderTicketException {
         // 创建Aliyun RAM
-        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
