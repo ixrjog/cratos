@@ -56,7 +56,6 @@ public class TagGroupParam {
     @NoArgsConstructor
     @Schema
     public static class MyGroupAssetPageQuery extends PageParam implements HasSessionUser {
-        @NotBlank
         private String tagGroup;
         private String queryName;
         @Null

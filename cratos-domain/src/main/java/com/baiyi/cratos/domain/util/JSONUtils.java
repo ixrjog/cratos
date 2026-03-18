@@ -21,4 +21,18 @@ public final class JSONUtils {
         }
     }
 
+    /**
+     * 格式化Json让人类可阅读
+     * @param object
+     * @return
+     */
+    public static String writeValueAsPrettyString(Object object) {
+        try {
+            JSONMapper mapper = new JSONMapper();
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
 }

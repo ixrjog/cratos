@@ -218,7 +218,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         param.setUserPermissionIds(businessIds);
         return edsAssetService.queryUserPermissionPage(param);
     }
-
+    
     @Override
     public List<ServerAccount> queryUserPermissionServerAccounts(String username) {
         List<Integer> userPermissionIds = userPermissionService.queryUserPermissionBusinessIds(
