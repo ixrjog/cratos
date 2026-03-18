@@ -42,6 +42,10 @@ public class EdsAssetQuery {
         private List<String> effectiveAssetTypes;
         private String queryName;
         private String queryGroupName;
+        // ext tag
+        private String env;
+        // ext tag
+        private String countryCode;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
     }
 

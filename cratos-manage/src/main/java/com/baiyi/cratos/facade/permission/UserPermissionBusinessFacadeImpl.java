@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.permission;
 
 import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserPermissionBusinessException;
 import com.baiyi.cratos.common.util.EnvLifecycleUtils;
@@ -18,6 +19,7 @@ import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.facade.EnvFacade;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.query.ServerAccountQuery;
 import com.baiyi.cratos.service.*;
@@ -46,7 +48,6 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     private final EnvFacade envFacade;
     private final EdsAssetService edsAssetService;
     private final TagGroupService tagGroupService;
-
     private final TagService tagService;
     private final BusinessTagService businessTagService;
     private final ServerAccountService serverAccountService;
@@ -54,6 +55,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     private final Tag edsTagUniqueKey = Tag.builder()
             .tagKey(SysTagKeys.EDS.getKey())
             .build();
+    private final RbacRoleFacade rbacRoleFacade;
 
     @Override
     public DataTable<PermissionBusinessVO.PermissionBusiness> queryUserPermissionBusinessPage(
@@ -67,13 +69,11 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     public void updateUserPermissionBusiness(
             UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness) {
         Map<String, Env> envLifecycleMap = envFacade.getEnvMap();
-        for (UserPermissionBusinessParam.BusinessPermission businessPermission : updateUserPermissionBusiness.getBusinessPermissions()) {
-            updateUserPermissionBusiness(
-                    updateUserPermissionBusiness.getUsername(),
-                    updateUserPermissionBusiness.getBusinessType(), businessPermission,
-                    envLifecycleMap
-            );
-        }
+        updateUserPermissionBusiness.getBusinessPermissions()
+                .forEach(businessPermission -> updateUserPermissionBusiness(
+                        updateUserPermissionBusiness.getUsername(), updateUserPermissionBusiness.getBusinessType(),
+                        businessPermission, envLifecycleMap
+                ));
     }
 
     private void updateUserPermissionBusiness(String username, String businessType,
@@ -185,7 +185,13 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     @Override
     public DataTable<EdsAsset> queryUserPermissionAssets(EdsAssetQuery.UserPermissionPageQueryParam param) {
         // 查询用户所有的授权组
-        List<String> groups = userPermissionService.queryUserPermissionGroups(param.getUsername());
+        List<String> groups;
+        if (rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS, param.getUsername())) {
+            // 管理员查询所有的
+            groups = userPermissionService.queryUserPermissionGroups("");
+        } else {
+            groups = userPermissionService.queryUserPermissionGroups(param.getUsername());
+        }
         if (CollectionUtils.isEmpty(groups)) {
             return DataTable.NO_DATA;
         }
@@ -218,7 +224,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         param.setUserPermissionIds(businessIds);
         return edsAssetService.queryUserPermissionPage(param);
     }
-    
+
     @Override
     public List<ServerAccount> queryUserPermissionServerAccounts(String username) {
         List<Integer> userPermissionIds = userPermissionService.queryUserPermissionBusinessIds(

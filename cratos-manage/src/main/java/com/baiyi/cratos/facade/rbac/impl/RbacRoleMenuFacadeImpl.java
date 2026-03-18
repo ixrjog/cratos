@@ -49,12 +49,10 @@ public class RbacRoleMenuFacadeImpl implements RbacRoleMenuFacade {
                     .forEach(rbacRoleMenuService::add);
             return;
         }
-
         Set<Integer> menuIdSet = Sets.newHashSet();
         rbacRoleMenus.stream()
                 .map(RbacRoleMenu::getMenuId)
                 .forEach(menuIdSet::add);
-
         saveRoleMenu.toRoleMenus()
                 .forEach(rbacRoleMenu -> {
                     if (!menuIdSet.contains(rbacRoleMenu.getMenuId())) {
@@ -72,7 +70,6 @@ public class RbacRoleMenuFacadeImpl implements RbacRoleMenuFacade {
                 .map(rbacRoleMenuService::getByUniqueKey)
                 .filter(Objects::nonNull)
                 .forEach(rbacRoleMenu -> rbacRoleMenuService.deleteById(rbacRoleMenu.getId()));
-
     }
 
 }

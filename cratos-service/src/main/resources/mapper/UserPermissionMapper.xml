@@ -59,7 +59,9 @@
         select distinct name
         from user_permission
         where business_type = 'TAG_GROUP'
-          and username = #{username}
+        <if test="username != null and username != ''">
+            and username = #{username}
+        </if>
     </select>
 
 </mapper>
