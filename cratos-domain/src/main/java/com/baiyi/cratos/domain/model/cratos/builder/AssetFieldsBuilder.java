@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.model.cratos.builder;
 
-import com.baiyi.cratos.domain.model.cratos.CratosCommonModel;
+import com.baiyi.cratos.domain.model.cratos.CustomIdcHostModel;
 import com.google.common.collect.Maps;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -15,14 +15,14 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AssetFieldsBuilder {
 
-    private final Map<String, CratosCommonModel.AssetFieldDesc> fields = Maps.newHashMap();
+    private final Map<String, CustomIdcHostModel.AssetFieldDesc> fields = Maps.newHashMap();
 
     public static AssetFieldsBuilder newBuilder() {
         return new AssetFieldsBuilder();
     }
 
     public AssetFieldsBuilder withField(String fieldName, String desc, Boolean required) {
-        fields.put(fieldName, CratosCommonModel.AssetFieldDesc.builder()
+        fields.put(fieldName, CustomIdcHostModel.AssetFieldDesc.builder()
                 .name(fieldName)
                 .desc(desc)
                 .required(required)
@@ -31,7 +31,7 @@ public class AssetFieldsBuilder {
     }
 
     public AssetFieldsBuilder withField(String fieldName, String desc) {
-        fields.put(fieldName, CratosCommonModel.AssetFieldDesc.builder()
+        fields.put(fieldName, CustomIdcHostModel.AssetFieldDesc.builder()
                 .name(fieldName)
                 .desc(desc)
                 .required(true)
@@ -39,7 +39,7 @@ public class AssetFieldsBuilder {
         return this;
     }
 
-    public Map<String, CratosCommonModel.AssetFieldDesc> get() {
+    public Map<String, CustomIdcHostModel.AssetFieldDesc> get() {
         return fields;
     }
 

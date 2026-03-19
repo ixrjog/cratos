@@ -124,6 +124,16 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
+    public static class CustomIdc implements HasEdsConfig {
+        private String version;
+        private EdsInstance edsInstance;
+        private EdsCustomIdcConfigModel.IDCInfo idcInfo;
+        private EdsCustomIdcConfigModel.HostConfig host;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
     public static class Dingtalk implements HasEdsConfig {
         private String version;
         private String url;

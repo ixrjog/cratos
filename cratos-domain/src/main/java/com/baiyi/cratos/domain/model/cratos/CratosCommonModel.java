@@ -17,26 +17,6 @@ import java.util.Map;
  */
 public class CratosCommonModel {
 
-    public interface HasFieldMapper {
-        Map<String, AssetFieldDesc> getFields();
-
-        void setFields(Map<String, AssetFieldDesc> fields);
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class AssetFieldDesc implements Serializable {
-        @Serial
-        private static final long serialVersionUID = -1054269947639389764L;
-
-        private String name;
-        private String desc;
-        private Boolean required;
-
-    }
-
     public interface HasTags {
         List<String> getTags();
 

@@ -20,13 +20,13 @@ public class CratosComputerModel {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ComputerFieldMapper implements CratosCommonModel.HasFieldMapper {
+    public static class ComputerFieldMapper implements CustomIdcHostModel.HasFieldMapper {
 
         public static final ComputerFieldMapper DATA = ComputerFieldMapper.builder()
                 .build();
 
         @Builder.Default
-        private Map<String, CratosCommonModel.AssetFieldDesc> fields = AssetFieldsBuilder.newBuilder()
+        private Map<String, CustomIdcHostModel.AssetFieldDesc> fields = AssetFieldsBuilder.newBuilder()
                 .withField("assetId", "Computer ID", false)
                 .withField("name", "Computer Name")
                 .withField("assetKey", "Remote Management IP")

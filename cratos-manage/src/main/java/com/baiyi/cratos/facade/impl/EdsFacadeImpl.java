@@ -11,9 +11,10 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.cratos.CratosComputerModel;
+import com.baiyi.cratos.domain.model.cratos.CustomIdcHostModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
-import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
+import com.baiyi.cratos.domain.param.http.eds.cratos.CustomAssetParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
@@ -22,6 +23,7 @@ import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
+import com.baiyi.cratos.eds.core.annotation.CustomAsset;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
@@ -43,6 +45,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.jersey.internal.guava.Sets;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -115,8 +118,10 @@ public class EdsFacadeImpl implements EdsFacade {
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.VERY_SHORT, key = "'COMMAND_EXEC:EDS_INSTANCE:ID:' + #query.instanceId + ':NAMESPACES'", unless = "#result == null")
     public Set<String> queryCommandExecEdsInstanceNamespace(EdsInstanceParam.QueryCommandExecInstanceNamespace query) {
         // 查询当前实例下打标签的资产
-        List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(BusinessTypeEnum.EDS_ASSET.name(),
-                SysTagKeys.COMMAND_EXEC.getKey());
+        List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(
+                BusinessTypeEnum.EDS_ASSET.name(),
+                SysTagKeys.COMMAND_EXEC.getKey()
+        );
         if (CollectionUtils.isEmpty(assetIds)) {
             return Set.of();
         }
@@ -241,8 +246,10 @@ public class EdsFacadeImpl implements EdsFacade {
                 .businessId(dbEdsConfig.getId())
                 .build();
         IdentityUtils.tryIdentity(updateEdsConfig.getCredentialId())
-                .withValid(() -> handleValidCredentialId(updateEdsConfig, dbEdsConfig, business),
-                        () -> handleInvalidCredentialId(dbEdsConfig, business));
+                .withValid(
+                        () -> handleValidCredentialId(updateEdsConfig, dbEdsConfig, business),
+                        () -> handleInvalidCredentialId(dbEdsConfig, business)
+                );
         EdsConfig edsConfig = updateEdsConfig.toTarget();
         edsConfig.setInstanceId(dbEdsConfig.getInstanceId());
         edsConfigService.updateByPrimaryKey(edsConfig);
@@ -252,13 +259,20 @@ public class EdsFacadeImpl implements EdsFacade {
     private void handleValidCredentialId(EdsConfigParam.UpdateEdsConfig updateEdsConfig, EdsConfig dbEdsConfig,
                                          SimpleBusiness business) {
         IdentityUtils.tryIdentity(dbEdsConfig.getCredentialId())
-                .withValid(() -> {
-                    if (!updateEdsConfig.getCredentialId()
-                            .equals(dbEdsConfig.getCredentialId())) {
-                        businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
-                        businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business);
-                    }
-                }, () -> businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business));
+                .withValid(
+                        () -> {
+                            if (!updateEdsConfig.getCredentialId()
+                                    .equals(dbEdsConfig.getCredentialId())) {
+                                businessCredentialFacade.revokeBusinessCredential(
+                                        dbEdsConfig.getCredentialId(), business);
+                                businessCredentialFacade.issueBusinessCredential(
+                                        updateEdsConfig.getCredentialId(), business);
+                            }
+                        }, () -> businessCredentialFacade.issueBusinessCredential(
+                                updateEdsConfig.getCredentialId(),
+                                business
+                        )
+                );
     }
 
     private void handleInvalidCredentialId(EdsConfig dbEdsConfig, SimpleBusiness business) {
@@ -271,12 +285,14 @@ public class EdsFacadeImpl implements EdsFacade {
     public void deleteEdsConfigById(int id) {
         EdsConfig edsConfig = edsConfigService.getById(id);
         IdentityUtils.tryIdentity(edsConfig.getInstanceId())
-                .withValid(() -> {
-                    EdsInstance edsInstance = edsInstanceService.getById(edsConfig.getInstanceId());
-                    if (edsInstance == null || !edsInstance.getValid()) {
-                        deleteEdsConfig(edsConfig);
-                    }
-                }, () -> deleteEdsConfig(edsConfig));
+                .withValid(
+                        () -> {
+                            EdsInstance edsInstance = edsInstanceService.getById(edsConfig.getInstanceId());
+                            if (edsInstance == null || !edsInstance.getValid()) {
+                                deleteEdsConfig(edsConfig);
+                            }
+                        }, () -> deleteEdsConfig(edsConfig)
+                );
     }
 
     private void deleteEdsConfig(EdsConfig edsConfig) {
@@ -295,8 +311,10 @@ public class EdsFacadeImpl implements EdsFacade {
     @Async
     public void importEdsInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
         try {
-            EdsInstanceProviderHolder<?, ?> providerHolder = buildHolder(importInstanceAsset.getInstanceId(),
-                    importInstanceAsset.getAssetType());
+            EdsInstanceProviderHolder<?, ?> providerHolder = buildHolder(
+                    importInstanceAsset.getInstanceId(),
+                    importInstanceAsset.getAssetType()
+            );
             providerHolder.importAssets();
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
@@ -375,8 +393,10 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     @Async
     public void deleteEdsInstanceAsset(EdsInstanceParam.DeleteInstanceAsset deleteInstanceAsset) {
-        List<EdsAsset> assets = edsAssetService.queryInstanceAssets(deleteInstanceAsset.getInstanceId(),
-                deleteInstanceAsset.getAssetType());
+        List<EdsAsset> assets = edsAssetService.queryInstanceAssets(
+                deleteInstanceAsset.getInstanceId(),
+                deleteInstanceAsset.getAssetType()
+        );
         if (!CollectionUtils.isEmpty(assets)) {
             assets.stream()
                     .mapToInt(EdsAsset::getId)
@@ -406,6 +426,7 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public EdsAssetVO.SupportManual<?> getEdsInstanceAssetSupportManual(String instanceType, String assetType) {
         if (!EdsInstanceTypeEnum.CRATOS.name()
+                .equals(instanceType) && !EdsInstanceTypeEnum.CUSTOM_IDC.name()
                 .equals(instanceType)) {
             return EdsAssetVO.SupportManual.UNSUPPORTED;
         }
@@ -413,55 +434,50 @@ public class EdsFacadeImpl implements EdsFacade {
                 .equals(assetType)) {
             return EdsAssetVO.SupportManual.of(CratosComputerModel.ComputerFieldMapper.DATA);
         }
+        if (EdsAssetTypeEnum.CUSTOM_IDC_HOST.name()
+                .equals(assetType)) {
+            return EdsAssetVO.SupportManual.of(CustomIdcHostModel.HostFieldMapper.DATA);
+        }
         return EdsAssetVO.SupportManual.UNSUPPORTED;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addInstanceCratosAsset(CratosAssetParam.AddCratosAsset addCratosAsset) {
-        EdsInstance instance = edsInstanceService.getById(addCratosAsset.getInstanceId());
+    public void addInstanceCustomAsset(CustomAssetParam.AddAsset addAsset) {
+        EdsInstance instance = edsInstanceService.getById(addAsset.getInstanceId());
         if (Objects.isNull(instance)) {
             EdsAssetException.runtime("Instance does not exist");
         }
-        if (!EdsInstanceTypeEnum.CRATOS.name()
-                .equals(instance.getEdsType())) {
-            EdsAssetException.runtime("The current asset type does not support manually adding assets");
+        EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype> holder = (EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype>) buildHolder(
+                addAsset.getInstanceId(), addAsset.getAssetType());
+        validateCustomAssetHolder(holder);
+        holder.importAsset(addAsset);
+    }
+
+    private void validateCustomAssetHolder(EdsInstanceProviderHolder<?, ?> holder) {
+        if (holder == null || AopUtils.getTargetClass(holder)
+                .getAnnotation(CustomAsset.class) == null) {
+            throw new EdsAssetException("The current asset type does not support custom asset operations.");
         }
-        if (!EdsAssetTypeEnum.CRATOS_COMPUTER.name()
-                .equals(addCratosAsset.getAssetType())) {
-            EdsAssetException.runtime("The current asset type does not support manually adding assets");
-        }
-        EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset>) buildHolder(
-                addCratosAsset.getInstanceId(), addCratosAsset.getAssetType());
-        if (Objects.isNull(holder)) {
-            EdsAssetException.runtime("The current asset type does not support manually adding assets");
-        }
-        holder.importAsset(addCratosAsset.toTarget());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void updateInstanceCratosAsset(CratosAssetParam.UpdateCratosAsset updateCratosAsset) {
-        EdsAsset asset = edsAssetService.getById(updateCratosAsset.getId());
+    public void updateInstanceCustomAsset(CustomAssetParam.UpdateAsset updateAsset) {
+        EdsAsset asset = edsAssetService.getById(updateAsset.getId());
         if (asset == null) {
             EdsAssetException.runtime("The asset does not exist.");
         }
         EdsInstance instance = edsInstanceService.getById(asset.getInstanceId());
         if (Objects.isNull(instance)) {
-            EdsAssetException.runtime("Instance does not exist");
+            EdsAssetException.runtime("Instance does not exist.");
         }
-        if (!EdsInstanceTypeEnum.CRATOS.name()
-                .equals(instance.getEdsType())) {
-            EdsAssetException.runtime("The current asset type does not support manually adding assets");
-        }
-        EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset>) buildHolder(
-                instance.getId(), updateCratosAsset.getAssetType());
-        if (Objects.isNull(holder)) {
-            EdsAssetException.runtime("The current asset type does not support manually adding assets");
-        }
-        CratosAssetParam.CratosAsset cratosAsset = updateCratosAsset.toTarget();
-        cratosAsset.setInstanceId(instance.getId());
-        holder.importAsset(cratosAsset);
+        EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype> holder = (EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype>) buildHolder(
+                instance.getId(), updateAsset.getAssetType());
+        validateCustomAssetHolder(holder);
+        CustomAssetParam.AssetPrototype assetPrototype = updateAsset.toTarget();
+        assetPrototype.setInstanceId(instance.getId());
+        holder.importAsset(assetPrototype);
     }
 
 }

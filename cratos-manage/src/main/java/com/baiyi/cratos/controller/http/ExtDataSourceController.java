@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
-import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
+import com.baiyi.cratos.domain.param.http.eds.cratos.CustomAssetParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
@@ -176,19 +176,33 @@ public class ExtDataSourceController {
         return HttpResult.of(edsFacade.queryAssetByUniqueKey(queryAssetByUniqueKey));
     }
 
-    @Operation(summary = "Add eds cratos asset")
-    @PostMapping(value = "/instance/cratos/asset/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addInstanceCratosAsset(
-            @RequestBody @Valid CratosAssetParam.AddCratosAsset addCratosAsset) {
-        edsFacade.addInstanceCratosAsset(addCratosAsset);
+    @Operation(summary = "Add eds custom asset")
+    @PostMapping(value = "/instance/custom/asset/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addInstanceCustomAsset(@RequestBody @Valid CustomAssetParam.AddAsset addAsset) {
+        edsFacade.addInstanceCustomAsset(addAsset);
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update eds custom asset")
+    @PutMapping(value = "/instance/custom/asset/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateInstanceCustomAsset(@RequestBody @Valid CustomAssetParam.UpdateAsset updateAsset) {
+        edsFacade.updateInstanceCustomAsset(updateAsset);
+        return HttpResult.SUCCESS;
+    }
+
+    @Deprecated
+    @Operation(summary = "Add eds cratos asset")
+    @PostMapping(value = "/instance/cratos/asset/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addInstanceCratosAsset(@RequestBody @Valid CustomAssetParam.AddAsset addAsset) {
+        edsFacade.addInstanceCustomAsset(addAsset);
+        return HttpResult.SUCCESS;
+    }
+
+    @Deprecated
     @Operation(summary = "Update eds cratos asset")
     @PutMapping(value = "/instance/cratos/asset/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateInstanceCratosAsset(
-            @RequestBody @Valid CratosAssetParam.UpdateCratosAsset updateCratosAsset) {
-        edsFacade.updateInstanceCratosAsset(updateCratosAsset);
+    public HttpResult<Boolean> updateInstanceCratosAsset(@RequestBody @Valid CustomAssetParam.UpdateAsset updateAsset) {
+        edsFacade.updateInstanceCustomAsset(updateAsset);
         return HttpResult.SUCCESS;
     }
 

@@ -3,8 +3,9 @@ package com.baiyi.cratos.eds.cratos.provider;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
+import com.baiyi.cratos.domain.param.http.eds.cratos.CustomAssetParam;
 import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
+import com.baiyi.cratos.eds.core.annotation.CustomAsset;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -27,22 +28,23 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@CustomAsset
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CRATOS, assetTypeOf = EdsAssetTypeEnum.CRATOS_COMPUTER)
-public class EdsCratosComputerAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Cratos, CratosAssetParam.CratosAsset> {
+public class EdsCratosComputerAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Cratos, CustomAssetParam.AssetPrototype> {
 
     public EdsCratosComputerAssetProvider(EdsAssetProviderContext context) {
         super(context);
     }
 
     @Override
-    protected List<CratosAssetParam.CratosAsset> listEntities(
+    protected List<CustomAssetParam.AssetPrototype> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Cratos> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Query not supported");
     }
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cratos> instance,
-                                         CratosAssetParam.CratosAsset entity) throws EdsAssetConversionException {
+                                         CustomAssetParam.AssetPrototype entity) throws EdsAssetConversionException {
         String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtils.randomUUID();
         if (!IpUtils.isIP(entity.getAssetKey())) {
             EdsAssetConversionException.runtime("`Remote Management IP` not a valid IP address.");

@@ -129,6 +129,7 @@ public enum EdsAssetTypeEnum {
     CRT_LOG("Certificate Log", 1),
 
     SRE_EVENTBRIDGE_EVENT("Event Bridge", 1),
+    @CloudComputer CUSTOM_IDC_HOST("Host", 1),
 
     DEF("Default", 9999);
 

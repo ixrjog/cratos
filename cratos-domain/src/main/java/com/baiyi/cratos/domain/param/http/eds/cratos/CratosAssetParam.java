@@ -1,7 +1,6 @@
 package com.baiyi.cratos.domain.param.http.eds.cratos;
 
 import com.baiyi.cratos.domain.model.cratos.CratosCommonModel;
-import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -27,7 +26,7 @@ public class CratosAssetParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class AddCratosAsset implements CratosCommonModel.HasTags, CratosCommonModel.HasConfigMap, IToTarget<CratosAsset> {
+    public static class AddCratosAssetX implements CratosCommonModel.HasTags, CratosCommonModel.HasConfigMap {
         @Null
         private Integer id;
         private Integer parentId;
@@ -58,7 +57,7 @@ public class CratosAssetParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class UpdateCratosAsset implements CratosCommonModel.HasTags, CratosCommonModel.HasConfigMap, IToTarget<CratosAsset> {
+    public static class UpdateCratosAssetX implements CratosCommonModel.HasTags, CratosCommonModel.HasConfigMap {
         @NotNull
         private Integer id;
         private Integer parentId;
@@ -89,7 +88,7 @@ public class CratosAssetParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class CratosAsset implements CratosCommonModel.HasTags, CratosCommonModel.HasConfigMap {
+    public static class CratosAssetX implements CratosCommonModel.HasTags, CratosCommonModel.HasConfigMap {
         private Integer id;
         private Integer parentId;
         private Integer instanceId;
@@ -103,7 +102,6 @@ public class CratosAssetParam {
         private String region;
         private String zone;
         private String assetStatus;
-        private String originalModel;
         private String description;
         private List<String> tags;
         private CratosCommonModel.ConfigMap configMap;
