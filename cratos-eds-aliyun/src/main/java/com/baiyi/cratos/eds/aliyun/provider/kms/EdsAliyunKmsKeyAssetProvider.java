@@ -6,21 +6,15 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
@@ -43,23 +37,18 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_KMS_KEY)
 public class EdsAliyunKmsKeyAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, AliyunKms.KmsKey> {
 
-    public EdsAliyunKmsKeyAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                        EdsAssetIndexFacade edsAssetIndexFacade,
-                                        AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                        EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAliyunKmsKeyAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
     protected Set<String> listEndpoints(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getConfig)
-                .map(EdsConfigs.Aliyun::getKms)
-                .map(EdsAliyunConfigModel.KMS::getEndpoints)
-                .orElse(List.of()));
+                                       .map(ExternalDataSourceInstance::getConfig)
+                                       .map(EdsConfigs.Aliyun::getKms)
+                                       .map(EdsAliyunConfigModel.KMS::getEndpoints)
+                                       .orElse(List.of()));
     }
 
     @Override
@@ -77,8 +66,10 @@ public class EdsAliyunKmsKeyAssetProvider extends BaseHasEndpointsEdsAssetProvid
         return keys.stream()
                 .map(e -> AliyunKmsRepo.describeKey(endpoint, configModel, e.getKeyId())
                         .map(keyMetadata -> {
-                            AliyunKms.KeyMetadata metadata = BeanCopierUtils.copyProperties(keyMetadata,
-                                    AliyunKms.KeyMetadata.class);
+                            AliyunKms.KeyMetadata metadata = BeanCopierUtils.copyProperties(
+                                    keyMetadata,
+                                    AliyunKms.KeyMetadata.class
+                            );
                             return AliyunKms.KmsKey.builder()
                                     .endpoint(endpoint)
                                     .metadata(metadata)
@@ -91,25 +82,27 @@ public class EdsAliyunKmsKeyAssetProvider extends BaseHasEndpointsEdsAssetProvid
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  AliyunKms.KmsKey entity) {
+                                         AliyunKms.KmsKey entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getMetadata()
-                        .getKeyId())
+                                                                      .getKeyId())
                 .nameOf(entity.getMetadata()
-                        .getArn())
+                                .getArn())
                 .assetKeyOf(entity.getMetadata()
-                        .getArn())
+                                    .getArn())
                 .descriptionOf(entity.getMetadata()
-                        .getDescription())
+                                       .getDescription())
                 .build();
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, AliyunKms.KmsKey entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                            AliyunKms.KmsKey entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
-        indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_INSTANCE_ID, entity.getMetadata()
-                .getDKMSInstanceId()));
+        indices.add(createEdsAssetIndex(
+                edsAsset, ALIYUN_KMS_INSTANCE_ID, entity.getMetadata()
+                        .getDKMSInstanceId()
+        ));
         return indices;
     }
 

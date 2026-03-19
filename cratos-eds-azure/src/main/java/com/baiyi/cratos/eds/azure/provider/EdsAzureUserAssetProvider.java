@@ -4,21 +4,15 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
 import com.baiyi.cratos.eds.azure.repo.GraphUserRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -37,17 +31,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AZURE, assetTypeOf = EdsAssetTypeEnum.AZURE_USER)
-public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Azure, GraphUserModel.User> {
+public class EdsAzureUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Azure, GraphUserModel.User> {
 
-    public EdsAzureUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade,
-                                     AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                     EdsProviderHolderFactory holderBuilder) {
-        super(
-                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder
-        );
+    public EdsAzureUserAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
@@ -92,7 +79,7 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsC
         // 角色
         if (!CollectionUtils.isEmpty(entity.getDirectoryRoleIds())) {
             java.util.Set<String> dirRoleIdsSet = Set.copyOf(entity.getDirectoryRoleIds());
-            String joined = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.AZURE_DIRECTORY_ROLE).stream()
+            String joined = queryInstanceAssets(instance, EdsAssetTypeEnum.AZURE_DIRECTORY_ROLE).stream()
                     .filter(role -> dirRoleIdsSet.contains(role.getAssetId()))
                     .map(EdsAsset::getName)
                     .filter(StringUtils::isNotBlank)

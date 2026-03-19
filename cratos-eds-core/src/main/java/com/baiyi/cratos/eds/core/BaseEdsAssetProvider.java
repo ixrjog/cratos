@@ -11,24 +11,19 @@ import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.eds.core.builder.EdsAssetBuilder;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.AssetUtils;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
@@ -46,21 +41,15 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unchecked")
 @Slf4j
-@AllArgsConstructor
-public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
+@RequiredArgsConstructor
+public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
 
-    private final EdsAssetService edsAssetService;
-    private final SimpleEdsFacade simpleEdsFacade;
-    protected final CredentialService credentialService;
-    private final ConfigCredTemplate configCredTemplate;
-    protected final EdsAssetIndexFacade edsAssetIndexFacade;
-    private final AssetToBusinessObjectUpdater assetToBusinessObjectUpdater;
-    private final EdsProviderHolderFactory holderBuilder;
+    protected final EdsAssetProviderContext context;
 
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
     protected EdsInstanceProviderHolder<C, A> getHolder(int instanceId) {
-        return (EdsInstanceProviderHolder<C, A>) holderBuilder.createHolder(instanceId, getAssetType());
+        return (EdsInstanceProviderHolder<C, A>) context.getEdsProviderHolderFactory().createHolder(instanceId, getAssetType());
     }
 
     /**
@@ -70,17 +59,17 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
      * @param edsAssetTypeEnum
      * @return
      */
-    protected List<EdsAsset> queryAssetsByInstanceAndType(ExternalDataSourceInstance<C> instance,
-                                                          EdsAssetTypeEnum edsAssetTypeEnum) {
-        return edsAssetService.queryInstanceAssets(
+    protected List<EdsAsset> queryInstanceAssets(ExternalDataSourceInstance<C> instance,
+                                                 EdsAssetTypeEnum edsAssetTypeEnum) {
+        return context.getEdsAssetService().queryInstanceAssets(
                 instance.getEdsInstance()
                         .getId(), edsAssetTypeEnum.name()
         );
     }
 
-    protected List<EdsAsset> queryAssetsByInstanceTypeAndRegion(ExternalDataSourceInstance<C> instance,
-                                                                EdsAssetTypeEnum edsAssetTypeEnum, String region) {
-        return edsAssetService.queryInstanceAssets(
+    protected List<EdsAsset> queryInstanceAssets(ExternalDataSourceInstance<C> instance,
+                                                 EdsAssetTypeEnum edsAssetTypeEnum, String region) {
+        return context.getEdsAssetService().queryInstanceAssets(
                 instance.getEdsInstance()
                         .getId(), edsAssetTypeEnum.name(), region
         );
@@ -104,7 +93,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
                             .getInstanceName(), Joiner.on("|")
                             .join(idSet)
             );
-            idSet.forEach(simpleEdsFacade::deleteEdsAssetById);
+            idSet.forEach(context.getSimpleEdsFacade()::deleteEdsAssetById);
         }
         // post processing
         postProcessEntities(instance);
@@ -123,7 +112,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
         try {
             EdsAsset edsAsset = saveAsset(convertToEdsAsset(instance, entity));
             List<EdsAssetIndex> indices = createEdsAssetIndices(instance, edsAsset, entity);
-            edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), indices);
+            context.getEdsAssetIndexFacade().saveAssetIndexList(edsAsset.getId(), indices);
             processingAssetTags(edsAsset, instance, entity, indices);
             return edsAsset;
         } catch (EdsAssetConversionException e) {
@@ -205,7 +194,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
     }
 
     private EdsAsset saveOrUpdateAsset(EdsAsset newEdsAsset) {
-        EdsAsset edsAsset = edsAssetService.getByUniqueKey(newEdsAsset);
+        EdsAsset edsAsset = context.getEdsAssetService().getByUniqueKey(newEdsAsset);
         if (edsAsset == null) {
             try {
                 addNewAsset(newEdsAsset);
@@ -215,9 +204,9 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
         } else {
             newEdsAsset.setId(edsAsset.getId());
             if (!isAssetChanged(edsAsset, newEdsAsset)) {
-                edsAssetService.updateByPrimaryKey(newEdsAsset);
+                context.getEdsAssetService().updateByPrimaryKey(newEdsAsset);
                 // 更新绑定的资产
-                assetToBusinessObjectUpdater.update(newEdsAsset);
+                context.getAssetToBusinessObjectUpdater().update(newEdsAsset);
             }
         }
         return newEdsAsset;
@@ -229,7 +218,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
      */
     private void addNewAsset(EdsAsset newEdsAsset) {
         try {
-            edsAssetService.add(newEdsAsset);
+            context.getEdsAssetService().add(newEdsAsset);
             afterAssetCreated(newEdsAsset);
         } catch (Exception e) {
             log.error("Enter eds asset err: {}", e.getMessage());
@@ -271,7 +260,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
      * @return
      */
     private List<EdsAsset> queryExistingAssets(ExternalDataSourceInstance<C> instance) {
-        return edsAssetService.queryInstanceAssets(
+        return context.getEdsAssetService().queryInstanceAssets(
                 instance.getEdsInstance()
                         .getId(), getAssetType()
         );
@@ -281,9 +270,9 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
     public C configLoadAs(EdsConfig edsConfig) {
         String configContent = edsConfig.getConfigContent();
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
-            Credential cred = credentialService.getById(edsConfig.getCredentialId());
+            Credential cred = context.getCredentialService().getById(edsConfig.getCredentialId());
             if (cred != null) {
-                return configLoadAs(configCredTemplate.renderTemplate(configContent, cred));
+                return configLoadAs(context.getConfigCredTemplate().renderTemplate(configContent, cred));
             }
         }
         return configLoadAs(configContent);
@@ -291,14 +280,14 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
 
     protected C configLoadAs(String configContent) {
         // Get the entity type of generic `C`
-        Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 0);
+        Class<C> clazz = Generics.find(this.getClass(), BaseEdsAssetProvider.class, 0);
         return EdsConfigUtils.loadAs(configContent, clazz);
     }
 
     @Override
     public A assetLoadAs(String originalModel) {
         // Get the entity type of generic `A`
-        Class<A> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 1);
+        Class<A> clazz = Generics.find(this.getClass(), BaseEdsAssetProvider.class, 1);
         return AssetUtils.loadAs(originalModel, clazz);
     }
 

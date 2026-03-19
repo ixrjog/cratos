@@ -4,21 +4,15 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareZoneRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -33,15 +27,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUDFL
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_ZONE)
-public class EdsCloudFlareZoneAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Cloudflare, CloudFlareZone.Zone> {
+public class EdsCloudFlareZoneAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Cloudflare, CloudFlareZone.Zone> {
 
-    public EdsCloudFlareZoneAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade,
-                                          AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                          EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsCloudFlareZoneAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

@@ -3,21 +3,15 @@ package com.baiyi.cratos.eds.gitlab.provider.asset;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.gitlab4j.api.models.User;
 import org.springframework.stereotype.Component;
 
@@ -32,15 +26,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_AV
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_USER)
-public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.GitLab, User> {
+public class EdsGitLabUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.GitLab, User> {
 
-    public EdsGitLabUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                      EdsAssetIndexFacade edsAssetIndexFacade,
-                                      AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                      EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsGitLabUserAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

@@ -9,20 +9,14 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
@@ -40,20 +34,14 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_POLICY)
-public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, GetPolicyResponse.Policy> {
+public class EdsAliyunRamPolicyAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aliyun, GetPolicyResponse.Policy> {
 
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
     private final AliyunRamUserRepo aliyunRamUserRepo;
 
-    public EdsAliyunRamPolicyAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                           EdsAssetIndexFacade edsAssetIndexFacade,
-                                           AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                           EdsProviderHolderFactory edsProviderHolderFactory,
-                                           AliyunRamPolicyRepo aliyunRamPolicyRepo,
+    public EdsAliyunRamPolicyAssetProvider(EdsAssetProviderContext context, AliyunRamPolicyRepo aliyunRamPolicyRepo,
                                            AliyunRamUserRepo aliyunRamUserRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+        super(context);
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
     }
@@ -79,7 +67,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  GetPolicyResponse.Policy entity) {
+                                         GetPolicyResponse.Policy entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyName())
                 .nameOf(entity.getPolicyName())
                 .kindOf(entity.getPolicyType())
@@ -89,8 +77,8 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, GetPolicyResponse.Policy entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                            GetPolicyResponse.Policy entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<ListEntitiesForPolicyResponse.User> users = aliyunRamUserRepo.listUsersForPolicy(
@@ -98,8 +86,8 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
             if (!CollectionUtils.isEmpty(users)) {
                 final String policyName = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
                         .join(users.stream()
-                                .map(ListEntitiesForPolicyResponse.User::getUserName)
-                                .toList());
+                                      .map(ListEntitiesForPolicyResponse.User::getUserName)
+                                      .toList());
                 indices.add(createEdsAssetIndex(edsAsset, ALIYUN_RAM_USERS, policyName));
             }
         } catch (Exception ignored) {

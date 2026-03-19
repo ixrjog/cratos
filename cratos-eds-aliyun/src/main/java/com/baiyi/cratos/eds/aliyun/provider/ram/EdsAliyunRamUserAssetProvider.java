@@ -9,21 +9,15 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamAccessKeyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -44,21 +38,16 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)
-public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, GetUserResponse.User> {
+public class EdsAliyunRamUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aliyun, GetUserResponse.User> {
 
     private final AliyunRamUserRepo aliyunRamUserRepo;
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
     private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
 
-    public EdsAliyunRamUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                         CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                         EdsAssetIndexFacade edsAssetIndexFacade,
-                                         AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                         EdsProviderHolderFactory edsProviderHolderFactory,
-                                         AliyunRamUserRepo aliyunRamUserRepo, AliyunRamPolicyRepo aliyunRamPolicyRepo,
+    public EdsAliyunRamUserAssetProvider(EdsAssetProviderContext context, AliyunRamUserRepo aliyunRamUserRepo,
+                                         AliyunRamPolicyRepo aliyunRamPolicyRepo,
                                          AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+        super(context);
         this.aliyunRamUserRepo = aliyunRamUserRepo;
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
         this.aliyunRamAccessKeyRepo = aliyunRamAccessKeyRepo;
@@ -85,7 +74,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  GetUserResponse.User entity) {
+                                         GetUserResponse.User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getDisplayName())
                 .assetKeyOf(entity.getUserName())
@@ -95,8 +84,8 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, GetUserResponse.User entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                            GetUserResponse.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<ListPoliciesForUserResponse.Policy> policies = aliyunRamPolicyRepo.listPoliciesForUser(
@@ -126,7 +115,8 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
         try {
             GetLoginProfileResponse.LoginProfile loginProfile = aliyunRamUserRepo.getLoginProfile(
                     instance.getConfig()
-                            .getRegionId(), instance.getConfig(), entity.getUserName());
+                            .getRegionId(), instance.getConfig(), entity.getUserName()
+            );
             if (Objects.nonNull(loginProfile)) {
                 indices.add(createEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
             }

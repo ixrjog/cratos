@@ -7,22 +7,16 @@ import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.model.AliyunArms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunArmsRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.EnvFacade;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -45,18 +39,12 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ENV;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ARMS_TRACE_APPS)
-public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, AliyunArms.TraceApps> {
+public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aliyun, AliyunArms.TraceApps> {
 
     private final EnvFacade envFacade;
 
-    public EdsAliyunArmsTraceAppAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                              CredentialService credentialService,
-                                              ConfigCredTemplate configCredTemplate,
-                                              EdsAssetIndexFacade edsAssetIndexFacade,
-                                              AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                              EdsProviderHolderFactory edsProviderHolderFactory, EnvFacade envFacade) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAliyunArmsTraceAppAssetProvider(EdsAssetProviderContext context, EnvFacade envFacade) {
+        super(context);
         this.envFacade = envFacade;
     }
 
@@ -67,14 +55,13 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
             return AliyunArmsRepo.listTraceApps(instance.getConfig())
                     .stream()
                     .map(e -> {
-                        List<AliyunArms.Tags> tags = CollectionUtils.isEmpty(e.getTags()) ? List.of() :
-                                e.getTags()
-                                        .stream()
-                                        .map(t -> AliyunArms.Tags.builder()
-                                                .key(t.getKey())
-                                                .value(t.getValue())
-                                                .build())
-                                        .toList();
+                        List<AliyunArms.Tags> tags = CollectionUtils.isEmpty(e.getTags()) ? List.of() : e.getTags()
+                                .stream()
+                                .map(t -> AliyunArms.Tags.builder()
+                                        .key(t.getKey())
+                                        .value(t.getValue())
+                                        .build())
+                                .toList();
                         return AliyunArms.TraceApps.builder()
                                 .appId(e.getAppId())
                                 .appName(e.getAppName())
@@ -100,7 +87,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  AliyunArms.TraceApps entity) {
+                                         AliyunArms.TraceApps entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getAppId())
                 .nameOf(entity.getAppName())
                 .assetKeyOf(entity.getPid())
@@ -110,8 +97,8 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, AliyunArms.TraceApps entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                            AliyunArms.TraceApps entity) {
         String name = entity.getAppName();
         Map<String, Env> envMap = envFacade.getEnvMap();
         String env = EnvUtils.getEnvSuffix(envMap, name);
@@ -125,8 +112,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
                     .map(EdsConfigs.Aliyun::getArms)
                     .map(EdsAliyunConfigModel.ARMS::getAppOverview)
                     .ifPresent(home -> {
-                        String appHome = StringFormatter.arrayFormat(home, entity.getRegionId(),
-                                entity.getPid());
+                        String appHome = StringFormatter.arrayFormat(home, entity.getRegionId(), entity.getPid());
                         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ARMS_APP_HOME, appHome));
                     });
             return indices;

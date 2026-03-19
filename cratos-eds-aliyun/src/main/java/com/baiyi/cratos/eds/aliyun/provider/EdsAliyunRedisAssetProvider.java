@@ -6,20 +6,14 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRedisRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 
@@ -39,14 +33,8 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
 
     private final AliyunRedisRepo aliyunRedisRepo;
 
-    public EdsAliyunRedisAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                       EdsAssetIndexFacade edsAssetIndexFacade,
-                                       AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                       EdsProviderHolderFactory edsProviderHolderFactory,
-                                       AliyunRedisRepo aliyunRedisRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAliyunRedisAssetProvider(EdsAssetProviderContext context, AliyunRedisRepo aliyunRedisRepo) {
+        super(context);
         this.aliyunRedisRepo = aliyunRedisRepo;
     }
 
@@ -66,7 +54,7 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
+                                         com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                 .nameOf(entity.getInstanceName())
                 .kindOf(entity.getInstanceType())
@@ -79,8 +67,7 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
                                             com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {

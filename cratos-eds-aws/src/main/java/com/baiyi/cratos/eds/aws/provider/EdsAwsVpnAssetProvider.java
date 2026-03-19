@@ -3,20 +3,14 @@ package com.baiyi.cratos.eds.aws.provider;
 import com.amazonaws.services.ec2.model.Tag;
 import com.amazonaws.services.ec2.model.VpnConnection;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsVpnRepo;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,13 +25,8 @@ import java.util.Optional;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_STS_VPN)
 public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, VpnConnection> {
 
-    public EdsAwsVpnAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                  EdsAssetIndexFacade edsAssetIndexFacade,
-                                  AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                  EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsVpnAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

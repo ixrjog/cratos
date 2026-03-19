@@ -7,21 +7,15 @@ import com.baiyi.cratos.eds.aws.model.InstanceModel;
 import com.baiyi.cratos.eds.aws.repo.AwsEc2Repo;
 import com.baiyi.cratos.eds.aws.repo.Ec2InstancesRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -41,15 +35,9 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     private final Ec2InstancesRepo ec2InstancesRepo;
     private final AwsEc2Repo awsEc2Repo;
 
-    public EdsAwsEc2AssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                  EdsAssetIndexFacade edsAssetIndexFacade, Ec2InstancesRepo ec2InstancesRepo,
-                                  AwsEc2Repo awsEc2Repo, AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                  EdsProviderHolderFactory holderBuilder) {
-        super(
-                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder
-        );
+    public EdsAwsEc2AssetProvider(EdsAssetProviderContext context, Ec2InstancesRepo ec2InstancesRepo,
+                                  AwsEc2Repo awsEc2Repo) {
+        super(context);
         this.ec2InstancesRepo = ec2InstancesRepo;
         this.awsEc2Repo = awsEc2Repo;
     }
@@ -97,6 +85,7 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
                                        .getLaunchTime())
                 .build();
     }
+
     @Override
     protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.builder()

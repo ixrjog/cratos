@@ -2,23 +2,17 @@ package com.baiyi.cratos.eds.gitlab.provider.asset;
 
 import com.baiyi.cratos.common.util.SshKeyUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.gitlab.data.SshKeyData;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabSshKeyRepo;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.SshKey;
 import org.gitlab4j.api.models.User;
@@ -37,22 +31,17 @@ import java.util.stream.Stream;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_SSHKEY)
-public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.GitLab, SshKeyData> {
+public class EdsGitLabSshKeyAssetProvider extends BaseEdsAssetProvider<EdsConfigs.GitLab, SshKeyData> {
 
-    public EdsGitLabSshKeyAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                        EdsAssetIndexFacade edsAssetIndexFacade,
-                                        AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                        EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsGitLabSshKeyAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
     protected List<SshKeyData> listEntities(
             ExternalDataSourceInstance<EdsConfigs.GitLab> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> edsUserAssets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.GITLAB_USER);
+            List<EdsAsset> edsUserAssets = queryInstanceAssets(instance, EdsAssetTypeEnum.GITLAB_USER);
             if (!CollectionUtils.isEmpty(edsUserAssets)) {
                 return listSshKeyWithEdsUserAssets(instance, edsUserAssets);
             }

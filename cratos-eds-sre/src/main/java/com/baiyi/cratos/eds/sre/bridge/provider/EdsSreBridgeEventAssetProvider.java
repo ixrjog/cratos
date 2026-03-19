@@ -3,21 +3,15 @@ package com.baiyi.cratos.eds.sre.bridge.provider;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.model.SreBridgeModel;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.sre.bridge.facade.SreBridgeFacade;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,17 +27,10 @@ import static com.baiyi.cratos.eds.core.util.SreEventFormatter.EVENT_ID;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.SRE_EVENTBRIDGE, assetTypeOf = EdsAssetTypeEnum.SRE_EVENTBRIDGE_EVENT)
-public class EdsSreBridgeEventAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.SreEventBridge, SreBridgeModel.Event> {
+public class EdsSreBridgeEventAssetProvider extends BaseEdsAssetProvider<EdsConfigs.SreEventBridge, SreBridgeModel.Event> {
 
-    public EdsSreBridgeEventAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade,
-                                          AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                          EdsProviderHolderFactory holderBuilder) {
-        super(
-                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder
-        );
+    public EdsSreBridgeEventAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

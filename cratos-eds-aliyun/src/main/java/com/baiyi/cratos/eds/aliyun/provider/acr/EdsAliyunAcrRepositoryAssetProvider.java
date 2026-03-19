@@ -7,21 +7,15 @@ import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -44,15 +38,8 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
 
     private final AliyunAcrRepo aliyunAcrRepo;
 
-    public EdsAliyunAcrRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                               CredentialService credentialService,
-                                               ConfigCredTemplate configCredTemplate,
-                                               EdsAssetIndexFacade edsAssetIndexFacade,
-                                               AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                               EdsProviderHolderFactory edsProviderHolderFactory,
-                                               AliyunAcrRepo aliyunAcrRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAliyunAcrRepositoryAssetProvider(EdsAssetProviderContext context, AliyunAcrRepo aliyunAcrRepo) {
+        super(context);
         this.aliyunAcrRepo = aliyunAcrRepo;
     }
 
@@ -66,8 +53,11 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
             }
             List<ListRepositoryResponse.RepositoriesItem> entities = Lists.newArrayList();
             for (ListInstanceResponse.InstancesItem instancesItem : instancesItems) {
-                List<ListRepositoryResponse.RepositoriesItem> repositoriesItems = aliyunAcrRepo.listRepository(regionId,
-                        configModel, instancesItem.getInstanceId());
+                List<ListRepositoryResponse.RepositoriesItem> repositoriesItems = aliyunAcrRepo.listRepository(
+                        regionId,
+                        configModel,
+                        instancesItem.getInstanceId()
+                );
                 if (!CollectionUtils.isEmpty(repositoriesItems)) {
                     entities.addAll(repositoriesItems);
                 }
@@ -84,7 +74,7 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  ListRepositoryResponse.RepositoriesItem entity) {
+                                         ListRepositoryResponse.RepositoriesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getRepoId());
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getRepoId())
@@ -97,8 +87,7 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
                                             ListRepositoryResponse.RepositoriesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
@@ -112,9 +101,9 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     @Override
     protected Set<String> getRegionSet(EdsConfigs.Aliyun configModel) {
         return Sets.newHashSet(Optional.of(configModel)
-                .map(EdsConfigs.Aliyun::getAcr)
-                .map(EdsAliyunConfigModel.ACR::getRegionIds)
-                .orElse(Collections.emptyList()));
+                                       .map(EdsConfigs.Aliyun::getAcr)
+                                       .map(EdsAliyunConfigModel.ACR::getRegionIds)
+                                       .orElse(Collections.emptyList()));
     }
 
 }

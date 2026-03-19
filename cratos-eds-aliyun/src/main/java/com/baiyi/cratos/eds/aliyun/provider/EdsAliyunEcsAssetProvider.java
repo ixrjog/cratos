@@ -14,20 +14,14 @@ import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.aliyun.model.AliyunEcs;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunTagRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -57,20 +51,16 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     private static final SysTagKeys[] COMPUTER_TAGS = {SysTagKeys.GROUP, SysTagKeys.NAME, SysTagKeys.SERVER_ACCOUNT};
 
-    public EdsAliyunEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade,
-                                     AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                     EdsProviderHolderFactory edsProviderHolderFactory, AliyunEcsRepo aliyunEcsRepo,
+    public EdsAliyunEcsAssetProvider(EdsAssetProviderContext context, AliyunEcsRepo aliyunEcsRepo,
                                      AliyunTagRepo aliyunTagRepo, TagService tagService,
                                      BusinessTagFacade businessTagFacade) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+        super(context);
         this.aliyunEcsRepo = aliyunEcsRepo;
         this.aliyunTagRepo = aliyunTagRepo;
         this.tagService = tagService;
         this.businessTagFacade = businessTagFacade;
     }
+
 
     public static Date toUtcDate(String time) {
         return TimeUtils.toDate(time, TimeZoneEnum.UTC);
@@ -89,8 +79,10 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                                       List<DescribeInstancesResponse.Instance> instances) {
         return instances.stream()
                 .map(e -> {
-                    List<DescribeDisksResponse.Disk> disks = aliyunEcsRepo.describeDisks(regionId, configModel,
-                            e.getInstanceId());
+                    List<DescribeDisksResponse.Disk> disks = aliyunEcsRepo.describeDisks(
+                            regionId, configModel,
+                            e.getInstanceId()
+                    );
                     AliyunEcs.Ecs ecs = AliyunEcs.Ecs.builder()
                             .regionId(regionId)
                             .instance(e)
@@ -103,8 +95,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  AliyunEcs.Ecs entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunEcs.Ecs entity) {
         final String privateIp = entity.getInstance()
                 .getInstanceNetworkType()
                 .equals(VPC) ? entity.getInstance()
@@ -120,20 +111,20 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
             expiredTime = toUtcDate(optionalExpiredTime.get());
         }
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
-                        .getInstanceId())
+                                                                      .getInstanceId())
                 .nameOf(entity.getInstance()
-                        .getInstanceName())
+                                .getInstanceName())
                 .assetKeyOf(privateIp)
                 .kindOf(entity.getInstance()
-                        .getInstanceType())
+                                .getInstanceType())
                 .regionOf(entity.getRegionId())
                 .zoneOf(entity.getInstance()
-                        .getZoneId())
+                                .getZoneId())
                 .createdTimeOf(toUtcDate(entity.getInstance()
-                        .getCreationTime()))
+                                                 .getCreationTime()))
                 .expiredTimeOf(expiredTime)
                 .descriptionOf(entity.getInstance()
-                        .getDescription())
+                                       .getDescription())
                 .build();
     }
 
@@ -151,16 +142,17 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunEcs.Ecs entity) {
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunEcs.Ecs entity) {
         EdsAsset asset = super.saveEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
-        List<ListTagResourcesResponse.TagResource> tagResources = aliyunTagRepo.listTagResources(entity.getRegionId(),
-                                                                                                 instance.getConfig(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()
-                                .getInstanceId())
+        List<ListTagResourcesResponse.TagResource> tagResources = aliyunTagRepo.listTagResources(
+                        entity.getRegionId(), instance.getConfig(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()
+                                .getInstanceId()
+                )
                 .stream()
                 .filter(tagResource -> Arrays.stream(COMPUTER_TAGS)
-                        .anyMatch(tagKey -> tagKey.name().equals(tagResource.getTagKey())))
+                        .anyMatch(tagKey -> tagKey.name()
+                                .equals(tagResource.getTagKey())))
                 .toList();
         if (CollectionUtils.isEmpty(tagResources)) {
             return asset;

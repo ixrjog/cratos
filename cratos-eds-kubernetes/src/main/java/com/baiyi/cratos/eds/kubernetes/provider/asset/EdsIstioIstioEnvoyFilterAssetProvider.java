@@ -2,22 +2,16 @@ package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIstioEnvoyFilterRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import io.fabric8.istio.api.networking.v1alpha3.EnvoyFilter;
 import org.springframework.stereotype.Component;
@@ -37,16 +31,10 @@ public class EdsIstioIstioEnvoyFilterAssetProvider extends BaseEdsKubernetesAsse
 
     private final KubernetesIstioEnvoyFilterRepo kubernetesIstioEnvoyFilterRepo;
 
-    public EdsIstioIstioEnvoyFilterAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                 CredentialService credentialService,
-                                                 ConfigCredTemplate configCredTemplate,
-                                                 EdsAssetIndexFacade edsAssetIndexFacade,
-                                                 AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                                 EdsProviderHolderFactory holderBuilder,
+    public EdsIstioIstioEnvoyFilterAssetProvider(EdsAssetProviderContext context,
                                                  KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                                  KubernetesIstioEnvoyFilterRepo kubernetesIstioEnvoyFilterRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder, kubernetesNamespaceRepo);
+        super(context, kubernetesNamespaceRepo);
         this.kubernetesIstioEnvoyFilterRepo = kubernetesIstioEnvoyFilterRepo;
     }
 
@@ -57,9 +45,8 @@ public class EdsIstioIstioEnvoyFilterAssetProvider extends BaseEdsKubernetesAsse
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
-            EnvoyFilter entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
+                                            EdsAsset edsAsset, EnvoyFilter entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         return indices;

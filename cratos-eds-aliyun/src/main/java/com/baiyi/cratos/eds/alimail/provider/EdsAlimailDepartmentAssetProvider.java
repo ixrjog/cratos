@@ -5,9 +5,10 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.repo.AlimailDepartmentRepo;
 import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,15 +33,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIMAIL
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_DEPARTMENT)
-public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Alimail, AlimailDepartment.Department> {
+public class EdsAlimailDepartmentAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Alimail, AlimailDepartment.Department> {
 
-    public EdsAlimailDepartmentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                             EdsAssetIndexFacade edsAssetIndexFacade,
-                                             AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                             EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAlimailDepartmentAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

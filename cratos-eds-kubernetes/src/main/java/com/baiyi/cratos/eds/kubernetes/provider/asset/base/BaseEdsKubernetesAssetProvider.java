@@ -2,19 +2,13 @@ package com.baiyi.cratos.eds.kubernetes.provider.asset.base;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
 import io.fabric8.kubernetes.api.model.HasMetadata;
@@ -34,16 +28,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Kubernetes, A> {
 
-    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
+    protected final KubernetesNamespaceRepo kubernetesNamespaceRepo;
 
-    public BaseEdsKubernetesAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade,
-                                          AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                          EdsProviderHolderFactory holderBuilder,
+    public BaseEdsKubernetesAssetProvider(EdsAssetProviderContext context,
                                           KubernetesNamespaceRepo kubernetesNamespaceRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+        super(context);
         this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
     }
 
@@ -83,7 +72,7 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
 
     protected Date getCreationTime(HasMetadata hasMetadata) {
         return toUTCDate(hasMetadata.getMetadata()
-                .getCreationTimestamp());
+                                 .getCreationTimestamp());
     }
 
     protected String getMetadataLabel(HasMetadata hasMetadata, String key) {

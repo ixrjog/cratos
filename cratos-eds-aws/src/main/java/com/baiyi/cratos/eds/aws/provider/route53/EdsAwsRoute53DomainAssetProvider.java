@@ -3,21 +3,15 @@ package com.baiyi.cratos.eds.aws.provider.route53;
 import com.amazonaws.services.route53domains.model.DomainSummary;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53DomainRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,15 +23,10 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_DOMAIN)
-public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, DomainSummary> {
+public class EdsAwsRoute53DomainAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aws, DomainSummary> {
 
-    public EdsAwsRoute53DomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                            EdsAssetIndexFacade edsAssetIndexFacade,
-                                            AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                            EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsRoute53DomainAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

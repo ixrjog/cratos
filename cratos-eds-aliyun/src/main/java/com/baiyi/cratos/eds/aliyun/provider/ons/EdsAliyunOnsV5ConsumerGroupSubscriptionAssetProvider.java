@@ -6,23 +6,17 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOnsClient;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -47,16 +41,9 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
 
     private final EdsAssetIndexService edsAssetIndexService;
 
-    public EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider(EdsAssetService edsAssetService,
-                                                                SimpleEdsFacade simpleEdsFacade,
-                                                                CredentialService credentialService,
-                                                                ConfigCredTemplate configCredTemplate,
-                                                                EdsAssetIndexFacade edsAssetIndexFacade,
-                                                                AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                                                EdsProviderHolderFactory edsProviderHolderFactory,
+    public EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider(EdsAssetProviderContext context,
                                                                 EdsAssetIndexService edsAssetIndexService) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+        super(context);
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
@@ -64,11 +51,11 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
     protected Set<String> listEndpoints(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getConfig)
-                .map(EdsConfigs.Aliyun::getOns)
-                .map(EdsAliyunConfigModel.ONS::getV5)
-                .map(EdsAliyunConfigModel.RocketMQ::getEndpoints)
-                .orElse(Collections.emptyList()));
+                                       .map(ExternalDataSourceInstance::getConfig)
+                                       .map(EdsConfigs.Aliyun::getOns)
+                                       .map(EdsAliyunConfigModel.ONS::getV5)
+                                       .map(EdsAliyunConfigModel.RocketMQ::getEndpoints)
+                                       .orElse(Collections.emptyList()));
     }
 
     @Override
@@ -76,8 +63,10 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                                                                        ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         List<AliyunOnsV5.ConsumerGroupSubscription> results = Lists.newArrayList();
         try {
-            List<EdsAsset> edsAssetsOnsConsumerGroups = queryAssetsByInstanceAndType(instance,
-                    EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP);
+            List<EdsAsset> edsAssetsOnsConsumerGroups = queryInstanceAssets(
+                    instance,
+                    EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP
+            );
             if (CollectionUtils.isEmpty(edsAssetsOnsConsumerGroups)) {
                 return Collections.emptyList();
             } else {
@@ -101,12 +90,12 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                                 endpoint, instance.getConfig(), instanceId, consumerGroupId);
                         if (!CollectionUtils.isEmpty(consumerGroupSubscriptions)) {
                             results.addAll(consumerGroupSubscriptions.stream()
-                                    .map(e -> AliyunOnsV5.ConsumerGroupSubscription.builder()
-                                            .instanceId(instanceId)
-                                            .endpoint(endpoint)
-                                            .consumerGroupSubscription(e)
-                                            .build())
-                                    .toList());
+                                                   .map(e -> AliyunOnsV5.ConsumerGroupSubscription.builder()
+                                                           .instanceId(instanceId)
+                                                           .endpoint(endpoint)
+                                                           .consumerGroupSubscription(e)
+                                                           .build())
+                                                   .toList());
                         }
                     }
                 }
@@ -119,20 +108,22 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  AliyunOnsV5.ConsumerGroupSubscription entity) {
+                                         AliyunOnsV5.ConsumerGroupSubscription entity) {
         try {
             // instanceId:consumerGroupId:topicName
             final String key = Joiner.on(":")
-                    .join(entity.getInstanceId(), entity.getConsumerGroupSubscription()
-                            .getConsumerGroupId(), entity.getConsumerGroupSubscription()
-                            .getTopicName());
+                    .join(
+                            entity.getInstanceId(), entity.getConsumerGroupSubscription()
+                                    .getConsumerGroupId(), entity.getConsumerGroupSubscription()
+                                    .getTopicName()
+                    );
             return newEdsAssetBuilder(instance, entity).assetIdOf(key)
                     .assetKeyOf(key)
                     .regionOf(entity.getEndpoint())
                     .kindOf(entity.getConsumerGroupSubscription()
-                            .getMessageModel())
+                                    .getMessageModel())
                     .statusOf(entity.getConsumerGroupSubscription()
-                            .getSubscriptionStatus())
+                                      .getSubscriptionStatus())
                     .build();
         } catch (Exception ex) {
             throw new EdsAssetConversionException(ex.getMessage());
@@ -140,15 +131,19 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, AliyunOnsV5.ConsumerGroupSubscription entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                            AliyunOnsV5.ConsumerGroupSubscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));
-            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_CONSUMER_GROUP_ID, entity.getConsumerGroupSubscription()
-                    .getConsumerGroupId()));
-            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_TOPIC_NAME, entity.getConsumerGroupSubscription()
-                    .getTopicName()));
+            indices.add(createEdsAssetIndex(
+                    edsAsset, ALIYUN_ONS_CONSUMER_GROUP_ID, entity.getConsumerGroupSubscription()
+                            .getConsumerGroupId()
+            ));
+            indices.add(createEdsAssetIndex(
+                    edsAsset, ALIYUN_ONS_TOPIC_NAME, entity.getConsumerGroupSubscription()
+                            .getTopicName()
+            ));
         } catch (Exception ignored) {
         }
         return indices;

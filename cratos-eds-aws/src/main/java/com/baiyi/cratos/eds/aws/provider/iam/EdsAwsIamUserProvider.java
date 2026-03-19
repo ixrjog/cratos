@@ -9,21 +9,15 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamAccessKeyRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -43,19 +37,14 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_IAM_USER)
-public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, User> {
+public class EdsAwsIamUserProvider extends BaseEdsAssetProvider<EdsConfigs.Aws, User> {
 
     private final AwsIamUserRepo awsIamUserRepo;
     private final AwsIamPolicyRepo awsIamPolicyRepo;
 
-    public EdsAwsIamUserProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                 CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                 EdsAssetIndexFacade edsAssetIndexFacade,
-                                 AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                 EdsProviderHolderFactory holderBuilder, AwsIamUserRepo awsIamUserRepo,
+    public EdsAwsIamUserProvider(EdsAssetProviderContext context, AwsIamUserRepo awsIamUserRepo,
                                  AwsIamPolicyRepo awsIamPolicyRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+        super(context);
         this.awsIamUserRepo = awsIamUserRepo;
         this.awsIamPolicyRepo = awsIamPolicyRepo;
     }
@@ -81,12 +70,14 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsConfi
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                            EdsAsset edsAsset, User entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                            User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            List<AttachedPolicy> policies = awsIamPolicyRepo.listUserPolicies(instance.getConfig(),
-                    entity.getUserName());
+            List<AttachedPolicy> policies = awsIamPolicyRepo.listUserPolicies(
+                    instance.getConfig(),
+                    entity.getUserName()
+            );
             if (!CollectionUtils.isEmpty(policies)) {
                 String policyName = policies.stream()
                         .map(AttachedPolicy::getPolicyName)
@@ -98,8 +89,10 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsConfi
         }
         // accessKeys
         try {
-            List<AccessKeyMetadata> accessKeys = AwsIamAccessKeyRepo.listAccessKeys(instance.getConfig(),
-                    entity.getUserName());
+            List<AccessKeyMetadata> accessKeys = AwsIamAccessKeyRepo.listAccessKeys(
+                    instance.getConfig(),
+                    entity.getUserName()
+            );
             if (!CollectionUtils.isEmpty(accessKeys)) {
                 final String accessKeyIds = accessKeys.stream()
                         .map(AccessKeyMetadata::getAccessKeyId)
@@ -110,8 +103,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsConfi
         }
         // loginProfile
         try {
-            LoginProfile loginProfile = awsIamUserRepo.getLoginProfile(instance.getConfig(),
-                    entity.getUserName());
+            LoginProfile loginProfile = awsIamUserRepo.getLoginProfile(instance.getConfig(), entity.getUserName());
             if (Objects.nonNull(loginProfile)) {
                 indices.add(createEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
             }

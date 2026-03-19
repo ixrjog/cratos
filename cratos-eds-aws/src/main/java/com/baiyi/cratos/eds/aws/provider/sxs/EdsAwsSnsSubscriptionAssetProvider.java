@@ -5,19 +5,13 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aws.model.AwsSns;
 import com.baiyi.cratos.eds.aws.repo.AwsSnsRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -40,14 +34,8 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
 
     private final AwsSnsRepo awsSnsRepo;
 
-    public EdsAwsSnsSubscriptionAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                              CredentialService credentialService,
-                                              ConfigCredTemplate configCredTemplate,
-                                              EdsAssetIndexFacade edsAssetIndexFacade, AwsSnsRepo awsSnsRepo,
-                                              AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                              EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsSnsSubscriptionAssetProvider(EdsAssetProviderContext context, AwsSnsRepo awsSnsRepo) {
+        super(context);
         this.awsSnsRepo = awsSnsRepo;
     }
 
@@ -64,8 +52,10 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
                                                       List<Subscription> subscriptions) {
         return subscriptions.stream()
                 .map(e -> {
-                    Map<String, String> attributes = awsSnsRepo.getSubscriptionAttributes(regionId, aws,
-                            e.getSubscriptionArn());
+                    Map<String, String> attributes = awsSnsRepo.getSubscriptionAttributes(
+                            regionId, aws,
+                            e.getSubscriptionArn()
+                    );
                     return AwsSns.Subscription.builder()
                             .regionId(regionId)
                             .attributes(attributes)
@@ -77,29 +67,37 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                  AwsSns.Subscription entity) {
+                                         AwsSns.Subscription entity) {
         return newEdsAssetBuilder(instance, entity)
                 // ID
-                .assetIdOf(StringUtils.substringAfterLast(entity.getSubscription()
-                        .getSubscriptionArn(), ":"))
+                .assetIdOf(StringUtils.substringAfterLast(
+                        entity.getSubscription()
+                                .getSubscriptionArn(), ":"
+                ))
                 .nameOf(entity.getSubscription()
-                        .getEndpoint())
+                                .getEndpoint())
                 .regionOf(entity.getRegionId())
                 .kindOf(entity.getSubscription()
-                        .getProtocol())
+                                .getProtocol())
                 .build();
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                            EdsAsset edsAsset, AwsSns.Subscription entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                            AwsSns.Subscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()
-                .getEndpoint()));
-        indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_TOPIC_ARN, entity.getSubscription()
-                .getTopicArn()));
-        indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_PROTOCOL, entity.getSubscription()
-                .getProtocol()));
+        indices.add(createEdsAssetIndex(
+                edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()
+                        .getEndpoint()
+        ));
+        indices.add(createEdsAssetIndex(
+                edsAsset, AWS_SNS_SUBSCRIPTION_TOPIC_ARN, entity.getSubscription()
+                        .getTopicArn()
+        ));
+        indices.add(createEdsAssetIndex(
+                edsAsset, AWS_SNS_SUBSCRIPTION_PROTOCOL, entity.getSubscription()
+                        .getProtocol()
+        ));
         return indices;
     }
 

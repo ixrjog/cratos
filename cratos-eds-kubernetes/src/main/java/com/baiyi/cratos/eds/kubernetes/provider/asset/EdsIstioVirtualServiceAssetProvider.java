@@ -2,22 +2,16 @@ package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIstioVirtualServiceRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import io.fabric8.istio.api.networking.v1alpha3.VirtualService;
 import org.springframework.stereotype.Component;
@@ -37,16 +31,9 @@ public class EdsIstioVirtualServiceAssetProvider extends BaseEdsKubernetesAssetP
 
     private final KubernetesIstioVirtualServiceRepo kubernetesIstioVirtualServiceRepo;
 
-    public EdsIstioVirtualServiceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                               CredentialService credentialService,
-                                               ConfigCredTemplate configCredTemplate,
-                                               EdsAssetIndexFacade edsAssetIndexFacade,
-                                               AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                               EdsProviderHolderFactory holderBuilder,
-                                               KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                               KubernetesIstioVirtualServiceRepo kubernetesIstioVirtualServiceRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder, kubernetesNamespaceRepo);
+    public EdsIstioVirtualServiceAssetProvider(EdsAssetProviderContext context,
+                                               KubernetesNamespaceRepo kubernetesNamespaceRepo, KubernetesIstioVirtualServiceRepo kubernetesIstioVirtualServiceRepo) {
+        super(context, kubernetesNamespaceRepo);
         this.kubernetesIstioVirtualServiceRepo = kubernetesIstioVirtualServiceRepo;
     }
 

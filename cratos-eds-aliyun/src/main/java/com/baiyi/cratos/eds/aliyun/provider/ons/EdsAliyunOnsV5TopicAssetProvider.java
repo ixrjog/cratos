@@ -5,22 +5,16 @@ import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -43,24 +37,19 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC)
 public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> {
 
-    public EdsAliyunOnsV5TopicAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                            EdsAssetIndexFacade edsAssetIndexFacade,
-                                            AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                            EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAliyunOnsV5TopicAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
     protected Set<String> listEndpoints(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getConfig)
-                .map(EdsConfigs.Aliyun::getOns)
-                .map(EdsAliyunConfigModel.ONS::getV5)
-                .map(EdsAliyunConfigModel.RocketMQ::getEndpoints)
-                .orElse(Collections.emptyList()));
+                                       .map(ExternalDataSourceInstance::getConfig)
+                                       .map(EdsConfigs.Aliyun::getOns)
+                                       .map(EdsAliyunConfigModel.ONS::getV5)
+                                       .map(EdsAliyunConfigModel.RocketMQ::getEndpoints)
+                                       .orElse(Collections.emptyList()));
     }
 
     @Override
@@ -68,8 +57,10 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
                                                                                        ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> results = Lists.newArrayList();
         try {
-            List<EdsAsset> edsAssetsOnsInstances = queryAssetsByInstanceAndType(instance,
-                    EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE);
+            List<EdsAsset> edsAssetsOnsInstances = queryInstanceAssets(
+                    instance,
+                    EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE
+            );
             if (CollectionUtils.isEmpty(edsAssetsOnsInstances)) {
                 return Collections.emptyList();
             } else {
@@ -89,7 +80,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
+                                         ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         try {
             final String key = Joiner.on(":")
                     .join(entity.getInstanceId(), entity.getTopicName());
@@ -108,8 +99,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
                                             ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {

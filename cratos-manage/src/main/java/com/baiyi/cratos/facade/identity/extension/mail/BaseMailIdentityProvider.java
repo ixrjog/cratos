@@ -20,7 +20,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Objects;
 
-import static com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider.INDEX_VALUE_DIVISION_SYMBOL;
+import static com.baiyi.cratos.eds.core.BaseEdsAssetProvider.INDEX_VALUE_DIVISION_SYMBOL;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MAIL;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MAIL_ALIAS;
 

@@ -3,14 +3,9 @@ package com.baiyi.cratos.eds.core;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import com.baiyi.cratos.eds.core.config.base.HasRegions;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +20,10 @@ import java.util.Set;
  * &#064;Version 1.0
  */
 @Slf4j
-public abstract class BaseEdsRegionAssetProvider<Config extends HasRegions & HasEdsConfig, Asset extends HasRegionId> extends BaseEdsInstanceAssetProvider<Config, Asset> {
-    
-    public BaseEdsRegionAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                      EdsAssetIndexFacade edsAssetIndexFacade,
-                                      AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                      EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+public abstract class BaseEdsRegionAssetProvider<Config extends HasRegions & HasEdsConfig, Asset extends HasRegionId> extends BaseEdsAssetProvider<Config, Asset> {
+
+    public BaseEdsRegionAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     /**

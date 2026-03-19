@@ -2,21 +2,15 @@ package com.baiyi.cratos.eds.huaweicloud.cloud.provider;
 
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcScmRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.huaweicloud.sdk.scm.v3.model.CertificateDetail;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -36,13 +30,8 @@ public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
 
     private final static String DATE_FORMAT = "yyyy-MM-dd' 'HH:mm:ss.S";
 
-    public EdsHwcScmCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                      EdsAssetIndexFacade edsAssetIndexFacade,
-                                      AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                      EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsHwcScmCertAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

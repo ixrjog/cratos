@@ -3,20 +3,14 @@ package com.baiyi.cratos.eds.aliyun.provider;
 import com.aliyun.cas20200407.models.ListCertificatesResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunCertRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,19 +23,12 @@ import java.util.Optional;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_CERT)
-public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> {
+public class EdsAliyunCertAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aliyun, ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> {
 
     private final AliyunCertRepo aliyunCertRepo;
 
-    public EdsAliyunCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                      EdsAssetIndexFacade edsAssetIndexFacade,
-                                      AssetToBusinessObjectUpdater updateBusinessFromAssetHandler,
-                                      EdsProviderHolderFactory edsProviderHolderFactory, AliyunCertRepo aliyunCertRepo) {
-        super(
-                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler, edsProviderHolderFactory
-        );
+    public EdsAliyunCertAssetProvider(EdsAssetProviderContext context, AliyunCertRepo aliyunCertRepo) {
+        super(context);
         this.aliyunCertRepo = aliyunCertRepo;
     }
 

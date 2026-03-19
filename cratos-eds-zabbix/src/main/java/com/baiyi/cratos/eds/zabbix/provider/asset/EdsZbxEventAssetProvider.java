@@ -3,17 +3,14 @@ package com.baiyi.cratos.eds.zabbix.provider.asset;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.zabbix.enums.SeverityType;
@@ -21,9 +18,6 @@ import com.baiyi.cratos.eds.zabbix.facade.ZbxFacade;
 import com.baiyi.cratos.eds.zabbix.result.ZbxEventResult;
 import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
 import com.baiyi.cratos.eds.zabbix.sender.AlertNotificationSender;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -44,22 +38,14 @@ import static java.util.Map.entry;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX, assetTypeOf = EdsAssetTypeEnum.ZBX_EVENT)
-public class EdsZbxEventAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Zabbix, ZbxEventResult.Event> {
+public class EdsZbxEventAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Zabbix, ZbxEventResult.Event> {
 
     private final AlertNotificationSender alertNotificationSender;
 
     public static final String OPERATOR = "Zabbix";
 
-    public EdsZbxEventAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                    CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                    EdsAssetIndexFacade edsAssetIndexFacade,
-                                    AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                    EdsProviderHolderFactory holderBuilder,
-                                    AlertNotificationSender alertNotificationSender) {
-        super(
-                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder
-        );
+    public EdsZbxEventAssetProvider(EdsAssetProviderContext context, AlertNotificationSender alertNotificationSender) {
+        super(context);
         this.alertNotificationSender = alertNotificationSender;
     }
 

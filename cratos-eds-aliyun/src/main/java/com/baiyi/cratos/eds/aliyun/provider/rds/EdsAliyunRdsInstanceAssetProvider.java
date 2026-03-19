@@ -6,20 +6,14 @@ import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRdsInstanceRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -36,14 +30,9 @@ public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
 
     private final AliyunRdsInstanceRepo aliyunRdsInstanceRepo;
 
-    public EdsAliyunRdsInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                             EdsAssetIndexFacade edsAssetIndexFacade,
-                                             AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                             EdsProviderHolderFactory edsProviderHolderFactory,
+    public EdsAliyunRdsInstanceAssetProvider(EdsAssetProviderContext context,
                                              AliyunRdsInstanceRepo aliyunRdsInstanceRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+        super(context);
         this.aliyunRdsInstanceRepo = aliyunRdsInstanceRepo;
     }
 
@@ -59,7 +48,7 @@ public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  DescribeDBInstanceAttributeResponse.DBInstanceAttribute entity) {
+                                         DescribeDBInstanceAttributeResponse.DBInstanceAttribute entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
                 .nameOf(entity.getDBInstanceDescription())
                 .regionOf(entity.getRegionId())

@@ -1,14 +1,9 @@
 package com.baiyi.cratos.eds.core;
 
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import org.springframework.util.CollectionUtils;
 
@@ -21,16 +16,10 @@ import java.util.Set;
  * &#064;Date  2024/6/19 下午3:41
  * &#064;Version 1.0
  */
-public abstract class BaseMultipleSourcesEdsAssetProvider<C extends HasEdsConfig, A> extends BaseEdsInstanceAssetProvider<C, A> {
+public abstract class BaseMultipleSourcesEdsAssetProvider<C extends HasEdsConfig, A> extends BaseEdsAssetProvider<C, A> {
 
-    public BaseMultipleSourcesEdsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                               CredentialService credentialService,
-                                               ConfigCredTemplate configCredTemplate,
-                                               EdsAssetIndexFacade edsAssetIndexFacade,
-                                               AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                               EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public BaseMultipleSourcesEdsAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     /**

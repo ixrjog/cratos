@@ -4,22 +4,16 @@ import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.huaweicloud.cloud.model.HwcEcs;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcEcsRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.huaweicloud.sdk.ecs.v2.model.ServerAddress;
@@ -43,13 +37,8 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.EIP;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_ECS)
 public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Hwc, HwcEcs.Ecs> {
 
-    public EdsHwcEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                  EdsAssetIndexFacade edsAssetIndexFacade,
-                                  AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                  EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsHwcEcsAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override

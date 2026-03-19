@@ -5,20 +5,14 @@ import com.amazonaws.services.transfer.model.ListedUser;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsTransferServer;
 import com.baiyi.cratos.eds.aws.repo.AwsTransferRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -34,13 +28,8 @@ import java.util.List;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_TRANSFER_SERVER)
 public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, AwsTransferServer.TransferServer> {
 
-    public EdsAwsTransferServerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                             EdsAssetIndexFacade edsAssetIndexFacade,
-                                             AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                             EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsTransferServerAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
@@ -68,14 +57,13 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetPro
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                  AwsTransferServer.TransferServer entity) {
-        return newEdsAssetBuilder(instance, entity)
-                .assetIdOf(entity.getServer()
-                        .getServerId())
+                                         AwsTransferServer.TransferServer entity) {
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getServer()
+                                                                      .getServerId())
                 .nameOf(entity.getServer()
-                        .getServerId())
+                                .getServerId())
                 .assetKeyOf(entity.getServer()
-                        .getArn())
+                                    .getArn())
                 .regionOf(entity.getRegionId())
                 .build();
     }

@@ -6,20 +6,14 @@ import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
@@ -37,19 +31,12 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_NAMESPACE)
-public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, ListNamespaceResponse.NamespacesItem> {
+public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aliyun, ListNamespaceResponse.NamespacesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;
 
-    public EdsAliyunAcrNamespaceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                              CredentialService credentialService,
-                                              ConfigCredTemplate configCredTemplate,
-                                              EdsAssetIndexFacade edsAssetIndexFacade,
-                                              AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                              EdsProviderHolderFactory edsProviderHolderFactory,
-                                              AliyunAcrRepo aliyunAcrRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAliyunAcrNamespaceAssetProvider(EdsAssetProviderContext context, AliyunAcrRepo aliyunAcrRepo) {
+        super(context);
         this.aliyunAcrRepo = aliyunAcrRepo;
     }
 
@@ -59,7 +46,7 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  ListNamespaceResponse.NamespacesItem entity) {
+                                         ListNamespaceResponse.NamespacesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getNamespaceName());
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getNamespaceName())
@@ -73,12 +60,12 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
     protected List<ListNamespaceResponse.NamespacesItem> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> assets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE);
+            List<EdsAsset> assets = queryInstanceAssets(instance, EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE);
             List<ListNamespaceResponse.NamespacesItem> entities = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(assets)) {
                 for (EdsAsset asset : assets) {
-                    entities.addAll(aliyunAcrRepo.listNamespace(asset.getRegion(), instance.getConfig(),
-                            asset.getAssetId()));
+                    entities.addAll(
+                            aliyunAcrRepo.listNamespace(asset.getRegion(), instance.getConfig(), asset.getAssetId()));
                 }
             }
             return entities;
@@ -88,8 +75,8 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, ListNamespaceResponse.NamespacesItem entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                            ListNamespaceResponse.NamespacesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));

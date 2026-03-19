@@ -4,20 +4,14 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.alimail.model.AlimailUser;
 import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
@@ -35,29 +29,26 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_USER)
-public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Alimail, AlimailUser.User> {
+public class EdsAlimailUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Alimail, AlimailUser.User> {
 
-    public EdsAlimailUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                       EdsAssetIndexFacade edsAssetIndexFacade,
-                                       AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                       EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAlimailUserAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
     protected List<AlimailUser.User> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Alimail> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> departments = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.ALIMAIL_DEPARTMENT);
+            List<EdsAsset> departments = queryInstanceAssets(instance, EdsAssetTypeEnum.ALIMAIL_DEPARTMENT);
             if (CollectionUtils.isEmpty(departments)) {
                 return List.of();
             }
             List<AlimailUser.User> entities = Lists.newArrayList();
             departments.forEach(department -> {
-                List<AlimailUser.User> users = AlimailUserRepo.listUsersOfDepartment(instance.getConfig(),
-                        department.getAssetId());
+                List<AlimailUser.User> users = AlimailUserRepo.listUsersOfDepartment(
+                        instance.getConfig(),
+                        department.getAssetId()
+                );
                 if (!CollectionUtils.isEmpty(users)) {
                     entities.addAll(users);
                 }
@@ -72,7 +63,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Alimail> instance,
-                                  AlimailUser.User entity) {
+                                         AlimailUser.User entity) {
         return newEdsAssetBuilder(instance, entity)
                 // 资源 ID
                 .assetIdOf(entity.getId())
@@ -81,18 +72,21 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsConfigs.Alimail> instance, EdsAsset edsAsset,
-            AlimailUser.User entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Alimail> instance, EdsAsset edsAsset,
+                                            AlimailUser.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         if (!CollectionUtils.isEmpty(entity.getDepartmentIds())) {
-            indices.add(createEdsAssetIndex(edsAsset, ALIMAIL_USER_DEPARTMENT_IDS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
-                    .join(entity.getDepartmentIds())));
+            indices.add(createEdsAssetIndex(
+                    edsAsset, ALIMAIL_USER_DEPARTMENT_IDS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
+                            .join(entity.getDepartmentIds())
+            ));
         }
         indices.add(createEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
         if (!CollectionUtils.isEmpty(entity.getEmailAliases())) {
-            indices.add(createEdsAssetIndex(edsAsset, USER_MAIL_ALIAS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
-                    .join(entity.getEmailAliases())));
+            indices.add(createEdsAssetIndex(
+                    edsAsset, USER_MAIL_ALIAS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
+                            .join(entity.getEmailAliases())
+            ));
         }
         return indices;
     }

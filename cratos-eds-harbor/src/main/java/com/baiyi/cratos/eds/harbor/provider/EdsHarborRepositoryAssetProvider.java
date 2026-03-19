@@ -1,24 +1,18 @@
 package com.baiyi.cratos.eds.harbor.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseMultipleSourcesEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.harbor.model.HarborProject;
 import com.baiyi.cratos.eds.harbor.model.HarborRepository;
 import com.baiyi.cratos.eds.harbor.repo.HarborProjectRepo;
 import com.baiyi.cratos.eds.harbor.repo.HarborRepositoryRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.stereotype.Component;
 
@@ -35,13 +29,8 @@ import java.util.stream.Collectors;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HARBOR, assetTypeOf = EdsAssetTypeEnum.HARBOR_REPOSITORY)
 public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsConfigs.Harbor, HarborRepository.Repository> {
 
-    public EdsHarborRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                            EdsAssetIndexFacade edsAssetIndexFacade,
-                                            AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                            EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsHarborRepositoryAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
@@ -69,7 +58,7 @@ public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAsse
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Harbor> instance,
-                                  HarborRepository.Repository entity) {
+                                         HarborRepository.Repository entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getProjectId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getName())

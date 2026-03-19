@@ -9,24 +9,18 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.crt.facade.CrtShFacade;
 import com.baiyi.cratos.eds.crt.model.CrtSh;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.DomainService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
@@ -46,23 +40,16 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CRT, assetTypeOf = EdsAssetTypeEnum.CRT_LOG)
-public class EdsCrtLogAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.CrtSh, CrtSh.CertificateLog> {
+public class EdsCrtLogAssetProvider extends BaseEdsAssetProvider<EdsConfigs.CrtSh, CrtSh.CertificateLog> {
 
     private final DomainService domainService;
     private final TagService tagService;
     private final BusinessTagFacade businessTagFacade;
     private final CrtShFacade crtShFacade;
 
-    public EdsCrtLogAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                  EdsAssetIndexFacade edsAssetIndexFacade,
-                                  AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                  EdsProviderHolderFactory holderBuilder, DomainService domainService,
-                                  TagService tagService, BusinessTagFacade businessTagFacade, CrtShFacade crtShFacade) {
-        super(
-                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder
-        );
+    public EdsCrtLogAssetProvider(EdsAssetProviderContext context, DomainService domainService, TagService tagService,
+                                  BusinessTagFacade businessTagFacade, CrtShFacade crtShFacade) {
+        super(context);
         this.domainService = domainService;
         this.tagService = tagService;
         this.businessTagFacade = businessTagFacade;

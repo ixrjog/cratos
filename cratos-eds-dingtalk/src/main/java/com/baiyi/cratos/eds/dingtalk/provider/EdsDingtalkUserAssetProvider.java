@@ -3,24 +3,18 @@ package com.baiyi.cratos.eds.dingtalk.provider;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkDepartmentModel;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkUserModel;
 import com.baiyi.cratos.eds.dingtalk.repo.DingtalkUserRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -45,20 +39,14 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_APP, assetTypeOf = EdsAssetTypeEnum.DINGTALK_USER)
-public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Dingtalk, DingtalkUserModel.User> {
+public class EdsDingtalkUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Dingtalk, DingtalkUserModel.User> {
 
     private static final long DEPT_ROOT_ID = 1L;
 
     private final DingtalkUserRepo dingtalkUserRepo;
 
-    public EdsDingtalkUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                        EdsAssetIndexFacade edsAssetIndexFacade,
-                                        AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                        EdsProviderHolderFactory holderBuilder,
-                                        DingtalkUserRepo dingtalkUserRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsDingtalkUserAssetProvider(EdsAssetProviderContext context, DingtalkUserRepo dingtalkUserRepo) {
+        super(context);
         this.dingtalkUserRepo = dingtalkUserRepo;
     }
 
@@ -90,27 +78,30 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
      * @return
      */
     private Set<Long> queryDeptSubIds(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance) {
-        List<EdsAsset> deptAssets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.DINGTALK_DEPARTMENT);
+        List<EdsAsset> deptAssets = queryInstanceAssets(instance, EdsAssetTypeEnum.DINGTALK_DEPARTMENT);
         return deptAssets.stream()
                 .map(e -> Long.valueOf(e.getAssetId()))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance, EdsAsset edsAsset,
-            DingtalkUserModel.User entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance, EdsAsset edsAsset,
+                                            DingtalkUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
         String mobilePhone = Joiner.on("-")
                 .skipNulls()
                 .join(entity.getStateCode(), entity.getMobile());
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, mobilePhone));
-        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_LEADER, entity.getLeader()
-                .toString()));
+        indices.add(createEdsAssetIndex(
+                edsAsset, DINGTALK_USER_LEADER, entity.getLeader()
+                        .toString()
+        ));
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_AVATAR, entity.getAvatar()));
-        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_BOSS, entity.getBoss()
-                .toString()));
+        indices.add(createEdsAssetIndex(
+                edsAsset, DINGTALK_USER_BOSS, entity.getBoss()
+                        .toString()
+        ));
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_JOB_NUMBER, entity.getJobNumber()));
         // 头像
         if (ValidationUtils.isURL(entity.getAvatar())) {
@@ -122,8 +113,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
         }
         // Manager
         try {
-            DingtalkUserModel.GetUser getUser = dingtalkUserRepo.getUser(instance.getConfig(),
-                    entity.getUserid());
+            DingtalkUserModel.GetUser getUser = dingtalkUserRepo.getUser(instance.getConfig(), entity.getUserid());
             if (StringUtils.hasText(getUser.getManagerUserid())) {
                 indices.add(createEdsAssetIndex(edsAsset, DINGTALK_MANAGER_USER_ID, getUser.getManagerUserid()));
             }

@@ -4,19 +4,13 @@ import com.amazonaws.services.sns.model.Topic;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsSns;
 import com.baiyi.cratos.eds.aws.repo.AwsSnsRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -36,13 +30,8 @@ public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsC
 
     private final AwsSnsRepo awsSnsRepo;
 
-    public EdsAwsSnsTopicAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                       EdsAssetIndexFacade edsAssetIndexFacade,
-                                       AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                       EdsProviderHolderFactory holderBuilder, AwsSnsRepo awsSnsRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsSnsTopicAssetProvider(EdsAssetProviderContext context, AwsSnsRepo awsSnsRepo) {
+        super(context);
         this.awsSnsRepo = awsSnsRepo;
     }
 
@@ -73,9 +62,11 @@ public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsC
         return newEdsAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getTopic()
-                        .getTopicArn())
-                .nameOf(StringUtils.substringAfterLast(entity.getTopic()
-                        .getTopicArn(), "/"))
+                                   .getTopicArn())
+                .nameOf(StringUtils.substringAfterLast(
+                        entity.getTopic()
+                                .getTopicArn(), "/"
+                ))
                 .regionOf(entity.getRegionId())
                 .build();
     }

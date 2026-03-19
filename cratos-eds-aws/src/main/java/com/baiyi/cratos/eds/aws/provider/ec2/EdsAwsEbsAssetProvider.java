@@ -3,21 +3,15 @@ package com.baiyi.cratos.eds.aws.provider.ec2;
 import com.amazonaws.services.ec2.model.Volume;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
-import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsEbsRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -35,13 +29,8 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
 
     private final AwsEbsRepo ebsRepo;
 
-    public EdsAwsEbsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                  EdsAssetIndexFacade edsAssetIndexFacade, AwsEbsRepo ebsRepo,
-                                  AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                  EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsEbsAssetProvider(EdsAssetProviderContext context, AwsEbsRepo ebsRepo) {
+        super(context);
         this.ebsRepo = ebsRepo;
     }
 
@@ -62,8 +51,8 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                            EdsAsset edsAsset, Volume entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                            Volume entity) {
         return entity.getAttachments()
                 .stream()
                 .filter(attachment -> StringUtils.hasText(attachment.getInstanceId()))

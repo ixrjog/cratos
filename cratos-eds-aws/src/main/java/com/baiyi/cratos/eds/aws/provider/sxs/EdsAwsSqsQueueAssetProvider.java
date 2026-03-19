@@ -3,19 +3,13 @@ package com.baiyi.cratos.eds.aws.provider.sxs;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsSqs;
 import com.baiyi.cratos.eds.aws.repo.AwsSqsRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -36,13 +30,8 @@ public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsC
 
     private final AwsSqsRepo awsSqsRepo;
 
-    public EdsAwsSqsQueueAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                       EdsAssetIndexFacade edsAssetIndexFacade,
-                                       AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                       EdsProviderHolderFactory holderBuilder, AwsSqsRepo awsSqsRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsSqsQueueAssetProvider(EdsAssetProviderContext context, AwsSqsRepo awsSqsRepo) {
+        super(context);
         this.awsSqsRepo = awsSqsRepo;
     }
 
@@ -73,12 +62,12 @@ public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsC
         return newEdsAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getAttributes()
-                        .get("QueueArn"))
+                                   .get("QueueArn"))
                 .assetKeyOf(entity.getQueue())
                 .nameOf(StringUtils.substringAfterLast(entity.getQueue(), "/"))
                 .regionOf(entity.getRegionId())
                 .createdTimeOf(new Date(Long.parseLong(entity.getAttributes()
-                        .get("CreatedTimestamp")) * 1000))
+                                                               .get("CreatedTimestamp")) * 1000))
                 .build();
     }
 

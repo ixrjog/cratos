@@ -6,20 +6,14 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aws.model.AwsEc2;
 import com.baiyi.cratos.eds.aws.repo.AwsVpcRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -37,13 +31,8 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_CID
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_VPC)
 public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsEc2.Vpc> {
 
-    public EdsAwsVpcAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                  EdsAssetIndexFacade edsAssetIndexFacade,
-                                  AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                  EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsVpcAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
@@ -68,21 +57,23 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Vpc entity) {
         final String tagName = AmazonEc2Util.getName(entity.getVpc()
-                .getTags());
-        return newEdsAssetBuilder(instance, entity)
-                .assetIdOf(entity.getVpc()
+                                                             .getTags());
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpc()
+                                                                      .getVpcId())
+                .nameOf(StringUtils.hasText(tagName) ? tagName : entity.getVpc()
                         .getVpcId())
-                .nameOf(StringUtils.hasText(tagName)? tagName : entity.getVpc().getVpcId())
                 .regionOf(entity.getRegionId())
                 .build();
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                            EdsAsset edsAsset, AwsEc2.Vpc entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                            AwsEc2.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(createEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getVpc()
-                .getCidrBlock()));
+        indices.add(createEdsAssetIndex(
+                edsAsset, VPC_CIDR_BLOCK, entity.getVpc()
+                        .getCidrBlock()
+        ));
         return indices;
     }
 

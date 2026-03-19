@@ -1,14 +1,9 @@
 package com.baiyi.cratos.eds.core;
 
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 
 import java.util.List;
 import java.util.Set;
@@ -20,13 +15,8 @@ import java.util.Set;
  */
 public abstract class BaseHasNamespaceEdsAssetProvider<C extends HasEdsConfig, A> extends BaseMultipleSourcesEdsAssetProvider<C, A> {
 
-    public BaseHasNamespaceEdsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                            EdsAssetIndexFacade edsAssetIndexFacade,
-                                            AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                            EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public BaseHasNamespaceEdsAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     abstract protected Set<String> listNamespace(

@@ -4,21 +4,14 @@ import com.amazonaws.services.ecr.model.Repository;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsEcr;
 import com.baiyi.cratos.eds.aws.repo.AwsEcrRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,13 +25,8 @@ import java.util.List;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_ECR_REPOSITORY)
 public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsEcr.RegionRepository> {
 
-    public EdsAwsEcrRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                            EdsAssetIndexFacade edsAssetIndexFacade,
-                                            AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                            EdsProviderHolderFactory holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAwsEcrRepositoryAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
@@ -62,16 +50,16 @@ public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                  AwsEcr.RegionRepository entity) {
+                                         AwsEcr.RegionRepository entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getRepository()
-                        .getRegistryId())
+                                                                      .getRegistryId())
                 .nameOf(entity.getRepository()
-                        .getRepositoryName())
+                                .getRepositoryName())
                 .assetKeyOf(entity.getRepository()
-                        .getRepositoryArn())
+                                    .getRepositoryArn())
                 .regionOf(entity.getRegionId())
                 .createdTimeOf(entity.getRepository()
-                        .getCreatedAt())
+                                       .getCreatedAt())
                 .build();
     }
 

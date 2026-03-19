@@ -4,20 +4,14 @@ import com.aliyuncs.ecs.model.v20140526.DescribeVpcsResponse;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunVpcRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 
@@ -36,13 +30,8 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     private final AliyunVpcRepo aliyunVpcRepo;
 
-    public EdsAliyunVpcAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade,
-                                     AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                     EdsProviderHolderFactory holderBuilder, AliyunVpcRepo aliyunVpcRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+    public EdsAliyunVpcAssetProvider(EdsAssetProviderContext context, AliyunVpcRepo aliyunVpcRepo) {
+        super(context);
         this.aliyunVpcRepo = aliyunVpcRepo;
     }
 
@@ -57,7 +46,7 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  DescribeVpcsResponse.Vpc entity) {
+                                         DescribeVpcsResponse.Vpc entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpcId())
                 .nameOf(entity.getVpcName())
                 .regionOf(entity.getRegionId())
@@ -66,8 +55,8 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, DescribeVpcsResponse.Vpc entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                            DescribeVpcsResponse.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getCidrBlock()));
         return indices;

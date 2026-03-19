@@ -8,24 +8,18 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -54,20 +48,13 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final BusinessTagFacade businessTagFacade;
-
     private final TagService tagService;
 
-    public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                CredentialService credentialService,
-                                                ConfigCredTemplate configCredTemplate,
-                                                EdsAssetIndexFacade edsAssetIndexFacade,
-                                                AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                                EdsProviderHolderFactory holderBuilder,
+    public EdsKubernetesDeploymentAssetProvider(EdsAssetProviderContext context,
                                                 KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                                 KubernetesDeploymentRepo kubernetesDeploymentRepo,
                                                 BusinessTagFacade businessTagFacade, TagService tagService) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder, kubernetesNamespaceRepo);
+        super(context, kubernetesNamespaceRepo);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.businessTagFacade = businessTagFacade;
         this.tagService = tagService;
@@ -80,9 +67,8 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
-            Deployment entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
+                                            EdsAsset edsAsset, Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         String env = getMetadataLabel(entity, ENV);
@@ -123,8 +109,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     }
 
     @Override
-    protected void processingAssetTags(EdsAsset asset,
-                                       ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
+    protected void processingAssetTags(EdsAsset asset, ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
                                        Deployment entity, List<EdsAssetIndex> indices) {
         if (CollectionUtils.isEmpty(indices)) {
             return;
@@ -149,14 +134,15 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     @Override
     public Deployment getAsset(EdsAsset edsAsset) {
-        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(
-                edsAsset.getInstanceId());
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(edsAsset.getInstanceId());
         Deployment local = holder.getProvider()
                 .assetLoadAs(edsAsset.getOriginalModel());
-        return kubernetesDeploymentRepo.get(holder.getInstance()
-                .getConfig(), local.getMetadata()
-                .getNamespace(), local.getMetadata()
-                .getName());
+        return kubernetesDeploymentRepo.get(
+                holder.getInstance()
+                        .getConfig(), local.getMetadata()
+                        .getNamespace(), local.getMetadata()
+                        .getName()
+        );
     }
 
 }

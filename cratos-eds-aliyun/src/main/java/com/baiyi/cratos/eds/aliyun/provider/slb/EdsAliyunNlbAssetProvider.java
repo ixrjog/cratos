@@ -6,21 +6,15 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.model.AliyunNlb;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunNlbRepo;
 import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 
@@ -37,16 +31,11 @@ import java.util.Set;
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_NLB)
 public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Aliyun, AliyunNlb.Nlb> {
-    
+
     private static final String DEFAULT_ENDPOINT = "nlb.cn-hangzhou.aliyuncs.com";
 
-    public EdsAliyunNlbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade,
-                                     AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                     EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, edsProviderHolderFactory);
+    public EdsAliyunNlbAssetProvider(EdsAssetProviderContext context) {
+        super(context);
     }
 
     @Override
@@ -81,17 +70,16 @@ public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunNlb.Nlb entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunNlb.Nlb entity) {
         // https://help.aliyun.com/zh/slb/application-load-balancer/developer-reference/api-alb-2020-06-16-listloadbalancers?spm=a2c4g.11186623.0.i4
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getLoadBalancers()
-                        .getLoadBalancerId())
+                                                                      .getLoadBalancerId())
                 .nameOf(entity.getLoadBalancers()
-                        .getLoadBalancerName())
+                                .getLoadBalancerName())
                 .assetKeyOf(entity.getLoadBalancers()
-                        .getDNSName())
+                                    .getDNSName())
                 .statusOf(entity.getLoadBalancers()
-                        .getLoadBalancerStatus())
+                                  .getLoadBalancerStatus())
                 .regionOf(entity)
                 .build();
     }

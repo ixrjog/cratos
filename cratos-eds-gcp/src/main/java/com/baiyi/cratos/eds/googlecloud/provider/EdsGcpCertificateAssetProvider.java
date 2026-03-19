@@ -1,24 +1,18 @@
 package com.baiyi.cratos.eds.googlecloud.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseMultipleSourcesEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.googlecloud.model.GoogleCertificateModel;
 import com.baiyi.cratos.eds.googlecloud.repo.GcpCredentialRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 
@@ -37,14 +31,9 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
 
     private final GcpCredentialRepo googleCloudCredentialRepo;
 
-    public EdsGcpCertificateAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade,
-                                          AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                          EdsProviderHolderFactory holderBuilder,
+    public EdsGcpCertificateAssetProvider(EdsAssetProviderContext context,
                                           GcpCredentialRepo googleCloudCredentialRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+        super(context);
         this.googleCloudCredentialRepo = googleCloudCredentialRepo;
     }
 

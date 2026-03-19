@@ -10,16 +10,13 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
@@ -28,10 +25,7 @@ import com.baiyi.cratos.eds.kubernetes.model.EksIngressConditionsModel;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -65,23 +59,16 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     private final KubernetesIngressRepo kubernetesIngressRepo;
     private final TagService tagService;
     private final BusinessTagFacade businessTagFacade;
-
-    private static final String UNDEFINED_SERVICE = "Undefined Service";
     private final EdsAssetIndexService edsAssetIndexService;
 
-    public EdsKubernetesIngressAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                             EdsAssetIndexFacade edsAssetIndexFacade,
-                                             AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                             EdsProviderHolderFactory holderBuilder,
+    private static final String UNDEFINED_SERVICE = "Undefined Service";
+
+    public EdsKubernetesIngressAssetProvider(EdsAssetProviderContext context,
                                              KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                             KubernetesIngressRepo kubernetesIngressRepo,
-                                             EdsAssetIndexService edsAssetIndexService, TagService tagService,
-                                             BusinessTagFacade businessTagFacade) {
-        super(
-                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder, kubernetesNamespaceRepo
-        );
+                                             KubernetesIngressRepo kubernetesIngressRepo, TagService tagService,
+                                             BusinessTagFacade businessTagFacade,
+                                             EdsAssetIndexService edsAssetIndexService) {
+        super(context, kubernetesNamespaceRepo);
         this.kubernetesIngressRepo = kubernetesIngressRepo;
         this.edsAssetIndexService = edsAssetIndexService;
         this.tagService = tagService;
@@ -228,7 +215,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     protected void afterAssetCreated(EdsAsset asset) {
         // SRE
         try {
-            Map<String, EdsAssetIndex> indexMap = edsAssetIndexFacade.queryAssetIndexById(asset.getId())
+            Map<String, EdsAssetIndex> indexMap = context.getEdsAssetIndexFacade().queryAssetIndexById(asset.getId())
                     .stream()
                     .collect(Collectors.toMap(EdsAssetIndex::getName, Function.identity(), (old, newVal) -> newVal));
             List<String> rules = indexMap.values()
