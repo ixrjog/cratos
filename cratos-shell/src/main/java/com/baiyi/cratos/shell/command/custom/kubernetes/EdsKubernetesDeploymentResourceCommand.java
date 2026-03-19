@@ -102,7 +102,7 @@ public class EdsKubernetesDeploymentResourceCommand extends AbstractCommand {
         table.getData()
                 .stream()
                 .map(asset -> edsInstanceProviderHolder.getProvider()
-                        .assetLoadAs(asset.getOriginalModel()))
+                        .loadAsset(asset.getOriginalModel()))
                 .forEach(deployment -> {
                     final String namespace = Optional.ofNullable(deployment)
                             .map(Deployment::getMetadata)

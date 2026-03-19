@@ -117,7 +117,7 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                                     .getConsumerGroupId(), entity.getConsumerGroupSubscription()
                                     .getTopicName()
                     );
-            return newEdsAssetBuilder(instance, entity).assetIdOf(key)
+            return createAssetBuilder(instance, entity).assetIdOf(key)
                     .assetKeyOf(key)
                     .regionOf(entity.getEndpoint())
                     .kindOf(entity.getConsumerGroupSubscription()
@@ -131,8 +131,8 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            AliyunOnsV5.ConsumerGroupSubscription entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               AliyunOnsV5.ConsumerGroupSubscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));

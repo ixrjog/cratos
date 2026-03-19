@@ -58,7 +58,7 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Vpc entity) {
         final String tagName = AmazonEc2Util.getName(entity.getVpc()
                                                              .getTags());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpc()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getVpc()
                                                                       .getVpcId())
                 .nameOf(StringUtils.hasText(tagName) ? tagName : entity.getVpc()
                         .getVpcId())
@@ -67,8 +67,8 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
-                                            AwsEc2.Vpc entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                               AwsEc2.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(
                 edsAsset, VPC_CIDR_BLOCK, entity.getVpc()

@@ -62,7 +62,7 @@ public class EdsAwsIamUserProvider extends BaseEdsAssetProvider<EdsConfigs.Aws, 
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, User entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getUserName())
                 .assetKeyOf(entity.getArn())
                 .createdTimeOf(entity.getCreateDate())
@@ -70,8 +70,8 @@ public class EdsAwsIamUserProvider extends BaseEdsAssetProvider<EdsConfigs.Aws, 
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
-                                            User entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                               User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<AttachedPolicy> policies = awsIamPolicyRepo.listUserPolicies(
@@ -114,7 +114,7 @@ public class EdsAwsIamUserProvider extends BaseEdsAssetProvider<EdsConfigs.Aws, 
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

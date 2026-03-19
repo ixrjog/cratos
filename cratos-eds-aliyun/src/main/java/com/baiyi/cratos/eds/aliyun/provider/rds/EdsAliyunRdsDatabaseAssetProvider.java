@@ -65,7 +65,7 @@ public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsAssetProvider<EdsC
                                          DescribeDatabasesResponse.Database entity) {
         final String key = Joiner.on(":")
                 .join(entity.getDBInstanceId(), entity.getDBName());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
                 .nameOf(entity.getDBName())
                 .assetKeyOf(key)
                 .build();

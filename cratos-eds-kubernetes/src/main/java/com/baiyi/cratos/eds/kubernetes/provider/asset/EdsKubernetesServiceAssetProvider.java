@@ -54,8 +54,8 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
-                                            EdsAsset edsAsset, Service entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
+                                               EdsAsset edsAsset, Service entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
         String env = getMetadataLabel(entity, ENV);

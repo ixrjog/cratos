@@ -87,7 +87,7 @@ public class EdsJenkinsComputerAssetProvider extends BaseEdsAssetProvider<EdsCon
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Jenkins> instance,
                                   JenkinsComputerModel.Computer entity) throws EdsAssetConversionException {
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getDisplayName())
                 .nameOf(entity.getDisplayName())

@@ -77,7 +77,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          AliyunAlb.Alb entity) {
         // https://help.aliyun.com/zh/slb/application-load-balancer/developer-reference/api-alb-2020-06-16-listloadbalancers?spm=a2c4g.11186623.0.i4
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getLoadBalancers()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getLoadBalancers()
                         .getLoadBalancerId())
                 .nameOf(entity.getLoadBalancers()
                         .getLoadBalancerName())
@@ -90,7 +90,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset, AliyunAlb.Alb entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {

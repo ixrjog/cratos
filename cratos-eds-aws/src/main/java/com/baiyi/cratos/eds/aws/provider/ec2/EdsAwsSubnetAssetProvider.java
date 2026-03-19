@@ -59,7 +59,7 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsCon
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Subnet entity) {
         final String tagName = AmazonEc2Util.getName(entity.getSubnet()
                 .getTags());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
                         .getSubnetId())
                 .nameOf(StringUtils.hasText(tagName) ? tagName : entity.getSubnet()
                         .getSubnetId())
@@ -72,8 +72,8 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsCon
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                            EdsAsset edsAsset, AwsEc2.Subnet entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
+                                               EdsAsset edsAsset, AwsEc2.Subnet entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK, entity.getSubnet()
                 .getCidrBlock()));

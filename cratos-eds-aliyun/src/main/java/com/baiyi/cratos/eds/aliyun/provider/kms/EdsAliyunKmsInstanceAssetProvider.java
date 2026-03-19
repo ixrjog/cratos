@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -14,13 +13,7 @@ import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -81,7 +74,7 @@ public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetP
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   AliyunKms.KmsInstance entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
                         .getKmsInstanceId())
                 .nameOf(entity.getInstance()
                         .getKmsInstanceArn())
@@ -89,8 +82,8 @@ public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset, AliyunKms.KmsInstance entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                                               EdsAsset edsAsset, AliyunKms.KmsInstance entity) {
         return List.of(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
     }
 

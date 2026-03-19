@@ -96,7 +96,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
                 continue;
             }
             GetUserResponse.User ramUser = holder.getProvider()
-                    .assetLoadAs(asset.getOriginalModel());
+                    .loadAsset(asset.getOriginalModel());
             if (!StringUtils.hasText(ramUser.getMobilePhone())) {
                 System.out.println("用户手机号不存在: user=" + ramUser.getUserName());
                 User user = userService.getByUsername(asset.getAssetKey());

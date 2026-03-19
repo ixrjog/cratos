@@ -44,7 +44,7 @@ public class EdsIstioVirtualServiceAssetProvider extends BaseEdsKubernetesAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
             VirtualService entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

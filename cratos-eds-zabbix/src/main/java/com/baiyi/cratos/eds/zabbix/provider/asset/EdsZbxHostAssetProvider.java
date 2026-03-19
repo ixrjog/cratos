@@ -70,7 +70,7 @@ public class EdsZbxHostAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Zab
                         .map(ZbxInterfaceResult.Interface::getIp))
                 .filter(StringUtils::hasText)
                 .orElse(entity.getName());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getHostid())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getHostid())
                 .assetKeyOf(assetKey)
                 .nameOf(entity.getName())
                 .descriptionOf(entity.getDescription())

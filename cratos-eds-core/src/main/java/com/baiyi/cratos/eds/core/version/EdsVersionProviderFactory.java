@@ -18,12 +18,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class EdsInstanceVersionProviderFactory {
+public class EdsVersionProviderFactory {
 
-    private static final Map<String, BaseEdsInstanceVersionProvider<?>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, BaseEdsVersionProvider<?>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <Config extends HasEdsConfig> void register(BaseEdsInstanceVersionProvider<Config> providerBean) {
-        log.info("EdsInstanceVersionProviderFactory Registered: instanceType={}", providerBean.getInstanceType());
+    public static <Config extends HasEdsConfig> void register(BaseEdsVersionProvider<Config> providerBean) {
+        log.info("EdsVersionProviderFactory Registered: instanceType={}", providerBean.getInstanceType());
         CONTEXT.put(providerBean.getInstanceType(), providerBean);
     }
 
@@ -32,13 +32,13 @@ public class EdsInstanceVersionProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <Config extends HasEdsConfig> BaseEdsInstanceVersionProvider<Config> getVersionProvider(
+    public static <Config extends HasEdsConfig> BaseEdsVersionProvider<Config> getVersionProvider(
             String instanceType) {
-        return (BaseEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType);
+        return (BaseEdsVersionProvider<Config>) CONTEXT.get(instanceType);
     }
 
     @SuppressWarnings("unchecked")
-    public static <Config extends HasEdsConfig> EdsInstanceVersionProviderHolder<Config> buildHolder(
+    public static <Config extends HasEdsConfig> EdsInstanceVersionProviderHolder<Config> createHolder(
             ExternalDataSourceInstance<Config> instance) throws EdsInstanceVersionProviderException {
         String instanceType = instance.getEdsInstance()
                 .getEdsType();
@@ -47,7 +47,7 @@ public class EdsInstanceVersionProviderFactory {
         }
         return EdsInstanceVersionProviderHolder.<Config>builder()
                 .instance(instance)
-                .provider((BaseEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType))
+                .provider((BaseEdsVersionProvider<Config>) CONTEXT.get(instanceType))
                 .build();
     }
 

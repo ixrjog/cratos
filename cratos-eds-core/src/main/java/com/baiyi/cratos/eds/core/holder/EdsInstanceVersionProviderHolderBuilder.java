@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceVersionProviderException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.version.EdsInstanceVersionProviderFactory;
+import com.baiyi.cratos.eds.core.version.EdsVersionProviderFactory;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class EdsInstanceVersionProviderHolderBuilder {
         if (edsInstance == null) {
             return false;
         }
-        return EdsInstanceVersionProviderFactory.isSupport(edsInstance.getEdsType());
+        return EdsVersionProviderFactory.isSupport(edsInstance.getEdsType());
     }
 
     public EdsInstanceVersionProviderHolder<?> newHolder(
@@ -50,7 +50,7 @@ public class EdsInstanceVersionProviderHolderBuilder {
                 .edsInstance(edsInstance)
                 .config(edsConfigModel)
                 .build();
-        return EdsInstanceVersionProviderFactory.buildHolder(extDataSourceInstance);
+        return EdsVersionProviderFactory.createHolder(extDataSourceInstance);
     }
 
 }

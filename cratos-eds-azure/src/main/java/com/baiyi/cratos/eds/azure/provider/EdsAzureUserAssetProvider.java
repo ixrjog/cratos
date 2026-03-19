@@ -59,14 +59,14 @@ public class EdsAzureUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.A
         String name = Joiner.on("|")
                 .skipNulls()
                 .join(entity.getDisplayName(), entity.getSurname(), entity.getGivenName());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(name)
                 .assetKeyOf(entity.getUserPrincipalName())
                 .build();
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Azure> instance, EdsAsset edsAsset,
             GraphUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

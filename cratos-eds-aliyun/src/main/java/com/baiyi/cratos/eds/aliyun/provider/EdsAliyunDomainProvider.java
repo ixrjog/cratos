@@ -50,7 +50,7 @@ public class EdsAliyunDomainProvider extends BaseEdsAssetProvider<EdsConfigs.Ali
         // 域名过期状态。取值：1：域名未过期。 2：域名已过期。
         boolean valid = entity.getExpirationDateStatus()
                 .equals("1");
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDomainName())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getDomainName())
                 .nameOf(entity.getDomainName())
                 .descriptionOf(entity.getRemark())
                 .createdTimeOf(new Date(entity.getRegistrationDateLong()))
@@ -60,7 +60,7 @@ public class EdsAliyunDomainProvider extends BaseEdsAssetProvider<EdsConfigs.Ali
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

@@ -75,7 +75,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsAssetProvider<EdsConfi
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          GetUserResponse.User entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getDisplayName())
                 .assetKeyOf(entity.getUserName())
                 .descriptionOf(entity.getComments())
@@ -84,8 +84,8 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            GetUserResponse.User entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               GetUserResponse.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<ListPoliciesForUserResponse.Policy> policies = aliyunRamPolicyRepo.listPoliciesForUser(
@@ -127,7 +127,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.builder()
                 .comparisonName(true)
                 .comparisonKey(true)

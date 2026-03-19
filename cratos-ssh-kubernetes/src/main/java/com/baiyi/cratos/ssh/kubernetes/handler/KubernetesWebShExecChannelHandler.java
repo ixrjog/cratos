@@ -291,7 +291,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                                                                    .getEdsInstance()
                                                                    .getConfigId());
             EdsConfigs.Robot robot = providerHolder.getProvider()
-                    .configLoadAs(edsConfig);
+                    .loadConfig(edsConfig);
             dingtalkService.send(robot.getToken(), message);
             providerHolder.importAsset(message);
         });

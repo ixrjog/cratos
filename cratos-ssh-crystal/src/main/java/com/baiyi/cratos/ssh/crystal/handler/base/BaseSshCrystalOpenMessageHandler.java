@@ -114,7 +114,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
                                                                    .getEdsInstance()
                                                                    .getConfigId());
             EdsConfigs.Robot robot = providerHolder.getProvider()
-                    .configLoadAs(edsConfig);
+                    .loadConfig(edsConfig);
             dingtalkService.send(robot.getToken(), message);
             providerHolder.importAsset(message);
         });
@@ -175,7 +175,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
             EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) edsProviderHolderFactory.createHolder(
                     edsAsset.getInstanceId(), edsAsset.getAssetType());
             Node node = edsInstanceProviderHolder.getProvider()
-                    .assetLoadAs(edsAsset.getOriginalModel());
+                    .loadAsset(edsAsset.getOriginalModel());
             List<NodeAddress> nodeAddresses = Optional.ofNullable(node)
                     .map(Node::getStatus)
                     .map(NodeStatus::getAddresses)

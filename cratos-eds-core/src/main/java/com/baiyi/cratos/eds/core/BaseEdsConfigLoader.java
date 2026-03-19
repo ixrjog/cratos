@@ -51,14 +51,14 @@ public abstract class BaseEdsConfigLoader<C extends HasEdsConfig> {
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential cred = credService.getById(edsConfig.getCredentialId());
             if (cred != null) {
-                return wrapConfig(edsConfig, configLoadAs(configCredTemplate.renderTemplate(configContent, cred)));
+                return wrapConfig(edsConfig, loadAs(configCredTemplate.renderTemplate(configContent, cred)));
             }
         }
-        return wrapConfig(edsConfig, configLoadAs(configContent));
+        return wrapConfig(edsConfig, loadAs(configContent));
     }
 
     @SuppressWarnings("unchecked")
-    private C configLoadAs(String configContent) {
+    private C loadAs(String configContent) {
         // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsConfigLoader.class, 0);
         return EdsConfigUtils.loadAs(configContent, clazz);

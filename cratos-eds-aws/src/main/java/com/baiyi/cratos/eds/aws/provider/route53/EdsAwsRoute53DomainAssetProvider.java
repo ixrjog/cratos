@@ -43,7 +43,7 @@ public class EdsAwsRoute53DomainAssetProvider extends BaseEdsAssetProvider<EdsCo
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, DomainSummary entity) {
         // https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ListDomains.html
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getDomainName())
                 .nameOf(entity.getDomainName())
@@ -52,7 +52,7 @@ public class EdsAwsRoute53DomainAssetProvider extends BaseEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

@@ -47,14 +47,14 @@ public class LdapGroupProvider extends BaseEdsAssetProvider<EdsConfigs.Ldap, Lda
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Ldap> instance, LdapGroup.Group entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getGroupName())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getGroupName())
                 .nameOf(entity.getGroupName())
                 .build();
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Ldap> instance, EdsAsset edsAsset,
-                                            LdapGroup.Group entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Ldap> instance, EdsAsset edsAsset,
+                                               LdapGroup.Group entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(
                 edsAsset, LDAP_GROUP_DN, Joiner.on(",")

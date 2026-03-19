@@ -74,7 +74,7 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
                                 .getVSwitchId()
                 );
 
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVirtualSwitch()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getVirtualSwitch()
                                                                       .getVSwitchId())
                 .nameOf(entity.getVirtualSwitch()
                                 .getVSwitchName())
@@ -88,8 +88,8 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            AliyunVirtualSwitch.Switch entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               AliyunVirtualSwitch.Switch entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(
                 edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK, entity.getVirtualSwitch()

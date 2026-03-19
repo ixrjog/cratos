@@ -82,7 +82,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
         try {
             final String key = Joiner.on(":")
                     .join(entity.getInstanceId(), entity.getConsumerGroupId());
-            return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getConsumerGroupId())
+            return createAssetBuilder(instance, entity).assetIdOf(entity.getConsumerGroupId())
                     .nameOf(entity.getConsumerGroupId())
                     .assetKeyOf(key)
                     .regionOf(entity.getRegionId())
@@ -96,9 +96,9 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                            EdsAsset edsAsset,
-                                            ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                                               EdsAsset edsAsset,
+                                               ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));

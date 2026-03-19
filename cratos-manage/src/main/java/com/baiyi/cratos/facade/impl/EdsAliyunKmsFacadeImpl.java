@@ -100,7 +100,7 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
             EdsAssetVO.Asset kmsInstance = kmsInstanceMap.computeIfAbsent(asset.getAssetId(),
                     a -> getKmsInstance(asset.getInstanceId(), asset.getAssetId()));
             AliyunKms.KmsSecret kmsSecret = holder.getProvider()
-                    .assetLoadAs(asset.getOriginalModel());
+                    .loadAsset(asset.getOriginalModel());
             AliyunKms.SecretMetadata metadata = kmsSecret.getMetadata();
             AliyunKmsVO.Secret secret = AliyunKmsVO.Secret.builder()
                     .edsInstance(instance)

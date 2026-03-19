@@ -52,7 +52,7 @@ public class EdsAliyunCertAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList entity) {
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // 资源 ID
                 .assetIdOf(entity.getCertificateId())
                 .assetKeyOf(entity.getCertIdentifier())

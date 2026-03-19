@@ -36,7 +36,7 @@ public class EdsEagleCloudAlertRecordAssertProvider extends BaseEdsAssetProvider
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Sase> instance,
                                          EagleCloudModel.AlertRecord entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getEventId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getEventId())
                 .nameOf(entity.getName())
                 .descriptionOf(entity.getDescription())
                 .build();

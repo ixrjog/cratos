@@ -42,7 +42,7 @@ public class EdsGandiDomainAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gandi> instance,
                                   GandiDomain.Domain entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getFqdn())
                 .descriptionOf(entity.getDomainOwner())
                 .createdTimeOf(entity.getDates()
@@ -53,7 +53,7 @@ public class EdsGandiDomainAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

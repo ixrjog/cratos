@@ -50,7 +50,7 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                   KeystoneListUsersResult entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getName())
                 .validOf(entity.getEnabled())
@@ -58,8 +58,8 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
-                                            EdsAsset edsAsset, KeystoneListUsersResult entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
+                                               EdsAsset edsAsset, KeystoneListUsersResult entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getName()));
         // accessKeys

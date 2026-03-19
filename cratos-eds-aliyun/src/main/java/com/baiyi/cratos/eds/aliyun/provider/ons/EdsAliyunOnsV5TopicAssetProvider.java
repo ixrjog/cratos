@@ -84,7 +84,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
         try {
             final String key = Joiner.on(":")
                     .join(entity.getInstanceId(), entity.getTopicName());
-            return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getTopicName())
+            return createAssetBuilder(instance, entity).assetIdOf(entity.getTopicName())
                     .nameOf(entity.getTopicName())
                     .assetKeyOf(key)
                     .kindOf(entity.getMessageType())
@@ -99,8 +99,8 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));

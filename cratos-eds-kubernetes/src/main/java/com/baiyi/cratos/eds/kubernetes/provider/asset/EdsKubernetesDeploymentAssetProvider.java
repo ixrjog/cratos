@@ -67,8 +67,8 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
-                                            EdsAsset edsAsset, Deployment entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
+                                               EdsAsset edsAsset, Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         String env = getMetadataLabel(entity, ENV);
@@ -109,8 +109,8 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     }
 
     @Override
-    protected void processingAssetTags(EdsAsset asset, ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
-                                       Deployment entity, List<EdsAssetIndex> indices) {
+    protected void processAssetTags(EdsAsset asset, ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
+                                    Deployment entity, List<EdsAssetIndex> indices) {
         if (CollectionUtils.isEmpty(indices)) {
             return;
         }
@@ -136,7 +136,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     public Deployment getAsset(EdsAsset edsAsset) {
         EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(edsAsset.getInstanceId());
         Deployment local = holder.getProvider()
-                .assetLoadAs(edsAsset.getOriginalModel());
+                .loadAsset(edsAsset.getOriginalModel());
         return kubernetesDeploymentRepo.get(
                 holder.getInstance()
                         .getConfig(), local.getMetadata()

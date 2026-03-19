@@ -52,7 +52,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         );
         // TODO 是否要序列化对象？
         vo.setOriginalAsset(edsInstanceProviderHolder.getProvider()
-                                    .assetLoadAs(vo.getOriginalModel()));
+                                    .loadAsset(vo.getOriginalModel()));
         // ToBusiness
         IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
                 vo.getAssetType());
@@ -74,7 +74,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         );
         if (!skipLoadAsset) {
             asset.setOriginalAsset(providerHolder.getProvider()
-                                           .assetLoadAs(asset.getOriginalModel()));
+                                           .loadAsset(asset.getOriginalModel()));
         }
         // ToBusiness
         IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
@@ -101,7 +101,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
             EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) edsProviderHolderFactory.createHolder(
                     vo.getInstanceId(), vo.getAssetType());
             Node node = edsInstanceProviderHolder.getProvider()
-                    .assetLoadAs(vo.getOriginalModel());
+                    .loadAsset(vo.getOriginalModel());
             List<NodeAddress> nodeAddresses = Optional.ofNullable(node)
                     .map(Node::getStatus)
                     .map(NodeStatus::getAddresses)

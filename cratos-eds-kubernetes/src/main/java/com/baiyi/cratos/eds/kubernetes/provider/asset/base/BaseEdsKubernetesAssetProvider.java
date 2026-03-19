@@ -85,7 +85,7 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, A entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(getAssetId(entity))
+        return createAssetBuilder(instance, entity).assetIdOf(getAssetId(entity))
                 .nameOf(getName(entity))
                 .kindOf(entity.getKind())
                 .createdTimeOf(getCreationTime(entity))
@@ -97,7 +97,7 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

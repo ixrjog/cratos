@@ -41,7 +41,7 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Volume entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVolumeId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getVolumeId())
                 .nameOf(AmazonEc2Util.getName(entity.getTags()))
                 .kindOf(entity.getVolumeType())
                 .zoneOf(entity.getAvailabilityZone())
@@ -51,8 +51,8 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
-                                            Volume entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                               Volume entity) {
         return entity.getAttachments()
                 .stream()
                 .filter(attachment -> StringUtils.hasText(attachment.getInstanceId()))

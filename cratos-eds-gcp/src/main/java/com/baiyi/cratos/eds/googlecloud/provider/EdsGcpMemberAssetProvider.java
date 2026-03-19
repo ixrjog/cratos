@@ -46,7 +46,7 @@ public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.G
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
                                   GoogleMemberModel.Member entity) throws EdsAssetConversionException {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getName())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .assetKeyOf(entity.getName())
                 .nameOf(entity.getName())
                 .kindOf(entity.getType())
@@ -69,7 +69,7 @@ public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.G
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Gcp> instance, EdsAsset edsAsset,
             GoogleMemberModel.Member entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
@@ -86,7 +86,7 @@ public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.G
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 }

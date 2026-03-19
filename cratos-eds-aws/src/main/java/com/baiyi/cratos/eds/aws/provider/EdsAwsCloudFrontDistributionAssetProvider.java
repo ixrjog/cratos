@@ -64,7 +64,7 @@ public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsAssetProvi
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                   AwsCloudFrontDistribution.Distribution entity) {
         // https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDistribution()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getDistribution()
                         .getId())
                 .nameOf(entity.getDistribution()
                         .getDomainName())
@@ -76,7 +76,7 @@ public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsAssetProvi
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

@@ -37,7 +37,7 @@ public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsC
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                          CertificateSummary entity) {
         // https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getCertificateArn())
                 .nameOf(entity.getDomainName())
@@ -49,7 +49,7 @@ public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsC
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

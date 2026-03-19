@@ -110,7 +110,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
         if (optionalExpiredTime.isPresent()) {
             expiredTime = toUtcDate(optionalExpiredTime.get());
         }
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
                                                                       .getInstanceId())
                 .nameOf(entity.getInstance()
                                 .getInstanceName())
@@ -129,7 +129,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.builder()
                 .comparisonName(true)
                 .comparisonKey(true)
@@ -142,8 +142,8 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunEcs.Ecs entity) {
-        EdsAsset asset = super.saveEntityAsAsset(instance, entity);
+    protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunEcs.Ecs entity) {
+        EdsAsset asset = super.importEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
         List<ListTagResourcesResponse.TagResource> tagResources = aliyunTagRepo.listTagResources(
                         entity.getRegionId(), instance.getConfig(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()

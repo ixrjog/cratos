@@ -44,7 +44,7 @@ public class EdsCloudFlareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
                                   CloudFlareDns.DnsRecord entity) throws EdsAssetConversionException {
         String key = Joiner.on(":")
                 .join(entity.getZoneId(), entity.getName());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(key)
                 .kindOf(entity.getType())
@@ -71,7 +71,7 @@ public class EdsCloudFlareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance, EdsAsset edsAsset,
             CloudFlareDns.DnsRecord entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

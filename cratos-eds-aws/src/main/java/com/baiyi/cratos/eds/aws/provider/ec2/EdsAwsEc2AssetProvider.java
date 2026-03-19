@@ -70,7 +70,7 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Ec2 entity) {
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getInstance()
                                    .getInstanceId())
@@ -87,7 +87,7 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.builder()
                 .comparisonName(true)
                 .comparisonKey(true)

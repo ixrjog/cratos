@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.repo.AlimailDepartmentRepo;
-import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -12,13 +11,7 @@ import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -58,7 +51,7 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsAssetProvider<EdsC
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Alimail> instance,
                                   AlimailDepartment.Department entity) {
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // 资源 ID
                 .assetIdOf(entity.getId())
                 .nameOf(entity.getName())
@@ -66,7 +59,7 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsAssetProvider<EdsC
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Alimail> instance, EdsAsset edsAsset,
             AlimailDepartment.Department entity) {
         return List.of(createEdsAssetIndex(edsAsset, ALIMAIL_DEPARTMENT_PARENT_ID, entity.getParentId()));

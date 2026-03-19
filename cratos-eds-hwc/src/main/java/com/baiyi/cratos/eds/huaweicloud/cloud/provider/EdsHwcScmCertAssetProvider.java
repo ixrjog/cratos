@@ -49,7 +49,7 @@ public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
                                   CertificateDetail entity) {
         //  https://support.huaweicloud.com/intl/en-us/api-ccm/ListCertificates.html
         try {
-            return newEdsAssetBuilder(instance, entity)
+            return createAssetBuilder(instance, entity)
                     // ARN
                     .assetIdOf(entity.getId())
                     .nameOf(entity.getDomain())

@@ -63,7 +63,7 @@ public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsA
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   DescribeDBInstancesResponseBody.DescribeDBInstancesResponseBodyDBInstancesDBInstance entity) {
         try {
-            return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
+            return createAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
                     .nameOf(entity.getDBInstanceDescription())
                     .regionOf(entity.getRegionId())
                     .zoneOf(entity.getZoneId())

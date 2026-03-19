@@ -88,7 +88,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsAssetProvider<Eds
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          AliyunArms.TraceApps entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getAppId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getAppId())
                 .nameOf(entity.getAppName())
                 .assetKeyOf(entity.getPid())
                 .regionOf(entity.getRegionId())
@@ -97,8 +97,8 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            AliyunArms.TraceApps entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               AliyunArms.TraceApps entity) {
         String name = entity.getAppName();
         Map<String, Env> envMap = envFacade.getEnvMap();
         String env = EnvUtils.getEnvSuffix(envMap, name);

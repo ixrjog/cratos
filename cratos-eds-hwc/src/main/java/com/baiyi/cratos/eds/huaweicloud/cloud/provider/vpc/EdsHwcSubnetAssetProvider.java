@@ -59,7 +59,7 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                   HwcSubnet.Subnet entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
                         .getId())
                 .nameOf(entity.getSubnet()
                         .getName())
@@ -75,8 +75,8 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
-                                            EdsAsset edsAsset, HwcSubnet.Subnet entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
+                                               EdsAsset edsAsset, HwcSubnet.Subnet entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK , entity.getSubnet().getCidr()));
         indices.add(createEdsAssetIndex(edsAsset, VPC_ID , entity.getSubnet().getVpcId()));

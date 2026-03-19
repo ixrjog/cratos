@@ -47,7 +47,7 @@ public class EdsAwsIamPolicyProvider extends BaseEdsAssetProvider<EdsConfigs.Aws
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Policy entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getPolicyId())
                 .nameOf(entity.getPolicyName())
                 .assetKeyOf(entity.getArn())
                 .descriptionOf(entity.getDescription())
@@ -56,7 +56,7 @@ public class EdsAwsIamPolicyProvider extends BaseEdsAssetProvider<EdsConfigs.Aws
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

@@ -75,7 +75,7 @@ public class EdsZbxEventAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Za
                 "{} | {} | {}", hostName,
                 SeverityType.getName(entity.getSeverity()), entity.getName()
         );
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getEventid())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getEventid())
                 .assetKeyOf(assetKey)
                 .nameOf(entity.getName())
                 .build();
@@ -86,7 +86,7 @@ public class EdsZbxEventAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Za
         // 发送告警通知
         alertNotificationSender.sendAlertNotice(asset);
         // SRE
-        ZbxEventResult.Event event = assetLoadAs(asset.getOriginalModel());
+        ZbxEventResult.Event event = loadAsset(asset.getOriginalModel());
         if (!CollectionUtils.isEmpty(event.getHosts())) {
             // 按主机发送事件
             event.getHosts()

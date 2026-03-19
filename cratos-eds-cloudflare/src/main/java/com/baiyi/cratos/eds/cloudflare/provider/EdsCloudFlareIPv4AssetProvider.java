@@ -35,7 +35,7 @@ public class EdsCloudFlareIPv4AssetProvider extends BaseHasNamespaceEdsAssetProv
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
                                          String entity) throws EdsAssetConversionException {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity)
+        return createAssetBuilder(instance, entity).assetIdOf(entity)
                 .nameOf(entity)
                 .assetKeyOf(entity)
                 .kindOf("ipv4")

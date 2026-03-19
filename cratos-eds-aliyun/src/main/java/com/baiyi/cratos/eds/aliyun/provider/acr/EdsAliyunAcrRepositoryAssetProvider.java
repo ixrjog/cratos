@@ -77,7 +77,7 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
                                          ListRepositoryResponse.RepositoriesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getRepoId());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getRepoId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getRepoId())
                 .nameOf(entity.getRepoName())
                 .assetKeyOf(key)
                 .statusOf(entity.getRepoStatus())
@@ -87,8 +87,8 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            ListRepositoryResponse.RepositoriesItem entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               ListRepositoryResponse.RepositoriesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));

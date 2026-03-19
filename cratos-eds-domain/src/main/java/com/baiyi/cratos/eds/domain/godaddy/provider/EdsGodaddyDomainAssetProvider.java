@@ -42,7 +42,7 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsAssetProvider<EdsConfi
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Godaddy> instance,
                                   GodaddyDomain.Domain entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDomainId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getDomainId())
                 .nameOf(entity.getDomain())
                 .createdTimeOf(entity.getCreatedAt())
                 .expiredTimeOf(entity.getExpiresAt())
@@ -62,7 +62,7 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

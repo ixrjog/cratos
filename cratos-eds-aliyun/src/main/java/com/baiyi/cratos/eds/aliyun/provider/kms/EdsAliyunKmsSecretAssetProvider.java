@@ -100,7 +100,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          AliyunKms.KmsSecret entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSecret()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getSecret()
                                                                       .getSecretName())
                 .nameOf(entity.getSecret()
                                 .getSecretName())
@@ -120,8 +120,8 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            AliyunKms.KmsSecret entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               AliyunKms.KmsSecret entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
         Optional<GetSecretValueResponseBody> optionalGetSecretValueResponseBody = AliyunKmsRepo.getSecretValue(
@@ -140,9 +140,9 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunKms.KmsSecret entity) {
-        EdsAsset asset = super.saveEntityAsAsset(instance, entity);
+    protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                                           AliyunKms.KmsSecret entity) {
+        EdsAsset asset = super.importEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
         List<AliyunKms.Tag> tags = Optional.of(entity)
                 .map(AliyunKms.KmsSecret::getMetadata)

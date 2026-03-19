@@ -49,7 +49,7 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsAssetProvider<Eds
                                          ListNamespaceResponse.NamespacesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getNamespaceName());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getNamespaceName())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getNamespaceName())
                 .nameOf(entity.getNamespaceName())
                 .assetKeyOf(key)
                 .statusOf(entity.getNamespaceStatus())
@@ -75,8 +75,8 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
-                                            ListNamespaceResponse.NamespacesItem entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
+                                               ListNamespaceResponse.NamespacesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));

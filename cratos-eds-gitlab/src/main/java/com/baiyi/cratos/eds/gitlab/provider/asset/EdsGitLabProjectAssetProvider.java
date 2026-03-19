@@ -45,7 +45,7 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsAssetProvider<EdsConfi
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance, Project entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .createdTimeOf(entity.getCreatedAt())
                 .descriptionOf(entity.getDescription())
@@ -53,8 +53,8 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
-                                            EdsAsset edsAsset, Project entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
+                                               EdsAsset edsAsset, Project entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, REPO_SSH_URL, entity.getSshUrlToRepo()));
         indices.add(createEdsAssetIndex(edsAsset, REPO_HTTP_URL, entity.getHttpUrlToRepo()));
@@ -63,7 +63,7 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.builder()
                 .comparisonName(true)
                 .build()

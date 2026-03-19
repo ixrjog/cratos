@@ -42,7 +42,7 @@ public class EdsCloudFlareZoneAssetProvider extends BaseEdsAssetProvider<EdsConf
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
                                   CloudFlareZone.Zone entity) throws EdsAssetConversionException {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getId())
                 .kindOf(entity.getType())
@@ -51,7 +51,7 @@ public class EdsCloudFlareZoneAssetProvider extends BaseEdsAssetProvider<EdsConf
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance, EdsAsset edsAsset,
             CloudFlareZone.Zone entity) {
         if (StringUtils.hasText(entity.getCnameSuffix())) {

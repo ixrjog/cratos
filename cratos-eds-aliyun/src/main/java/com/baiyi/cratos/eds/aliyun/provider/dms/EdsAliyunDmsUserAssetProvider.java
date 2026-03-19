@@ -43,7 +43,7 @@ public class EdsAliyunDmsUserAssetProvider extends BaseEdsAssetProvider<EdsConfi
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   AliyunDms.User entity) throws EdsAssetConversionException {
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 .assetIdOf(entity.getUserId())
                 .nameOf(entity.getNickName())
                 .assetKeyOf(entity.getUid())

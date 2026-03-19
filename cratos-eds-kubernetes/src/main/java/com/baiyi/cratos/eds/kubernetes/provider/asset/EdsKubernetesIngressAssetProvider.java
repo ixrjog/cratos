@@ -82,8 +82,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
-                                            EdsAsset edsAsset, Ingress entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
+                                               EdsAsset edsAsset, Ingress entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         // rules
         Optional.of(entity)
@@ -192,8 +192,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, Ingress entity) {
-        EdsAsset asset = super.saveEntityAsAsset(instance, entity);
+    protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, Ingress entity) {
+        EdsAsset asset = super.importEntityAsAsset(instance, entity);
         Optional.ofNullable(edsAssetIndexService.getByAssetIdAndName(asset.getId(), KUBERNETES_INGRESS_ORDER))
                 .map(EdsAssetIndex::getValue)
                 .ifPresent(orderValue -> {

@@ -49,7 +49,7 @@ public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          DescribeDBInstanceAttributeResponse.DBInstanceAttribute entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
                 .nameOf(entity.getDBInstanceDescription())
                 .regionOf(entity.getRegionId())
                 .zoneOf(entity.getZoneId())

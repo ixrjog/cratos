@@ -55,7 +55,7 @@ public class KubernetesResourceUtils {
         EdsInstanceAssetProvider<EdsConfigs.Kubernetes, Deployment> provider = holder.getProvider();
         for (EdsAsset asset : assets) {
             try {
-                Deployment deployment = provider.assetLoadAs(asset.getOriginalModel());
+                Deployment deployment = provider.loadAsset(asset.getOriginalModel());
                 KubeUtils.findAppContainerOf(deployment)
                         .ifPresent(container -> addTableRow(prettyTable, asset.getName(), container, deployment));
             } catch (Exception e) {

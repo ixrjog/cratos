@@ -58,7 +58,7 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetPro
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                          AwsTransferServer.TransferServer entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getServer()
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getServer()
                                                                       .getServerId())
                 .nameOf(entity.getServer()
                                 .getServerId())
@@ -69,7 +69,7 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

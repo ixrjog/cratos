@@ -64,7 +64,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Alimail> instance,
                                          AlimailUser.User entity) {
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // 资源 ID
                 .assetIdOf(entity.getId())
                 .nameOf(entity.getName())
@@ -72,8 +72,8 @@ public class EdsAlimailUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Alimail> instance, EdsAsset edsAsset,
-                                            AlimailUser.User entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Alimail> instance, EdsAsset edsAsset,
+                                               AlimailUser.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         if (!CollectionUtils.isEmpty(entity.getDepartmentIds())) {
             indices.add(createEdsAssetIndex(

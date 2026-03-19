@@ -94,7 +94,7 @@ public class ApplicationTest extends BaseUnit {
                 try {
                     EdsInstanceProviderHolder<?, Deployment> holder = getHolder(edsAsset.getInstanceId(), holders);
                     Deployment deployment = holder.getProvider()
-                            .assetLoadAs(edsAsset.getOriginalModel());
+                            .loadAsset(edsAsset.getOriginalModel());
                     Optional<Container> containerOptional = KubeUtils.findAppContainerOf(deployment);
                     if (containerOptional.isPresent()) {
                         String path = containerOptional.map(Container::getLivenessProbe)

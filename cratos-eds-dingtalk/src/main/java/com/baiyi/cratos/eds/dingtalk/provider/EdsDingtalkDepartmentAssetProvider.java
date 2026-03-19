@@ -98,7 +98,7 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance, EdsAsset edsAsset,
             DingtalkDepartmentModel.Department entity) {
         if (entity.getParentId() == null) {
@@ -110,7 +110,7 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsAssetProvider<Eds
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance,
                                   DingtalkDepartmentModel.Department entity) {
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDeptId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getDeptId())
                 .nameOf(entity.getName())
                 .build();
     }

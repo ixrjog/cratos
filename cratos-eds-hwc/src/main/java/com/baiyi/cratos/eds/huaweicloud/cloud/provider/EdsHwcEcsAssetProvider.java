@@ -89,7 +89,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
         if (!StringUtils.hasText(privateIp)) {
             privateIp = assetId;
         }
-        return newEdsAssetBuilder(instance, entity).assetIdOf(assetId)
+        return createAssetBuilder(instance, entity).assetIdOf(assetId)
                 .nameOf(entity.getServerDetail()
                         .getName())
                 .assetKeyOf(privateIp)
@@ -104,7 +104,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Hwc> instance, EdsAsset edsAsset,
             HwcEcs.Ecs entity) {
         Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()

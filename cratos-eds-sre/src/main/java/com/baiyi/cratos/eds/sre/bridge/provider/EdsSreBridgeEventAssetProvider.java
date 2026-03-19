@@ -46,7 +46,7 @@ public class EdsSreBridgeEventAssetProvider extends BaseEdsAssetProvider<EdsConf
                 .map(SreBridgeModel.Event::getExt)
                 .orElse(Map.of());
         String eventId = ext.containsKey(EVENT_ID) ? ext.get(EVENT_ID) : PasswordGenerator.generateNo();
-        return newEdsAssetBuilder(instance, entity).assetIdOf(eventId)
+        return createAssetBuilder(instance, entity).assetIdOf(eventId)
                 .nameOf(entity.getAction())
                 .kindOf(entity.getType())
                 .createdTimeOf(entity.getTime())
@@ -55,9 +55,9 @@ public class EdsSreBridgeEventAssetProvider extends BaseEdsAssetProvider<EdsConf
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.SreEventBridge> instance,
-                                         SreBridgeModel.Event entity) {
-        EdsAsset asset = super.saveEntityAsAsset(instance, entity);
+    protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.SreEventBridge> instance,
+                                           SreBridgeModel.Event entity) {
+        EdsAsset asset = super.importEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
         SreBridgeFacade.collectEvent(instance.getConfig(), entity);
         return asset;

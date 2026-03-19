@@ -181,7 +181,7 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
                 .getConfig();
         final String ingressStr = edsAsset.getOriginalModel();
         Ingress originalIngress = holder.getProvider()
-                .assetLoadAs(ingressStr);
+                .loadAsset(ingressStr);
         final String namespace = originalIngress.getMetadata()
                 .getNamespace();
         Ingress targetIngress = kubernetesIngressRepo.get(kubernetes, namespace, edsAsset.getName());

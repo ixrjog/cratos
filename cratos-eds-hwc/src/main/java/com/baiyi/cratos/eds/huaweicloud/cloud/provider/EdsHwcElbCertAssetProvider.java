@@ -63,7 +63,7 @@ public class EdsHwcElbCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
         try {
             String description = StringUtils.hasText(entity.getDomain()) ? entity.getDomain() : Joiner.on(",")
                     .join(entity.getSubjectAlternativeNames());
-            return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+            return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                     .regionOf(entity)
                     .nameOf(entity.getCommonName())
                     .kindOf(entity.getType())

@@ -83,7 +83,7 @@ public class EdsCrtLogAssetProvider extends BaseEdsAssetProvider<EdsConfigs.CrtS
         String matchingIdentities = entity.getNameValue()
                 .replaceAll("\\n", ",");
         String name = StringFormatter.arrayFormat("{} -> {}", entity.getDomainName(), entity.getCommonName());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(name)
                 .assetKeyOf(entity.getSerialNumber())
                 .kindOf(entity.getDomainName())
@@ -95,8 +95,8 @@ public class EdsCrtLogAssetProvider extends BaseEdsAssetProvider<EdsConfigs.CrtS
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.CrtSh> instance, EdsAsset edsAsset,
-                                            CrtSh.CertificateLog entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.CrtSh> instance, EdsAsset edsAsset,
+                                               CrtSh.CertificateLog entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, CRT_DOMAIN_NAME, entity.getDomainName()));
         indices.add(createEdsAssetIndex(edsAsset, DOMAIN_COMMON, entity.getCommonName()));
@@ -110,8 +110,8 @@ public class EdsCrtLogAssetProvider extends BaseEdsAssetProvider<EdsConfigs.CrtS
     }
 
     @Override
-    protected void processingAssetTags(EdsAsset asset, ExternalDataSourceInstance<EdsConfigs.CrtSh> instance,
-                                       CrtSh.CertificateLog entity, List<EdsAssetIndex> indices) {
+    protected void processAssetTags(EdsAsset asset, ExternalDataSourceInstance<EdsConfigs.CrtSh> instance,
+                                    CrtSh.CertificateLog entity, List<EdsAssetIndex> indices) {
         String domain = entity.getDomainName();
         Optional.ofNullable(tagService.getByTagKey(SysTagKeys.DOMAIN))
                 .ifPresent(tag -> {

@@ -66,7 +66,7 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
         try {
-            return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
+            return createAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                     .nameOf(entity.getInstanceName())
                     .regionOf(entity.getRegionId())
                     .createdTimeOf(TimeUtils.strToDate(entity.getCreateTime(), "yyyy-MM-dd HH:mm:ss"))
@@ -79,7 +79,7 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(
+    protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
             EdsAsset edsAsset,
             ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {

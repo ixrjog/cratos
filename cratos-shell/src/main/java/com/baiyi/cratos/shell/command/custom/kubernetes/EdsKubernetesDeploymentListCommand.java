@@ -104,7 +104,7 @@ public class EdsKubernetesDeploymentListCommand extends AbstractCommand {
         int i = 1;
         for (EdsAsset asset : table.getData()) {
             Deployment deployment = edsInstanceProviderHolder.getProvider()
-                    .assetLoadAs(asset.getOriginalModel());
+                    .loadAsset(asset.getOriginalModel());
             final String namespace = Optional.ofNullable(deployment)
                     .map(Deployment::getMetadata)
                     .map(ObjectMeta::getNamespace)

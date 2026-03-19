@@ -108,7 +108,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
         // import transfer server
         try {
             AwsTransferServer.TransferServer transferServer = holder.getProvider()
-                    .assetLoadAs(sftpUser.getAsset()
+                    .loadAsset(sftpUser.getAsset()
                             .getOriginalModel());
             List<ListedUser> sftpUsers = AwsTransferRepo.listUsers(regionId, aws, sftpUser.getAsset()
                     .getAssetId());

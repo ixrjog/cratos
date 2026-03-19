@@ -90,7 +90,7 @@ public class EdsCloudFlareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
                 95, EdsAssetTypeEnum.CLOUDFLARE_DNS_RECORD.name());
         for (EdsAsset asset : assets) {
             CloudFlareDns.DnsRecord dnsRecord = holder.getProvider()
-                    .assetLoadAs(asset.getOriginalModel());
+                    .loadAsset(asset.getOriginalModel());
             if (!dnsRecord.getType()
                     .equals("CNAME")) {
                 System.out.println("非CNAME解析:" + dnsRecord.getName());

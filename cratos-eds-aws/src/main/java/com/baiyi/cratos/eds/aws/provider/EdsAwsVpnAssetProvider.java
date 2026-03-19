@@ -43,7 +43,7 @@ public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
                 .findAny();
         final String name = optionalTag.isPresent() ? optionalTag.get()
                 .getValue() : entity.getVpnConnectionId();
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpnConnectionId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getVpnConnectionId())
                 .nameOf(name)
                 .kindOf(entity.getType())
                 .statusOf(entity.getState())

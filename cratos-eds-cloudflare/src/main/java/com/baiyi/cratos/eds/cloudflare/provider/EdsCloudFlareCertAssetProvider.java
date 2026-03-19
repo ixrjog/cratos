@@ -65,7 +65,7 @@ public class EdsCloudFlareCertAssetProvider extends BaseHasNamespaceEdsAssetProv
                 .findAny()
                 .orElseGet(() -> entity.getHosts()
                         .getFirst());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(name)
                 .zoneOf(entity.getZoneId())
                 .kindOf(entity.getIssuer())

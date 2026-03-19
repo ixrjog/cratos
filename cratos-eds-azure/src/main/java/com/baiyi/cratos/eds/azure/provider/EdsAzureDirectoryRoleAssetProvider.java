@@ -42,7 +42,7 @@ public class EdsAzureDirectoryRoleAssetProvider extends BaseEdsAssetProvider<Eds
         final String key = Joiner.on("|")
                 .skipNulls()
                 .join(entity.getId(), entity.getRoleTemplateId());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+        return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getDisplayName())
                 .assetKeyOf(key)
                 .descriptionOf(entity.getDescription())

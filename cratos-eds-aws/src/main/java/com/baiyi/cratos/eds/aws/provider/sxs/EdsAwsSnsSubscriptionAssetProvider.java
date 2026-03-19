@@ -68,7 +68,7 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                          AwsSns.Subscription entity) {
-        return newEdsAssetBuilder(instance, entity)
+        return createAssetBuilder(instance, entity)
                 // ID
                 .assetIdOf(StringUtils.substringAfterLast(
                         entity.getSubscription()
@@ -83,8 +83,8 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
-                                            AwsSns.Subscription entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance, EdsAsset edsAsset,
+                                               AwsSns.Subscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(
                 edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()
