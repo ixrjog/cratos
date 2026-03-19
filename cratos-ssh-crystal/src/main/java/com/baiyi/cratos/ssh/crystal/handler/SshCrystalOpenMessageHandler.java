@@ -1,5 +1,6 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -12,6 +13,7 @@ import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
@@ -28,6 +30,7 @@ import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalOpenMessageHandle
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
 import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
@@ -43,6 +46,8 @@ import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
 @MessageStates(state = MessageState.OPEN)
 public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandler<SshCrystalMessage.Open> {
 
+    private final RbacRoleFacade rbacRoleFacade;
+
     public SshCrystalOpenMessageHandler(EdsAssetService edsAssetService, ServerAccountService serverAccountService,
                                         CredentialService credentialService,
                                         ServerAccessControlFacade serverAccessControlFacade,
@@ -53,12 +58,14 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                                         SshAuditProperties sshAuditProperties,
                                         SimpleSshSessionFacade simpleSshSessionFacade,
                                         SshProxyHostHolder proxyHostHolder,
-                                        EdsProviderHolderFactory edsProviderHolderFactory) {
+                                        EdsProviderHolderFactory edsProviderHolderFactory,
+                                        RbacRoleFacade rbacRoleFacade) {
         super(
                 edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
                 sshAuditProperties, simpleSshSessionFacade, proxyHostHolder, edsProviderHolderFactory
         );
+        this.rbacRoleFacade = rbacRoleFacade;
     }
 
     @Override
@@ -70,22 +77,32 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                     openMessage.getInstanceId()
             );
             heartbeat(sshSession.getSessionId());
-            AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(
-                    username,
-                    openMessage.getAssetId()
-            );
-            if (!accessControl.getPermission()) {
-                sendHostSystemErrMsgToSession(
-                        session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                        AUTH_FAIL_STATUS, accessControl.getMsg()
+            // TODO 鉴权逻辑优化，OPS 管理员可直接登录机器
+            boolean isOps = rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS, username);
+            if (!isOps) {
+                AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(
+                        username,
+                        openMessage.getAssetId()
                 );
-                return;
+                if (!accessControl.getPermission()) {
+                    sendHostSystemErrMsgToSession(
+                            session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                            AUTH_FAIL_STATUS, accessControl.getMsg()
+                    );
+                    return;
+                }
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
             String sshLoginIP = getRemoteManagementIP(server);
             // 查询 serverAccount
-            ServerAccount serverAccount = serverAccountService.getByName(
-                    getServerAccountName(openMessage.getAssetId()));
+            ServerAccount serverAccount = getServerAccount(openMessage.getAssetId());
+            if (serverAccount == null) {
+                sendHostSystemErrMsgToSession(
+                        session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                        AUTH_FAIL_STATUS, "Service login account is not configured."
+                );
+                return;
+            }
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
                     openMessage.getInstanceId(), sshLoginIP,
@@ -138,8 +155,19 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
         }
     }
 
+    private ServerAccount getServerAccount(int assetId) {
+        String serverAccountName = getServerAccountName(assetId);
+        if (!StringUtils.hasText(serverAccountName)) {
+            return null;
+        }
+        return serverAccountService.getByName(serverAccountName);
+    }
+
     private String getServerAccountName(int assetId) {
         BusinessTag businessTag = getServerBusinessTag(assetId, SysTagKeys.SERVER_ACCOUNT);
+        if (businessTag == null) {
+            return null;
+        }
         return businessTag.getTagValue();
     }
 

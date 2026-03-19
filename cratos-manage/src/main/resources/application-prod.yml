@@ -29,6 +29,7 @@ cratos:
         - BASE
         - DEV
   tenant: PP
+  auto-register: on
 
 springdoc:
   swagger-ui:

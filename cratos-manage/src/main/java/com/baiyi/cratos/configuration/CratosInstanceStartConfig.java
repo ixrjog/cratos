@@ -41,6 +41,9 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
     @Value("${spring.application.version}")
     private String version;
 
+    @Value("${cratos.auto-register:false}")
+    private Boolean autoRegister;
+
     public static final InetAddress INET_ADDRESS = CratosInstanceStartConfig.getInetAddress();
 
     @Override
@@ -57,6 +60,9 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
     }
 
     private void register() throws UnknownHostException {
+        if (!autoRegister) {
+            return;
+        }
         InetAddress inetAddress = HostUtils.getInetAddress();
         // 已存在
         CratosInstance instance = cratosInstanceService.getByHostIp(inetAddress.getHostAddress());
