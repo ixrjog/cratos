@@ -14,18 +14,15 @@ import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aws.enums.Route53RoutingPolicyEnum;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
+import com.baiyi.cratos.eds.context.DNSResolverContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.annotation.ToFQDN;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
 import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.TrafficRecordTargetService;
-import com.baiyi.cratos.service.TrafficRouteService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -46,10 +43,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
 
     private static final String CONSOLE_URL = "https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones?region=eu-west-1#ListRecordSets/{}";
 
-    public AwsRoute53Resolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
-                              TrafficRecordTargetService trafficRecordTargetService,
-                              EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsProviderHolderFactory);
+    public AwsRoute53Resolver(DNSResolverContext context) {
+        super(context);
     }
 
     @Override
@@ -185,7 +180,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
             return trafficRoute.getZoneId();
         }
         String domainFqdn = toFQDN(trafficRoute.getDomain());
-        List<EdsAsset> hostedZoneAssets = edsAssetService.queryInstanceAssetByTypeAndName(
+        List<EdsAsset> hostedZoneAssets = resolverContext.getEdsAssetService().queryInstanceAssetByTypeAndName(
                 trafficRoute.getDnsResolverInstanceId(), EdsAssetTypeEnum.AWS_HOSTED_ZONE.name(), domainFqdn, false);
         return CollectionUtils.isEmpty(hostedZoneAssets) ? null : hostedZoneAssets.getFirst()
                 .getAssetId();

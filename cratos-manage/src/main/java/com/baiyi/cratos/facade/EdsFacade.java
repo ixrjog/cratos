@@ -70,4 +70,6 @@ public interface EdsFacade extends SimpleEdsFacade, HasSetValid {
 
     void updateInstanceCustomAsset(CustomAssetParam.UpdateAsset updateAsset);
 
+    void migrateAsset(int assetId, int toInstanceId, String assetType);
+
 }

@@ -190,22 +190,6 @@ public class ExtDataSourceController {
         return HttpResult.SUCCESS;
     }
 
-    @Deprecated
-    @Operation(summary = "Add eds cratos asset")
-    @PostMapping(value = "/instance/cratos/asset/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addInstanceCratosAsset(@RequestBody @Valid CustomAssetParam.AddAsset addAsset) {
-        edsFacade.addInstanceCustomAsset(addAsset);
-        return HttpResult.SUCCESS;
-    }
-
-    @Deprecated
-    @Operation(summary = "Update eds cratos asset")
-    @PutMapping(value = "/instance/cratos/asset/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateInstanceCratosAsset(@RequestBody @Valid CustomAssetParam.UpdateAsset updateAsset) {
-        edsFacade.updateInstanceCustomAsset(updateAsset);
-        return HttpResult.SUCCESS;
-    }
-
     @Operation(summary = "Get to business target")
     @GetMapping(value = "/asset/to/business/target/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsAssetVO.AssetToBusiness<?>> getToBusinessTarget(@RequestParam int assetId) {

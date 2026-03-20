@@ -4,15 +4,11 @@ import com.baiyi.cratos.common.exception.CloudComputerOperationException;
 import com.baiyi.cratos.eds.aws.repo.AwsEc2Repo;
 import com.baiyi.cratos.eds.computer.BaseCloudComputerOperator;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
+import com.baiyi.cratos.eds.context.CloudComputerOperatorContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,10 +22,8 @@ public class AwsEc2ComputerOperator extends BaseCloudComputerOperator<EdsConfigs
 
     private final AwsEc2Repo awsEc2Repo;
 
-    public AwsEc2ComputerOperator(EdsInstanceService edsInstanceService, EdsConfigService edsConfigService,
-                                  EdsAssetService edsAssetService, CredentialService credentialService,
-                                  ConfigCredTemplate configCredTemplate, AwsEc2Repo awsEc2Repo) {
-        super(edsInstanceService, edsConfigService, edsAssetService, credentialService, configCredTemplate);
+    public AwsEc2ComputerOperator(CloudComputerOperatorContext context, AwsEc2Repo awsEc2Repo) {
+        super(context);
         this.awsEc2Repo = awsEc2Repo;
     }
 
@@ -67,8 +61,7 @@ public class AwsEc2ComputerOperator extends BaseCloudComputerOperator<EdsConfigs
      * @throws CloudComputerOperationException
      */
     @Override
-    protected String stopInstance(
-            CloudComputerContext<EdsConfigs.Aws> context) throws CloudComputerOperationException {
+    protected String stopInstance(CloudComputerContext<EdsConfigs.Aws> context) throws CloudComputerOperationException {
         return awsEc2Repo.stopInstance(context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
     }
 

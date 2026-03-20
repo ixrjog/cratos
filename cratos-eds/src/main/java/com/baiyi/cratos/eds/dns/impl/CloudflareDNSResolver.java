@@ -10,16 +10,13 @@ import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareDns;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareDnsRepo;
+import com.baiyi.cratos.eds.context.DNSResolverContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
 import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.TrafficRecordTargetService;
-import com.baiyi.cratos.service.TrafficRouteService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -40,10 +37,8 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
 
     private static final String CONSOLE_URL = "https://dash.cloudflare.com/{}/{}/dns/records";
 
-    public CloudflareDNSResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
-                                 TrafficRecordTargetService trafficRecordTargetService,
-                                 EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsProviderHolderFactory);
+    public CloudflareDNSResolver(DNSResolverContext context) {
+        super(context);
     }
 
     @Override
@@ -181,10 +176,11 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
         if (StringUtils.hasText(trafficRoute.getZoneId())) {
             return trafficRoute.getZoneId();
         }
-        List<EdsAsset> hostedZoneAssets = edsAssetService.queryInstanceAssetByTypeAndName(
-                trafficRoute.getDnsResolverInstanceId(), EdsAssetTypeEnum.CLOUDFLARE_ZONE.name(),
-                trafficRoute.getDomain(), false
-        );
+        List<EdsAsset> hostedZoneAssets = resolverContext.getEdsAssetService()
+                .queryInstanceAssetByTypeAndName(
+                        trafficRoute.getDnsResolverInstanceId(), EdsAssetTypeEnum.CLOUDFLARE_ZONE.name(),
+                        trafficRoute.getDomain(), false
+                );
         return CollectionUtils.isEmpty(hostedZoneAssets) ? null : hostedZoneAssets.getFirst()
                 .getAssetId();
     }

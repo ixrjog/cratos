@@ -5,14 +5,11 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.eds.context.DNSResolverContext;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.TrafficRecordTargetService;
-import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
@@ -28,15 +25,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> implements DNSResolver {
 
-    protected final EdsAssetService edsAssetService;
-    protected final TrafficRouteService trafficRouteService;
-    protected final TrafficRecordTargetService trafficRecordTargetService;
-    protected final EdsProviderHolderFactory edsProviderHolderFactory;
+    protected final DNSResolverContext resolverContext;
 
     private static final int MAX_LOAD_BALANCING = 3;
 
     protected TrafficRecordTarget getTrafficRecordTargetById(int trafficRecordTargetId) {
-        return Optional.ofNullable(trafficRecordTargetService.getById(trafficRecordTargetId))
+        return Optional.ofNullable(resolverContext.getTrafficRecordTargetService()
+                                           .getById(trafficRecordTargetId))
                 .orElseThrow(() -> new TrafficRouteException(
                         "TrafficRecordTarget 不存在, recordTargetId: {}",
                         trafficRecordTargetId
@@ -44,7 +39,8 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
     }
 
     protected TrafficRoute getTrafficRouteById(int trafficRouteId) {
-        return Optional.ofNullable(trafficRouteService.getById(trafficRouteId))
+        return Optional.ofNullable(resolverContext.getTrafficRouteService()
+                                           .getById(trafficRouteId))
                 .orElseThrow(
                         () -> new TrafficRouteException("TrafficRoute 不存在, trafficRouteId: {}", trafficRouteId));
     }
@@ -79,8 +75,8 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
 
     @SuppressWarnings("unchecked")
     protected Config getEdsConfig(TrafficRoute trafficRoute, EdsAssetTypeEnum assetTypeEnum) {
-        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsProviderHolderFactory.createHolder(
-                trafficRoute.getDnsResolverInstanceId(), assetTypeEnum.name());
+        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) resolverContext.getEdsProviderHolderFactory()
+                .createHolder(trafficRoute.getDnsResolverInstanceId(), assetTypeEnum.name());
         return holder.getInstance()
                 .getConfig();
     }
@@ -120,6 +116,7 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
 
     /**
      * 安全控制
+     *
      * @param matchedRecords
      */
     protected void validateRecordCount(List<Record> matchedRecords) {

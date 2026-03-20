@@ -5,8 +5,8 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.view.base.LoginServerVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
-import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.business.converter.AssetToBusinessConverterFactory;
+import com.baiyi.cratos.eds.business.converter.AssetToBusinessConverter;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
@@ -54,7 +54,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         vo.setOriginalAsset(edsInstanceProviderHolder.getProvider()
                                     .loadAsset(vo.getOriginalModel()));
         // ToBusiness
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
+        AssetToBusinessConverter<?> assetToBusinessWrapper = AssetToBusinessConverterFactory.getProvider(
                 vo.getAssetType());
         if (assetToBusinessWrapper != null) {
             assetToBusinessWrapper.wrap(vo);
@@ -77,7 +77,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
                                            .loadAsset(asset.getOriginalModel()));
         }
         // ToBusiness
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
+        AssetToBusinessConverter<?> assetToBusinessWrapper = AssetToBusinessConverterFactory.getProvider(
                 asset.getAssetType());
         if (assetToBusinessWrapper != null) {
             assetToBusinessWrapper.wrap(asset);

@@ -1,0 +1,27 @@
+package com.baiyi.cratos.eds.business.converter.impl.domain;
+
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.eds.aliyun.model.AliyunDomain;
+import com.baiyi.cratos.eds.business.converter.impl.domain.base.BaseDomainAssetToBusinessConverter;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
+import org.springframework.stereotype.Component;
+
+/**
+ * @Author baiyi
+ * @Date 2024/4/28 上午10:45
+ * @Version 1.0
+ */
+@Component
+@BusinessType(type = BusinessTypeEnum.DOMAIN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
+public class AliyunDomainAssetToBusinessConverter extends BaseDomainAssetToBusinessConverter<AliyunDomain> {
+
+    public AliyunDomainAssetToBusinessConverter(BusinessAssetBoundService businessAssetBoundService) {
+        super(businessAssetBoundService);
+    }
+
+}

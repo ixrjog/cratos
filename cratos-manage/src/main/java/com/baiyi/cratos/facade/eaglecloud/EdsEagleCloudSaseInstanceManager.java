@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.core.config.loader.EagleCloudSaseConfigLoader;
+import com.baiyi.cratos.eds.core.config.loader.EdsEagleCloudSaseConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 public class EdsEagleCloudSaseInstanceManager {
 
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
-    private final EagleCloudSaseConfigLoader eagleCloudSaseConfigLoader;
+    private final EdsEagleCloudSaseConfigLoader eagleCloudSaseConfigLoader;
     private static final EdsInstanceTypeEnum[] INSTANCE_TYPES = {EdsInstanceTypeEnum.EAGLECLOUD_SASE};
 
     public EdsInstance findInstanceByHookToken(String hookToken) {

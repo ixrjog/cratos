@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.idc.provider;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.param.http.eds.cratos.CustomIdcParam;
+import com.baiyi.cratos.domain.param.http.eds.cratos.CustomAssetParam;
 import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.CustomAsset;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -31,21 +31,21 @@ import java.util.Optional;
 @Component
 @CustomAsset
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CUSTOM_IDC, assetTypeOf = EdsAssetTypeEnum.CUSTOM_IDC_HOST)
-public class EdsCustomIDCHostAssetProvider extends BaseEdsAssetProvider<EdsConfigs.CustomIdc, CustomIdcParam.Host> {
+public class EdsCustomIDCHostAssetProvider extends BaseEdsAssetProvider<EdsConfigs.CustomIdc, CustomAssetParam.AssetPrototype> {
 
     public EdsCustomIDCHostAssetProvider(EdsAssetProviderContext context) {
         super(context);
     }
 
     @Override
-    protected List<CustomIdcParam.Host> listEntities(
+    protected List<CustomAssetParam.AssetPrototype> listEntities(
             ExternalDataSourceInstance<EdsConfigs.CustomIdc> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Query not supported.");
     }
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.CustomIdc> instance,
-                                         CustomIdcParam.Host entity) throws EdsAssetConversionException {
+                                         CustomAssetParam.AssetPrototype entity) throws EdsAssetConversionException {
         if (!IpUtils.isIP(entity.getAssetKey())) {
             throw new EdsAssetConversionException("`Remote Management IP` not a valid IP address.");
         }

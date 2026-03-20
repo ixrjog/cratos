@@ -2,11 +2,7 @@ package com.baiyi.cratos.eds.core.config.loader;
 
 import com.baiyi.cratos.eds.core.BaseEdsConfigLoader;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.eds.core.context.EdsConfigLoaderContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,10 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EdsGitLabConfigLoader extends BaseEdsConfigLoader<EdsConfigs.GitLab> {
 
-    public EdsGitLabConfigLoader(EdsProviderHolderFactory holderBuilder, EdsInstanceService edsInstanceService,
-                                 EdsConfigService edsConfigService, ConfigCredTemplate configCredTemplate,
-                                 CredentialService credService) {
-        super(holderBuilder, edsInstanceService, edsConfigService, configCredTemplate, credService);
+    public EdsGitLabConfigLoader(EdsConfigLoaderContext context) {
+        super(context);
     }
 
 }

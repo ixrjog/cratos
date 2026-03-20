@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/4/25 14:01
+ * &#064;Date  2025/9/29 15:36
  * &#064;Version 1.0
  */
 @Component
-public class EdsOpscloudConfigLoader extends BaseEdsConfigLoader<EdsConfigs.Opscloud> {
+public class EdsEagleCloudSaseConfigLoader extends BaseEdsConfigLoader<EdsConfigs.Sase> {
 
-    public EdsOpscloudConfigLoader(EdsConfigLoaderContext context) {
+    public EdsEagleCloudSaseConfigLoader(EdsConfigLoaderContext context) {
         super(context);
     }
 

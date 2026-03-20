@@ -3,16 +3,12 @@ package com.baiyi.cratos.eds.computer.impl;
 import com.baiyi.cratos.common.exception.CloudComputerOperationException;
 import com.baiyi.cratos.eds.computer.BaseCloudComputerOperator;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
+import com.baiyi.cratos.eds.context.CloudComputerOperatorContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcEcsRepo;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.ecs.v2.model.ServerDetail;
 import org.springframework.stereotype.Component;
@@ -26,10 +22,8 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_ECS)
 public class HwcEcsComputerOperator extends BaseCloudComputerOperator<EdsConfigs.Hwc, ServerDetail> {
 
-    public HwcEcsComputerOperator(EdsInstanceService edsInstanceService, EdsConfigService edsConfigService,
-                                  EdsAssetService edsAssetService, CredentialService credentialService,
-                                  ConfigCredTemplate configCredTemplate) {
-        super(edsInstanceService, edsConfigService, edsAssetService, credentialService, configCredTemplate);
+    public HwcEcsComputerOperator(CloudComputerOperatorContext context) {
+        super(context);
     }
 
     /**
@@ -76,8 +70,7 @@ public class HwcEcsComputerOperator extends BaseCloudComputerOperator<EdsConfigs
      * @throws CloudComputerOperationException
      */
     @Override
-    protected String stopInstance(
-            CloudComputerContext<EdsConfigs.Hwc> context) throws CloudComputerOperationException {
+    protected String stopInstance(CloudComputerContext<EdsConfigs.Hwc> context) throws CloudComputerOperationException {
         try {
             return HwcEcsRepo.stopInstance(context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
         } catch (ServiceResponseException serviceResponseException) {

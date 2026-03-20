@@ -1,7 +1,6 @@
 package com.baiyi.cratos.eds.computer;
 
 import com.baiyi.cratos.common.exception.CloudComputerOperationException;
-import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +20,10 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class CloudComputerOperatorFactory {
 
-    private static final Map<EdsAssetTypeEnum, HasCloudComputerOperator<?, ?>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<EdsAssetTypeEnum, CloudComputerOperator> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <Config extends HasEdsConfig, Computer> void register(
-            HasCloudComputerOperator<Config, Computer> operatorBean) {
+    public static void register(
+            CloudComputerOperator operatorBean) {
         CONTEXT.put(EdsAssetTypeEnum.valueOf(operatorBean.getAssetType()), operatorBean);
     }
 

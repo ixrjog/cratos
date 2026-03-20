@@ -8,13 +8,9 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
+import com.baiyi.cratos.eds.context.CloudComputerOperatorContext;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.EdsInstanceService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -26,13 +22,9 @@ import java.util.Optional;
  */
 @SuppressWarnings("All")
 @RequiredArgsConstructor
-public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Computer> implements HasCloudComputerOperator<Config, Computer> {
+public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Computer> implements CloudComputerOperator {
 
-    private final EdsInstanceService edsInstanceService;
-    private final EdsConfigService edsConfigService;
-    private final EdsAssetService edsAssetService;
-    private final CredentialService credentialService;
-    private final ConfigCredTemplate configCredTemplate;
+    private final CloudComputerOperatorContext context;
 
     @Override
     public void reboot(Integer assetId) {
@@ -53,10 +45,12 @@ public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Com
     }
 
     protected CloudComputerContext<Config> buildContext(Integer assetId) {
-        EdsAsset asset = edsAssetService.getById(assetId);
+        EdsAsset asset = context.getEdsAssetService()
+                .getById(assetId);
         Optional.of(asset)
                 .orElseThrow(() -> new CloudComputerOperationException("Asset not found, assetId: {}", assetId));
-        EdsInstance edsInstance = edsInstanceService.getById(asset.getInstanceId());
+        EdsInstance edsInstance = context.getEdsInstanceService()
+                .getById(asset.getInstanceId());
         Optional.of(edsInstance)
                 .orElseThrow(() -> new CloudComputerOperationException(
                         "Instance not found, instanceId: {}",
@@ -66,7 +60,8 @@ public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Com
             CloudComputerOperationException.runtime(
                     "Instance not bound to config, instanceId: {}", edsInstance.getId());
         }
-        EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
+        EdsConfig edsConfig = context.getEdsConfigService()
+                .getById(edsInstance.getConfigId());
         Optional.of(edsConfig)
                 .orElseThrow(() -> new CloudComputerOperationException(
                         "Instance configuration not found: configId={}",
@@ -82,7 +77,8 @@ public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Com
     }
 
     protected EdsAsset getAsset(Integer assetId) {
-        return edsAssetService.getById(assetId);
+        return context.getEdsAssetService()
+                .getById(assetId);
     }
 
     protected abstract String rebootInstance(
@@ -91,15 +87,16 @@ public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Com
     protected abstract String startInstance(
             CloudComputerContext<Config> context) throws CloudComputerOperationException;
 
-    protected abstract String stopInstance(
-            CloudComputerContext<Config> context) throws CloudComputerOperationException;
+    protected abstract String stopInstance(CloudComputerContext<Config> context) throws CloudComputerOperationException;
 
     protected Config configLoadAs(EdsConfig edsConfig) {
         String configContent = edsConfig.getConfigContent();
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
-            Credential cred = credentialService.getById(edsConfig.getCredentialId());
+            Credential cred = context.getCredentialService()
+                    .getById(edsConfig.getCredentialId());
             if (cred != null) {
-                return configLoadAs(configCredTemplate.renderTemplate(configContent, cred));
+                return configLoadAs(context.getConfigCredTemplate()
+                                            .renderTemplate(configContent, cred));
             }
         }
         return configLoadAs(configContent);

@@ -8,17 +8,14 @@ import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
+import com.baiyi.cratos.eds.context.DNSResolverContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
 import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.TrafficRecordTargetService;
-import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -40,10 +37,8 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     private static final String CONSOLE_URL = "https://dnsnext.console.aliyun.com/authoritative/domains/{}?RRKeyWord={}";
 
-    public AliyunDNSResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
-                             TrafficRecordTargetService trafficRecordTargetService,
-                             EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsProviderHolderFactory);
+    public AliyunDNSResolver(DNSResolverContext context) {
+        super(context);
     }
 
     @Override

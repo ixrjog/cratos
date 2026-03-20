@@ -20,8 +20,8 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
-import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
-import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.business.converter.AssetToBusinessConverterFactory;
+import com.baiyi.cratos.eds.business.converter.AssetToBusinessConverter;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.annotation.CustomAsset;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -383,8 +383,8 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsAsset edsAsset = Optional.ofNullable(edsAssetService.getById(assetId))
                 .orElseThrow(() -> new EdsAssetException("The asset object does not exist: assetId={}.", assetId));
         EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(edsAsset);
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = Optional.ofNullable(
-                        AssetToBusinessWrapperFactory.getProvider(edsAsset.getAssetType()))
+        AssetToBusinessConverter<?> assetToBusinessWrapper = Optional.ofNullable(
+                        AssetToBusinessConverterFactory.getProvider(edsAsset.getAssetType()))
                 .orElseThrow(() -> new EdsAssetException(
                         "This asset object cannot be converted to a business object: assetId={}.", assetId));
         return assetToBusinessWrapper.getAssetToBusiness(assetVO);
@@ -448,14 +448,14 @@ public class EdsFacadeImpl implements EdsFacade {
         if (Objects.isNull(instance)) {
             EdsAssetException.runtime("Instance does not exist");
         }
-        EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype> holder = (EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype>) buildHolder(
+        EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype>) buildHolder(
                 addAsset.getInstanceId(), addAsset.getAssetType());
-        validateCustomAssetHolder(holder);
-        holder.importAsset(addAsset);
+        validateCustomAssetHolder(edsInstanceProviderHolder);
+        edsInstanceProviderHolder.importAsset(addAsset.toTarget());
     }
 
-    private void validateCustomAssetHolder(EdsInstanceProviderHolder<?, ?> holder) {
-        if (holder == null || AopUtils.getTargetClass(holder)
+    private void validateCustomAssetHolder(EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder) {
+        if (edsInstanceProviderHolder == null || AopUtils.getTargetClass(edsInstanceProviderHolder.getProvider())
                 .getAnnotation(CustomAsset.class) == null) {
             throw new EdsAssetException("The current asset type does not support custom asset operations.");
         }
@@ -472,12 +472,38 @@ public class EdsFacadeImpl implements EdsFacade {
         if (Objects.isNull(instance)) {
             EdsAssetException.runtime("Instance does not exist.");
         }
-        EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype> holder = (EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype>) buildHolder(
+        EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, CustomAssetParam.AssetPrototype>) buildHolder(
                 instance.getId(), updateAsset.getAssetType());
-        validateCustomAssetHolder(holder);
+        validateCustomAssetHolder(edsInstanceProviderHolder);
         CustomAssetParam.AssetPrototype assetPrototype = updateAsset.toTarget();
         assetPrototype.setInstanceId(instance.getId());
-        holder.importAsset(assetPrototype);
+        edsInstanceProviderHolder.importAsset(assetPrototype);
+    }
+
+    /**
+     * 迁移资产, 仅内部使用
+     *
+     * @param assetId
+     * @param toInstanceId
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void migrateAsset(int assetId, int toInstanceId,String assetType) {
+        EdsAsset edsAsset = edsAssetService.getById(assetId);
+        int instanceId = edsAsset.getInstanceId();
+        if (instanceId == toInstanceId) {
+            return;
+        }
+        edsAsset.setInstanceId(toInstanceId);
+        edsAsset.setAssetType(assetType);
+        edsAssetService.updateByPrimaryKey(edsAsset);
+        List<EdsAssetIndex> indexes = edsAssetIndexService.queryIndexByAssetId(assetId);
+        if (!CollectionUtils.isEmpty(indexes)) {
+            for (EdsAssetIndex index : indexes) {
+                index.setInstanceId(toInstanceId);
+                edsAssetIndexService.updateByPrimaryKey(index);
+            }
+        }
     }
 
 }

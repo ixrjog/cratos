@@ -18,8 +18,4 @@ public class ExternalDataSourceInstance<Config extends HasEdsConfig> {
 
     Config config;
 
-    public Config getConfig() {
-        return config;
-    }
-
 }
