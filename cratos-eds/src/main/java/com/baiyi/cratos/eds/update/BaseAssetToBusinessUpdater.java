@@ -9,9 +9,9 @@ import com.baiyi.cratos.service.BusinessAssetBoundService;
  * &#064;Date  2024/6/7 下午1:39
  * &#064;Version 1.0
  */
-public abstract class BaseUpdateBusinessFromAssetProcessor<B> implements IUpdateBusinessFromAssetProcessor {
+public abstract class BaseAssetToBusinessUpdater<B> implements AssetToBusinessUpdater {
 
-    public BaseUpdateBusinessFromAssetProcessor(BusinessAssetBoundService businessAssetBoundService) {
+    public BaseAssetToBusinessUpdater(BusinessAssetBoundService businessAssetBoundService) {
         this.businessAssetBoundService = businessAssetBoundService;
     }
 
@@ -36,7 +36,7 @@ public abstract class BaseUpdateBusinessFromAssetProcessor<B> implements IUpdate
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        UpdateBusinessFromAssetProcessorFactory.register(this);
+        AssetToBusinessUpdaterFactory.register(this);
     }
 
 }

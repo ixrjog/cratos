@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
-import com.baiyi.cratos.eds.update.BaseUpdateBusinessFromAssetProcessor;
+import com.baiyi.cratos.eds.update.BaseAssetToBusinessUpdater;
 import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.GlobalNetworkSubnetService;
@@ -23,12 +23,12 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
 @Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
-public class UpdateGlobalNetworkSubnetFromAssetProcessor extends BaseUpdateBusinessFromAssetProcessor<GlobalNetworkSubnet> {
+public class SubnetAssetToBusinessUpdater extends BaseAssetToBusinessUpdater<GlobalNetworkSubnet> {
 
     private final GlobalNetworkSubnetService globalNetworkSubnetService;
     private final EdsAssetIndexService edsAssetIndexService;
 
-    public UpdateGlobalNetworkSubnetFromAssetProcessor(BusinessAssetBoundService businessAssetBoundService,
+    public SubnetAssetToBusinessUpdater(BusinessAssetBoundService businessAssetBoundService,
                                                        GlobalNetworkSubnetService globalNetworkSubnetService,
                                                        EdsAssetIndexService edsAssetIndexService) {
         super(businessAssetBoundService);

@@ -33,7 +33,7 @@ public class AssetToBusinessObjectUpdaterImpl implements AssetToBusinessObjectUp
     }
 
     private void update(EdsAsset asset, BusinessAssetBound businessAssetBound) {
-        IUpdateBusinessFromAssetProcessor provider = UpdateBusinessFromAssetProcessorFactory.getProvider(
+        AssetToBusinessUpdater provider = AssetToBusinessUpdaterFactory.getUpdater(
                 businessAssetBound.getBusinessType());
         if (provider != null) {
             provider.update(asset, businessAssetBound);
