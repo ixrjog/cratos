@@ -41,12 +41,12 @@ import static com.baiyi.cratos.shell.command.custom.computer.EdsComputerListComm
 @Slf4j
 @Component
 @SshShellComponent
-@ShellCommandGroup("Eds CloudComputer Commands")
+@ShellCommandGroup("Automatic Certificate Management Environment")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class AcmeDomainCommand extends AbstractCommand {
 
-    public static final String GROUP = "acme-domain";
-    private static final String COMMAND_ACME_DOMAIN_LIST = GROUP + "-list";
+    public static final String GROUP = "acme";
+    private static final String COMMAND_ACME_DOMAIN_LIST = GROUP + "-domain-list";
 
     public static final String[] ACME_DOMAIN_TABLE_FIELD_NAME = {"ID", "Name", "Domain", "Domains", "DNS Resolver Instance", "Account and ACME Provider" , "DCV Delegation"};
     protected static final int PAGE_FOOTER_SIZE = 6;

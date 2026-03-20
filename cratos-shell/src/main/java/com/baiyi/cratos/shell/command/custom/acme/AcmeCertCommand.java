@@ -37,14 +37,14 @@ import static com.baiyi.cratos.shell.command.custom.computer.EdsComputerListComm
 @Slf4j
 @Component
 @SshShellComponent
-@ShellCommandGroup("Eds CloudComputer Commands")
+@ShellCommandGroup("Automatic Certificate Management Environment")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class AcmeCertCommand extends AbstractCommand {
 
-    public static final String GROUP = "acme-cert";
-    private static final String COMMAND_ACME_CERT_SHOW = GROUP + "-show";
-    private static final String COMMAND_ACME_CERT_ISSUE = GROUP + "-issue";
-    private static final String COMMAND_ACME_CERT_CLOUD_RESOURCE_LIST = GROUP + "-cloud-resources-list";
+    public static final String GROUP = "acme";
+    private static final String COMMAND_ACME_CERT_SHOW = GROUP + "-cert-show";
+    private static final String COMMAND_ACME_CERT_ISSUE = GROUP + "-cert-issue";
+    private static final String COMMAND_ACME_CERT_CLOUD_RESOURCE_LIST = GROUP + "-cert-cloud-resources-list";
 
     public static final String[] ACME_CERT_TABLE_FIELD_NAME = {"Domains", "Not Before", "Not After"};
     public static final String[] CERT_CLOUD_RESOURCE_TABLE_FIELD_NAME = {"ID", "Cert Name", "Cert ID", "Cloud Name", "Cloud Product", "Resource ID"};
