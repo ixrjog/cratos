@@ -166,6 +166,7 @@ public class EdsConfigs {
     @NoArgsConstructor
     public static class Gcp implements HasEdsConfig {
         private EdsGcpConfigModel.Project project;
+        private EdsGcpConfigModel.User user;
         //private List<EdsGcpConfigModel.Project> projects;
         private EdsInstance edsInstance;
         private EdsGcpConfigModel.Certificate certificate;

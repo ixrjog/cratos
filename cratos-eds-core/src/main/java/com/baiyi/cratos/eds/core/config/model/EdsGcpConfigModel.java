@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -30,6 +31,13 @@ public class EdsGcpConfigModel {
     @Data
     @NoArgsConstructor
     @Schema
+    public static class User {
+        private Map<String, String> mapping;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
     public static class Certificate {
         // https://console.cloud.google.com/security/ccm/certificates/add?hl=zh-cn&orgonly=true&project=palmpay-nigeria&supportedpurview=organizationId
         private List<String> locations;
@@ -42,7 +50,8 @@ public class EdsGcpConfigModel {
             if (!StringUtils.hasText(getId())) {
                 throw new EdsConfigException("project id cannot be empty.");
             }
-            return ProjectName.of(getId()).toString();
+            return ProjectName.of(getId())
+                    .toString();
         }
     }
 
