@@ -5,9 +5,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
-import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -108,21 +106,6 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected HostSystem getProxyHost(EdsAsset server) {
         return context.getProxyHostHolder()
                 .getSshProxyHost(server);
-    }
-
-    private String getServerAccountName(int assetId) {
-        BusinessTag businessTag = getServerBusinessTag(assetId, SysTagKeys.SERVER_ACCOUNT);
-        return businessTag.getTagValue();
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private BusinessTag getServerBusinessTag(int assetId, SysTagKeys sysTagKeys) {
-        SimpleBusiness byBusiness = SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(assetId)
-                .build();
-        return context.getBusinessTagFacade()
-                .getBusinessTag(byBusiness, sysTagKeys.getKey());
     }
 
     protected void openSshCrystal(SshSession sshSession, HostSystem targetSystem, HostSystem proxySystem) {

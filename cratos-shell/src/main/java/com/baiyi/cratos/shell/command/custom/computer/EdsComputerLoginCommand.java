@@ -152,15 +152,15 @@ public class EdsComputerLoginCommand extends AbstractCommand {
             helper.print("CloudComputer does not exist, exec computer-list first, then login", PromptColor.RED);
             return;
         }
-        EdsAsset asset = computerMapper.get(id);
+        EdsAsset hostAsset = computerMapper.get(id);
         // Preview Docs
         if (docs) {
-            previewDocs(asset);
+            previewDocs(hostAsset);
             return;
         }
-        final String sshSessionInstanceId = generateInstanceId(asset);
+        final String sshSessionInstanceId = generateInstanceId(hostAsset);
         if (!StringUtils.hasText(account)) {
-            account = getServerAccount(asset);
+            account = getServerAccount(hostAsset);
         }
         if (!ComputerAssetContext.getAccountContext()
                 .containsKey(account)) {
@@ -186,7 +186,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
             // 用远程管理IP登陆
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
                     sshSessionInstanceId,
-                    hostSystemFacade.getSshLoginIP(asset),
+                    hostSystemFacade.getSshLoginIP(hostAsset),
                     serverAccount, credential
             );
             // targetSystem.setInstanceId(sshSessionInstanceId);
@@ -207,18 +207,18 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                 try {
                     DingtalkRobotModel.Msg msg = getMsg(
-                            user, serverAccount.getUsername(), asset.getAssetKey(),
-                            asset.getName()
+                            user, serverAccount.getUsername(), hostAsset.getAssetKey(),
+                            hostAsset.getName()
                     );
                     sendUserLoginServerNotice(msg);
                     SreBridgeUtils.publish(
                             SreEventFormatter.loginServer(
-                                    user, SreEventFormatter.Action.LOGIN_SERVER, asset.getName(),
-                                    serverAccount.getUsername(), asset.getAssetKey(), "SSH-Server"
+                                    user, SreEventFormatter.Action.LOGIN_SERVER, hostAsset.getName(),
+                                    serverAccount.getUsername(), hostAsset.getAssetKey(), "SSH-Server"
                             ));
                     String target = StringFormatter.arrayFormat(
-                            "{} ({}@{})", asset.getName(),
-                            serverAccount.getUsername(), asset.getAssetKey()
+                            "{} ({}@{})", hostAsset.getName(),
+                            serverAccount.getUsername(), hostAsset.getAssetKey()
                     );
                     SiemSecurityLogger.log(
                             SiemSecurityLogger.EventType.LOGIN, helper.getSshSession()
@@ -229,7 +229,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 }
                 // open ssh
                 if (proxy) {
-                    HostSystem proxySystem = getProxyHost(asset);
+                    HostSystem proxySystem = getProxyHost(hostAsset);
                     if (Objects.isNull(proxySystem)) {
                         RemoteInvokeHandler.openSSHServer(sessionId, targetSystem, out);
                     } else {
@@ -265,14 +265,14 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
                 SreBridgeUtils.publish(
                         SreEventFormatter.loginServer(
-                                user, SreEventFormatter.Action.LOGOUT_SERVER, asset.getName(),
-                                serverAccount.getUsername(), asset.getAssetKey(), "SSH-Server"
+                                user, SreEventFormatter.Action.LOGOUT_SERVER, hostAsset.getName(),
+                                serverAccount.getUsername(), hostAsset.getAssetKey(), "SSH-Server"
                         ));
                 SiemSecurityLogger.log(
                         SiemSecurityLogger.EventType.LOGOUT, helper.getSshSession()
                                 .getUsername(), SiemSecurityLogger.Action.LOGOUT, StringFormatter.arrayFormat(
-                                "SSH logout to server {} ({}@{}) via Cratos SSH-Server", asset.getName(),
-                                serverAccount.getUsername(), asset.getAssetKey()
+                                "SSH logout to server {} ({}@{}) via Cratos SSH-Server", hostAsset.getName(),
+                                serverAccount.getUsername(), hostAsset.getAssetKey()
                         )
                 );
             }

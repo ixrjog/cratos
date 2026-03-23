@@ -25,6 +25,7 @@ import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.pagination.TableFooter;
 import com.baiyi.cratos.shell.writer.ComputerTableWriter;
+import com.baiyi.cratos.ssh.core.facade.HostSystemFacade;
 import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
@@ -64,6 +65,7 @@ public class EdsComputerListCommand extends AbstractCommand {
     private final UserService userService;
     private final EnvFacade envFacade;
     private final BusinessTagFacade businessTagFacade;
+    private final HostSystemFacade hostSystemFacade;
     private final SshProxyHostHolder proxyHostHolder;
     public static final String[] COMPUTER_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
     public static final String[] SHORT_COMPUTER_TABLE_FIELD_NAME = {"ID", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
@@ -73,7 +75,8 @@ public class EdsComputerListCommand extends AbstractCommand {
                                   EdsInstanceService edsInstanceService,
                                   UserPermissionBusinessFacade userPermissionBusinessFacade,
                                   UserPermissionService userPermissionService, BusinessTagFacade businessTagFacade,
-                                  UserService userService, EnvFacade envFacade, SshProxyHostHolder proxyHostHolder) {
+                                  UserService userService, EnvFacade envFacade, SshProxyHostHolder proxyHostHolder,
+                                  HostSystemFacade hostSystemFacade) {
         super(
                 helper, properties, properties.getCommands()
                         .getComputer()
@@ -85,6 +88,7 @@ public class EdsComputerListCommand extends AbstractCommand {
         this.envFacade = envFacade;
         this.userService = userService;
         this.proxyHostHolder = proxyHostHolder;
+        this.hostSystemFacade = hostSystemFacade;
     }
 
     @ShellMethod(key = {COMMAND_COMPUTER_LIST, "ls"}, value = "List computer asset")
@@ -136,7 +140,8 @@ public class EdsComputerListCommand extends AbstractCommand {
                     .withServerAccounts(toServerAccounts(serverAccountBusinessTag, serverAccounts))
                     .withPermission(toPermission(user, tagGroup, env))
                     .withServerName(getServerName(asset))
-                    .withProxyIP(getProxyIP(asset))
+                    .withIpInfo(getIpInfo(asset))
+                    .withProxy(getProxy(asset))
                     .withShort(isShort)
                     .addRow();
             computerMapper.put(id, asset);
@@ -156,7 +161,16 @@ public class EdsComputerListCommand extends AbstractCommand {
         helper.print(pagination.toStr(), PromptColor.GREEN);
     }
 
-    private String getProxyIP(EdsAsset targetComputer) {
+    private String getIpInfo(EdsAsset asset) {
+        String ip = asset.getAssetKey();
+        String sshLoginIp = hostSystemFacade.getSshLoginIP(asset);
+        if (ip.equals(sshLoginIp)) {
+            return ip;
+        }
+        return sshLoginIp + " | " + ip;
+    }
+
+    private String getProxy(EdsAsset targetComputer) {
         String proxyValue = proxyHostHolder.getSshProxyValue(targetComputer);
         return helper.getColored(proxyValue, PromptColor.GREEN);
     }

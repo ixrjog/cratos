@@ -18,7 +18,8 @@ public class ComputerTableWriter {
     private String serverAccounts;
     private String permission;
     private String serverName;
-    private String proxyIP;
+    private String ipInfo;
+    private String proxy;
     private boolean isShort;
 
     private PrettyTable table;
@@ -47,6 +48,11 @@ public class ComputerTableWriter {
         return this;
     }
 
+    public ComputerTableWriter withIpInfo(String ipInfo) {
+        this.ipInfo = ipInfo;
+        return this;
+    }
+
     public ComputerTableWriter withEnv(String env) {
         this.env = env;
         return this;
@@ -72,8 +78,8 @@ public class ComputerTableWriter {
         return this;
     }
 
-    public ComputerTableWriter withProxyIP(String proxyIP) {
-        this.proxyIP = proxyIP;
+    public ComputerTableWriter withProxy(String proxy) {
+        this.proxy = proxy;
         return this;
     }
 
@@ -86,15 +92,14 @@ public class ComputerTableWriter {
         final String instanceId = this.asset.getAssetId();
         final String region = asset.getRegion();
         final String type = asset.getAssetType();
-        final String ip = asset.getAssetKey();
         if (isShort) {
             // {"ID", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
-            this.table.addRow(this.id, this.group, this.env, this.serverName, ip, proxyIP, this.serverAccounts,
-                    this.permission);
+            this.table.addRow(this.id, this.group, this.env, this.serverName, this.ipInfo, proxy, this.serverAccounts,
+                              this.permission);
         } else {
             // {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
-            this.table.addRow(this.id, this.cloud, instanceId, type, region, this.group, this.env, this.serverName, ip,
-                    proxyIP, this.serverAccounts, this.permission);
+            this.table.addRow(this.id, this.cloud, instanceId, type, region, this.group, this.env, this.serverName, this.ipInfo,
+                              proxy, this.serverAccounts, this.permission);
         }
     }
 
