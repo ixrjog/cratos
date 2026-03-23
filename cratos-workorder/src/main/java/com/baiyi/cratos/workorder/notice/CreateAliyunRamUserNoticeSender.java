@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
+import com.baiyi.cratos.workorder.context.WorkOrderNoticeSenderContext;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +27,8 @@ import java.util.Map;
 @Component
 public class CreateAliyunRamUserNoticeSender extends BaseWorkOrderNoticeSender {
 
-    public CreateAliyunRamUserNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                           UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
-                                           EdsDingtalkMessageFacade edsDingtalkMessageFacade,
-                                           LanguageUtils languageUtils,
-                                           NotificationTemplateService notificationTemplateService) {
-        super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
-                notificationTemplateService);
+    public CreateAliyunRamUserNoticeSender(WorkOrderNoticeSenderContext context) {
+        super(context);
     }
 
     public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String ramLoginUsername, String password,

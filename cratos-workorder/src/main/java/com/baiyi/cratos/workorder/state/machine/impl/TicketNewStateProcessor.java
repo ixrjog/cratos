@@ -4,21 +4,14 @@ import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.work.WorkOrderService;
-import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
-import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
-import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.annotation.TransitionGuard;
+import com.baiyi.cratos.workorder.context.TicketStateProcessorContext;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.TicketStateProcessorException;
-import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
-import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -39,16 +32,8 @@ import java.util.Optional;
 @TransitionGuard
 public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SubmitTicket> {
 
-    public TicketNewStateProcessor(UserService userService, WorkOrderService workOrderService,
-                                   WorkOrderTicketService workOrderTicketService,
-                                   WorkOrderTicketNodeService workOrderTicketNodeService,
-                                   WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
-                                   WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
-                                   WorkOrderTicketEntryService workOrderTicketEntryService,
-                                   TicketWorkflowFacade ticketWorkflowFacade) {
-        super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
-                ticketWorkflowFacade);
+    public TicketNewStateProcessor(TicketStateProcessorContext context) {
+        super(context);
     }
 
     @Override
@@ -62,11 +47,13 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
             TicketStateProcessorException.runtime("Non personal submission of work order.");
         }
         // 工单条目未配置
-        if (workOrderTicketEntryService.countByTicketId(ticket.getId()) == 0) {
+        if (context.getWorkOrderTicketEntryService()
+                .countByTicketId(ticket.getId()) == 0) {
             TicketStateProcessorException.runtime("Work order entry not configured.");
         }
         // 校验节点是否都指定了审批人
-        List<WorkOrderTicketNode> nodes = workOrderTicketNodeService.queryByTicketId(ticket.getId());
+        List<WorkOrderTicketNode> nodes = context.getWorkOrderTicketNodeService()
+                .queryByTicketId(ticket.getId());
         if (!CollectionUtils.isEmpty(nodes)) {
             Map<String, String> nodeApprover = Optional.ofNullable(event.getBody())
                     .map(WorkOrderTicketParam.SubmitTicket::toApprovers)
@@ -77,8 +64,10 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
                             node.getNodeName()))
                     .findAny()
                     .ifPresent(
-                            node -> TicketStateProcessorException.runtime("Approval node {} does not specify approver.",
-                                    node.getNodeName()));
+                            node -> TicketStateProcessorException.runtime(
+                                    "Approval node {} does not specify approver.",
+                                    node.getNodeName()
+                            ));
         }
     }
 
@@ -95,15 +84,17 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
                 .map(WorkOrderTicketParam.SubmitTicket::toApprovers)
                 .orElse(Map.of());
         // WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        workOrderTicketNodeService.queryByTicketId(ticket.getId())
+        context.getWorkOrderTicketNodeService()
+                .queryByTicketId(ticket.getId())
                 .stream()
                 .filter(node -> ApprovalTypes.USER_SPECIFIED.equals(
                         ApprovalTypes.valueOf(node.getApprovalType())) && nodeApprover.containsKey(node.getNodeName()))
                 .forEach(node -> {
-                    if (ticketWorkflowFacade.isApprover(ticket, node.getNodeName(),
-                            nodeApprover.get(node.getNodeName()))) {
+                    if (context.getTicketWorkflowFacade()
+                            .isApprover(ticket, node.getNodeName(), nodeApprover.get(node.getNodeName()))) {
                         node.setUsername(nodeApprover.get(node.getNodeName()));
-                        workOrderTicketNodeService.updateByPrimaryKey(node);
+                        context.getWorkOrderTicketNodeService()
+                                .updateByPrimaryKey(node);
                     } else {
                         TicketStateProcessorException.runtime("Invalid approver.");
                     }
@@ -111,8 +102,9 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
         // 更新工单状态
         ticket.setSubmittedAt(new Date());
         ticket.setApplyRemark(event.getBody()
-                .getApplyRemark());
-        workOrderTicketService.updateByPrimaryKey(ticket);
+                                      .getApplyRemark());
+        context.getWorkOrderTicketService()
+                .updateByPrimaryKey(ticket);
     }
 
 }

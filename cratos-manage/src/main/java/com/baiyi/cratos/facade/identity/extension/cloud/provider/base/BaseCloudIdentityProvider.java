@@ -10,15 +10,9 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityProvider;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
+import com.baiyi.cratos.facade.identity.extension.context.CloudIdentityProviderContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
@@ -39,22 +33,17 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @RequiredArgsConstructor
 public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Account> implements CloudIdentityProvider, InitializingBean {
 
-    protected final EdsAssetService edsAssetService;
-    protected final EdsAssetWrapper edsAssetWrapper;
-    protected final EdsAssetIndexService edsAssetIndexService;
-    private final UserService userService;
-    protected final UserWrapper userWrapper;
-    protected final EdsInstanceWrapper instanceWrapper;
-    protected final EdsProviderHolderFactory edsProviderHolderFactory;
+    protected final CloudIdentityProviderContext context;
+
     public final static boolean CREATE_LOGIN_PROFILE = true;
 
     @SuppressWarnings("unchecked")
     @Override
     public EdsIdentityVO.CloudAccount createCloudAccount(EdsInstance instance,
                                                          EdsIdentityParam.CreateCloudAccount createCloudAccount) {
-        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsProviderHolderFactory.createHolder(
+        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) context.getEdsProviderHolderFactory().createHolder(
                 instance.getId(), getAccountAssetType());
-        User user = userService.getByUsername(createCloudAccount.getUsername());
+        User user = context.getUserService().getByUsername(createCloudAccount.getUsername());
         EdsIdentityVO.CloudAccount cloudAccount = getAccount(instance, user, user.getUsername());
         // 账户已存在
         if (cloudAccount.isExist()) {
@@ -80,11 +69,11 @@ public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Acc
 
     @Override
     public void grantPermission(EdsInstance instance, EdsIdentityParam.GrantPermission grantPermission) {
-        EdsAsset permission = edsAssetService.getById(grantPermission.getGrantId());
+        EdsAsset permission = context.getEdsAssetService().getById(grantPermission.getGrantId());
         if (Objects.isNull(permission)) {
             CloudIdentityException.runtime("Permission asset do not exist.");
         }
-        EdsAsset account = edsAssetService.getById(grantPermission.getAccountId());
+        EdsAsset account = context.getEdsAssetService().getById(grantPermission.getAccountId());
         if (Objects.isNull(account)) {
             CloudIdentityException.runtime("Account asset do not exist.");
         }
@@ -93,11 +82,11 @@ public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Acc
 
     @Override
     public void revokePermission(EdsInstance instance, EdsIdentityParam.RevokePermission revokePermission) {
-        EdsAsset permission = edsAssetService.getById(revokePermission.getRevokeId());
+        EdsAsset permission = context.getEdsAssetService().getById(revokePermission.getRevokeId());
         if (Objects.isNull(permission)) {
             CloudIdentityException.runtime("Permission asset do not exist.");
         }
-        EdsAsset account = edsAssetService.getById(revokePermission.getAccountId());
+        EdsAsset account = context.getEdsAssetService().getById(revokePermission.getAccountId());
         if (Objects.isNull(account)) {
             CloudIdentityException.runtime("Account asset do not exist.");
         }
@@ -105,12 +94,12 @@ public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Acc
     }
 
     protected EdsAsset queryAccountAsset(int instanceId, User user, String username) {
-        List<EdsAssetIndex> indices = edsAssetIndexService.queryInstanceIndexByNameAndValue(instanceId,
+        List<EdsAssetIndex> indices = context.getEdsAssetIndexService().queryInstanceIndexByNameAndValue(instanceId,
                 CLOUD_ACCOUNT_USERNAME, username);
         if (CollectionUtils.isEmpty(indices)) {
             return null;
         }
-        return edsAssetService.getById(indices.getFirst()
+        return context.getEdsAssetService().getById(indices.getFirst()
                 .getAssetId());
     }
 
@@ -122,7 +111,7 @@ public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Acc
                     .assetId(account.getId())
                     .name(policyIndexName)
                     .build();
-            EdsAssetIndex policyIndex = edsAssetIndexService.getByUniqueKey(query);
+            EdsAssetIndex policyIndex = context.getEdsAssetIndexService().getByUniqueKey(query);
             return Objects.isNull(policyIndex) ? List.of() : List.of(policyIndex.getValue()
                     .split(INDEX_VALUE_DIVISION_SYMBOL));
         } catch (CloudIdentityException ex) {
@@ -136,7 +125,7 @@ public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Acc
                 .assetId(account.getId())
                 .name(CLOUD_ACCESS_KEY_IDS)
                 .build();
-        EdsAssetIndex accessKeyIdsIndex = edsAssetIndexService.getByUniqueKey(query);
+        EdsAssetIndex accessKeyIdsIndex = context.getEdsAssetIndexService().getByUniqueKey(query);
         return Objects.isNull(accessKeyIdsIndex) ? List.of() : Arrays.stream(accessKeyIdsIndex.getValue()
                         .split(INDEX_VALUE_DIVISION_SYMBOL))
                 .map(e -> EdsIdentityVO.AccessKey.builder()
@@ -154,9 +143,9 @@ public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Acc
             }
 
             return EdsIdentityVO.CloudAccount.builder()
-                    .instance(instanceWrapper.wrapToTarget(instance))
-                    .user(userWrapper.wrapToTarget(user))
-                    .account(edsAssetWrapper.wrapToTarget(account))
+                    .instance(context.getInstanceWrapper().wrapToTarget(instance))
+                    .user(context.getUserWrapper().wrapToTarget(user))
+                    .account(context.getEdsAssetWrapper().wrapToTarget(account))
                     .username(username)
                     .password("******")
                     .accountLogin(toAccountLoginDetails(account, username))
@@ -170,7 +159,7 @@ public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Acc
     }
 
     protected EdsIdentityVO.LoginProfile getLoginProfile(EdsInstance instance, EdsAsset account) {
-        EdsAssetIndex loginProfileIndex = edsAssetIndexService.getByAssetIdAndName(account.getId(),
+        EdsAssetIndex loginProfileIndex = context.getEdsAssetIndexService().getByAssetIdAndName(account.getId(),
                 CLOUD_LOGIN_PROFILE);
         Boolean loginProfileEnabled = Objects.nonNull(loginProfileIndex) && "Enabled".equalsIgnoreCase(
                 loginProfileIndex.getValue());

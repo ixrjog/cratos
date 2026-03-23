@@ -53,7 +53,8 @@ public class EdsConfigServiceImpl implements EdsConfigService, ICredentialHolder
     public EdsConfig getByUniqueKey(@NonNull EdsConfig record) {
         Example example = new Example(EdsConfig.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", record.getName());
+        criteria.andEqualTo("name", record.getName())
+                .andEqualTo("edsType", record.getEdsType());
         return edsConfigMapper.selectOneByExample(example);
     }
 

@@ -11,15 +11,9 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.googlecloud.model.GoogleMemberModel;
 import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
+import com.baiyi.cratos.facade.identity.extension.context.CloudIdentityProviderContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -41,14 +35,8 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gc
 
     private static final String GCP_LOGIN_URL = "https://console.cloud.google.com/";
 
-    public GcpIdentityProvider(EdsAssetService edsAssetService, EdsAssetWrapper edsAssetWrapper,
-                               EdsAssetIndexService edsAssetIndexService, UserService userService,
-                               UserWrapper userWrapper, EdsInstanceWrapper instanceWrapper,
-                               EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(
-                edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper, instanceWrapper,
-                edsProviderHolderFactory
-        );
+    public GcpIdentityProvider(CloudIdentityProviderContext context) {
+        super(context);
     }
 
     @Override
@@ -83,8 +71,8 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gc
     @Override
     protected EdsAsset queryAccountAsset(int instanceId, User user, String username) {
         if (ValidationUtils.isEmail(user.getEmail())) {
-            List<EdsAsset> assets = edsAssetService.queryInstanceAssetByTypeAndKey(instanceId, getAccountAssetType(),
-                    user.getEmail());
+            List<EdsAsset> assets = context.getEdsAssetService()
+                    .queryInstanceAssetByTypeAndKey(instanceId, getAccountAssetType(), user.getEmail());
             if (!CollectionUtils.isEmpty(assets)) {
                 return assets.getFirst();
             }
@@ -94,8 +82,8 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gc
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsConfigs.Gcp gcp = (EdsConfigs.Gcp) edsProviderHolderFactory.createHolder(asset.getInstanceId(),
-                                                                                    getAccountAssetType())
+        EdsConfigs.Gcp gcp = (EdsConfigs.Gcp) context.getEdsProviderHolderFactory()
+                .createHolder(asset.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()

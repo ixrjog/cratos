@@ -5,16 +5,11 @@ import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.WorkflowModel;
-import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
-import com.baiyi.cratos.service.NotificationTemplateService;
-import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketSubscriberService;
-import com.baiyi.cratos.util.LanguageUtils;
+import com.baiyi.cratos.workorder.context.WorkOrderNoticeSenderContext;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.SubscribeStatus;
-import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
@@ -38,19 +33,15 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
 
     private final WorkOrderTicketSubscriberService workOrderTicketSubscriberService;
 
-    public WorkOrderApprovalNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                         UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
-                                         EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
-                                         NotificationTemplateService notificationTemplateService,
+    public WorkOrderApprovalNoticeSender(WorkOrderNoticeSenderContext context,
                                          WorkOrderTicketSubscriberService workOrderTicketSubscriberService) {
-        super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
-                notificationTemplateService);
+        super(context);
         this.workOrderTicketSubscriberService = workOrderTicketSubscriberService;
     }
 
     public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
         List<User> approvers = queryApprovers(workOrder, ticket, ticketNode);
-        List<TicketEntryModel.EntryDesc> ticketEntities = workOrderTicketEntryService.queryTicketEntries(ticket.getId())
+        List<TicketEntryModel.EntryDesc> ticketEntities = context.getWorkOrderTicketEntryService().queryTicketEntries(ticket.getId())
                 .stream()
                 .map(entry -> {
                     TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(
@@ -72,9 +63,9 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
 
     private List<User> queryApprovers(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
         if (StringUtils.hasText(ticketNode.getUsername())) {
-            return List.of(userService.getByUsername(ticketNode.getUsername()));
+            return List.of(context.getUserService().getByUsername(ticketNode.getUsername()));
         }
-        return ticketWorkflowFacade.queryNodeApprovalUsers(ticket, ticketNode.getNodeName());
+        return context.getTicketWorkflowFacade().queryNodeApprovalUsers(ticket, ticketNode.getNodeName());
     }
 
     private void sendMsgToApprover(WorkOrderTicket ticket, WorkOrderTicketNode ticketNode, List<User> approvers,
@@ -89,7 +80,7 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
             String approvalNode = Global.NONE;
             if (optionalNode.isPresent()) {
                 WorkflowModel.Node node = optionalNode.get();
-                String lang = languageUtils.getLanguageOf(approver);
+                String lang = context.getLanguageUtils().getLanguageOf(approver);
                 approvalNode = node.getLangMap()
                         .getOrDefault(lang, null) != null ? node.getLangMap()
                         .get(lang)

@@ -13,12 +13,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
-import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
+import com.baiyi.cratos.facade.identity.extension.context.EdsIdentityExtensionContext;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -38,28 +33,23 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_AV
 @RequiredArgsConstructor
 public abstract class BaseEdsIdentityExtension {
 
-    protected final EdsAssetWrapper edsAssetWrapper;
-    protected final EdsInstanceService edsInstanceService;
-    protected final EdsInstanceWrapper edsInstanceWrapper;
-    protected final UserService userService;
-    protected final UserWrapper userWrapper;
-    protected final EdsProviderHolderFactory edsProviderHolderFactory;
-    protected final EdsAssetService edsAssetService;
-    protected final EdsFacade edsFacade;
-    protected final EdsAssetIndexService edsAssetIndexService;
-    private final TagService tagService;
-    private final BusinessTagService businessTagService;
+    protected final EdsIdentityExtensionContext context;
 
-    private static final List<String> EDS_INSTANCE_TYPES = List.of(EdsInstanceTypeEnum.AWS.name(),
-            EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name(),EdsInstanceTypeEnum.ALIMAIL.name());
+    private static final List<String> EDS_INSTANCE_TYPES = List.of(
+            EdsInstanceTypeEnum.AWS.name(), EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name(),
+            EdsInstanceTypeEnum.ALIMAIL.name()
+    );
 
     protected Map<Integer, EdsInstance> getEdsInstanceMap(List<EdsAsset> identityAssets,
-                                                        HasEdsInstanceType hasEdsInstanceType) {
+                                                          HasEdsInstanceType hasEdsInstanceType) {
         Map<Integer, EdsInstance> map = Maps.newHashMap();
         identityAssets.forEach(edsAsset -> {
-            EdsInstance instance = Optional.ofNullable(edsInstanceService.getById(edsAsset.getInstanceId()))
-                    .orElseThrow(() -> new EdsIdentityException("The edsInstance does not exist: instanceId={}.",
-                            edsAsset.getInstanceId()));
+            EdsInstance instance = Optional.ofNullable(context.getEdsInstanceService()
+                                                               .getById(edsAsset.getInstanceId()))
+                    .orElseThrow(() -> new EdsIdentityException(
+                            "The edsInstance does not exist: instanceId={}.",
+                            edsAsset.getInstanceId()
+                    ));
             if (!StringUtils.hasText(hasEdsInstanceType.getInstanceType()) || hasEdsInstanceType.getInstanceType()
                     .equals(instance.getEdsType())) {
                 map.put(edsAsset.getInstanceId(), instance);
@@ -101,7 +91,8 @@ public abstract class BaseEdsIdentityExtension {
         if (!IdentityUtils.hasIdentity(hasEdsInstanceId.getInstanceId())) {
             EdsIdentityException.runtime("InstanceId is incorrect.");
         }
-        EdsInstance instance = edsInstanceService.getById(hasEdsInstanceId.getInstanceId());
+        EdsInstance instance = context.getEdsInstanceService()
+                .getById(hasEdsInstanceId.getInstanceId());
         if (Objects.isNull(instance)) {
             EdsIdentityException.runtime("Instance does not exist.");
         }
@@ -116,7 +107,8 @@ public abstract class BaseEdsIdentityExtension {
     }
 
     protected List<EdsAsset> queryByUsernameTag(String username, List<String> assetTypes) {
-        Tag tag = tagService.getByTagKey(SysTagKeys.USERNAME.getKey());
+        Tag tag = context.getTagService()
+                .getByTagKey(SysTagKeys.USERNAME.getKey());
         if (Objects.isNull(tag)) {
             return List.of();
         }
@@ -125,9 +117,10 @@ public abstract class BaseEdsIdentityExtension {
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .tagValue(username)
                 .build();
-        return businessTagService.queryBusinessIdByTag(queryByTag)
+        return context.getBusinessTagService()
+                .queryBusinessIdByTag(queryByTag)
                 .stream()
-                .map(edsAssetService::getById)
+                .map(context.getEdsAssetService()::getById)
                 .filter(byId -> assetTypes.stream()
                         .anyMatch(e -> byId.getAssetType()
                                 .equals(e)))
@@ -135,7 +128,8 @@ public abstract class BaseEdsIdentityExtension {
     }
 
     protected List<EdsAsset> queryByUsernameTag(String username, String assetType) {
-        Tag tag = tagService.getByTagKey(SysTagKeys.USERNAME.getKey());
+        Tag tag = context.getTagService()
+                .getByTagKey(SysTagKeys.USERNAME.getKey());
         if (Objects.isNull(tag)) {
             return List.of();
         }
@@ -144,15 +138,17 @@ public abstract class BaseEdsIdentityExtension {
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .tagValue(username)
                 .build();
-        return businessTagService.queryBusinessIdByTag(queryByTag)
+        return context.getBusinessTagService()
+                .queryBusinessIdByTag(queryByTag)
                 .stream()
-                .map(edsAssetService::getById)
+                .map(context.getEdsAssetService()::getById)
                 .filter(byId -> assetType.equals(byId.getAssetType()))
                 .toList();
     }
 
     protected String getAvatar(EdsAsset asset) {
-        EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), USER_AVATAR);
+        EdsAssetIndex index = context.getEdsAssetIndexService()
+                .getByAssetIdAndName(asset.getId(), USER_AVATAR);
         if (Objects.nonNull(index)) {
             return index.getValue();
         }

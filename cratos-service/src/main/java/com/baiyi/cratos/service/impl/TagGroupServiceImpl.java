@@ -53,13 +53,15 @@ public class TagGroupServiceImpl implements TagGroupService {
                 .length(pageQuery.getLength())
                 .build();
         DataTable<BusinessTag> dataTable = businessTagService.queryPageByParam(param);
-        return new DataTable<>(dataTable.getData()
-                .stream()
-                .map(e -> {
-                    e.setBusinessId(tagGroup.getId());
-                    return toPermissionBusiness(e);
-                })
-                .toList(), dataTable.getTotalNum());
+        return new DataTable<>(
+                dataTable.getData()
+                        .stream()
+                        .map(e -> {
+                            e.setBusinessId(tagGroup.getId());
+                            return toPermissionBusiness(e);
+                        })
+                        .toList(), dataTable.getTotalNum()
+        );
     }
 
     @Override
@@ -87,4 +89,5 @@ public class TagGroupServiceImpl implements TagGroupService {
         SupportBusinessServiceFactory.register(this);
         PermissionBusinessServiceFactory.register(this);
     }
+
 }

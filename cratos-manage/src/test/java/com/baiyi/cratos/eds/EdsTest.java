@@ -30,9 +30,8 @@ public class EdsTest extends BaseUnit {
         // 150 IDC BD Dhaka Coloasia Ltd
         List<EdsAsset> assets = edsAssetService.queryInstanceAssets(126, EdsAssetTypeEnum.CRATOS_COMPUTER.name());
         for (EdsAsset asset : assets) {
-            if (asset.getName()
-                    .startsWith("pk-isb-")) {
-                edsFacade.migrateAsset(asset.getId(), 152, EdsAssetTypeEnum.CUSTOM_IDC_HOST.name());
+            if (asset.getAssetKey().startsWith("10.11.")) {
+                edsFacade.migrateAsset(asset.getId(), 155, EdsAssetTypeEnum.CUSTOM_IDC_HOST.name());
                 System.out.println(asset.getName());
             }
         }

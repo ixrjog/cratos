@@ -43,6 +43,7 @@ import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
+import com.baiyi.cratos.ssh.core.facade.HostSystemFacade;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
@@ -104,6 +105,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     private final NotificationTemplateService notificationTemplateService;
     private final UserService userService;
     private final SshProxyHostHolder proxyHostHolder;
+    private final HostSystemFacade hostSystemFacade;
 
     @Value("${cratos.notification:NORMAL}")
     private String notification;
@@ -118,7 +120,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                                    EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                    DingtalkService dingtalkService,
                                    NotificationTemplateService notificationTemplateService, UserService userService,
-                                   SshProxyHostHolder proxyHostHolder) {
+                                   SshProxyHostHolder proxyHostHolder, HostSystemFacade hostSystemFacade) {
         super(
                 helper, properties, properties.getCommands()
                         .getComputer()
@@ -135,6 +137,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         this.notificationTemplateService = notificationTemplateService;
         this.userService = userService;
         this.proxyHostHolder = proxyHostHolder;
+        this.hostSystemFacade = hostSystemFacade;
     }
 
     @ClearScreen
@@ -180,14 +183,15 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         }
         try {
             final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);
+            // 用远程管理IP登陆
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
-                    sshSessionInstanceId, asset, serverAccount,
-                    credential
+                    sshSessionInstanceId,
+                    hostSystemFacade.getSshLoginIP(asset),
+                    serverAccount, credential
             );
             // targetSystem.setInstanceId(sshSessionInstanceId);
             targetSystem.setTerminalSize(helper.terminalSize());
             targetSystem.setAuditPath(auditPath);
-
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(
                     sessionId, targetSystem,
                     SshSessionInstanceTypeEnum.COMPUTER,
@@ -272,7 +276,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                         )
                 );
             }
-        } catch (SshException ex) {
+        } catch (Exception ex) {
             log.debug(ex.getMessage());
             helper.print(ex.getMessage(), PromptColor.RED);
         } finally {

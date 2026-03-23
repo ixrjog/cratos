@@ -9,13 +9,8 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
+import com.baiyi.cratos.facade.identity.extension.context.MailIdentityProviderContext;
 import com.baiyi.cratos.facade.identity.extension.mail.BaseMailIdentityProvider;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -29,20 +24,14 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_USER)
 public class EdsAlimailIdentityProvider extends BaseMailIdentityProvider<EdsConfigs.Alimail, AlimailUser.User> {
 
-    public EdsAlimailIdentityProvider(EdsAssetService edsAssetService, EdsAssetWrapper edsAssetWrapper,
-                                      EdsAssetIndexService edsAssetIndexService, UserWrapper userWrapper,
-                                      EdsInstanceWrapper instanceWrapper,
-                                      EdsProviderHolderFactory edsProviderHolderFactory) {
-        super(
-                edsAssetService, edsAssetWrapper, edsAssetIndexService, userWrapper, instanceWrapper,
-                edsProviderHolderFactory
-        );
+    public EdsAlimailIdentityProvider(MailIdentityProviderContext context) {
+        super(context);
     }
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username, String mail) {
-        EdsConfigs.Alimail alimail = (EdsConfigs.Alimail) edsProviderHolderFactory.createHolder(
-                        asset.getInstanceId(), getAccountAssetType())
+        EdsConfigs.Alimail alimail = (EdsConfigs.Alimail) context.getEdsProviderHolderFactory()
+                .createHolder(asset.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
@@ -55,8 +44,8 @@ public class EdsAlimailIdentityProvider extends BaseMailIdentityProvider<EdsConf
 
     @Override
     public void blockMailAccount(EdsIdentityParam.BlockMailAccount blockMailAccount) {
-        EdsConfigs.Alimail alimail = (EdsConfigs.Alimail) edsProviderHolderFactory.createHolder(
-                        blockMailAccount.getInstanceId(), getAccountAssetType())
+        EdsConfigs.Alimail alimail = (EdsConfigs.Alimail) context.getEdsProviderHolderFactory()
+                .createHolder(blockMailAccount.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getConfig();
         AlimailUserRepo.freezeUser(alimail, blockMailAccount.getUserId());

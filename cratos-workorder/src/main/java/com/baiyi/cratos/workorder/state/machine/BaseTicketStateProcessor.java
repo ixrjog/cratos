@@ -2,21 +2,14 @@ package com.baiyi.cratos.workorder.state.machine;
 
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.work.WorkOrderService;
-import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
-import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
-import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.StateForward;
 import com.baiyi.cratos.workorder.annotation.TransitionGuard;
+import com.baiyi.cratos.workorder.context.TicketStateProcessorContext;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.TicketStateProcessorException;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketDoNextException;
-import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
-import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
@@ -33,15 +26,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketParam.HasTicketNo> implements TicketStateProcessor<Event> {
 
-    protected final UserService userService;
-    protected final WorkOrderService workOrderService;
+    protected final TicketStateProcessorContext context;
     private TicketStateProcessor<Event> targetProcessor;
-    protected final WorkOrderTicketService workOrderTicketService;
-    protected final WorkOrderTicketNodeService workOrderTicketNodeService;
-    protected final WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade;
-    protected final WorkOrderTicketNodeFacade workOrderTicketNodeFacade;
-    protected final WorkOrderTicketEntryService workOrderTicketEntryService;
-    protected final TicketWorkflowFacade ticketWorkflowFacade;
 
     @SuppressWarnings("rawtypes")
     @Override
@@ -63,7 +49,7 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     protected void preChangeInspection(TicketStateChangeAction action, TicketEvent<Event> event) {
         TicketState processorState = getState();
         TicketState currentTicketState = TicketState.valueOf(getTicketByNo(event.getBody()
-                .getTicketNo()).getTicketState());
+                                                                                   .getTicketNo()).getTicketState());
         if (!processorState.equals(currentTicketState)) {
             TicketStateProcessorException.runtime(
                     "The work order status is incorrect, and the current operation cannot be executed.");
@@ -71,11 +57,13 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     }
 
     protected WorkOrderTicket getTicketByNo(String ticketNo) {
-        return workOrderTicketService.getByTicketNo(ticketNo);
+        return context.getWorkOrderTicketService()
+                .getByTicketNo(ticketNo);
     }
 
     protected WorkOrderTicket getTicketByNo(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-        return workOrderTicketService.getByTicketNo(hasTicketNo.getTicketNo());
+        return context.getWorkOrderTicketService()
+                .getByTicketNo(hasTicketNo.getTicketNo());
     }
 
     /**
@@ -102,7 +90,7 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     protected void changeToTarget(TicketEvent<Event> event) {
         WorkOrderTicketParam.SimpleTicketNo simpleTicketNo = WorkOrderTicketParam.SimpleTicketNo.builder()
                 .ticketNo(event.getBody()
-                        .getTicketNo())
+                                  .getTicketNo())
                 .build();
         getTarget().change(TicketStateChangeAction.DO_NEXT, (TicketEvent<Event>) TicketEvent.of(simpleTicketNo));
     }
@@ -128,8 +116,9 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
         if (Objects.nonNull(nextProcessor)) {
             WorkOrderTicket ticket = getTicketByNo(hasTicketNo);
             ticket.setTicketState(nextProcessor.getState()
-                    .name());
-            workOrderTicketService.updateByPrimaryKey(ticket);
+                                          .name());
+            context.getWorkOrderTicketService()
+                    .updateByPrimaryKey(ticket);
         }
     }
 

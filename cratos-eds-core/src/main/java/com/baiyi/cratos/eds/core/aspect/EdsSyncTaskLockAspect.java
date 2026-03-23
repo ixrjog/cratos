@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.RedisUtil;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.ReadableDurationUtils;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
+import com.baiyi.cratos.eds.core.annotation.EdsSyncTaskLock;
 import com.baiyi.cratos.eds.core.exception.EdsTaskLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ import java.util.stream.IntStream;
 @Component
 @RequiredArgsConstructor
 @Order(-1)
-public class EdsTaskLockAspect {
+public class EdsSyncTaskLockAspect {
 
     private final RedisUtil redisUtil;
 
@@ -52,12 +52,12 @@ public class EdsTaskLockAspect {
     private final DefaultParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
     private final ExpressionParser expressionParser = new SpelExpressionParser();
 
-    @Pointcut(value = "@annotation(com.baiyi.cratos.eds.core.annotation.EdsTaskLock)")
+    @Pointcut(value = "@annotation(com.baiyi.cratos.eds.core.annotation.EdsSyncTaskLock)")
     public void annotationPoint() {
     }
 
     @Around("@annotation(edsTaskLock)")
-    public Object around(ProceedingJoinPoint joinPoint, EdsTaskLock edsTaskLock) throws Throwable {
+    public Object around(ProceedingJoinPoint joinPoint, EdsSyncTaskLock edsTaskLock) throws Throwable {
         String key = generateLockKey(joinPoint, edsTaskLock);
         if (!StringUtils.hasText(key)) {
             return joinPoint.proceed();
@@ -89,7 +89,7 @@ public class EdsTaskLockAspect {
         return new Throwable();
     }
 
-    private String generateLockKey(JoinPoint joinPoint, EdsTaskLock edsTaskLock) {
+    private String generateLockKey(JoinPoint joinPoint, EdsSyncTaskLock edsTaskLock) {
         EdsInstanceAssetType edsInstanceAssetType = AopUtils.getTargetClass(joinPoint.getTarget())
                 .getAnnotation(EdsInstanceAssetType.class);
         // 缺少注解

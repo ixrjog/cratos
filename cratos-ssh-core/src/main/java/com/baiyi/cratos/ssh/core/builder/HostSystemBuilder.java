@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import lombok.NoArgsConstructor;
-import org.apache.sshd.common.SshException;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -33,16 +32,17 @@ public class HostSystemBuilder {
                 .build();
     }
 
-    public static HostSystem buildHostSystem(String hostIP, ServerAccount serverAccount, Credential credential) {
+    public static HostSystem buildHostSystem(String sshLoginIP, ServerAccount serverAccount, Credential credential) {
         return HostSystem.builder()
-                .host(hostIP)
+                .host(sshLoginIP)
                 .serverAccount(serverAccount)
                 .credential(credential)
                 .build();
     }
 
+    @Deprecated
     public static HostSystem buildHostSystem(String instanceId, EdsAsset server, ServerAccount serverAccount,
-                                             Credential credential) throws SshException {
+                                             Credential credential) {
         return HostSystem.builder()
                 .instanceId(instanceId)
                 .host(server.getAssetKey())
@@ -51,11 +51,11 @@ public class HostSystemBuilder {
                 .build();
     }
 
-    public static HostSystem buildHostSystem(String instanceId, String remoteManagementIP, ServerAccount serverAccount,
+    public static HostSystem buildHostSystem(String instanceId, String sshLoginIP, ServerAccount serverAccount,
                                              Credential credential) {
         return HostSystem.builder()
                 .instanceId(instanceId)
-                .host(remoteManagementIP)
+                .host(sshLoginIP)
                 .serverAccount(serverAccount)
                 .credential(credential)
                 .build();

@@ -4,12 +4,7 @@ import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
-import com.baiyi.cratos.service.NotificationTemplateService;
-import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
-import com.baiyi.cratos.util.LanguageUtils;
-import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
+import com.baiyi.cratos.workorder.context.WorkOrderNoticeSenderContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,27 +20,26 @@ import java.util.Map;
 @RequiredArgsConstructor
 public abstract class BaseWorkOrderNoticeSender {
 
-    protected final WorkOrderTicketEntryService workOrderTicketEntryService;
-    protected final UserService userService;
-    protected final TicketWorkflowFacade ticketWorkflowFacade;
-    protected final EdsDingtalkMessageFacade edsDingtalkMessageFacade;
-    protected final LanguageUtils languageUtils;
-    private final NotificationTemplateService notificationTemplateService;
+    protected final WorkOrderNoticeSenderContext context;
 
     private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
         NotificationTemplate query = NotificationTemplate.builder()
                 .notificationTemplateKey(notificationTemplateKey)
-                .lang(languageUtils.getLanguageOf(user))
+                .lang(context.getLanguageUtils()
+                              .getLanguageOf(user))
                 .build();
-        return notificationTemplateService.getByUniqueKey(query);
+        return context.getNotificationTemplateService()
+                .getByUniqueKey(query);
     }
 
     protected void sendMsgToUsername(String username, String notificationTemplateKey, Map<String, Object> dict) {
-        User user = userService.getByUsername(username);
+        User user = context.getUserService()
+                .getByUsername(username);
         sendMsgToUser(user, notificationTemplateKey, dict);
     }
 
-    protected void sendMsgToUser(User sendToUser, NotificationTemplateKeys notificationTemplateKey, Map<String, Object> dict) {
+    protected void sendMsgToUser(User sendToUser, NotificationTemplateKeys notificationTemplateKey,
+                                 Map<String, Object> dict) {
         this.sendMsgToUser(sendToUser, notificationTemplateKey.name(), dict);
     }
 
@@ -56,7 +50,8 @@ public abstract class BaseWorkOrderNoticeSender {
         try {
             NotificationTemplate notificationTemplate = getNotificationTemplate(notificationTemplateKey, sendToUser);
             String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), dict);
-            edsDingtalkMessageFacade.sendToDingtalkUser(sendToUser, notificationTemplate, msg);
+            context.getEdsDingtalkMessageFacade()
+                    .sendToDingtalkUser(sendToUser, notificationTemplate, msg);
         } catch (IOException ioException) {
             log.error("WorkOrder ticket send msg to user err: {}", ioException.getMessage());
         }

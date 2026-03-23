@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.util.Generics;
-import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
+import com.baiyi.cratos.eds.core.annotation.EdsSyncTaskLock;
 import com.baiyi.cratos.eds.core.builder.EdsAssetBuilder;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
@@ -90,7 +90,7 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
      * 全量导入资产入口，带分布式锁
      */
     @Override
-    @EdsTaskLock(instanceId = "#instance.edsInstance.id")
+    @EdsSyncTaskLock(instanceId = "#instance.edsInstance.id")
     public void importAssets(ExternalDataSourceInstance<C> instance) {
         List<A> entities = listEntities(instance);
         syncEntities(instance, entities);

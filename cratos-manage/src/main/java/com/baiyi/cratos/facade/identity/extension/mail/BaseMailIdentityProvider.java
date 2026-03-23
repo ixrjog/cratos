@@ -7,12 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
+import com.baiyi.cratos.facade.identity.extension.context.MailIdentityProviderContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
@@ -32,21 +27,18 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MA
 @RequiredArgsConstructor
 public abstract class BaseMailIdentityProvider<Config extends HasEdsConfig, Account> implements MailIdentityProvider, InitializingBean {
 
-    protected final EdsAssetService edsAssetService;
-    protected final EdsAssetWrapper edsAssetWrapper;
-    protected final EdsAssetIndexService edsAssetIndexService;
-    protected final UserWrapper userWrapper;
-    protected final EdsInstanceWrapper instanceWrapper;
-    protected final EdsProviderHolderFactory edsProviderHolderFactory;
+    protected final MailIdentityProviderContext context;
 
     protected EdsAsset queryAccountAsset(int instanceId, User user) {
-        List<EdsAssetIndex> indices = edsAssetIndexService.queryInstanceIndexByNameAndValue(instanceId, USER_MAIL,
-                user.getEmail());
+        List<EdsAssetIndex> indices = context.getEdsAssetIndexService().queryInstanceIndexByNameAndValue(
+                instanceId, USER_MAIL,
+                user.getEmail()
+        );
         if (CollectionUtils.isEmpty(indices)) {
             return null;
         }
-        return edsAssetService.getById(indices.getFirst()
-                .getAssetId());
+        return context.getEdsAssetService().getById(indices.getFirst()
+                                               .getAssetId());
     }
 
     @Override
@@ -61,18 +53,18 @@ public abstract class BaseMailIdentityProvider<Config extends HasEdsConfig, Acco
                     .assetId(account.getId())
                     .name(USER_MAIL)
                     .build();
-            EdsAssetIndex mailIndex = edsAssetIndexService.getByUniqueKey(uk);
+            EdsAssetIndex mailIndex = context.getEdsAssetIndexService().getByUniqueKey(uk);
             if (Objects.isNull(mailIndex)) {
                 return EdsIdentityVO.MailAccount.NO_ACCOUNT;
             }
             return EdsIdentityVO.MailAccount.builder()
-                    .instance(instanceWrapper.wrapToTarget(instance))
-                    .user(userWrapper.wrapToTarget(user))
-                    .account(edsAssetWrapper.wrapToTarget(account))
+                    .instance(context.getInstanceWrapper().wrapToTarget(instance))
+                    .user(context.getUserWrapper().wrapToTarget(user))
+                    .account(context.getEdsAssetWrapper().wrapToTarget(account))
                     .username(user.getUsername())
                     .password("******")
                     .accountLogin(toAccountLoginDetails(account, user.getUsername(), mailIndex.getValue()))
-                    .mailAlias(queryMailAlias(instance,account))
+                    .mailAlias(queryMailAlias(instance, account))
                     .build();
         } catch (Exception ex) {
             throw new CloudIdentityException(ex.getMessage());
@@ -85,9 +77,9 @@ public abstract class BaseMailIdentityProvider<Config extends HasEdsConfig, Acco
                 .assetId(account.getId())
                 .name(USER_MAIL_ALIAS)
                 .build();
-        EdsAssetIndex mailAliasIndex = edsAssetIndexService.getByUniqueKey(uk);
+        EdsAssetIndex mailAliasIndex = context.getEdsAssetIndexService().getByUniqueKey(uk);
         return Objects.isNull(mailAliasIndex) ? List.of() : List.of(mailAliasIndex.getValue()
-                .split(INDEX_VALUE_DIVISION_SYMBOL));
+                                                                            .split(INDEX_VALUE_DIVISION_SYMBOL));
     }
 
     @Override

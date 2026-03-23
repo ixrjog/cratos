@@ -13,15 +13,10 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
-import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityProvider;
-import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
+import com.baiyi.cratos.facade.identity.extension.context.EdsIdentityExtensionContext;
 import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -43,26 +38,18 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_A
 @Component
 public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension implements EdsCloudIdentityExtension {
 
-    public EdsCloudIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
-                                         EdsInstanceWrapper edsInstanceWrapper, UserService userService,
-                                         UserWrapper userWrapper, EdsProviderHolderFactory edsProviderHolderFactory,
-                                         EdsAssetService edsAssetService, EdsFacade edsFacade,
-                                         EdsAssetIndexService edsAssetIndexService, TagService tagService,
-                                         BusinessTagService businessTagService) {
-        super(
-                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, edsProviderHolderFactory,
-                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService
-        );
+    public EdsCloudIdentityExtensionImpl(EdsIdentityExtensionContext context) {
+        super(context);
     }
 
     private List<EdsAsset> queryAccountAssets(EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
         List<EdsAsset> cloudIdentityAssets = Lists.newArrayList();
-        List<EdsAsset> byIndexUsername = edsAssetIndexService.queryIndexByNameAndValue(
+        List<EdsAsset> byIndexUsername = context.getEdsAssetIndexService().queryIndexByNameAndValue(
                         CLOUD_ACCOUNT_USERNAME,
                         queryCloudIdentityDetails.getUsername()
                 )
                 .stream()
-                .map(e -> edsAssetService.getById(e.getAssetId()))
+                .map(e -> context.getEdsAssetService().getById(e.getAssetId()))
                 .toList();
         cloudIdentityAssets.addAll(byIndexUsername);
         cloudIdentityAssets.addAll(queryByUsernameTag(
@@ -81,7 +68,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
     @Override
     public EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-        User user = userService.getByUsername(queryCloudIdentityDetails.getUsername());
+        User user = context.getUserService().getByUsername(queryCloudIdentityDetails.getUsername());
         List<EdsAsset> cloudIdentityAssets = queryAccountAssets(queryCloudIdentityDetails);
         if (cloudIdentityAssets.isEmpty()) {
             return EdsIdentityVO.CloudIdentityDetails.NO_DATA;
@@ -110,7 +97,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
                 .assetId(asset.getId())
                 .name(CLOUD_ACCOUNT_USERNAME)
                 .build();
-        EdsAssetIndex usernameIndex = edsAssetIndexService.getByUniqueKey(uk);
+        EdsAssetIndex usernameIndex = context.getEdsAssetIndexService().getByUniqueKey(uk);
         return usernameIndex.getValue();
     }
 
@@ -128,7 +115,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
         if (!IdentityUtils.hasIdentity(hasEdsInstanceId.getInstanceId())) {
             EdsIdentityException.runtime("{} instanceId is incorrect.", instanceTypeEnum.name());
         }
-        EdsInstance instance = edsInstanceService.getById(hasEdsInstanceId.getInstanceId());
+        EdsInstance instance = context.getEdsInstanceService().getById(hasEdsInstanceId.getInstanceId());
         if (Objects.isNull(instance)) {
             EdsIdentityException.runtime("{} instance does not exist.", instanceTypeEnum.name());
         }
@@ -168,7 +155,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
         Map<String, Map<Integer, List<EdsAssetVO.Asset>>> cloudIdentities = Maps.newHashMap();
         cloudIdentityAssets.forEach(cloudIdentityAsset -> {
             String assetType = cloudIdentityAsset.getAssetType();
-            EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(cloudIdentityAsset);
+            EdsAssetVO.Asset assetVO = context.getEdsAssetWrapper().wrapToTarget(cloudIdentityAsset);
             cloudIdentities.computeIfAbsent(assetType, k -> Maps.newHashMap())
                     .computeIfAbsent(cloudIdentityAsset.getInstanceId(), k -> Lists.newArrayList())
                     .add(assetVO);

@@ -13,14 +13,9 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsGitLabIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
-import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
-import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
+import com.baiyi.cratos.facade.identity.extension.context.EdsIdentityExtensionContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -37,36 +32,37 @@ import java.util.Objects;
 @Component
 public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension implements EdsGitLabIdentityExtension {
 
-    public EdsGitLabIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
-                                          EdsInstanceWrapper edsInstanceWrapper, UserService userService,
-                                          UserWrapper userWrapper, EdsProviderHolderFactory edsProviderHolderFactory,
-                                          EdsAssetService edsAssetService, EdsFacade edsFacade,
-                                          EdsAssetIndexService edsAssetIndexService, TagService tagService,
-                                          BusinessTagService businessTagService) {
-        super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, edsProviderHolderFactory,
-                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
+    public EdsGitLabIdentityExtensionImpl(EdsIdentityExtensionContext context) {
+        super(context);
     }
 
     @Override
     public EdsIdentityVO.GitLabIdentityDetails queryGitLabIdentityDetails(
             EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails) {
         final String username = queryGitLabIdentityDetails.getUsername();
-        User user = userService.getByUsername(username);
+        User user = context.getUserService()
+                .getByUsername(username);
         if (Objects.isNull(user)) {
             return EdsIdentityVO.GitLabIdentityDetails.NO_DATA;
         }
         List<EdsAsset> assets = onlyInTheInstance(
-                edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername()),
-                queryGitLabIdentityDetails);
+                context.getEdsAssetService()
+                        .queryByTypeAndKey(EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername()),
+                queryGitLabIdentityDetails
+        );
         if (CollectionUtils.isEmpty(assets)) {
             return EdsIdentityVO.GitLabIdentityDetails.NO_DATA;
         }
         List<EdsIdentityVO.GitLabIdentity> gitLabIdentities = assets.stream()
                 .map(asset -> EdsIdentityVO.GitLabIdentity.builder()
                         .username(username)
-                        .user(userWrapper.wrapToTarget(user))
-                        .account(edsAssetWrapper.wrapToTarget(asset))
-                        .instance(edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
+                        .user(context.getUserWrapper()
+                                      .wrapToTarget(user))
+                        .account(context.getEdsAssetWrapper()
+                                         .wrapToTarget(asset))
+                        .instance(context.getEdsInstanceWrapper()
+                                          .wrapToTarget(context.getEdsInstanceService()
+                                                                .getById(asset.getInstanceId())))
                         .sshKeys(queryGitLabUserSshKeys(user.getUsername(), asset.getInstanceId()))
                         .accountLogin(toAccountLogin(asset, username))
                         .avatar(getAvatar(asset))
@@ -82,17 +78,23 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
     public void blockGitLabIdentity(EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity) {
         EdsInstance instance = getEdsInstance(blockGitLabIdentity);
         try {
-            EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User>) edsProviderHolderFactory.createHolder(
-                    blockGitLabIdentity.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name());
+            EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, org.gitlab4j.api.models.User>) context.getEdsProviderHolderFactory()
+                    .createHolder(blockGitLabIdentity.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name());
 
-            org.gitlab4j.api.models.User gitLabUser = GitLabUserRepo.getUser(holder.getInstance()
-                    .getConfig(), blockGitLabIdentity.getUserId());
+            org.gitlab4j.api.models.User gitLabUser = GitLabUserRepo.getUser(
+                    edsInstanceProviderHolder.getInstance()
+                            .getConfig(), blockGitLabIdentity.getUserId()
+            );
             if (Objects.nonNull(gitLabUser)) {
                 // blockUser
-                GitLabUserRepo.blockUser(holder.getInstance()
-                        .getConfig(), blockGitLabIdentity.getUserId());
-                holder.importAsset(GitLabUserRepo.getUser(holder.getInstance()
-                        .getConfig(), blockGitLabIdentity.getUserId()));
+                GitLabUserRepo.blockUser(
+                        edsInstanceProviderHolder.getInstance()
+                                .getConfig(), blockGitLabIdentity.getUserId()
+                );
+                edsInstanceProviderHolder.importAsset(GitLabUserRepo.getUser(
+                        edsInstanceProviderHolder.getInstance()
+                                .getConfig(), blockGitLabIdentity.getUserId()
+                ));
             }
         } catch (Exception ex) {
             throw new EdsIdentityException("Block gitLab user error: {}", ex.getMessage());
@@ -100,23 +102,24 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
     }
 
     private EdsIdentityVO.AccountLoginDetails toAccountLogin(EdsAsset asset, String username) {
-        EdsConfigs.GitLab gitLab = (EdsConfigs.GitLab) edsProviderHolderFactory.createHolder(
-                        asset.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name())
+        EdsConfigs.GitLab gitLab = (EdsConfigs.GitLab) context.getEdsProviderHolderFactory()
+                .createHolder(asset.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name())
                 .getInstance()
                 .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .loginUsername(username)
                 .username(username)
                 .loginUrl(gitLab.getApi()
-                        .getUrl())
+                                  .getUrl())
                 .build();
     }
 
     private List<EdsAssetVO.Asset> queryGitLabUserSshKeys(String username, int instanceId) {
-        return edsAssetService.queryByTypeAndName(EdsAssetTypeEnum.GITLAB_SSHKEY.name(), username, false)
+        return context.getEdsAssetService()
+                .queryByTypeAndName(EdsAssetTypeEnum.GITLAB_SSHKEY.name(), username, false)
                 .stream()
                 .filter(e -> e.getInstanceId() == instanceId)
-                .map(edsAssetWrapper::wrapToTarget)
+                .map(context.getEdsAssetWrapper()::wrapToTarget)
                 .toList();
     }
 

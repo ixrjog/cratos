@@ -11,13 +11,9 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkIdentityExtension;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
-import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
-import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.wrapper.EdsAssetWrapper;
-import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.baiyi.cratos.wrapper.UserWrapper;
+import com.baiyi.cratos.facade.identity.extension.context.EdsIdentityExtensionContext;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -43,17 +39,9 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
 
     private final BusinessAssetBoundService businessAssetBoundService;
 
-    public EdsDingtalkIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
-                                            EdsInstanceWrapper edsInstanceWrapper, UserService userService,
-                                            UserWrapper userWrapper, EdsProviderHolderFactory edsProviderHolderFactory,
-                                            EdsAssetService edsAssetService, EdsFacade edsFacade,
-                                            EdsAssetIndexService edsAssetIndexService, TagService tagService,
-                                            BusinessTagService businessTagService,
+    public EdsDingtalkIdentityExtensionImpl(EdsIdentityExtensionContext context,
                                             BusinessAssetBoundService businessAssetBoundService) {
-        super(
-                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, edsProviderHolderFactory,
-                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService
-        );
+        super(context);
         this.businessAssetBoundService = businessAssetBoundService;
     }
 
@@ -61,7 +49,7 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
     public EdsIdentityVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
             EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
         String username = queryDingtalkIdentityDetails.getUsername();
-        User user = userService.getByUsername(username);
+        User user = context.getUserService().getByUsername(username);
         if (Objects.isNull(user)) {
             return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
         }
@@ -71,17 +59,17 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
         }
         List<EdsIdentityVO.DingtalkIdentity> dingtalkIdentities = assets.stream()
                 .map(asset -> {
-                    EdsAssetIndex mobileIndex = edsAssetIndexService.getByAssetIdAndName(
+                    EdsAssetIndex mobileIndex = context.getEdsAssetIndexService().getByAssetIdAndName(
                             asset.getId(),
                             DINGTALK_USER_MOBILE
                     );
-                    EdsAssetIndex mailIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(), USER_MAIL);
+                    EdsAssetIndex mailIndex = context.getEdsAssetIndexService().getByAssetIdAndName(asset.getId(), USER_MAIL);
                     return EdsIdentityVO.DingtalkIdentity.builder()
                             .username(username)
-                            .user(userWrapper.wrapToTarget(user))
+                            .user(context.getUserWrapper().wrapToTarget(user))
                             .instance(
-                                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
-                            .account(edsAssetWrapper.wrapToTarget(asset))
+                                    context.getEdsInstanceWrapper().wrapToTarget(context.getEdsInstanceService().getById(asset.getInstanceId())))
+                            .account(context.getEdsAssetWrapper().wrapToTarget(asset))
                             .email(Optional.ofNullable(mailIndex)
                                            .map(EdsAssetIndex::getValue)
                                            .orElse(null))
@@ -123,7 +111,7 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
             return List.of();
         }
         return bounds.stream()
-                .map(e -> edsAssetService.getById(e.getAssetId()))
+                .map(e -> context.getEdsAssetService().getById(e.getAssetId()))
                 // 过滤掉 null 值
                 .filter(Objects::nonNull)
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
@@ -139,12 +127,12 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
         if (!ValidationUtils.containsHyphenBetweenDigits(mobilePhone)) {
             mobilePhone = "86-" + mobilePhone;
         }
-        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE, mobilePhone);
+        List<EdsAssetIndex> indices = context.getEdsAssetIndexService().queryIndexByNameAndValue(DINGTALK_USER_MOBILE, mobilePhone);
         if (CollectionUtils.isEmpty(indices)) {
             return List.of();
         }
         return indices.stream()
-                .map(e -> edsAssetService.getById(e.getAssetId()))
+                .map(e -> context.getEdsAssetService().getById(e.getAssetId()))
                 // 过滤掉 null 值
                 .filter(Objects::nonNull)
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
@@ -157,9 +145,9 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
         if (!ValidationUtils.isEmail(email)) {
             return List.of();
         }
-        return edsAssetIndexService.queryIndexByNameAndValue(USER_MAIL, email)
+        return context.getEdsAssetIndexService().queryIndexByNameAndValue(USER_MAIL, email)
                 .stream()
-                .map(e -> edsAssetService.getById(e.getAssetId()))
+                .map(e -> context.getEdsAssetService().getById(e.getAssetId()))
                 // 过滤掉 null 值
                 .filter(Objects::nonNull)
                 .filter(asset -> EdsAssetTypeEnum.DINGTALK_USER.name()

@@ -5,12 +5,7 @@ import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.util.LanguageUtils;
-import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
-import com.baiyi.cratos.service.NotificationTemplateService;
-import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
-import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
+import com.baiyi.cratos.workorder.context.WorkOrderNoticeSenderContext;
 import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,16 +21,11 @@ import java.util.Map;
 @Component
 public class ResetAwsIamUserNoticeSender extends BaseWorkOrderNoticeSender {
 
-    public ResetAwsIamUserNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                          UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
-                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade,
-                                          LanguageUtils languageUtils,
-                                          NotificationTemplateService notificationTemplateService) {
-        super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
-                notificationTemplateService);
+    public ResetAwsIamUserNoticeSender(WorkOrderNoticeSenderContext context) {
+        super(context);
     }
 
-    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket,String accountId, String iamLoginUsername, String password,
+    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String accountId, String iamLoginUsername, String password,
                         String loginLink, User applicantUser) {
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())

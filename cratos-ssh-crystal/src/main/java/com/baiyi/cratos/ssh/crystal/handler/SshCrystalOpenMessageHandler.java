@@ -5,27 +5,19 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.RbacRoleFacade;
-import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
-import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
-import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
-import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
-import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
 import com.baiyi.cratos.ssh.crystal.annotation.MessageStates;
+import com.baiyi.cratos.ssh.crystal.context.SshCrystalOpenMessageHandlerContext;
 import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalOpenMessageHandler;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
@@ -48,23 +40,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
 
     private final RbacRoleFacade rbacRoleFacade;
 
-    public SshCrystalOpenMessageHandler(EdsAssetService edsAssetService, ServerAccountService serverAccountService,
-                                        CredentialService credentialService,
-                                        ServerAccessControlFacade serverAccessControlFacade,
-                                        BusinessTagFacade businessTagFacade, UserService userService,
-                                        NotificationTemplateService notificationTemplateService,
-                                        EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                        EdsConfigService edsConfigService, DingtalkService dingtalkService,
-                                        SshAuditProperties sshAuditProperties,
-                                        SimpleSshSessionFacade simpleSshSessionFacade,
-                                        SshProxyHostHolder proxyHostHolder,
-                                        EdsProviderHolderFactory edsProviderHolderFactory,
-                                        RbacRoleFacade rbacRoleFacade) {
-        super(
-                edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
-                userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
-                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder, edsProviderHolderFactory
-        );
+    public SshCrystalOpenMessageHandler(SshCrystalOpenMessageHandlerContext context, RbacRoleFacade rbacRoleFacade) {
+        super(context);
         this.rbacRoleFacade = rbacRoleFacade;
     }
 
@@ -72,18 +49,14 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
     public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Open openMessage = toMessage(message);
         try {
-            final String auditPath = sshAuditProperties.generateAuditLogFilePath(
-                    sshSession.getSessionId(),
-                    openMessage.getInstanceId()
-            );
+            final String auditPath = context.getSshAuditProperties()
+                    .generateAuditLogFilePath(sshSession.getSessionId(), openMessage.getInstanceId());
             heartbeat(sshSession.getSessionId());
             // TODO 鉴权逻辑优化，OPS 管理员可直接登录机器
             boolean isOps = rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS, username);
             if (!isOps) {
-                AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(
-                        username,
-                        openMessage.getAssetId()
-                );
+                AccessControlVO.AccessControl accessControl = context.getServerAccessControlFacade()
+                        .generateAccessControl(username, openMessage.getAssetId());
                 if (!accessControl.getPermission()) {
                     sendHostSystemErrMsgToSession(
                             session, sshSession.getSessionId(), openMessage.getInstanceId(),
@@ -92,7 +65,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                     return;
                 }
             }
-            EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
+            EdsAsset server = context.getEdsAssetService()
+                    .getById(openMessage.getAssetId());
             String sshLoginIP = getRemoteManagementIP(server);
             // 查询 serverAccount
             ServerAccount serverAccount = getServerAccount(openMessage.getAssetId());
@@ -103,7 +77,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                 );
                 return;
             }
-            Credential credential = credentialService.getById(serverAccount.getCredentialId());
+            Credential credential = context.getCredentialService()
+                    .getById(serverAccount.getCredentialId());
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
                     openMessage.getInstanceId(), sshLoginIP,
                     serverAccount, credential
@@ -123,7 +98,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                     SshSessionInstanceTypeEnum.SERVER,
                     auditPath
             );
-            simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+            context.getSimpleSshSessionFacade()
+                    .addSshSessionInstance(sshSessionInstance);
             openSshCrystal(sshSession, targetSystem, proxySystem);
             // 发送登录通知
             sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
@@ -132,7 +108,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
             final String loginAccount = targetSystem.getLoginUsername();
             final String serverIp = server.getAssetKey();
             try {
-                User user = userService.getByUsername(username);
+                User user = context.getUserService()
+                        .getByUsername(username);
                 SreEventFormatter.loginServer(
                         user, SreEventFormatter.Action.LOGIN_SERVER, serverName, loginAccount, serverIp, "Crystal");
             } catch (Exception e) {
@@ -160,7 +137,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
         if (!StringUtils.hasText(serverAccountName)) {
             return null;
         }
-        return serverAccountService.getByName(serverAccountName);
+        return context.getServerAccountService()
+                .getByName(serverAccountName);
     }
 
     private String getServerAccountName(int assetId) {
@@ -177,7 +155,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(assetId)
                 .build();
-        return businessTagFacade.getBusinessTag(byBusiness, sysTagKeys.getKey());
+        return context.getBusinessTagFacade()
+                .getBusinessTag(byBusiness, sysTagKeys.getKey());
     }
 
 }
