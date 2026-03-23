@@ -14,7 +14,7 @@ import java.util.Optional;
  * &#064;Date  2024/7/29 下午5:23
  * &#064;Version 1.0
  */
-public class GoogleCertificateModel {
+public class GcpCertificateModel {
 
     @Builder
     @Data

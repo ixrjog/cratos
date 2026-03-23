@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.googlecloud.model.GoogleMemberModel;
+import com.baiyi.cratos.eds.googlecloud.model.GcpMemberModel;
 import com.baiyi.cratos.eds.googlecloud.repo.GcpProjectRepo;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -30,22 +30,21 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GCP_MEM
  * @Date 2024/7/30 上午11:16
  * @Since 1.0
  */
-
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GCP, assetTypeOf = EdsAssetTypeEnum.GCP_MEMBER)
-public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Gcp, GoogleMemberModel.Member> {
+public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Gcp, GcpMemberModel.Member> {
 
-    private final GcpProjectRepo googleCloudProjectRepo;
+    private final GcpProjectRepo gcpProjectRepo;
 
     public EdsGcpMemberAssetProvider(EdsAssetProviderContext context,
                                      GcpProjectRepo googleCloudProjectRepo) {
         super(context);
-        this.googleCloudProjectRepo = googleCloudProjectRepo;
+        this.gcpProjectRepo = googleCloudProjectRepo;
     }
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
-                                  GoogleMemberModel.Member entity) throws EdsAssetConversionException {
+                                  GcpMemberModel.Member entity) throws EdsAssetConversionException {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .assetKeyOf(entity.getName())
                 .nameOf(entity.getName())
@@ -55,13 +54,13 @@ public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.G
     }
 
     @Override
-    protected List<GoogleMemberModel.Member> listEntities(
+    protected List<GcpMemberModel.Member> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Gcp> instance) throws EdsQueryEntitiesException {
         try {
-            return googleCloudProjectRepo.listMembers(instance.getConfig())
+            return gcpProjectRepo.listMembers(instance.getConfig())
                     .entrySet()
                     .stream()
-                    .map(e -> GoogleMemberModel.toMember(e.getKey(), e.getValue()))
+                    .map(e -> GcpMemberModel.toMember(e.getKey(), e.getValue()))
                     .toList();
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
@@ -71,7 +70,7 @@ public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.G
     @Override
     protected List<EdsAssetIndex> buildIndexes(
             ExternalDataSourceInstance<EdsConfigs.Gcp> instance, EdsAsset edsAsset,
-            GoogleMemberModel.Member entity) {
+            GcpMemberModel.Member entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         // "roles/"
         String roles = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)

@@ -23,6 +23,7 @@ cratos:
     provider: LDAP
   rbac:
     auto-configuration:
+      # 开发环境禁用，加快启动
       enabled: off
     import-user:
       default-roles:

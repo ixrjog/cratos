@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2024/7/30 上午11:09
  * @Since 1.0
  */
-public class GoogleMemberModel {
+public class GcpMemberModel {
 
     @Builder
     @Data

@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.googlecloud.model.GoogleCertificateModel;
+import com.baiyi.cratos.eds.googlecloud.model.GcpCertificateModel;
 import com.baiyi.cratos.eds.googlecloud.repo.GcpCredentialRepo;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ import java.util.Set;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GCP, assetTypeOf = EdsAssetTypeEnum.GCP_CERTIFICATE)
-public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsConfigs.Gcp, GoogleCertificateModel.Certificate> {
+public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsConfigs.Gcp, GcpCertificateModel.Certificate> {
 
     private final GcpCredentialRepo googleCloudCredentialRepo;
 
@@ -39,7 +39,7 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
-                                  GoogleCertificateModel.Certificate entity) throws EdsAssetConversionException {
+                                  GcpCertificateModel.Certificate entity) throws EdsAssetConversionException {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getKey())
                 .assetKeyOf(entity.getKey())
                 .nameOf(entity.getName())
@@ -64,12 +64,12 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
     }
 
     @Override
-    protected List<GoogleCertificateModel.Certificate> listEntities(String namespace,
-                                                                    ExternalDataSourceInstance<EdsConfigs.Gcp> instance) throws EdsQueryEntitiesException {
+    protected List<GcpCertificateModel.Certificate> listEntities(String namespace,
+                                                                 ExternalDataSourceInstance<EdsConfigs.Gcp> instance) throws EdsQueryEntitiesException {
         try {
             return googleCloudCredentialRepo.listCertificates(namespace, instance.getConfig())
                     .stream()
-                    .map(GoogleCertificateModel::toCertificate)
+                    .map(GcpCertificateModel::toCertificate)
                     .toList();
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());

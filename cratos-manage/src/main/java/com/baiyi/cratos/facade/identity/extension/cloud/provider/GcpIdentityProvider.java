@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.googlecloud.model.GoogleMemberModel;
+import com.baiyi.cratos.eds.googlecloud.model.GcpMemberModel;
 import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.facade.identity.extension.context.CloudIdentityProviderContext;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GCP_MEM
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GCP, assetTypeOf = EdsAssetTypeEnum.GCP_MEMBER)
-public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gcp, GoogleMemberModel.Member> {
+public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gcp, GcpMemberModel.Member> {
 
     private static final String GCP_LOGIN_URL = "https://console.cloud.google.com/";
 

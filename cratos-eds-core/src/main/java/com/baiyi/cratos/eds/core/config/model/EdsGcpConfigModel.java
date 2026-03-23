@@ -23,6 +23,7 @@ public class EdsGcpConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Project implements ToProjectName {
+        private String name;
         private String id;
     }
 

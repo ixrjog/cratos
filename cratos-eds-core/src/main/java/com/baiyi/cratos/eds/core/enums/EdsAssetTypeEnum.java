@@ -112,6 +112,7 @@ public enum EdsAssetTypeEnum {
     HARBOR_REPOSITORY("Harbor Repository", 81),
     @CloudCertificate GCP_CERTIFICATE("Certificate", 82),
     @CloudIdentity GCP_MEMBER("Member", 83),
+    GCP_IAM_ROLE("IAM Role", 84),
 
     JENKINS_COMPUTER("CloudComputer Node", 84),
 

@@ -37,7 +37,7 @@ public class GcpProjectRepo {
         try (ProjectsClient client = ProjectsClient.create(settings)) {
             GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder()
                     .setResource(googleCloud.getProject()
-                            .toProjectName())
+                                         .toProjectName())
                     .build();
             Policy policy = client.getIamPolicy(request);
             Set<String> members = Sets.newHashSet();
@@ -82,7 +82,6 @@ public class GcpProjectRepo {
         } catch (Exception e) {
             log.error("Error removing member: " + e.getMessage());
         }
-
     }
 
     // Helper function to remove a member from a role in the policy

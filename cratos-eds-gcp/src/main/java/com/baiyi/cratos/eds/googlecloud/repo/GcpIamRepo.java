@@ -2,12 +2,16 @@ package com.baiyi.cratos.eds.googlecloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.googlecloud.builder.GcpIAMSettingsBuilder;
+import com.google.api.client.util.Lists;
 import com.google.cloud.iam.admin.v1.IAMClient;
 import com.google.cloud.iam.admin.v1.IAMSettings;
+import com.google.iam.admin.v1.ListRolesRequest;
+import com.google.iam.admin.v1.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -18,15 +22,24 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class GcpIamRepo {
 
-    private final GcpIAMSettingsBuilder googleCloudIAMSettingsBuilder;
+    private final GcpIAMSettingsBuilder gcpIAMSettingsBuilder;
 
-    private static final int PAGE_SIZE = 10;
-
-    void test1(EdsConfigs.Gcp googleCloud) throws IOException {
-        IAMSettings settings = googleCloudIAMSettingsBuilder.buildIAMSettings(googleCloud);
+    public List<Role> listRoles(EdsConfigs.Gcp googleCloud) throws IOException {
+        IAMSettings settings = gcpIAMSettingsBuilder.buildIAMSettings(googleCloud);
         try (IAMClient client = IAMClient.create(settings)) {
-            IAMClient.ListServiceAccountsPagedResponse listServiceAccountsPagedResponse =  client.listServiceAccounts(googleCloud.getProject().toProjectName());
-            System.out.println(listServiceAccountsPagedResponse);
+            List<Role> roles = Lists.newArrayList();
+            // 预定义角色
+            roles.addAll(Lists.newArrayList(client.listRoles(ListRolesRequest.newBuilder()
+                                                                     .setParent("")
+                                                                     .build())
+                                                    .iterateAll()));
+            // 项目级自定义角色
+            roles.addAll(Lists.newArrayList(client.listRoles(ListRolesRequest.newBuilder()
+                                                                     .setParent(googleCloud.getProject()
+                                                                                        .toProjectName())
+                                                                     .build())
+                                                    .iterateAll()));
+            return roles;
         }
     }
 

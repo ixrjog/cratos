@@ -50,7 +50,6 @@ public class KubernetesResourceUtils {
                 instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
                 instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-
         PrettyTable prettyTable = PrettyTable.fieldNames(TABLE_FIELD_NAME);
         EdsInstanceAssetProvider<EdsConfigs.Kubernetes, Deployment> provider = holder.getProvider();
         for (EdsAsset asset : assets) {
