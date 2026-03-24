@@ -181,10 +181,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                 .map(EdsInstanceVO.EdsInstance::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Eds instanceId is null"));
         EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsProviderHolderFactory.createHolder(
-                param.getDetail()
-                        .getEdsInstance()
-                        .getId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name()
-        );
+                instanceId, EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
         return CreateAliyunRamUserTicketEntryBuilder.newBuilder()

@@ -114,7 +114,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
-    public  void addApplicationDeploymentJvmSpecTicketEntry(WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry addTicketEntry){
+    public void addApplicationDeploymentJvmSpecTicketEntry(
+            WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_DEPLOYMENT_JVM_SPEC, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
@@ -341,6 +342,22 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addGcpIamMemberTicketEntry(WorkOrderTicketParam.AddGcpIamMemberTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddGcpIamMemberTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGcpIamMemberTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.GCP_IAM_PERMISSION, addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
+    public void addGcpIamRoleTicketEntry(WorkOrderTicketParam.AddGcpIamRoleTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddGcpIamRoleTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGcpIamRoleTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.GCP_IAM_ROLE_PERMISSION, addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void addRiskChangeTicketEntry(WorkOrderTicketParam.AddRiskChangeTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddRiskChangeTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddRiskChangeTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.RISK_CHANGE, addTicketEntry.getBusinessType());
@@ -360,8 +377,10 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         }
         //WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
         WorkOrderTicketNode workOrderTicketNode = workOrderTicketNodeService.getById(workOrderTicket.getNodeId());
-        if (!workflowFacade.isApprover(workOrderTicket, workOrderTicketNode.getNodeName(),
-                SessionUtils.getUsername())) {
+        if (!workflowFacade.isApprover(
+                workOrderTicket, workOrderTicketNode.getNodeName(),
+                SessionUtils.getUsername()
+        )) {
             WorkOrderTicketException.runtime("Only the approver of the current node can set valid settings.");
         }
         workOrderTicketEntryService.updateValidById(id);
@@ -419,8 +438,10 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public List<EdsAssetVO.Asset> queryAliyunKmsKeyTicketEntry(
             WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry) {
-        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(ALIYUN_KMS_INSTANCE_ID,
-                queryAliyunKmsKeyTicketEntry.getKmsInstanceId());
+        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(
+                ALIYUN_KMS_INSTANCE_ID,
+                queryAliyunKmsKeyTicketEntry.getKmsInstanceId()
+        );
         if (CollectionUtils.isEmpty(indices)) {
             return List.of();
         }
@@ -478,7 +499,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 queryApplicationResourceDeploymentTicketEntry.getApplicationName(),
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
-                queryApplicationResourceDeploymentTicketEntry.getNamespace());
+                queryApplicationResourceDeploymentTicketEntry.getNamespace()
+        );
         if (CollectionUtils.isEmpty(resources)) {
             return List.of();
         }
@@ -486,8 +508,10 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
                 .map(e -> {
                     EdsAsset asset = edsAssetService.getById(e.getBusinessId());
                     EdsAssetVO.Asset vo = BeanCopierUtils.copyProperties(asset, EdsAssetVO.Asset.class);
-                    vo.setEdsInstance(BeanCopierUtils.copyProperties(edsInstanceService.getById(vo.getInstanceId()),
-                            EdsInstanceVO.EdsInstance.class));
+                    vo.setEdsInstance(BeanCopierUtils.copyProperties(
+                            edsInstanceService.getById(vo.getInstanceId()),
+                            EdsInstanceVO.EdsInstance.class
+                    ));
                     return vo;
                 })
                 .toList();
@@ -542,8 +566,10 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
                             .businessType(BusinessTypeEnum.EDS_ASSET.name())
                             .businessId(e.getId())
                             .build();
-                    BusinessTag descriptionTag = businessTagFacade.getBusinessTag(hasBusiness,
-                            SysTagKeys.DESCRIPTION.getKey());
+                    BusinessTag descriptionTag = businessTagFacade.getBusinessTag(
+                            hasBusiness,
+                            SysTagKeys.DESCRIPTION.getKey()
+                    );
                     return LdapUserGroupModel.Role.builder()
                             .asset(e)
                             .group(e.getName())

@@ -122,8 +122,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                 }
             }
             // 发送通知
-            sendMsg(workOrderTicket, username, ramLoginUsername, newPassword, aliyun.getRam()
-                    .toLoginUrl());
+            sendMsg(
+                    workOrderTicket, username, ramLoginUsername, newPassword, aliyun.getRam()
+                            .toLoginUrl()
+            );
         }
         if (Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA())) {
             // 解绑MFA
@@ -153,8 +155,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
     private void createRAMUserLoginProfile(EdsConfigs.Aliyun aliyun, String ramUsername, String password,
                                            boolean enableMFA) {
         try {
-            aliyunRamUserRepo.createLoginProfile(aliyun.getRegionId(), aliyun, ramUsername, password,
-                    NO_PASSWORD_RESET_REQUIRED, enableMFA);
+            aliyunRamUserRepo.createLoginProfile(
+                    aliyun.getRegionId(), aliyun, ramUsername, password,
+                    NO_PASSWORD_RESET_REQUIRED, enableMFA
+            );
         } catch (ClientException clientException) {
             WorkOrderTicketException.runtime(clientException.getMessage());
         }
@@ -167,8 +171,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                     .map(GetUserMFAInfoResponse.MFADevice::getSerialNumber)
                     .orElse(null);
             if (StringUtils.hasText(serialNumber)) {
-                UnbindMFADeviceResponse.MFADevice unbindMfaDevice = aliyunRamUserRepo.unbindVirtualMFADevice(aliyun,
-                        ramUsername);
+                UnbindMFADeviceResponse.MFADevice unbindMfaDevice = aliyunRamUserRepo.unbindVirtualMFADevice(
+                        aliyun,
+                        ramUsername
+                );
                 Optional.ofNullable(unbindMfaDevice)
                         .map(UnbindMFADeviceResponse.MFADevice::getSerialNumber)
                         .ifPresent(sn -> {
@@ -196,8 +202,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
             User applicantUser = userService.getByUsername(username);
-            resetAliyunRamUserNoticeSender.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
-                    applicantUser);
+            resetAliyunRamUserNoticeSender.sendMsg(
+                    workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
+                    applicantUser
+            );
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());
         }
@@ -211,12 +219,14 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                 .map(EdsAssetVO.Asset::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("AWS IAM user asset is null"));
         EdsIdentityVO.CloudAccount cloudAccount = getAndVerifyCloudAccount(assetId);
-        AliyunModel.ResetAliyunAccount resetAliyunAccount = BeanCopierUtils.copyProperties(cloudAccount,
-                AliyunModel.ResetAliyunAccount.class);
+        AliyunModel.ResetAliyunAccount resetAliyunAccount = BeanCopierUtils.copyProperties(
+                cloudAccount,
+                AliyunModel.ResetAliyunAccount.class
+        );
         resetAliyunAccount.setResetPassword(param.getDetail()
-                .getResetPassword());
+                                                    .getResetPassword());
         resetAliyunAccount.setUnbindMFA(param.getDetail()
-                .getUnbindMFA());
+                                                .getUnbindMFA());
         return ResetAliyunRamUserTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .withResetAliyunAccount(resetAliyunAccount)
@@ -248,10 +258,11 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         String resetPassword = Boolean.TRUE.equals(resetAliyunAccount.getResetPassword()) ? "Yes" : "No";
         String unbindMFA = Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA()) ? "Yes" : "No";
         // | Aliyun Instance | RAM Login Username | Reset Password | Unbind MFA | Login Link |
-        return MarkdownUtils.createTableRow(instance.getInstanceName(), resetAliyunAccount.getAccountLogin()
-                .getLoginUsername(), resetPassword, unbindMFA, resetAliyunAccount.getAccountLogin()
-                .getLoginUrl());
-
+        return MarkdownUtils.createTableRow(
+                instance.getInstanceName(), resetAliyunAccount.getAccountLogin()
+                        .getLoginUsername(), resetPassword, unbindMFA, resetAliyunAccount.getAccountLogin()
+                        .getLoginUrl()
+        );
     }
 
     @Override

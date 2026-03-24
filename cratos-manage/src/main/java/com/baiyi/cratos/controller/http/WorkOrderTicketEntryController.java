@@ -136,6 +136,22 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add gcp iam member instance ticket entry")
+    @PostMapping(value = "/gcp/iam/member/instance/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addGcpIamMemberTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddGcpIamMemberTicketEntry addTicketEntry) {
+        ticketEntryFacade.addGcpIamMemberTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Add gcp iam role permission ticket entry")
+    @PostMapping(value = "/aws/iam/policy/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addGcpIamRoleTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddGcpIamRoleTicketEntry addTicketEntry) {
+        ticketEntryFacade.addGcpIamRoleTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add create aws iam user instance ticket entry")
     @PostMapping(value = "/aws/iam/user/instance/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addCreateAwsIamUserTicketEntry(

@@ -669,4 +669,30 @@ public class WorkOrderTicketParam {
         private T detail;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddGcpIamMemberTicketEntry extends TicketEntry<GcpModel.IamMember> implements BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -7941074070796591277L;
+        private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
+        private GcpModel.IamMember detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddGcpIamRoleTicketEntry extends TicketEntry<GcpModel.MemberRole> implements BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -7941074070796591277L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private GcpModel.MemberRole detail;
+    }
+
 }

@@ -28,6 +28,9 @@ public interface TableHeaderConstants {
     String GITLAB_GROUP_PERMISSION = "| Instance Name | Group Name | Group WebURL | Role |";
     String GITLAB_PROJECT_PERMISSION = "| Instance Name | Project SshURL | Role |";
 
+    String GCP_IAM_PERMISSION = "| Google Cloud Project Name | Google Cloud Project ID | IAM Member (Google Account) | Cratos Username |";
+    String GCP_IAM_ROLE_PERMISSION = "| Google Cloud Project Name | Google Cloud Project ID | IAM Member (Google Account) | Role Title |";
+
     String LDAP_ROLE_PERMISSION = "| LDAP Role | Description |";
     String REVOKE_USER_PERMISSION = "| Username | Name | DisplayName | Email | Tags |";
     String USER_RESET_PASSWORD = "| Username | Name | Display Name | Mail |";

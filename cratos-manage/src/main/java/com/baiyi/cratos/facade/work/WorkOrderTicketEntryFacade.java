@@ -44,7 +44,8 @@ public interface WorkOrderTicketEntryFacade {
     void addApplicationDeploymentElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry);
 
-    void addApplicationDeploymentJvmSpecTicketEntry(WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry addTicketEntry);
+    void addApplicationDeploymentJvmSpecTicketEntry(
+            WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry addTicketEntry);
 
     void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry);
 
@@ -99,6 +100,10 @@ public interface WorkOrderTicketEntryFacade {
 
     void addCreateAliyunOnsConsumerGroupTicketEntry(
             WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry addTicketEntry);
+
+    void addGcpIamMemberTicketEntry(WorkOrderTicketParam.AddGcpIamMemberTicketEntry addTicketEntry);
+
+    void addGcpIamRoleTicketEntry(WorkOrderTicketParam.AddGcpIamRoleTicketEntry addTicketEntry);
 
     void addRiskChangeTicketEntry(WorkOrderTicketParam.AddRiskChangeTicketEntry addTicketEntry);
 
