@@ -145,7 +145,7 @@ public class WorkOrderTicketEntryController {
     }
 
     @Operation(summary = "Add gcp iam role permission ticket entry")
-    @PostMapping(value = "/aws/iam/policy/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/gcp/iam/role/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addGcpIamRoleTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.AddGcpIamRoleTicketEntry addTicketEntry) {
         ticketEntryFacade.addGcpIamRoleTicketEntry(addTicketEntry);
