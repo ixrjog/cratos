@@ -10,7 +10,6 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.opscloud.param.OcUserParam;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserRepo;
 import com.baiyi.cratos.processor.BasePostImportAssetProcessor;
@@ -37,7 +36,6 @@ public class UserToOcPostImportProcessor implements BasePostImportAssetProcessor
 
     private final UserService userService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
-    private final EdsIdentityFacade edsIdentityFacade;
     private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
 
     @Override

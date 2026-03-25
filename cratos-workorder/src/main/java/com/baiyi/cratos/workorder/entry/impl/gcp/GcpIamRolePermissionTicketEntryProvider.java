@@ -16,7 +16,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.googlecloud.enums.GcpIAMMemberType;
@@ -53,19 +53,19 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final GcpProjectRepo gcpProjectRepo;
     private final EdsAssetService edsAssetService;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsCloudIdentityExtension cloudIdentityExtension;
 
     public GcpIamRolePermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    WorkOrderTicketService workOrderTicketService,
                                                    WorkOrderService workOrderService,
                                                    EdsProviderHolderFactory edsProviderHolderFactory,
                                                    GcpProjectRepo gcpProjectRepo, EdsAssetService edsAssetService,
-                                                   EdsIdentityFacade edsIdentityFacade) {
+                                                   EdsCloudIdentityExtension cloudIdentityExtension) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.gcpProjectRepo = gcpProjectRepo;
         this.edsAssetService = edsAssetService;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.cloudIdentityExtension = cloudIdentityExtension;
     }
 
     @Override
@@ -115,7 +115,7 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
                 .instanceType(EdsInstanceTypeEnum.GCP.name())
                 .username(username)
                 .build();
-        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(query);
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = cloudIdentityExtension.queryCloudIdentityDetails(query);
         if (!cloudIdentityDetails.getAccounts()
                 .containsKey(EdsInstanceTypeEnum.GCP.name())) {
             WorkOrderTicketException.runtime("Google Cloud 账户不存在.");

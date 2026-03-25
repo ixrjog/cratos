@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.dingtalk.sender.DingtalkMessageSender;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkIdentityExtension;
 import com.baiyi.cratos.facade.message.builder.AsyncSendMessageAgency;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import org.springframework.util.CollectionUtils;
 public class EdsDingtalkMessageFacadeImpl implements EdsDingtalkMessageFacade {
 
     private final DingtalkMessageSender dingtalkMessageSender;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsDingtalkIdentityExtension dingtalkIdentityExtension;
     private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     @Override
@@ -36,7 +36,7 @@ public class EdsDingtalkMessageFacadeImpl implements EdsDingtalkMessageFacade {
         EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
                 .username(sendToUser.getUsername())
                 .build();
-        EdsIdentityVO.DingtalkIdentityDetails dingtalkIdentityDetails = edsIdentityFacade.queryDingtalkIdentityDetails(
+        EdsIdentityVO.DingtalkIdentityDetails dingtalkIdentityDetails = dingtalkIdentityExtension.queryDingtalkIdentityDetails(
                 query);
         if (CollectionUtils.isEmpty(dingtalkIdentityDetails.getDingtalkIdentities())) {
             // 用户没有关联Dingtalk身份

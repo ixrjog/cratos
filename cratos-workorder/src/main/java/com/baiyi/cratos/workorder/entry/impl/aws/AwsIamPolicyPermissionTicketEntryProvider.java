@@ -19,7 +19,7 @@ import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -50,7 +50,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
 
     private final EdsInstanceService edsInstanceService;
     private final EdsProviderHolderFactory edsProviderHolderFactory;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsCloudIdentityExtension cloudIdentityExtension;
     private final AwsIamPolicyRepo awsIamPolicyRepo;
     private final AwsIamUserRepo awsIamUserRepo;
 
@@ -60,12 +60,12 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
 
                                                      EdsInstanceService edsInstanceService,
                                                      EdsProviderHolderFactory edsProviderHolderFactory,
-                                                     EdsIdentityFacade edsIdentityFacade,
+                                                     EdsCloudIdentityExtension cloudIdentityExtension,
                                                      AwsIamPolicyRepo awsIamPolicyRepo, AwsIamUserRepo awsIamUserRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsProviderHolderFactory = edsProviderHolderFactory;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.cloudIdentityExtension = cloudIdentityExtension;
         this.awsIamPolicyRepo = awsIamPolicyRepo;
         this.awsIamUserRepo = awsIamUserRepo;
     }
@@ -126,7 +126,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
                 .username(SessionUtils.getUsername())
                 .instanceType(EdsInstanceTypeEnum.AWS.name())
                 .build();
-        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = cloudIdentityExtension.queryCloudIdentityDetails(
                 queryCloudIdentityDetails);
         return cloudIdentityDetails.getAccounts()
                 .values()

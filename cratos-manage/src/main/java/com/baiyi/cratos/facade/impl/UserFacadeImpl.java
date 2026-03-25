@@ -22,7 +22,7 @@ import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsLdapIdentityExtension;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.*;
@@ -59,7 +59,7 @@ public class UserFacadeImpl implements UserFacade {
     private final TagService tagService;
     private final CratosConfiguration cratosConfiguration;
     private final RbacUserRoleFacade rbacUserRoleFacade;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsLdapIdentityExtension ldapIdentityExtension;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
     private final RbacRoleService rbacRoleService;
@@ -156,7 +156,7 @@ public class UserFacadeImpl implements UserFacade {
                 .username(username)
                 .build();
         List<EdsIdentityVO.LdapIdentity> ldapIdentities = Optional.ofNullable(
-                        edsIdentityFacade.queryLdapIdentityDetails(queryLdapIdentityDetails))
+                        ldapIdentityExtension.queryLdapIdentityDetails(queryLdapIdentityDetails))
                 .map(EdsIdentityVO.LdapIdentityDetails::getLdapIdentities)
                 .orElseGet(List::of);
         if (!CollectionUtils.isEmpty(ldapIdentities)) {
@@ -167,7 +167,7 @@ public class UserFacadeImpl implements UserFacade {
             for (EdsIdentityVO.LdapIdentity ldapIdentity : ldapIdentities) {
                 resetLdapUserPassword.setInstanceId(ldapIdentity.getInstance()
                                                             .getId());
-                edsIdentityFacade.resetLdapUserPassword(resetLdapUserPassword);
+                ldapIdentityExtension.resetLdapUserPassword(resetLdapUserPassword);
             }
         }
     }

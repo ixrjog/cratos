@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsLdapIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
@@ -51,7 +51,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
 
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsInstanceService edsInstanceService;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsLdapIdentityExtension ldapIdentityExtension;
     private final WorkOrderService workOrderService;
     private final UserService userService;
     private final ResetUserPasswordNoticeSender resetUserPasswordNoticeSender;
@@ -62,13 +62,13 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
                                                 WorkOrderService workOrderService,
                                                 EdsProviderHolderFactory edsProviderHolderFactory,
                                                 EdsInstanceService edsInstanceService,
-                                                EdsIdentityFacade edsIdentityFacade, UserService userService,
+                                                EdsLdapIdentityExtension ldapIdentityExtension, UserService userService,
                                                 ResetUserPasswordNoticeSender resetUserPasswordNoticeSender,
                                                 LdapPersonRepo ldapPersonRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsInstanceService = edsInstanceService;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.ldapIdentityExtension = ldapIdentityExtension;
         this.workOrderService = workOrderService;
         this.userService = userService;
         this.resetUserPasswordNoticeSender = resetUserPasswordNoticeSender;
@@ -145,7 +145,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
         EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails = EdsIdentityParam.QueryLdapIdentityDetails.builder()
                 .username(username)
                 .build();
-        EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = edsIdentityFacade.queryLdapIdentityDetails(
+        EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = ldapIdentityExtension.queryLdapIdentityDetails(
                 queryLdapIdentityDetails);
         if (CollectionUtils.isEmpty(ldapIdentityDetails.getLdapIdentities())) {
             WorkOrderTicketException.runtime("No LDAP identities found for the user.");

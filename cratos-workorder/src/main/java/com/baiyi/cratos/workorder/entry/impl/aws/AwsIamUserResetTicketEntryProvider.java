@@ -20,7 +20,7 @@ import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.UserService;
@@ -57,7 +57,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final UserService userService;
     private final WorkOrderService workOrderService;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsCloudIdentityExtension cloudIdentityExtension;
     private final AwsIamUserRepo awsIamUserRepo;
     private final ResetAwsIamUserNoticeSender resetAwsIamUserNoticeSender;
 
@@ -65,14 +65,14 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
                                               WorkOrderTicketService workOrderTicketService,
                                               WorkOrderService workOrderService,
                                               EdsProviderHolderFactory edsProviderHolderFactory,
-                                              UserService userService, EdsIdentityFacade edsIdentityFacade,
+                                              UserService userService, EdsCloudIdentityExtension cloudIdentityExtension,
                                               AwsIamUserRepo awsIamUserRepo,
                                               ResetAwsIamUserNoticeSender resetAwsIamUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.userService = userService;
         this.workOrderService = workOrderService;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.cloudIdentityExtension = cloudIdentityExtension;
         this.awsIamUserRepo = awsIamUserRepo;
         this.resetAwsIamUserNoticeSender = resetAwsIamUserNoticeSender;
     }
@@ -139,7 +139,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
                 .username(SessionUtils.getUsername())
                 .instanceType(EdsInstanceTypeEnum.AWS.name())
                 .build();
-        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = cloudIdentityExtension.queryCloudIdentityDetails(
                 queryCloudIdentityDetails);
         return cloudIdentityDetails.getAccounts()
                 .values()

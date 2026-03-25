@@ -14,7 +14,7 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsMailIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -49,7 +49,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
 
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsInstanceService edsInstanceService;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsMailIdentityExtension mailIdentityExtension;
     private final WorkOrderService workOrderService;
     private final UserService userService;
     private final ResetAlimailUserNoticeSender resetAlimailUserNoticeSender;
@@ -59,13 +59,13 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
                                                        WorkOrderService workOrderService,
                                                        EdsProviderHolderFactory edsProviderHolderFactory,
                                                        EdsInstanceService edsInstanceService,
-                                                       EdsIdentityFacade edsIdentityFacade,
+                                                       EdsMailIdentityExtension mailIdentityExtension,
                                                        UserService userService,
                                                        ResetAlimailUserNoticeSender resetAlimailUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsInstanceService = edsInstanceService;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.mailIdentityExtension = mailIdentityExtension;
         this.workOrderService = workOrderService;
         this.userService = userService;
         this.resetAlimailUserNoticeSender = resetAlimailUserNoticeSender;
@@ -132,7 +132,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
         EdsIdentityParam.QueryMailIdentityDetails queryMailIdentityDetails = EdsIdentityParam.QueryMailIdentityDetails.builder()
                 .username(SessionUtils.getUsername())
                 .build();
-        EdsIdentityVO.MailIdentityDetails mailIdentityDetails = edsIdentityFacade.queryMailIdentityDetails(
+        EdsIdentityVO.MailIdentityDetails mailIdentityDetails = mailIdentityExtension.queryMailIdentityDetails(
                 queryMailIdentityDetails);
         return mailIdentityDetails.getAccounts()
                 .values()

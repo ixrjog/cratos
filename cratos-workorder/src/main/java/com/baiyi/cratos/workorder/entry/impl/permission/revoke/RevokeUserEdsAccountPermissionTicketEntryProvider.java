@@ -11,7 +11,10 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsGitLabIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsLdapIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsMailIdentityExtension;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -43,18 +46,27 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MA
 public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<EdsAssetVO.Asset, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsCloudIdentityExtension cloudIdentityExtension;
+    private final EdsLdapIdentityExtension ldapIdentityExtension;
+    private final EdsMailIdentityExtension mailIdentityExtension;
+    private final EdsGitLabIdentityExtension gitLabIdentityExtension;
     private final EdsAssetIndexService edsAssetIndexService;
 
     public RevokeUserEdsAccountPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                              WorkOrderTicketService workOrderTicketService,
                                                              WorkOrderService workOrderService,
                                                              EdsInstanceService edsInstanceService,
-                                                             EdsIdentityFacade edsIdentityFacade,
+                                                             EdsCloudIdentityExtension cloudIdentityExtension,
+                                                             EdsLdapIdentityExtension ldapIdentityExtension,
+                                                             EdsMailIdentityExtension mailIdentityExtension,
+                                                             EdsGitLabIdentityExtension gitLabIdentityExtension,
                                                              EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.cloudIdentityExtension = cloudIdentityExtension;
+        this.ldapIdentityExtension = ldapIdentityExtension;
+        this.mailIdentityExtension = mailIdentityExtension;
+        this.gitLabIdentityExtension = gitLabIdentityExtension;
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
@@ -145,7 +157,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                     .accountId(detail.getAssetId())
                     .build();
             // 增加导入资产逻辑
-            edsIdentityFacade.blockCloudAccount(blockCloudAccount);
+            cloudIdentityExtension.blockCloudAccount(blockCloudAccount);
             return;
         }
         // other
@@ -155,14 +167,14 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                         .instanceId(entry.getInstanceId())
                         .username(entry.getName())
                         .build();
-                edsIdentityFacade.deleteLdapIdentity(deleteLdapIdentity);
+                ldapIdentityExtension.deleteLdapIdentity(deleteLdapIdentity);
             }
             case EdsAssetTypeEnum.ALIMAIL_USER -> {
                 EdsIdentityParam.BlockMailAccount blockMailAccount = EdsIdentityParam.BlockMailAccount.builder()
                         .instanceId(entry.getInstanceId())
                         .userId(detail.getAssetId())
                         .build();
-                edsIdentityFacade.blockMailAccount(blockMailAccount);
+                mailIdentityExtension.blockMailAccount(blockMailAccount);
             }
             case EdsAssetTypeEnum.GITLAB_USER -> {
                 EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity = EdsIdentityParam.BlockGitLabIdentity.builder()
@@ -170,7 +182,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                         .account(entry.getName())
                         .userId(Long.valueOf(detail.getAssetId()))
                         .build();
-                edsIdentityFacade.blockGitLabIdentity(blockGitLabIdentity);
+                gitLabIdentityExtension.blockGitLabIdentity(blockGitLabIdentity);
             }
             default -> WorkOrderTicketException.runtime("Unsupported asset type: {}", assetType);
         }

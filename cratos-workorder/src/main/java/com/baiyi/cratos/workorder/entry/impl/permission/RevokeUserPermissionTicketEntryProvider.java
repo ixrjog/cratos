@@ -14,7 +14,10 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsGitLabIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsLdapIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsMailIdentityExtension;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -49,17 +52,27 @@ import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.REVOKE_USER_
 public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> {
 
     private final BusinessTagFacade businessTagFacade;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsCloudIdentityExtension cloudIdentityExtension;
+    private final EdsLdapIdentityExtension ldapIdentityExtension;
+    private final EdsGitLabIdentityExtension gitLabIdentityExtension;
+    private final EdsMailIdentityExtension mailIdentityExtension;
     private final UserService userService;
 
     public RevokeUserPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    WorkOrderTicketService workOrderTicketService,
                                                    WorkOrderService workOrderService,
                                                    BusinessTagFacade businessTagFacade,
-                                                   EdsIdentityFacade edsIdentityFacade, UserService userService) {
+                                                   EdsCloudIdentityExtension cloudIdentityExtension,
+                                                   EdsLdapIdentityExtension ldapIdentityExtension,
+                                                   EdsGitLabIdentityExtension gitLabIdentityExtension,
+                                                   EdsMailIdentityExtension mailIdentityExtension,
+                                                   UserService userService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.businessTagFacade = businessTagFacade;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.cloudIdentityExtension = cloudIdentityExtension;
+        this.ldapIdentityExtension = ldapIdentityExtension;
+        this.gitLabIdentityExtension = gitLabIdentityExtension;
+        this.mailIdentityExtension = mailIdentityExtension;
         this.userService = userService;
     }
 
@@ -146,7 +159,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .username(param.getDetail()
                         .getUsername())
                 .build();
-        EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = edsIdentityFacade.queryLdapIdentityDetails(
+        EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = ldapIdentityExtension.queryLdapIdentityDetails(
                 queryLdapIdentityDetails);
         if (CollectionUtils.isEmpty(ldapIdentityDetails.getLdapIdentities())) {
             return List.of();
@@ -167,7 +180,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .username(param.getDetail()
                         .getUsername())
                 .build();
-        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = cloudIdentityExtension.queryCloudIdentityDetails(
                 queryCloudIdentityDetails);
         if (CollectionUtils.isEmpty(cloudIdentityDetails.getAccounts())) {
             return List.of();
@@ -190,7 +203,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .username(param.getDetail()
                         .getUsername())
                 .build();
-        EdsIdentityVO.GitLabIdentityDetails gitLabIdentityDetails = edsIdentityFacade.queryGitLabIdentityDetails(
+        EdsIdentityVO.GitLabIdentityDetails gitLabIdentityDetails = gitLabIdentityExtension.queryGitLabIdentityDetails(
                 queryGitLabIdentityDetails);
         if (CollectionUtils.isEmpty(gitLabIdentityDetails.getGitLabIdentities())) {
             return List.of();
@@ -211,7 +224,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .username(param.getDetail()
                         .getUsername())
                 .build();
-        EdsIdentityVO.MailIdentityDetails mailIdentityDetails = edsIdentityFacade.queryMailIdentityDetails(
+        EdsIdentityVO.MailIdentityDetails mailIdentityDetails = mailIdentityExtension.queryMailIdentityDetails(
                 queryMailIdentityDetails);
         if (CollectionUtils.isEmpty(mailIdentityDetails.getAccounts())) {
             return List.of();

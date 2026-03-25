@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsLdapIdentityExtension;
 import com.baiyi.cratos.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.workorder.notice.ResetUserPasswordNoticeSender;
@@ -37,7 +37,7 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
 
     private final UserService userService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsLdapIdentityExtension ldapIdentityExtension;
     private final ResetUserPasswordNoticeSender resetUserPasswordNoticeSender;
 
     @Override
@@ -65,7 +65,7 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
                     .username(user.getUsername())
                     .instanceId(ldapInstance.getId())
                     .build();
-            EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = edsIdentityFacade.queryLdapIdentityDetails(
+            EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = ldapIdentityExtension.queryLdapIdentityDetails(
                     queryLdapIdentityDetails);
             // 确认身份不存在后创建
             List<EdsIdentityVO.LdapIdentity> ldapIdentities = Optional.ofNullable(ldapIdentityDetails)
@@ -78,7 +78,7 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
                         .password(password)
                         .build();
                 log.info("Create ldap identity: {}", createLdapIdentity);
-                EdsIdentityVO.LdapIdentity ldapIdentity = edsIdentityFacade.createLdapIdentity(createLdapIdentity);
+                EdsIdentityVO.LdapIdentity ldapIdentity = ldapIdentityExtension.createLdapIdentity(createLdapIdentity);
                 resetUserPasswordNoticeSender.sendMsg(user.getUsername(), password);
             }
         });

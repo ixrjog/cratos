@@ -12,7 +12,6 @@ import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import com.baiyi.cratos.processor.PostImportAssetProcessorFactory;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.UserService;
@@ -43,7 +42,6 @@ public class PostImportProcessorAspect {
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final UserService userService;
     private final BusinessAssetBoundService businessAssetBoundService;
-    private final EdsIdentityFacade edsIdentityFacade;
     private final CratosConfiguration cratosConfiguration;
 
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.PostImportProcessor)")

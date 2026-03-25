@@ -20,7 +20,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -63,7 +63,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
     private final UserService userService;
     private final WorkOrderService workOrderService;
     private final ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsCloudIdentityExtension cloudIdentityExtension;
 
     private static final boolean ENABLE_MFA = true;
 
@@ -75,7 +75,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                                                  EdsProviderHolderFactory edsProviderHolderFactory,
                                                  UserService userService,
                                                  ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender,
-                                                 EdsIdentityFacade edsIdentityFacade) {
+                                                 EdsCloudIdentityExtension cloudIdentityExtension) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
@@ -83,7 +83,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         this.userService = userService;
         this.workOrderService = workOrderService;
         this.resetAliyunRamUserNoticeSender = resetAliyunRamUserNoticeSender;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.cloudIdentityExtension = cloudIdentityExtension;
     }
 
     @Override
@@ -238,7 +238,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                 .username(SessionUtils.getUsername())
                 .instanceType(EdsInstanceTypeEnum.ALIYUN.name())
                 .build();
-        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = cloudIdentityExtension.queryCloudIdentityDetails(
                 queryCloudIdentityDetails);
         return cloudIdentityDetails.getAccounts()
                 .values()

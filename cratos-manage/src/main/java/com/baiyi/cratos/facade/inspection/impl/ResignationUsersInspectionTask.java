@@ -16,7 +16,7 @@ import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkIdentityExtension;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.UserExtFacade;
 import com.baiyi.cratos.facade.UserFacade;
@@ -52,19 +52,19 @@ public class ResignationUsersInspectionTask extends BaseInspectionTask {
     private final UserService userService;
     private final UserExtFacade userExtFacade;
     private final UserFacade userFacade;
-    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsDingtalkIdentityExtension dingtalkIdentityExtension;
     private final TagService tagService;
 
     public ResignationUsersInspectionTask(NotificationTemplateService notificationTemplateService,
                                           DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
                                           EdsConfigService edsConfigService, UserService userService,
                                           UserExtFacade userExtFacade, UserFacade userFacade,
-                                          EdsIdentityFacade edsIdentityFacade, TagService tagService) {
+                                          EdsDingtalkIdentityExtension dingtalkIdentityExtension, TagService tagService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.userService = userService;
         this.userExtFacade = userExtFacade;
         this.userFacade = userFacade;
-        this.edsIdentityFacade = edsIdentityFacade;
+        this.dingtalkIdentityExtension = dingtalkIdentityExtension;
         this.tagService = tagService;
     }
 
@@ -124,7 +124,7 @@ public class ResignationUsersInspectionTask extends BaseInspectionTask {
                     EdsIdentityParam.QueryDingtalkIdentityDetails queryDetails = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
                             .username(user.getUsername())
                             .build();
-                    EdsIdentityVO.DingtalkIdentityDetails dingtalkDetails = edsIdentityFacade.queryDingtalkIdentityDetails(
+                    EdsIdentityVO.DingtalkIdentityDetails dingtalkDetails = dingtalkIdentityExtension.queryDingtalkIdentityDetails(
                             queryDetails);
                     return CollectionUtils.isEmpty(dingtalkDetails.getDingtalkIdentities());
                 })
