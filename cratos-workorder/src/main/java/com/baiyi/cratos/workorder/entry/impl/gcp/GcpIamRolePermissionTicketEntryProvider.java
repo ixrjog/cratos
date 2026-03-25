@@ -46,7 +46,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("unchecked")
 @Component
-@BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
+@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.GCP_IAM_ROLE_PERMISSION)
 public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProvider<GcpModel.MemberRole, WorkOrderTicketParam.AddGcpIamRoleTicketEntry> {
 
@@ -54,14 +54,13 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
     private final GcpProjectRepo gcpProjectRepo;
     private final EdsAssetService edsAssetService;
     private final EdsIdentityFacade edsIdentityFacade;
-//    @Autowired
-//    private EdsCloudIdentityExtension edsCloudIdentityExtension;
 
     public GcpIamRolePermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    WorkOrderTicketService workOrderTicketService,
                                                    WorkOrderService workOrderService,
                                                    EdsProviderHolderFactory edsProviderHolderFactory,
-                                                   GcpProjectRepo gcpProjectRepo, EdsAssetService edsAssetService,EdsIdentityFacade edsIdentityFacade) {
+                                                   GcpProjectRepo gcpProjectRepo, EdsAssetService edsAssetService,
+                                                   EdsIdentityFacade edsIdentityFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.gcpProjectRepo = gcpProjectRepo;
@@ -108,21 +107,22 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
                 .equals(roleAsset.getAssetType())) {
             WorkOrderTicketException.runtime("角色不存在或类型不正确");
         }
-
         int instanceId = roleAsset.getInstanceId();
         // Member
         String username = SessionUtils.getUsername();
-        EdsIdentityParam.QueryCloudIdentityDetails query =   EdsIdentityParam.QueryCloudIdentityDetails.builder()
+        EdsIdentityParam.QueryCloudIdentityDetails query = EdsIdentityParam.QueryCloudIdentityDetails.builder()
                 .instanceId(instanceId)
                 .instanceType(EdsInstanceTypeEnum.GCP.name())
                 .username(username)
                 .build();
         EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(query);
-        if(!cloudIdentityDetails.getAccounts().containsKey(EdsInstanceTypeEnum.GCP.name())){
+        if (!cloudIdentityDetails.getAccounts()
+                .containsKey(EdsInstanceTypeEnum.GCP.name())) {
             WorkOrderTicketException.runtime("Google Cloud 账户不存在.");
         }
-        List<EdsIdentityVO.CloudAccount> gcpAccounts = cloudIdentityDetails.getAccounts().get(EdsInstanceTypeEnum.GCP.name());
-        if(gcpAccounts.size() != 1){
+        List<EdsIdentityVO.CloudAccount> gcpAccounts = cloudIdentityDetails.getAccounts()
+                .get(EdsInstanceTypeEnum.GCP.name());
+        if (gcpAccounts.size() != 1) {
             WorkOrderTicketException.runtime("Google Cloud 账户配置不正确.");
         }
         EdsIdentityVO.CloudAccount gcpAccount = gcpAccounts.getFirst();
@@ -166,8 +166,9 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
                 .orElse("--") : "--";
         String projectId = project != null ? Optional.ofNullable(project.getId())
                 .orElse("--") : "--";
-        return MarkdownUtils.createTableRow(projectName, projectId, memberRole.getMember(), memberRole.getRole()
-                .getTitle()
+        return MarkdownUtils.createTableRow(
+                projectName, projectId, memberRole.getMember(), memberRole.getRole()
+                        .getTitle()
         );
     }
 
