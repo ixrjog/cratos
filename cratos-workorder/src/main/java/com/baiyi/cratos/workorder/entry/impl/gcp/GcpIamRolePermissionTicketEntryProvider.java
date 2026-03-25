@@ -33,6 +33,7 @@ import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ import java.util.Optional;
  * &#064;Version 1.0
  */
 @SuppressWarnings("unchecked")
+@Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.GCP_IAM_ROLE_PERMISSION)
@@ -87,8 +89,25 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
                     gcp, GcpIAMMemberType.USER, memberRole.getMember(), memberRole.getRole()
                             .getName()
             );
+            // 回写资产
+
         } catch (IOException ioException) {
             WorkOrderTicketException.runtime(ioException.getMessage(), ioException);
+        } finally {
+            if (isLastEntry(entry)) {
+                try {
+                    List<String> roles = gcpProjectRepo.listMemberRoles(
+                            gcp, GcpIAMMemberType.USER, memberRole.getMember());
+                    EdsAsset edsAsset = edsAssetService.getById(memberRole.getAsset()
+                                                                        .getId());
+                    GcpMemberModel.Member gcpMember = holder.getProvider()
+                            .loadAsset(edsAsset.getOriginalModel());
+                    gcpMember.setRoles(roles);
+                    holder.importAsset(gcpMember);
+                } catch (Exception ex) {
+                    log.error("同步用户角色错误:{}", ex.getMessage());
+                }
+            }
         }
     }
 
@@ -115,7 +134,8 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
                 .instanceType(EdsInstanceTypeEnum.GCP.name())
                 .username(username)
                 .build();
-        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = cloudIdentityExtension.queryCloudIdentityDetails(query);
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = cloudIdentityExtension.queryCloudIdentityDetails(
+                query);
         if (!cloudIdentityDetails.getAccounts()
                 .containsKey(EdsInstanceTypeEnum.GCP.name())) {
             WorkOrderTicketException.runtime("Google Cloud 账户不存在.");

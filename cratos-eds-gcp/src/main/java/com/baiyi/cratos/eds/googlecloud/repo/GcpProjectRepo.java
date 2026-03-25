@@ -58,6 +58,22 @@ public class GcpProjectRepo {
     }
 
     /**
+     * 查询成员在项目中的所有角色
+     */
+    public List<String> listMemberRoles(EdsConfigs.Gcp googleCloud, GcpIAMMemberType type, String member) throws IOException {
+        ProjectsSettings settings = projectSettingsBuilder.buildProjectSettings(googleCloud);
+        String typeMember = Joiner.on(":").join(type.getKey(), member);
+        try (ProjectsClient client = ProjectsClient.create(settings)) {
+            Policy policy = client.getIamPolicy(GetIamPolicyRequest.newBuilder()
+                    .setResource(googleCloud.getProject().toProjectName()).build());
+            return policy.getBindingsList().stream()
+                    .filter(binding -> binding.getMembersList().contains(typeMember))
+                    .map(Binding::getRole)
+                    .toList();
+        }
+    }
+
+    /**
      * GoogleID加入项目，并授权角色
      *
      * @param googleCloud
