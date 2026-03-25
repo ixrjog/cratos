@@ -136,70 +136,41 @@ public class GcpProjectRepo {
     }
 
     /**
+     * 从项目中移除成员（从所有角色中移除）
+     *
      * @param googleCloud
-     * @param username    user:user@example.com
+     * @param type
+     * @param member 邮箱地址
      * @throws IOException
      */
-    public void removeMember(EdsConfigs.Gcp googleCloud, String username) throws IOException {
+    public void removeMember(EdsConfigs.Gcp googleCloud, GcpIAMMemberType type, String member) throws IOException {
         ProjectsSettings settings = projectSettingsBuilder.buildProjectSettings(googleCloud);
-        String projectId = googleCloud.getProject()
-                .getId();
-        //String memberToRemove = "user:user@example.com"; // Replace with the member to remove
-        String role = "roles/viewer"; // Replace with the role from which to revoke access
-
+        String projectId = googleCloud.getProject().toProjectName();
+        String typeMember = Joiner.on(":").join(type.getKey(), member);
         try (ProjectsClient client = ProjectsClient.create(settings)) {
-            // 1. Get the current policy
-            GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder()
-                    .setResource(projectId)
+            Policy policy = client.getIamPolicy(GetIamPolicyRequest.newBuilder()
+                    .setResource(projectId).build());
+            List<Binding> updatedBindings = policy.getBindingsList().stream()
+                    .map(binding -> {
+                        if (!binding.getMembersList().contains(typeMember)) {
+                            return binding;
+                        }
+                        List<String> members = new ArrayList<>(binding.getMembersList());
+                        members.remove(typeMember);
+                        return Binding.newBuilder()
+                                .setRole(binding.getRole())
+                                .addAllMembers(members)
+                                .build();
+                    })
+                    .filter(binding -> !binding.getMembersList().isEmpty())
+                    .toList();
+            Policy updatedPolicy = Policy.newBuilder()
+                    .addAllBindings(updatedBindings)
+                    .setVersion(policy.getVersion())
+                    .setEtag(policy.getEtag())
                     .build();
-            Policy policy = client.getIamPolicy(request);
-
-            // 2. Modify the policy
-            Policy updatedPolicy = removeMemberFromRole(policy, username, role);
-
-            // 3. Update the policy
             client.setIamPolicy(projectId, updatedPolicy);
-        } catch (Exception e) {
-            log.error("Error removing member: " + e.getMessage());
         }
-    }
-
-    // Helper function to remove a member from a role in the policy
-    private static Policy removeMemberFromRole(Policy policy, String memberToRemove, String role) {
-        List<Binding> updatedBindings = new ArrayList<>();
-        boolean roleFound = false;
-
-        for (Binding binding : policy.getBindingsList()) {
-            if (binding.getRole()
-                    .equals(role)) {
-                roleFound = true;
-                List<String> updatedMembers = new ArrayList<>(binding.getMembersList());
-                updatedMembers.remove(memberToRemove); // Remove the member
-
-                // Create a new Binding object with the updated members
-                Binding updatedBinding = Binding.newBuilder()
-                        .setRole(role)
-                        .addAllMembers(updatedMembers)
-                        .build();
-                updatedBindings.add(updatedBinding);
-            } else {
-                // Keep other bindings as they are
-                updatedBindings.add(binding);
-            }
-        }
-
-        // If the role was not found, return the original policy (nothing to change)
-        if (!roleFound) {
-            log.debug("Role not found in policy.");
-            return policy;
-        }
-
-        // Build and return the updated Policy
-        return Policy.newBuilder()
-                .addAllBindings(updatedBindings)
-                .setVersion(policy.getVersion())
-                .setEtag(policy.getEtag())
-                .build();
     }
 
 }

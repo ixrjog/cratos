@@ -11,13 +11,16 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.googlecloud.enums.GcpIAMMemberType;
 import com.baiyi.cratos.eds.googlecloud.model.GcpMemberModel;
+import com.baiyi.cratos.eds.googlecloud.repo.GcpProjectRepo;
 import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.facade.identity.extension.context.CloudIdentityProviderContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GCP_MEMBER_ROLES;
@@ -34,9 +37,11 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GCP_MEM
 public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gcp, GcpMemberModel.Member> {
 
     private static final String GCP_LOGIN_URL = "https://console.cloud.google.com/";
+    private final GcpProjectRepo gcpProjectRepo;
 
-    public GcpIdentityProvider(CloudIdentityProviderContext context) {
+    public GcpIdentityProvider(CloudIdentityProviderContext context, GcpProjectRepo gcpProjectRepo) {
         super(context);
+        this.gcpProjectRepo = gcpProjectRepo;
     }
 
     @Override
@@ -82,10 +87,6 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gc
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsConfigs.Gcp gcp = (EdsConfigs.Gcp) context.getEdsProviderHolderFactory()
-                .createHolder(asset.getInstanceId(), getAccountAssetType())
-                .getInstance()
-                .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .username(asset.getName())
                 .name(asset.getName())
@@ -96,6 +97,15 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gc
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        try {
+            EdsConfigs.Gcp gcp = (EdsConfigs.Gcp) context.getEdsProviderHolderFactory()
+                    .createHolder(instance.getId(), getAccountAssetType())
+                    .getInstance()
+                    .getConfig();
+            gcpProjectRepo.removeMember(gcp, GcpIAMMemberType.USER, blockCloudAccount.getAccount());
+        } catch (IOException ioException) {
+            throw new CloudIdentityException(ioException.getMessage());
+        }
     }
 
     @Override
