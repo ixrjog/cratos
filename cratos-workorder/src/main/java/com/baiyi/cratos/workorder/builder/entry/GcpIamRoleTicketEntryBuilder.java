@@ -77,6 +77,7 @@ public class GcpIamRoleTicketEntryBuilder {
                 .projectName(this.projectName)
                 .type(GcpIAMMemberType.USER.getKey())
                 .username(this.username)
+                .role(this.iamRole)
                 .build();
         int businessId = Optional.of(param)
                 .map(WorkOrderTicketParam.AddGcpIamRoleTicketEntry::getDetail)
