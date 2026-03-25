@@ -137,27 +137,22 @@ public class GcpIamPermissionTicketEntryProvider extends BaseTicketEntryProvider
     @SuppressWarnings("unchecked")
     @Override
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddGcpIamMemberTicketEntry param) {
-        int instanceId = Optional.of(param)
-                .map(WorkOrderTicketParam.AddGcpIamMemberTicketEntry::getDetail)
-                .map(GcpModel.IamMember::getEdsInstance)
+        GcpModel.IamMember detail = Optional.ofNullable(param.getDetail())
+                .orElseThrow(() -> new WorkOrderTicketException("Detail is null"));
+        int instanceId = Optional.ofNullable(detail.getEdsInstance())
                 .map(EdsInstanceVO.EdsInstance::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Eds instanceId is null"));
-        String member = Optional.of(param)
-                .map(WorkOrderTicketParam.AddGcpIamMemberTicketEntry::getDetail)
-                .map(GcpModel.IamMember::getMember)
+        String member = Optional.ofNullable(detail.getMember())
                 .orElseThrow(() -> new WorkOrderTicketException("Member is null"));
+        // Project
         EdsInstanceProviderHolder<EdsConfigs.Gcp, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Gcp, ?>) edsProviderHolderFactory.createHolder(
                 instanceId, EdsAssetTypeEnum.GCP_MEMBER.name());
-        EdsConfigs.Gcp gcp = holder.getInstance()
-                .getConfig();
-        String projectId = Optional.of(gcp)
+        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance().getConfig())
                 .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getId)
+                .orElseThrow(() -> new WorkOrderTicketException("Project is null"));
+        String projectId = Optional.ofNullable(project.getId())
                 .orElseThrow(() -> new WorkOrderTicketException("Project id is null"));
-        String projectName = Optional.of(gcp)
-                .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getName)
-                .orElse("--");
+        String projectName = Optional.ofNullable(project.getName()).orElse("--");
         return GcpIamMemberTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .withUsername(SessionUtils.getUsername())
@@ -172,16 +167,11 @@ public class GcpIamPermissionTicketEntryProvider extends BaseTicketEntryProvider
         GcpModel.IamMember iamMember = loadAs(entry);
         EdsInstanceProviderHolder<EdsConfigs.Gcp, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Gcp, ?>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.GCP_MEMBER.name());
-        EdsConfigs.Gcp gcp = holder.getInstance()
-                .getConfig();
-        String projectName = Optional.of(gcp)
+        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance().getConfig())
                 .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getName)
-                .orElse("--");
-        String projectId = Optional.of(gcp)
-                .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getId)
-                .orElse("--");
+                .orElse(null);
+        String projectName = project != null ? Optional.ofNullable(project.getName()).orElse("--") : "--";
+        String projectId = project != null ? Optional.ofNullable(project.getId()).orElse("--") : "--";
         return MarkdownUtils.createTableRow(projectName, projectId, iamMember.getMember(), iamMember.getUsername());
     }
 

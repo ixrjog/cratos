@@ -89,51 +89,42 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
     @SuppressWarnings("unchecked")
     @Override
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddGcpIamRoleTicketEntry param) {
-        int assetId = Optional.of(param)
-                .map(WorkOrderTicketParam.AddGcpIamRoleTicketEntry::getDetail)
-                .map(GcpModel.MemberRole::getAsset)
+        GcpModel.MemberRole detail = Optional.ofNullable(param.getDetail())
+                .orElseThrow(() -> new WorkOrderTicketException("Detail is null"));
+        // Asset
+        int assetId = Optional.ofNullable(detail.getAsset())
                 .map(EdsAssetVO.Asset::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Asset id is null"));
         EdsAsset asset = edsAssetService.getById(assetId);
         int instanceId = asset.getInstanceId();
-        String member = Optional.of(param)
-                .map(WorkOrderTicketParam.AddGcpIamRoleTicketEntry::getDetail)
-                .map(GcpModel.MemberRole::getMember)
+        // Member
+        String member = Optional.ofNullable(detail.getMember())
+                .filter(StringUtils::hasText)
                 .orElseThrow(() -> new WorkOrderTicketException("Member is null"));
+        // Project
         EdsInstanceProviderHolder<EdsConfigs.Gcp, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Gcp, ?>) edsProviderHolderFactory.createHolder(
                 instanceId, EdsAssetTypeEnum.GCP_MEMBER.name());
-        EdsConfigs.Gcp gcp = holder.getInstance()
-                .getConfig();
-        String projectId = Optional.of(gcp)
+        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance().getConfig())
                 .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getId)
+                .orElseThrow(() -> new WorkOrderTicketException("Project is null"));
+        String projectId = Optional.ofNullable(project.getId())
                 .orElseThrow(() -> new WorkOrderTicketException("Project id is null"));
-        String projectName = Optional.of(gcp)
-                .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getName)
-                .orElse("--");
-
-        String roleName = Optional.of(param)
-                .map(WorkOrderTicketParam.AddGcpIamRoleTicketEntry::getDetail)
-                .map(GcpModel.MemberRole::getRole)
+        String projectName = Optional.ofNullable(project.getName()).orElse("--");
+        // Role
+        String roleName = Optional.ofNullable(detail.getRole())
                 .map(GcpModel.IamRole::getName)
+                .filter(StringUtils::hasText)
                 .orElseThrow(() -> new WorkOrderTicketException("Role is null"));
-        if (!StringUtils.hasText(roleName)) {
-            WorkOrderTicketException.runtime("Role is null");
-        }
-        // 查找 GCP IAM Role
         List<EdsAsset> assets = edsAssetService.queryInstanceAssetByTypeAndKey(
                 instanceId, EdsAssetTypeEnum.GCP_IAM_ROLE.name(), roleName);
         if (assets.size() != 1) {
             WorkOrderTicketException.runtime("Role name is error: " + roleName);
         }
+        EdsAsset roleAsset = assets.getFirst();
         GcpModel.IamRole iamRole = GcpModel.IamRole.builder()
-                .title(assets.getFirst()
-                               .getName())
-                .name(assets.getFirst()
-                              .getAssetKey())
-                .description(assets.getFirst()
-                                     .getDescription())
+                .title(roleAsset.getName())
+                .name(roleAsset.getAssetKey())
+                .description(roleAsset.getDescription())
                 .build();
         return GcpIamRoleTicketEntryBuilder.newBuilder()
                 .withUsername(SessionUtils.getUsername())
@@ -150,20 +141,13 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
         GcpModel.MemberRole memberRole = loadAs(entry);
         EdsInstanceProviderHolder<EdsConfigs.Gcp, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Gcp, ?>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.GCP_MEMBER.name());
-        EdsConfigs.Gcp gcp = holder.getInstance()
-                .getConfig();
-        String projectName = Optional.of(gcp)
+        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance().getConfig())
                 .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getName)
-                .orElse("--");
-        String projectId = Optional.of(gcp)
-                .map(EdsConfigs.Gcp::getProject)
-                .map(EdsGcpConfigModel.Project::getId)
-                .orElse("--");
-        // "| Google Cloud Project Name | Google Cloud Project ID | IAM Member (Google Account) | Role Title |";
+                .orElse(null);
+        String projectName = project != null ? Optional.ofNullable(project.getName()).orElse("--") : "--";
+        String projectId = project != null ? Optional.ofNullable(project.getId()).orElse("--") : "--";
         return MarkdownUtils.createTableRow(
-                projectName, projectId, memberRole.getMember(), memberRole.getRole()
-                        .getTitle()
+                projectName, projectId, memberRole.getMember(), memberRole.getRole().getTitle()
         );
     }
 
