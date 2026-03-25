@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import jakarta.annotation.Resource;
@@ -25,6 +26,21 @@ public class EdsIdentityFacadeTest extends BaseUnit {
         EdsIdentityVO.MailIdentityDetails details = edsIdentityFacade.queryMailIdentityDetails(
                 queryMailIdentityDetails);
         System.out.println(details);
+    }
+
+    @Test
+    void test2() {
+        EdsIdentityParam.QueryCloudIdentityDetails query =  EdsIdentityParam.QueryCloudIdentityDetails.builder()
+                .username("baiyi")
+                .instanceId(113)
+                //.instanceType(EdsInstanceTypeEnum.GCP.name())
+                .build();
+
+
+        EdsIdentityVO.CloudIdentityDetails details = edsIdentityFacade.queryCloudIdentityDetails(query);
+
+        System.out.println(JSONUtils.writeValueAsPrettyString(details));
+
     }
 
 }

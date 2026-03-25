@@ -8,11 +8,15 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.GcpModel;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.googlecloud.enums.GcpIAMMemberType;
@@ -30,7 +34,6 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,16 +53,20 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final GcpProjectRepo gcpProjectRepo;
     private final EdsAssetService edsAssetService;
+    private final EdsIdentityFacade edsIdentityFacade;
+//    @Autowired
+//    private EdsCloudIdentityExtension edsCloudIdentityExtension;
 
     public GcpIamRolePermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    WorkOrderTicketService workOrderTicketService,
                                                    WorkOrderService workOrderService,
                                                    EdsProviderHolderFactory edsProviderHolderFactory,
-                                                   GcpProjectRepo gcpProjectRepo, EdsAssetService edsAssetService) {
+                                                   GcpProjectRepo gcpProjectRepo, EdsAssetService edsAssetService,EdsIdentityFacade edsIdentityFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.gcpProjectRepo = gcpProjectRepo;
         this.edsAssetService = edsAssetService;
+        this.edsIdentityFacade = edsIdentityFacade;
     }
 
     @Override
@@ -92,42 +99,52 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
         GcpModel.MemberRole detail = Optional.ofNullable(param.getDetail())
                 .orElseThrow(() -> new WorkOrderTicketException("Detail is null"));
         // Asset
-        int assetId = Optional.ofNullable(detail.getAsset())
+        int roleAssetId = Optional.ofNullable(detail.getAsset())
                 .map(EdsAssetVO.Asset::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Asset id is null"));
-        EdsAsset asset = edsAssetService.getById(assetId);
-        int instanceId = asset.getInstanceId();
+        // Role
+        EdsAsset roleAsset = edsAssetService.getById(roleAssetId);
+        if (roleAsset == null || !EdsAssetTypeEnum.GCP_IAM_ROLE.name()
+                .equals(roleAsset.getAssetType())) {
+            WorkOrderTicketException.runtime("角色不存在或类型不正确");
+        }
+
+        int instanceId = roleAsset.getInstanceId();
         // Member
-        String member = Optional.ofNullable(detail.getMember())
-                .filter(StringUtils::hasText)
-                .orElseThrow(() -> new WorkOrderTicketException("Member is null"));
+        String username = SessionUtils.getUsername();
+        EdsIdentityParam.QueryCloudIdentityDetails query =   EdsIdentityParam.QueryCloudIdentityDetails.builder()
+                .instanceId(instanceId)
+                .instanceType(EdsInstanceTypeEnum.GCP.name())
+                .username(username)
+                .build();
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(query);
+        if(!cloudIdentityDetails.getAccounts().containsKey(EdsInstanceTypeEnum.GCP.name())){
+            WorkOrderTicketException.runtime("Google Cloud 账户不存在.");
+        }
+        List<EdsIdentityVO.CloudAccount> gcpAccounts = cloudIdentityDetails.getAccounts().get(EdsInstanceTypeEnum.GCP.name());
+        if(gcpAccounts.size() != 1){
+            WorkOrderTicketException.runtime("Google Cloud 账户配置不正确.");
+        }
+        EdsIdentityVO.CloudAccount gcpAccount = gcpAccounts.getFirst();
+        String member = gcpAccount.getUsername();
         // Project
         EdsInstanceProviderHolder<EdsConfigs.Gcp, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Gcp, ?>) edsProviderHolderFactory.createHolder(
                 instanceId, EdsAssetTypeEnum.GCP_MEMBER.name());
-        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance().getConfig())
+        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance()
+                                                                        .getConfig())
                 .map(EdsConfigs.Gcp::getProject)
                 .orElseThrow(() -> new WorkOrderTicketException("Project is null"));
         String projectId = Optional.ofNullable(project.getId())
                 .orElseThrow(() -> new WorkOrderTicketException("Project id is null"));
-        String projectName = Optional.ofNullable(project.getName()).orElse("--");
-        // Role
-        String roleName = Optional.ofNullable(detail.getRole())
-                .map(GcpModel.IamRole::getName)
-                .filter(StringUtils::hasText)
-                .orElseThrow(() -> new WorkOrderTicketException("Role is null"));
-        List<EdsAsset> assets = edsAssetService.queryInstanceAssetByTypeAndKey(
-                instanceId, EdsAssetTypeEnum.GCP_IAM_ROLE.name(), roleName);
-        if (assets.size() != 1) {
-            WorkOrderTicketException.runtime("Role name is error: " + roleName);
-        }
-        EdsAsset roleAsset = assets.getFirst();
+        String projectName = Optional.ofNullable(project.getName())
+                .orElse("--");
         GcpModel.IamRole iamRole = GcpModel.IamRole.builder()
                 .title(roleAsset.getName())
                 .name(roleAsset.getAssetKey())
                 .description(roleAsset.getDescription())
                 .build();
         return GcpIamRoleTicketEntryBuilder.newBuilder()
-                .withUsername(SessionUtils.getUsername())
+                .withUsername(username)
                 .withParam(param)
                 .withMember(member)
                 .withProjectId(projectId)
@@ -141,13 +158,16 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
         GcpModel.MemberRole memberRole = loadAs(entry);
         EdsInstanceProviderHolder<EdsConfigs.Gcp, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Gcp, ?>) edsProviderHolderFactory.createHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.GCP_MEMBER.name());
-        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance().getConfig())
+        EdsGcpConfigModel.Project project = Optional.ofNullable(holder.getInstance()
+                                                                        .getConfig())
                 .map(EdsConfigs.Gcp::getProject)
                 .orElse(null);
-        String projectName = project != null ? Optional.ofNullable(project.getName()).orElse("--") : "--";
-        String projectId = project != null ? Optional.ofNullable(project.getId()).orElse("--") : "--";
-        return MarkdownUtils.createTableRow(
-                projectName, projectId, memberRole.getMember(), memberRole.getRole().getTitle()
+        String projectName = project != null ? Optional.ofNullable(project.getName())
+                .orElse("--") : "--";
+        String projectId = project != null ? Optional.ofNullable(project.getId())
+                .orElse("--") : "--";
+        return MarkdownUtils.createTableRow(projectName, projectId, memberRole.getMember(), memberRole.getRole()
+                .getTitle()
         );
     }
 

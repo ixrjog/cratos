@@ -58,7 +58,9 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
                         .map(Enum::name)
                         .toList()
         ));
+        Integer instanceId = queryCloudIdentityDetails.getInstanceId();
         return cloudIdentityAssets.stream()
+                .filter(asset -> instanceId == null || instanceId.equals(asset.getInstanceId()))
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
                 .values()
                 .stream()
@@ -68,6 +70,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
     @Override
     public EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
+        // FIXME InstanceId 参数不生效
         User user = context.getUserService().getByUsername(queryCloudIdentityDetails.getUsername());
         List<EdsAsset> cloudIdentityAssets = queryAccountAssets(queryCloudIdentityDetails);
         if (cloudIdentityAssets.isEmpty()) {
