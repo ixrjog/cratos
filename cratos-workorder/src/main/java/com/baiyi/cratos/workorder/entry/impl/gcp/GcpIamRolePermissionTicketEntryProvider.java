@@ -146,6 +146,7 @@ public class GcpIamRolePermissionTicketEntryProvider extends BaseTicketEntryProv
         return GcpIamRoleTicketEntryBuilder.newBuilder()
                 .withUsername(username)
                 .withParam(param)
+                .withInstanceId(instanceId)
                 .withMember(member)
                 .withProjectId(projectId)
                 .withProjectName(projectName)

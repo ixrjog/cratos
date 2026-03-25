@@ -5,10 +5,13 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.GcpModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.googlecloud.enums.GcpIAMMemberType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -75,6 +78,11 @@ public class GcpIamRoleTicketEntryBuilder {
                 .type(GcpIAMMemberType.USER.getKey())
                 .username(this.username)
                 .build();
+        int businessId = Optional.of(param)
+                .map(WorkOrderTicketParam.AddGcpIamRoleTicketEntry::getDetail)
+                .map(GcpModel.MemberRole::getAsset)
+                .map(EdsAssetVO.Asset::getId)
+                .orElse(0);
         param.setDetail(memberRole);
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
@@ -83,7 +91,7 @@ public class GcpIamRoleTicketEntryBuilder {
                 .instanceId(this.instanceId)
                 .businessType(param.getBusinessType())
                 .subType(EdsAssetTypeEnum.GCP_MEMBER.name())
-                .businessId(1111111111)
+                .businessId(businessId)
                 .completed(false)
                 .entryKey(StringFormatter.arrayFormat(
                         "instanceId:{}:member:{}:role:{}", this.instanceId, this.member,
