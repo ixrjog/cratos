@@ -7,12 +7,13 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.facade.inspection.model.DeploymentInspectionModel;
-import com.baiyi.cratos.service.*;
+import com.baiyi.cratos.service.EdsAssetIndexService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.EdsInstanceService;
 import com.google.api.client.util.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -42,12 +43,10 @@ public class DeploymentGroupLabelInspectionTask extends BaseInspectionTask {
     private static final String[] FILTER_LIST = {"prod:istio-ingressgateway", "prod:posp-nginx", "prod:config-server", "prod:config-server-nairabox", "prod:config-server-tecno"};
     private static final String DEPLOYMENTS_FIELD = "deployments";
 
-    public DeploymentGroupLabelInspectionTask(NotificationTemplateService notificationTemplateService,
-                                              DingtalkService dingtalkService,
-                                              EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
+    public DeploymentGroupLabelInspectionTask(InspectionTaskContext context,
                                               EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
                                               EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
+        super(context);
         this.edsInstanceService = edsInstanceService;
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;

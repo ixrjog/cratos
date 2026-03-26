@@ -4,15 +4,12 @@ import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.facade.inspection.model.KubernetesElasticWorkerModel;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.NotificationTemplateService;
 import com.google.api.client.util.Maps;
 import org.springframework.stereotype.Component;
 
@@ -36,11 +33,9 @@ public class KubernetesElasticWorkerInspectionTask extends BaseInspectionTask {
     private final EdsAssetService edsAssetService;
     private final EdsInstanceService edsInstanceService;
 
-    public KubernetesElasticWorkerInspectionTask(NotificationTemplateService notificationTemplateService,
-                                                 DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                                 EdsConfigService edsConfigService, EdsInstanceService edsInstanceService,
+    public KubernetesElasticWorkerInspectionTask(InspectionTaskContext context, EdsInstanceService edsInstanceService,
                                                  EdsAssetService edsAssetService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
+        super(context);
         this.edsInstanceService = edsInstanceService;
         this.edsAssetService = edsAssetService;
     }

@@ -15,15 +15,12 @@ import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkIdentityExtension;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.UserExtFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.facade.inspection.model.ResignedUserModel;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
 import com.google.common.collect.Maps;
@@ -55,12 +52,10 @@ public class ResignationUsersInspectionTask extends BaseInspectionTask {
     private final EdsDingtalkIdentityExtension dingtalkIdentityExtension;
     private final TagService tagService;
 
-    public ResignationUsersInspectionTask(NotificationTemplateService notificationTemplateService,
-                                          DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                          EdsConfigService edsConfigService, UserService userService,
+    public ResignationUsersInspectionTask(InspectionTaskContext context, UserService userService,
                                           UserExtFacade userExtFacade, UserFacade userFacade,
                                           EdsDingtalkIdentityExtension dingtalkIdentityExtension, TagService tagService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
+        super(context);
         this.userService = userService;
         this.userExtFacade = userExtFacade;
         this.userFacade = userFacade;

@@ -4,17 +4,15 @@ import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.util.Generics;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.EdsConfigService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.NotificationTemplateService;
 
 /**
  * &#064;Author  baiyi
@@ -28,30 +26,28 @@ public abstract class BaseEdsInspectionTask<C extends HasEdsConfig> extends Base
     protected final EdsInstanceService edsInstanceService;
     private final ConfigCredTemplate configCredTemplate;
     private final CredentialService credentialService;
+    protected final EdsAssetService edsAssetService;
 
-    public BaseEdsInspectionTask(NotificationTemplateService notificationTemplateService,
-                                 DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                 EdsConfigService edsConfigService,
+    public BaseEdsInspectionTask(InspectionTaskContext context,
                                  EdsProviderHolderFactory edsProviderHolderFactory,
                                  EdsInstanceService edsInstanceService, ConfigCredTemplate configCredTemplate,
-                                 CredentialService credentialService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
+                                 CredentialService credentialService,EdsAssetService edsAssetService) {
+        super(context);
         this.edsProviderHolderFactory = edsProviderHolderFactory;
         this.edsInstanceService = edsInstanceService;
         this.configCredTemplate = configCredTemplate;
         this.credentialService = credentialService;
+        this.edsAssetService = edsAssetService;
     }
 
-
     public C getConfig(int instanceId, String assetType) {
-        //EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         EdsInstanceProviderHolder<?, ?> providerHolder = edsProviderHolderFactory.createHolder(instanceId, assetType);
         return (C) providerHolder.getInstance()
                 .getConfig();
     }
 
     public C getConfig(int configId) {
-        EdsConfig edsConfig = edsConfigService.getById(configId);
+        EdsConfig edsConfig = context.getEdsConfigService().getById(configId);
         String configContent = edsConfig.getConfigContent();
         //C config;
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {

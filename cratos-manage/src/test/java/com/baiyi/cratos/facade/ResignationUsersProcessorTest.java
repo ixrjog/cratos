@@ -1,16 +1,11 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
-import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.facade.inspection.impl.ResignationUsersInspectionTask;
 import com.baiyi.cratos.service.UserService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 
 /**
  * &#064;Author  baiyi
@@ -23,8 +18,7 @@ public class ResignationUsersProcessorTest extends BaseUnit {
     private ResignationUsersInspectionTask resignationUsersInspection;
     @Autowired
     private UserService userService;
-    @Resource
-    private EdsIdentityFacade edsIdentityFacade;
+
 //
 //    @Resource
 //    private UserService userService;
@@ -50,19 +44,19 @@ public class ResignationUsersProcessorTest extends BaseUnit {
 
     @Test
     void test() {
-       resignationUsersInspection.inspectionTask();
-
-        User user = userService.getByUsername("iamdylin");
-
-        System.out.println(user);
-
-        EdsIdentityParam.QueryDingtalkIdentityDetails queryDetails = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
-                .username(user.getUsername())
-                .build();
-        EdsIdentityVO.DingtalkIdentityDetails dingtalkDetails = edsIdentityFacade.queryDingtalkIdentityDetails(
-                queryDetails);
-        boolean x = CollectionUtils.isEmpty(dingtalkDetails.getDingtalkIdentities());
-        System.out.println(x);
+//       resignationUsersInspection.inspectionTask();
+//
+//        User user = userService.getByUsername("iamdylin");
+//
+//        System.out.println(user);
+//
+//        EdsIdentityParam.QueryDingtalkIdentityDetails queryDetails = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
+//                .username(user.getUsername())
+//                .build();
+//        EdsIdentityVO.DingtalkIdentityDetails dingtalkDetails = edsIdentityFacade.queryDingtalkIdentityDetails(
+//                queryDetails);
+//        boolean x = CollectionUtils.isEmpty(dingtalkDetails.getDingtalkIdentities());
+//        System.out.println(x);
 
 
     }

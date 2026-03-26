@@ -9,14 +9,11 @@ import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.service.DomainService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.NotificationTemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -45,10 +42,8 @@ public class DomainInspectionTask extends BaseInspectionTask {
     private static final String DOMAINS_FIELD = "domains";
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
 
-    public DomainInspectionTask(NotificationTemplateService notificationTemplateService,
-                                DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                EdsConfigService edsConfigService, DomainService domainService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
+    public DomainInspectionTask(InspectionTaskContext context, DomainService domainService) {
+        super(context);
         this.domainService = domainService;
     }
 

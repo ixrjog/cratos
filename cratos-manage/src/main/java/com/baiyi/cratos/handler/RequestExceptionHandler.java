@@ -3,10 +3,13 @@ package com.baiyi.cratos.handler;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.ErrorEnum;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -19,7 +22,10 @@ public class RequestExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public HttpResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        return new HttpResult<>(ErrorEnum.SYSTEM_ERROR.getCode(), exception.getBindingResult().getAllErrors().getFirst().getDefaultMessage());
+        String message = Optional.ofNullable(exception.getBindingResult().getFieldError())
+                .map(FieldError::getDefaultMessage)
+                .orElse("Parameter validation failed");
+        return new HttpResult<>(ErrorEnum.SYSTEM_ERROR.getCode(), message);
     }
 
 }

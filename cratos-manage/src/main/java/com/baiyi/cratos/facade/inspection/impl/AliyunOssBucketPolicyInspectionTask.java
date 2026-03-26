@@ -8,17 +8,18 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOss;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOssRepo;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseEdsInspectionTask;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.facade.inspection.model.AliyunOssBucketModel;
-import com.baiyi.cratos.service.*;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.EdsInstanceService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -48,21 +49,16 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Pattern RESOURCE_PREFIX_PATTERN = Pattern.compile("acs:oss:\\*:\\d+:");
     private static final String POLICIES_FIELD = "policies";
-    private final EdsAssetService edsAssetService;
 
-    public AliyunOssBucketPolicyInspectionTask(NotificationTemplateService notificationTemplateService,
-                                               DingtalkService dingtalkService,
-                                               EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                               EdsConfigService edsConfigService,
+    public AliyunOssBucketPolicyInspectionTask(InspectionTaskContext context,
                                                EdsProviderHolderFactory edsProviderHolderFactory,
                                                EdsInstanceService edsInstanceService,
                                                ConfigCredTemplate configCredTemplate,
                                                CredentialService credentialService, EdsAssetService edsAssetService) {
         super(
-                notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService,
-                edsProviderHolderFactory, edsInstanceService, configCredTemplate, credentialService
+                context, edsProviderHolderFactory, edsInstanceService, configCredTemplate, credentialService,
+                edsAssetService
         );
-        this.edsAssetService = edsAssetService;
     }
 
     @Override
@@ -97,7 +93,7 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
         Map<String, EdsAsset> ramUserMap = edsAssetService.queryInstanceAssets(
                         instance.getId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name())
                 .stream()
-                .collect(Collectors.toMap(EdsAsset::getAssetId, Function.identity()));
+                .collect(Collectors.toMap(EdsAsset::getAssetId, Function.identity(), (a, b) -> a));
 
         return AliyunOssRepo.listBuckets(endpoint, aliyun)
                 .stream()
@@ -115,7 +111,8 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
             return Optional.ofNullable(bucketPolicy.getStatement())
                     .orElse(List.of())
                     .stream()
-                    .flatMap(statement -> statement.getPrincipal()
+                    .flatMap(statement -> Optional.ofNullable(statement.getPrincipal())
+                            .orElse(List.of())
                             .stream()
                             .map(ramUserMap::get)
                             .filter(Objects::nonNull)
@@ -132,12 +129,12 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
                                     .action(String.join(",", statement.getAction()))
                                     .build()));
         } catch (JsonProcessingException e) {
-            log.debug("Failed to parse bucket policy: bucket={}, error={}", bucket.getName(), e.getMessage());
+            log.warn("Failed to parse bucket policy: bucket={}, error={}", bucket.getName(), e.getMessage());
             return Stream.empty();
         }
     }
 
-    public String convertResources(AliyunOss.Statement statement) {
+    private static String convertResources(AliyunOss.Statement statement) {
         return statement.getResource()
                 .stream()
                 .map(s -> RESOURCE_PREFIX_PATTERN.matcher(s)

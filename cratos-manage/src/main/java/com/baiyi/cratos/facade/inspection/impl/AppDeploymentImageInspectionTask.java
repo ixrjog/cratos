@@ -11,19 +11,16 @@ import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.facade.inspection.model.DeploymentImageModel;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.NotificationTemplateService;
 import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Container;
@@ -60,12 +57,9 @@ public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
     private static final String APPS_FIELD = "apps";
     private static final String[] FILTER_LIST = {"-1", "-2", "-3", "-4"};
 
-    public AppDeploymentImageInspectionTask(NotificationTemplateService notificationTemplateService,
-                                            DingtalkService dingtalkService,
-                                            EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                            EdsConfigService edsConfigService, EdsAssetService edsAssetService,
+    public AppDeploymentImageInspectionTask(InspectionTaskContext context, EdsAssetService edsAssetService,
                                             EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
+        super(context);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
     }
@@ -101,10 +95,8 @@ public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
             String env = "prod";
             Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
             Map<String, String> targetContent = Map.ofEntries(
-                    entry("appName", imageInspection.getAppName()), entry(
-                            "deployments", JSONUtils.writeValueAsString(
-                                    imageInspection.getDeploymentImages())
-                    )
+                    entry("appName", imageInspection.getAppName()),
+                    entry("deployments", JSONUtils.writeValueAsString(imageInspection.getDeploymentImages()))
             );
             com.baiyi.cratos.domain.model.SreBridgeModel.Event event = com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                     .operator(OPERATOR)

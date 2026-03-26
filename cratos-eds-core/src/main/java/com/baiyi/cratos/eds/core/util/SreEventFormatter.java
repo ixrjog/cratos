@@ -66,6 +66,7 @@ public class SreEventFormatter {
         INSPECT_DOMAIN("inspectDomain"),
         INSPECT_CERTIFICATE("inspectCertificate"),
         INSPECT_IMAGE("inspectImage"),
+        INSPECT_GCP_IAM("inspectGcpIam"),
         TRIGGER_EVENT("triggerEvent");
 
         private final String value;

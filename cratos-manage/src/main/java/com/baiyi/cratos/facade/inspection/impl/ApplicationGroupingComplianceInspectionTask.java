@@ -7,15 +7,12 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
 import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
 import com.baiyi.cratos.facade.inspection.model.ApplicationGroupingModel;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.NotificationTemplateService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -142,13 +139,10 @@ public class ApplicationGroupingComplianceInspectionTask extends BaseInspectionT
             palmpay-docs
             """;
 
-    public ApplicationGroupingComplianceInspectionTask(NotificationTemplateService notificationTemplateService,
-                                                       DingtalkService dingtalkService,
-                                                       EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                                       EdsConfigService edsConfigService,
+    public ApplicationGroupingComplianceInspectionTask(InspectionTaskContext context,
                                                        EdsAssetService edsAssetService,
                                                        EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
+        super(context);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
     }

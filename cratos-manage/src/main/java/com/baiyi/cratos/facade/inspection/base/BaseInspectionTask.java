@@ -5,17 +5,15 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.InspectionFactory;
 import com.baiyi.cratos.facade.inspection.InspectionTask;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.NotificationTemplateService;
+import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,12 +29,10 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 @Slf4j
+@RequiredArgsConstructor
 public abstract class BaseInspectionTask implements InspectionTask, InitializingBean {
 
-    private final NotificationTemplateService notificationTemplateService;
-    private final DingtalkService dingtalkService;
-    protected final EdsInstanceQueryHelper edsInstanceQueryHelper;
-    protected final EdsConfigService edsConfigService;
+    protected final InspectionTaskContext context;
 
     public static final String OPERATOR = "SystemTask";
 
@@ -45,14 +41,6 @@ public abstract class BaseInspectionTask implements InspectionTask, Initializing
 
     @Value("${cratos.notification:NORMAL}")
     private String notification;
-
-    public BaseInspectionTask(NotificationTemplateService notificationTemplateService, DingtalkService dingtalkService,
-                              EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService) {
-        this.notificationTemplateService = notificationTemplateService;
-        this.dingtalkService = dingtalkService;
-        this.edsInstanceQueryHelper = edsInstanceQueryHelper;
-        this.edsConfigService = edsConfigService;
-    }
 
     public void inspectionTask() {
         send();
@@ -63,24 +51,26 @@ public abstract class BaseInspectionTask implements InspectionTask, Initializing
                 .notificationTemplateKey(key.name())
                 .lang(language)
                 .build();
-        return notificationTemplateService.getByUniqueKey(query);
+        return context.getNotificationTemplateService()
+                .getByUniqueKey(query);
     }
 
     abstract protected String getMsg() throws IOException;
 
     protected void send() {
-        List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(
-                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.INSPECTION_NOTIFICATION.getKey());
+        List<EdsInstance> edsInstanceList = context.getEdsInstanceQueryHelper()
+                .queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
-                edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
+        List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>>) context.getEdsInstanceQueryHelper()
+                .buildHolder(edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
-            EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
-                                                                   .getEdsInstance()
-                                                                   .getConfigId());
+            EdsConfig edsConfig = context.getEdsConfigService()
+                    .getById(providerHolder.getInstance()
+                                     .getEdsInstance()
+                                     .getConfigId());
             EdsConfigs.Robot robot = providerHolder.getProvider()
                     .loadConfig(edsConfig);
             try {
@@ -89,7 +79,8 @@ public abstract class BaseInspectionTask implements InspectionTask, Initializing
                     // 本地调试打印到控制台
                     System.out.println(message);
                 } else {
-                    dingtalkService.send(robot.getToken(), message);
+                    context.getDingtalkService()
+                            .send(robot.getToken(), message);
                     providerHolder.importAsset(message);
                 }
             } catch (IOException e) {
