@@ -54,6 +54,14 @@ public class EdsGcpTest extends BaseEdsTest<EdsConfigs.Gcp> {
         List<Key> keys = gcpApiKeysRepo.listApiKeys(googleCloud);
         System.out.println(JSONUtils.writeValueAsString(keys));
     }
-    // projects/1018069716389/locations/global/keys/82cc8bfb-f573-4e14-a7d7-e00bbde6f858
+
+    @Test
+    void test5() throws IOException {
+        EdsConfigs.Gcp googleCloud = getConfig(23);
+        String key = gcpApiKeysRepo.getKeyString(
+                googleCloud, "projects/1018069716389/locations/global/keys/82cc8bfb-f573-4e14-a7d7-e00bbde6f858");
+        System.out.println(key);
+    }
+
 
 }

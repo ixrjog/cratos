@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -57,22 +56,51 @@ public class GcpApiKeysModel {
     public static class Restrictions {
 
         public static Restrictions of(com.google.api.apikeys.v2.Key key) {
-            List<ApiTarget> targets = Optional.ofNullable(key)
+            com.google.api.apikeys.v2.Restrictions r = Optional.ofNullable(key)
                     .map(com.google.api.apikeys.v2.Key::getRestrictions)
-                    .map(com.google.api.apikeys.v2.Restrictions::getApiTargetsList)
-                    .orElse(List.of());
-            if (CollectionUtils.isEmpty(targets)) {
+                    .orElse(null);
+            if (r == null) {
                 return Restrictions.builder()
                         .build();
             }
+            List<String> apiTargets = r.getApiTargetsList()
+                    .stream()
+                    .map(ApiTarget::getService)
+                    .toList();
+            List<AllowedApplication> allowedApplications = r.getAndroidKeyRestrictions()
+                    .getAllowedApplicationsList()
+                    .stream()
+                    .map(a -> AllowedApplication.builder()
+                            .packageName(a.getPackageName())
+                            .sha1Fingerprint(a.getSha1Fingerprint())
+                            .build())
+                    .toList();
+            List<String> clientRestrictions = r.getBrowserKeyRestrictions()
+                    .getAllowedReferrersList()
+                    .stream()
+                    .toList();
             return Restrictions.builder()
-                    .apiTargets(targets.stream().map(ApiTarget::getService).toList())
+                    .apiTargets(apiTargets)
+                    .allowedApplications(allowedApplications)
+                    .clientRestrictions(clientRestrictions)
                     .build();
         }
 
-        // 只保存 Service 名称
         @Builder.Default
         private List<String> apiTargets = List.of();
+        @Builder.Default
+        private List<String> clientRestrictions = List.of();
+        @Builder.Default
+        private List<AllowedApplication> allowedApplications = List.of();
+    }
+
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AllowedApplication {
+        private String sha1Fingerprint;
+        private String packageName;
     }
 
 }
