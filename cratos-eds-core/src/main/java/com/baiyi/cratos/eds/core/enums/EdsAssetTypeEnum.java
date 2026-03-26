@@ -113,6 +113,7 @@ public enum EdsAssetTypeEnum {
     @CloudCertificate GCP_CERTIFICATE("Certificate", 82),
     @CloudIdentity GCP_MEMBER("Member", 83),
     GCP_IAM_ROLE("IAM Role", 84),
+    GCP_API_KEYS("API Keys", 85),
 
     JENKINS_COMPUTER("CloudComputer Node", 84),
 

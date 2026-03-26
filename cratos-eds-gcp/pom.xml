@@ -51,6 +51,13 @@
             <artifactId>google-cloud-resourcemanager</artifactId>
             <version>1.48.0</version>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/com.google.cloud/google-cloud-apikeys -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-apikeys</artifactId>
+            <version>0.47.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>
