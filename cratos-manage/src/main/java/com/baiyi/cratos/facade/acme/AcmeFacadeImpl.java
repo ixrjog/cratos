@@ -6,12 +6,14 @@ import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.util.JSONUtils;
+import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
 import com.baiyi.cratos.eds.acme.deploy.AcmeDeployer;
 import com.baiyi.cratos.eds.acme.deploy.AcmeDeployerFactory;
 import com.baiyi.cratos.eds.acme.dns.AcmeDNSResolver;
@@ -30,6 +32,7 @@ import com.baiyi.cratos.service.acme.AcmeAccountService;
 import com.baiyi.cratos.service.acme.AcmeCertificateService;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
 import com.baiyi.cratos.service.acme.AcmeOrderService;
+import com.baiyi.cratos.wrapper.acme.AcmeDomainWrapper;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +74,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
     private final AcmeOrderService acmeOrderService;
     private final AcmeCertificateService acmeCertificateService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
+    private final AcmeDomainWrapper acmeDomainWrapper;
 
     @Override
     @InjectSessionUser(field = "createdBy")
@@ -459,6 +463,12 @@ public class AcmeFacadeImpl implements AcmeFacade {
                         }
                     }
                 });
+    }
+
+    @Override
+    public DataTable<AcmeDomainVO.Domain> queryDomainPage(AcmeDomainParam.DomainPageQuery pageQuery) {
+        DataTable<AcmeDomain> dataTable = acmeDomainService.queryAcmeDomainPage(pageQuery);
+        return acmeDomainWrapper.wrapToTarget(dataTable);
     }
 
 }

@@ -24,7 +24,7 @@ cratos:
   rbac:
     auto-configuration:
       # 开发环境禁用，加快启动
-      enabled: off
+      enabled: on
   credential:
     # 高安全性密钥
     high-security: on

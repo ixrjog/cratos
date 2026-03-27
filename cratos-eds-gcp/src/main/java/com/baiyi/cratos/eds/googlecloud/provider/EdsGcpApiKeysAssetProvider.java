@@ -19,6 +19,7 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.googlecloud.model.GcpApiKeysModel;
 import com.baiyi.cratos.eds.googlecloud.repo.GcpApiKeysRepo;
+import org.apache.commons.collections4.CollectionUtils;
 import com.baiyi.cratos.service.TagService;
 import org.springframework.stereotype.Component;
 
@@ -86,14 +87,21 @@ public class EdsGcpApiKeysAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
         businessTagFacade.saveBusinessTag(saveBusinessTag);
     }
 
+    /**
+     * 评估 API Key 安全级别
+     * <p>
+     * HIGH:   无 API 限制 且 无应用限制（未设置任何保护）
+     * MEDIUM: 仅设置了 API 限制 或 应用限制其中之一
+     * LOW:    同时设置了 API 限制 和 应用限制（Android包名+指纹 / HTTP Referrer / IP白名单）
+     */
     private SecurityLevel evaluateSecurityLevel(GcpApiKeysModel.Restrictions restrictions) {
         if (restrictions == null) {
             return SecurityLevel.HIGH;
         }
-        boolean hasApiRestriction = !restrictions.getApiTargets().isEmpty();
-        boolean hasAppRestriction = !restrictions.getAllowedApplications().isEmpty()
-                || !restrictions.getClientRestrictions().isEmpty()
-                || !restrictions.getAllowedIps().isEmpty();
+        boolean hasApiRestriction = !CollectionUtils.isEmpty(restrictions.getApiTargets());
+        boolean hasAppRestriction = !CollectionUtils.isEmpty(restrictions.getAllowedApplications())
+                || !CollectionUtils.isEmpty(restrictions.getClientRestrictions())
+                || !CollectionUtils.isEmpty(restrictions.getAllowedIps());
         if (hasApiRestriction && hasAppRestriction) {
             return SecurityLevel.LOW;
         }

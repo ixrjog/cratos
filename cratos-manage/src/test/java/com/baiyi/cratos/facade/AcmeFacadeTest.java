@@ -1,11 +1,13 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.AcmeCertificate;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
+import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
 import com.baiyi.cratos.eds.acme.enums.AcmeProviderEnum;
 import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.service.acme.AcmeCertificateService;
@@ -98,6 +100,16 @@ public class AcmeFacadeTest extends BaseUnit {
         System.out.println(acmeCertificate.getCertificateChain());
         System.out.println("Key:");
         System.out.println(acmeCertificate.getPrivateKey());
+    }
+
+    @Test
+    void test6() {
+        AcmeDomainParam.DomainPageQuery query = AcmeDomainParam.DomainPageQuery.builder()
+                .page(1)
+                .length(2)
+                .build();
+        DataTable<AcmeDomainVO.Domain> dataTable = acmeFacade.queryDomainPage(query);
+        System.out.println(dataTable);
     }
 
 }
