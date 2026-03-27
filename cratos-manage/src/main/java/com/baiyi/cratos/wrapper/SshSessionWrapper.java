@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.view.ssh.SshSessionVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class SshSessionWrapper extends BaseDataTableConverter<SshSessionVO.Session, SshSession> implements BaseWrapper<SshSessionVO.Session> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.SSH_INSTANCE})
+    @BusinessDecorator(types = {BusinessTypeEnum.SSH_INSTANCE})
     public void wrap(SshSessionVO.Session vo) {
         vo.initDurationTime();
     }

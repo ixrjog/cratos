@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.traffic;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class TrafficLayerRecordWrapper extends BaseDataTableConverter<TrafficLayerRecordVO.Record, TrafficLayerDomainRecord> implements BaseWrapper<TrafficLayerRecordVO.Record> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ENV, BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ENV, BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN})
     public void wrap(TrafficLayerRecordVO.Record vo) {
     }
 

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.work;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.annotation.I18nWrapper;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.WorkOrderGroup;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.service.work.WorkOrderGroupService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,12 +24,12 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.WORKORDER_GROUP)
-public class WorkOrderGroupWrapper extends BaseDataTableConverter<WorkOrderVO.Group, WorkOrderGroup> implements BaseBusinessWrapper<WorkOrderVO.HasWorkOrderGroup, WorkOrderVO.Group> {
+public class WorkOrderGroupWrapper extends BaseDataTableConverter<WorkOrderVO.Group, WorkOrderGroup> implements BaseBusinessDecorator<WorkOrderVO.HasWorkOrderGroup, WorkOrderVO.Group> {
 
     private final WorkOrderGroupService workOrderGroupService;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.WORKORDER})
+    @BusinessDecorator(types = {BusinessTypeEnum.WORKORDER})
     @I18nWrapper
     public void wrap(WorkOrderVO.Group vo) {
         // This is a good idea

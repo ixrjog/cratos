@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.HasEdsInstance;
@@ -15,7 +15,7 @@ import com.baiyi.cratos.eds.core.exception.EdsInstanceVersionProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,14 +36,14 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
-public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.EdsInstance, EdsInstance> implements BaseBusinessWrapper<HasEdsInstance, EdsInstanceVO.EdsInstance> {
+public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.EdsInstance, EdsInstance> implements BaseBusinessDecorator<HasEdsInstance, EdsInstanceVO.EdsInstance> {
 
     private final EdsInstanceService edsInstanceService;
     private final EdsConfigWrapper edsConfigWrapper;
     private final EdsInstanceVersionProviderHolderBuilder versionHolderBuilder;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(EdsInstanceVO.EdsInstance vo) {
         // Eds Instance Registered
         vo.setRegistered(vo.getConfigId() != null);

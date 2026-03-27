@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.common.cred.CredProviderFactory;
 import com.baiyi.cratos.common.cred.BaseCredProvider;
@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,12 +27,12 @@ import static com.baiyi.cratos.domain.constant.Global.NOT_APPLICABLE;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.CREDENTIAL)
-public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Credential, Credential> implements BaseBusinessWrapper<CredentialVO.HasCredential, CredentialVO.Credential> {
+public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Credential, Credential> implements BaseBusinessDecorator<CredentialVO.HasCredential, CredentialVO.Credential> {
 
     private final CredentialService credentialService;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG})
     @Sensitive
     public void wrap(CredentialVO.Credential vo) {
         // tips

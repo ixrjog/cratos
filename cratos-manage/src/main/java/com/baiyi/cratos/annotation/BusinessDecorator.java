@@ -13,13 +13,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface BusinessWrapper {
+public @interface BusinessDecorator {
 
-    enum InvokeAts {
+    enum Phase {
         BEFORE, AFTER
     }
 
-    InvokeAts invokeAt() default InvokeAts.AFTER;
+    Phase phase() default Phase.AFTER;
 
     /**
      * 不指定，则从类注解@BusinessType中获取类型

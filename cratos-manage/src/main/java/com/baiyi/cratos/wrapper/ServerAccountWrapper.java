@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class ServerAccountWrapper extends BaseDataTableConverter<ServerAccountVO.ServerAccount, ServerAccount> implements BaseWrapper<ServerAccountVO.ServerAccount> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.CREDENTIAL})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.CREDENTIAL})
     public void wrap(ServerAccountVO.ServerAccount vo) {
     }
 

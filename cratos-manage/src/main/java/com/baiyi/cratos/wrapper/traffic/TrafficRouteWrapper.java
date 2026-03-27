@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.traffic;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
+import static com.baiyi.cratos.annotation.BusinessDecorator.Phase.BEFORE;
 
 /**
  * &#064;Author  baiyi
@@ -28,7 +28,7 @@ import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
 public class TrafficRouteWrapper extends BaseDataTableConverter<TrafficRouteVO.Route, TrafficRoute> implements BaseWrapper<TrafficRouteVO.Route> {
 
     @Override
-    @BusinessWrapper(invokeAt = BEFORE, types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ENV, BusinessTypeEnum.EDS_INSTANCE, BusinessTypeEnum.TRAFFIC_RECORD_TARGET})
+    @BusinessDecorator(phase = BEFORE, types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ENV, BusinessTypeEnum.EDS_INSTANCE, BusinessTypeEnum.TRAFFIC_RECORD_TARGET})
     public void wrap(TrafficRouteVO.Route vo) {
         // 开始从DNS工厂中查询相关解析记录
         EdsInstanceVO.EdsInstance edsInstance = vo.getDnsResolverInstance();

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class AssetMaturityWrapper extends BaseDataTableConverter<AssetMaturityVO.AssetMaturity, AssetMaturity> implements BaseWrapper<AssetMaturityVO.AssetMaturity> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(AssetMaturityVO.AssetMaturity vo) {
     }
 

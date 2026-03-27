@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.application;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
@@ -27,7 +27,7 @@ public class ApplicationWrapper extends BaseDataTableConverter<ApplicationVO.App
     private final UserFavoriteFacade userFavoriteFacade;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(ApplicationVO.Application vo) {
         resourceWrapper.wrap(vo);
         String username = SessionUtils.getUsername();

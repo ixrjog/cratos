@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.traffic;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DOMAIN_
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
-public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLayerDomainVO.Domain, TrafficLayerDomain> implements BaseBusinessWrapper<TrafficLayerDomainVO.HasDomain, TrafficLayerDomainVO.Domain> {
+public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLayerDomainVO.Domain, TrafficLayerDomain> implements BaseBusinessDecorator<TrafficLayerDomainVO.HasDomain, TrafficLayerDomainVO.Domain> {
 
     private final TrafficLayerDomainService domainService;
     private final TrafficLayerDomainRecordService recordService;
@@ -49,7 +49,7 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
     private static final String AWS_ROUTE53_DNS_CONSOLE_TPL = "https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones?region=eu-west-1#ListRecordSets/{}";
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(TrafficLayerDomainVO.Domain vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
                 .put(buildResourceCountForRecord(vo))

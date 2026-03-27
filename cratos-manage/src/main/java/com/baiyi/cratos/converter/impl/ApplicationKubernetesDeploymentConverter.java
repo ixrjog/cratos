@@ -1,6 +1,6 @@
 package com.baiyi.cratos.converter.impl;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.converter.base.BaseKubernetesResourceConverter;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
@@ -107,7 +107,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         return vo;
     }
 
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.ENV})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.ENV})
     public void wrap(KubernetesDeploymentVO.Deployment vo) {
     }
 

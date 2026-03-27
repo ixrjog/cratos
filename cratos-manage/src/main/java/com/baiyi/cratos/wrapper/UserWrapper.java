@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
@@ -34,7 +34,7 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
 
     @Override
     @Sensitive
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RBAC_ROLE})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RBAC_ROLE})
     public void wrap(UserVO.User vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
                 .put(buildRbacUserRoleResourceCount(vo))

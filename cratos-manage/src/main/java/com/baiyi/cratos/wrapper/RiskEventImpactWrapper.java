@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.domain.view.risk.RiskEventVO;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,12 +29,12 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.RISK_EVENT_IMPACT)
-public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.Impact, RiskEventImpact> implements BaseBusinessWrapper<RiskEventVO.IRiskEventImpacts, RiskEventVO.Impact> {
+public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.Impact, RiskEventImpact> implements BaseBusinessDecorator<RiskEventVO.IRiskEventImpacts, RiskEventVO.Impact> {
 
     private final RiskEventImpactService impactService;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(RiskEventVO.Impact vo) {
         if (vo.getCost() != 0) {
             RiskEventVO.CostDetail costDetail = RiskEventVO.CostDetail.builder()

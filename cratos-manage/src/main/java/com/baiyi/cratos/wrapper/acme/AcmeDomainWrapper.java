@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.acme;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class AcmeDomainWrapper extends BaseDataTableConverter<AcmeDomainVO.Domain, AcmeDomain> implements BaseWrapper<AcmeDomainVO.Domain> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ACME_ACCOUNT, BusinessTypeEnum.EDS_INSTANCE})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ACME_ACCOUNT, BusinessTypeEnum.EDS_INSTANCE})
     public void wrap(AcmeDomainVO.Domain vo) {
     }
 

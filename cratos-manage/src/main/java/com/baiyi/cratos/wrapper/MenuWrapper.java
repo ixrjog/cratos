@@ -32,7 +32,7 @@ public class MenuWrapper extends BaseDataTableConverter<MenuVO.Menu, Menu> imple
     private final MenuService menuService;
 
     @Override
-    //@BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    //@BusinessDecorator(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(MenuVO.Menu vo) {
         vo.setTitle(vo.getName());
         vo.setActive(false);

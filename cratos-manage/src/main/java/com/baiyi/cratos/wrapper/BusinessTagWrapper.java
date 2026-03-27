@@ -1,13 +1,13 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.BUSINESS_TAG)
-public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.BusinessTag, BusinessTag> implements BaseBusinessWrapper<BusinessTagVO.HasBusinessTags, BusinessTagVO.BusinessTag> {
+public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.BusinessTag, BusinessTag> implements BaseBusinessDecorator<BusinessTagVO.HasBusinessTags, BusinessTagVO.BusinessTag> {
 
     private final BusinessTagService businessTagService;
 
     @Override
-    @BusinessWrapper(types = BusinessTypeEnum.TAG)
+    @BusinessDecorator(types = BusinessTypeEnum.TAG)
     public void wrap(BusinessTagVO.BusinessTag vo) {
         // This is a good idea
     }

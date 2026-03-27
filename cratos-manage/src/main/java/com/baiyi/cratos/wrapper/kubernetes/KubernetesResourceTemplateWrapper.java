@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.kubernetes;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
+import static com.baiyi.cratos.annotation.BusinessDecorator.Phase.BEFORE;
 
 /**
  * &#064;Author  baiyi
@@ -37,7 +37,7 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     private final EnvService envService;
 
     @Override
-    @BusinessWrapper(invokeAt = BEFORE, types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
+    @BusinessDecorator(phase = BEFORE, types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
     public void wrap(KubernetesResourceTemplateVO.Template vo) {
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 vo.getCustom());

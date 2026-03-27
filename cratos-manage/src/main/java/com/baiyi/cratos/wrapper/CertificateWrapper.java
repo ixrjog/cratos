@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class CertificateWrapper extends BaseDataTableConverter<CertificateVO.Certificate, Certificate> implements BaseWrapper<CertificateVO.Certificate> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(CertificateVO.Certificate vo) {
         // This is a good idea
     }

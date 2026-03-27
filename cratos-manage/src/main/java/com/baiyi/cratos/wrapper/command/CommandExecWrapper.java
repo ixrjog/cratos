@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.command;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.util.RegexSensitiveDataMasker;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -33,7 +33,7 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
     private final CommandExecApprovalService approvalService;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.ENV})
+    @BusinessDecorator(types = {BusinessTypeEnum.ENV})
     public void wrap(CommandExecVO.CommandExec vo) {
         String sessionUsername = SessionUtils.getUsername();
         boolean isMask = CommandExecUtils.isMask(sessionUsername, vo);

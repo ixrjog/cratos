@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.work;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.annotation.I18nWrapper;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.util.IdentityUtils;
@@ -15,7 +15,7 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.workorder.enums.WorkOrderStatus;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.WORKORDER)
-public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrder, WorkOrder> implements BaseBusinessWrapper<WorkOrderVO.HasWorkOrderList, WorkOrderVO.WorkOrder> {
+public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrder, WorkOrder> implements BaseBusinessDecorator<WorkOrderVO.HasWorkOrderList, WorkOrderVO.WorkOrder> {
 
     private final WorkOrderService workOrderService;
     private final WorkOrderGroupService workOrderGroupService;
@@ -40,7 +40,7 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
     private final WorkOrderGroupWrapper workOrderGroupWrapper;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
     @I18nWrapper
     public void wrap(WorkOrderVO.WorkOrder vo) {
         // Workflow Data

@@ -1,13 +1,13 @@
 package com.baiyi.cratos.wrapper.traffic;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,12 +23,12 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.TRAFFIC_RECORD_TARGET)
-public class TrafficRouteTargetWrapper extends BaseDataTableConverter<TrafficRouteVO.RecordTarget, TrafficRecordTarget> implements BaseBusinessWrapper<TrafficRouteVO.HasRecordTargets, TrafficRouteVO.RecordTarget> {
+public class TrafficRouteTargetWrapper extends BaseDataTableConverter<TrafficRouteVO.RecordTarget, TrafficRecordTarget> implements BaseBusinessDecorator<TrafficRouteVO.HasRecordTargets, TrafficRouteVO.RecordTarget> {
 
     private final TrafficRecordTargetService trafficRecordTargetService;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(TrafficRouteVO.RecordTarget vo) {
     }
 

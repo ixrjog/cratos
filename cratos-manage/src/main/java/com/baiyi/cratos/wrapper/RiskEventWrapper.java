@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEvent;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class RiskEventWrapper extends BaseDataTableConverter<RiskEventVO.Event, RiskEvent> implements BaseWrapper<RiskEventVO.Event> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RISK_EVENT_IMPACT})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RISK_EVENT_IMPACT})
     public void wrap(RiskEventVO.Event vo) {
     }
 

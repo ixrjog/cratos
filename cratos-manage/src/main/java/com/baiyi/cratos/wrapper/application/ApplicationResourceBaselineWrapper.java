@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.application;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.enums.ResourceBaselineTypeEnum;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ApplicationResourceBaseline;
@@ -34,7 +34,7 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
     private final ApplicationResourceBaselineRedeployingFacade deploymentRedeployFacade;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.ENV})
+    @BusinessDecorator(types = {BusinessTypeEnum.ENV})
     public void wrap(ApplicationResourceBaselineVO.ResourceBaseline vo) {
         vo.setIsDeploying(deploymentRedeployFacade.isRedeploying(vo.getId()));
         vo.setContainer(buildContainer(vo));

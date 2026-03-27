@@ -1,13 +1,13 @@
 package com.baiyi.cratos.wrapper.acme;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AcmeAccount;
 import com.baiyi.cratos.domain.view.acme.AcmeAccountVO;
 import com.baiyi.cratos.service.acme.AcmeAccountService;
-import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +22,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.ACME_ACCOUNT)
-public class AcmeAccountWrapper extends BaseDataTableConverter<AcmeAccountVO.Account, AcmeAccount> implements BaseBusinessWrapper<AcmeAccountVO.HasAcmeAccount, AcmeAccountVO.Account> {
+public class AcmeAccountWrapper extends BaseDataTableConverter<AcmeAccountVO.Account, AcmeAccount> implements BaseBusinessDecorator<AcmeAccountVO.HasAcmeAccount, AcmeAccountVO.Account> {
 
     private final AcmeAccountService acmeAccountService;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(AcmeAccountVO.Account vo) {
         // TODO
     }

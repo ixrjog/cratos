@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RbacResource;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class RbacResourceWrapper extends BaseDataTableConverter<RbacResourceVO.Resource, RbacResource> implements BaseWrapper<RbacResourceVO.Resource> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.RBAC_GROUP})
+    @BusinessDecorator(types = {BusinessTypeEnum.RBAC_GROUP})
     public void wrap(RbacResourceVO.Resource vo) {
     }
 

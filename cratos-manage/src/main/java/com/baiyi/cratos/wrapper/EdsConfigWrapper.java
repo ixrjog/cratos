@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
@@ -24,7 +24,7 @@ public class EdsConfigWrapper extends BaseDataTableConverter<EdsConfigVO.EdsConf
     private final EdsConfigService edsConfigService;
 
     @Override
-    @BusinessWrapper(types = BusinessTypeEnum.CREDENTIAL)
+    @BusinessDecorator(types = BusinessTypeEnum.CREDENTIAL)
     public void wrap(EdsConfigVO.EdsConfig vo) {
         // Eds Instance Registered
     }

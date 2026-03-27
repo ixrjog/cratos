@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.view.base.LoginServerVO;
@@ -44,7 +44,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     public static final boolean SKIP_LOAD_ASSET = true;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(EdsAssetVO.Asset vo) {
         EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = edsProviderHolderFactory.createHolder(
                 vo.getInstanceId(),

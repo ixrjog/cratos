@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper.base;
 
 import com.baiyi.cratos.domain.BaseBusiness;
-import com.baiyi.cratos.wrapper.factory.BusinessWrapperFactory;
+import com.baiyi.cratos.wrapper.factory.BusinessDecoratorFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -9,12 +9,12 @@ import org.springframework.beans.factory.InitializingBean;
  * @Date 2024/1/5 15:18
  * @Version 1.0
  */
-public interface BaseBusinessWrapper<Business, VO> extends BaseWrapper<VO>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
+public interface BaseBusinessDecorator<Business, VO> extends BaseWrapper<VO>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
     void decorateBusiness(Business biz);
 
     default void afterPropertiesSet() {
-        BusinessWrapperFactory.register(this);
+        BusinessDecoratorFactory.register(this);
     }
 
 }

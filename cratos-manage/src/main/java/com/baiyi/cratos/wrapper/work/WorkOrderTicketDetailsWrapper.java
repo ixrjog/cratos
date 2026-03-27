@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.work;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
@@ -25,7 +25,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Objects;
 
-import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
+import static com.baiyi.cratos.annotation.BusinessDecorator.Phase.BEFORE;
 
 /**
  * &#064;Author  baiyi
@@ -47,7 +47,7 @@ public class WorkOrderTicketDetailsWrapper implements BaseWrapper<WorkOrderTicke
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, invokeAt = BEFORE)
+    @BusinessDecorator(types = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, phase = BEFORE)
     public void wrap(WorkOrderTicketVO.TicketDetails vo) {
         WorkOrder workOrder = workOrderService.getById(vo.getTicket()
                 .getWorkOrderId());
