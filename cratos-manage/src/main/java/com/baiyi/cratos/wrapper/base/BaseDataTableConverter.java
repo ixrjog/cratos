@@ -14,10 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class BaseDataTableConverter<VO, DO> implements BaseWrapper<VO>, Converter<DO, VO> {
 
     public DataTable<VO> wrapToTarget(DataTable<DO> dataTable) {
-        return new DataTable<>(dataTable.getData()
-                .stream()
-                .map(this::wrapToTarget)
-                .toList(), dataTable.getTotalNum());
+        return new DataTable<>(
+                dataTable.getData()
+                        .stream()
+                        .map(this::wrapToTarget)
+                        .toList(), dataTable.getTotalNum()
+        );
     }
 
     /**
@@ -34,7 +36,6 @@ public abstract class BaseDataTableConverter<VO, DO> implements BaseWrapper<VO>,
 
     @SuppressWarnings("unchecked")
     protected void delegateWrap(VO t) {
-        // BaseDataTableConverter<VO, DO> bean = (BaseDataTableConverter<VO, DO>) AopContext.currentProxy();
         BaseWrapper<VO> bean = SpringContextUtils.getBean(this.getClass());
         bean.wrap(t);
     }
