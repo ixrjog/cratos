@@ -45,7 +45,8 @@ public enum SysTagKeys {
     DNS_RESOLVER("DNSResolver"),
     DOMAIN("Domain"),
     CERT_ABUSE("CertAbuse"),
-    ACME("ACME")
+    ACME("ACME"),
+    SECURITY_LEVEL("SecurityLevel"),
     ;
 
     private final String key;

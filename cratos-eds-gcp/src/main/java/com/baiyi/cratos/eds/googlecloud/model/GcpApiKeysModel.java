@@ -64,10 +64,13 @@ public class GcpApiKeysModel {
                         .build();
             }
             List<String> apiTargets = r.getApiTargetsList()
+                    .isEmpty() ? null : r.getApiTargetsList()
                     .stream()
                     .map(ApiTarget::getService)
                     .toList();
             List<AllowedApplication> allowedApplications = r.getAndroidKeyRestrictions()
+                    .getAllowedApplicationsList()
+                    .isEmpty() ? null : r.getAndroidKeyRestrictions()
                     .getAllowedApplicationsList()
                     .stream()
                     .map(a -> AllowedApplication.builder()
@@ -77,21 +80,28 @@ public class GcpApiKeysModel {
                     .toList();
             List<String> clientRestrictions = r.getBrowserKeyRestrictions()
                     .getAllowedReferrersList()
+                    .isEmpty() ? null : r.getBrowserKeyRestrictions()
+                    .getAllowedReferrersList()
+                    .stream()
+                    .toList();
+            List<String> allowedIps = r.getServerKeyRestrictions()
+                    .getAllowedIpsList()
+                    .isEmpty() ? null : r.getServerKeyRestrictions()
+                    .getAllowedIpsList()
                     .stream()
                     .toList();
             return Restrictions.builder()
                     .apiTargets(apiTargets)
                     .allowedApplications(allowedApplications)
                     .clientRestrictions(clientRestrictions)
+                    .allowedIps(allowedIps)
                     .build();
         }
 
-        @Builder.Default
-        private List<String> apiTargets = List.of();
-        @Builder.Default
-        private List<String> clientRestrictions = List.of();
-        @Builder.Default
-        private List<AllowedApplication> allowedApplications = List.of();
+        private List<String> apiTargets;
+        private List<String> clientRestrictions;
+        private List<String> allowedIps;
+        private List<AllowedApplication> allowedApplications;
     }
 
     @Builder
