@@ -1,6 +1,6 @@
 package com.baiyi.cratos.aspect;
 
-import com.baiyi.cratos.annotation.I18nWrapper;
+import com.baiyi.cratos.annotation.I18nDecorator;
 import com.baiyi.cratos.domain.model.I18nModel;
 import com.baiyi.cratos.domain.util.I18nUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +18,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-public class I18nWrapperAspect {
+public class I18nDecoratorAspect {
 
-    @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.I18nWrapper)")
+    @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.I18nDecorator)")
     public void annotationPoint() {
     }
 
-    @After(value = "@annotation(i18nWrapper)")
-    public void afterAdvice(JoinPoint joinPoint, I18nWrapper i18nWrapper) {
+    @After(value = "@annotation(i18nDecorator)")
+    public void afterAdvice(JoinPoint joinPoint, I18nDecorator i18nDecorator) {
         try {
             Object arg0 = joinPoint.getArgs()[0];
             if (arg0 instanceof I18nModel.HasI18n hasI18n) {

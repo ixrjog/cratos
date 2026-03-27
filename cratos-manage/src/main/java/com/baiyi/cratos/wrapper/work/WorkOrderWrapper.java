@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper.work;
 
 import com.baiyi.cratos.annotation.BusinessDecorator;
-import com.baiyi.cratos.annotation.I18nWrapper;
+import com.baiyi.cratos.annotation.I18nDecorator;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -41,7 +41,7 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
 
     @Override
     @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
-    @I18nWrapper
+    @I18nDecorator
     public void wrap(WorkOrderVO.WorkOrder vo) {
         // Workflow Data
         WorkflowUtils.setWorkflow(vo);

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper.work;
 
 import com.baiyi.cratos.annotation.BusinessDecorator;
-import com.baiyi.cratos.annotation.I18nWrapper;
+import com.baiyi.cratos.annotation.I18nDecorator;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderGroup;
@@ -30,7 +30,7 @@ public class WorkOrderGroupWrapper extends BaseDataTableConverter<WorkOrderVO.Gr
 
     @Override
     @BusinessDecorator(types = {BusinessTypeEnum.WORKORDER})
-    @I18nWrapper
+    @I18nDecorator
     public void wrap(WorkOrderVO.Group vo) {
         // This is a good idea
     }
