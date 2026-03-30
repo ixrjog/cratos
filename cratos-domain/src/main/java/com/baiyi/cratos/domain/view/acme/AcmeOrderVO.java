@@ -1,12 +1,12 @@
 package com.baiyi.cratos.domain.view.acme;
 
 import com.baiyi.cratos.domain.BaseBusiness;
-import com.baiyi.cratos.domain.HasEdsInstance;
 import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.annotation.FieldSensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.enums.SensitiveType;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
-import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,47 +14,41 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2026/3/27 15:42
+ * &#064;Date  2026/3/30 09:49
  * &#064;Version 1.0
  */
-public class AcmeDomainVO {
-
-    public interface HasAcmeDomain {
-
-        Integer getAcmeDomainId();
-        void setAcmeDomain(Domain domain);
-
-    }
+public class AcmeOrderVO {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.ACME_DOMAIN)
-    public static class Domain extends BaseVO implements HasEdsInstance, AcmeAccountVO.HasAcmeAccount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    @BusinessType(type = BusinessTypeEnum.ACME_ORDER)
+    public static class Order extends BaseVO implements AcmeAccountVO.HasAcmeAccount, AcmeDomainVO.HasAcmeDomain, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
         @Serial
-        private static final long serialVersionUID = 3525022281699968894L;
+        private static final long serialVersionUID = -3164941589879981426L;
         private Integer id;
-        private String name;
-        private Integer domainId;
-        private String domain;
-        private String domains;
-        private String zoneId;
-        private Integer dnsResolverInstanceId;
         private Integer accountId;
-        private Boolean valid;
-        private String dcvType;
-        private String dcvDelegationTarget;
-        private String comment;
+        private Integer domainId;
+        private Integer certificateId;
+        private String orderUrl;
+        private String orderStatus;
+        private Date expires;
+        private String dnsChallengeRecords;
+        private String domains;
+        @FieldSensitive(type = SensitiveType.ERASE)
+        private String domainKeyPair;
+        private String errorMessage;
 
-        private EdsInstanceVO.EdsInstance edsInstance;
         private AcmeAccountVO.Account account;
+        private AcmeDomainVO.Domain acmeDomain;
 
-        public Integer getInstanceId() {
-            return dnsResolverInstanceId;
+        public Integer getAcmeDomainId() {
+            return this.domainId;
         }
 
         @Override

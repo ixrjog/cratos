@@ -87,15 +87,15 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
     }
 
     @Override
-    public void decorateBusiness(HasEdsInstance biz) {
-        if (!IdentityUtils.hasIdentity(biz.getInstanceId())) {
+    public void decorateBusiness(HasEdsInstance hasBusiness) {
+        if (!IdentityUtils.hasIdentity(hasBusiness.getInstanceId())) {
             return;
         }
-        EdsInstance edsInstance = edsInstanceService.getById(biz.getInstanceId());
+        EdsInstance edsInstance = edsInstanceService.getById(hasBusiness.getInstanceId());
         if (edsInstance == null) {
             return;
         }
-        biz.setEdsInstance(wrapToTarget(edsInstance));
+        hasBusiness.setEdsInstance(wrapToTarget(edsInstance));
     }
 
 }

@@ -34,8 +34,8 @@ public class BusinessPropertyWrapper extends BaseDataTableConverter<BusinessProp
     }
 
     @Override
-    public void decorateBusiness(BusinessPropertyVO.HasBusinessProperties biz) {
-        biz.setBusinessProperties(businessPropertyService.selectByBusiness(biz)
+    public void decorateBusiness(BusinessPropertyVO.HasBusinessProperties hasBusiness) {
+        hasBusiness.setBusinessProperties(businessPropertyService.selectByBusiness(hasBusiness)
                 .stream()
                 .map(bizTag -> {
                     BusinessPropertyVO.BusinessProperty businessProperty = this.convert(bizTag);

@@ -1,10 +1,12 @@
 package com.baiyi.cratos.domain.param.http.acme;
 
 import com.baiyi.cratos.domain.HasSessionUser;
+import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Null;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * &#064;Author  baiyi
@@ -13,6 +15,16 @@ import lombok.*;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcmeAccountParam {
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class AccountPageQuery extends PageParam {
+        private String queryName;
+        private Boolean valid;
+    }
 
     @Data
     @Builder

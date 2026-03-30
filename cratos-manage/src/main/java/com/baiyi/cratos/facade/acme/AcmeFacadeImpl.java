@@ -11,9 +11,13 @@ import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
+import com.baiyi.cratos.domain.param.http.acme.AcmeOrderParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.util.JSONUtils;
+import com.baiyi.cratos.domain.view.acme.AcmeAccountVO;
+import com.baiyi.cratos.domain.view.acme.AcmeCertificateVO;
 import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
+import com.baiyi.cratos.domain.view.acme.AcmeOrderVO;
 import com.baiyi.cratos.eds.acme.deploy.AcmeDeployer;
 import com.baiyi.cratos.eds.acme.deploy.AcmeDeployerFactory;
 import com.baiyi.cratos.eds.acme.dns.AcmeDNSResolver;
@@ -32,7 +36,10 @@ import com.baiyi.cratos.service.acme.AcmeAccountService;
 import com.baiyi.cratos.service.acme.AcmeCertificateService;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
 import com.baiyi.cratos.service.acme.AcmeOrderService;
+import com.baiyi.cratos.wrapper.acme.AcmeAccountWrapper;
+import com.baiyi.cratos.wrapper.acme.AcmeCertificateWrapper;
 import com.baiyi.cratos.wrapper.acme.AcmeDomainWrapper;
+import com.baiyi.cratos.wrapper.acme.AcmeOrderWrapper;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,9 +82,12 @@ public class AcmeFacadeImpl implements AcmeFacade {
     private final AcmeCertificateService acmeCertificateService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final AcmeDomainWrapper acmeDomainWrapper;
+    private final AcmeOrderWrapper acmeOrderWrapper;
+    private final AcmeCertificateWrapper acmeCertificateWrapper;
+    private final AcmeAccountWrapper acmeAccountWrapper;
 
     @Override
-    @InjectSessionUser(field = "createdBy")
+    @InjectSessionUser(field = "created by")
     public void createAcmeAccount(AcmeAccountParam.CreateAccount createAccount) {
         String email = ValidationUtils.isEmail(
                 createAccount.getEmail()) ? createAccount.getEmail() : Optional.ofNullable(
@@ -119,10 +129,12 @@ public class AcmeFacadeImpl implements AcmeFacade {
         DNSResolver dnsResolver = DNSResolverFactory.getDNSResolver(edsInstance.getEdsType());
         String zoneId = dnsResolver.getZoneId(acmeDomain);
         acmeDomain.setZoneId(zoneId);
-        String domains = Stream.of("*." + addDomain.getDomain(), addDomain.getDomain())
-                .sorted()
-                .collect(Collectors.joining(","));
-        acmeDomain.setDomains(domains);
+        if (StringUtils.hasText(addDomain.getDomains())) {
+            String domains = Stream.of("*." + addDomain.getDomain(), addDomain.getDomain())
+                    .sorted()
+                    .collect(Collectors.joining(","));
+            acmeDomain.setDomains(domains);
+        }
         acmeDomainService.add(acmeDomain);
     }
 
@@ -466,9 +478,37 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
+    public DataTable<AcmeAccountVO.Account> queryAccountPage(AcmeAccountParam.AccountPageQuery pageQuery) {
+        DataTable<AcmeAccount> dataTable = acmeAccountService.queryAcmeAccountPage(pageQuery);
+        return acmeAccountWrapper.wrapToTarget(dataTable);
+    }
+
+    @Override
     public DataTable<AcmeDomainVO.Domain> queryDomainPage(AcmeDomainParam.DomainPageQuery pageQuery) {
         DataTable<AcmeDomain> dataTable = acmeDomainService.queryAcmeDomainPage(pageQuery);
         return acmeDomainWrapper.wrapToTarget(dataTable);
+    }
+
+    @Override
+    public DataTable<AcmeOrderVO.Order> queryOrderPage(AcmeOrderParam.OrderPageQuery pageQuery) {
+        DataTable<AcmeOrder> dataTable = acmeOrderService.queryAcmeOrderPage(pageQuery);
+        return acmeOrderWrapper.wrapToTarget(dataTable);
+    }
+
+    @Override
+    public AcmeCertificateVO.Certificate getAcmeCertificateById(int id) {
+        AcmeCertificate acmeCertificate = acmeCertificateService.getById(id);
+        return acmeCertificateWrapper.wrapToTarget(acmeCertificate);
+    }
+
+    @Override
+    public void updateAcmeDomain(AcmeDomainParam.UpdateDomain updateDomain) {
+        AcmeDomain acmeDomain = acmeDomainService.getById(updateDomain.getId());
+        acmeDomain.setName(updateDomain.getName());
+        acmeDomain.setDcvType(updateDomain.getDcvType());
+        acmeDomain.setDcvDelegationTarget(updateDomain.getDcvDelegationTarget());
+        acmeDomain.setDnsResolverInstanceId(updateDomain.getDnsResolverInstanceId());
+        acmeDomainService.updateByPrimaryKey(acmeDomain);
     }
 
 }

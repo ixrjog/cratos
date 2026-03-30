@@ -1,13 +1,19 @@
 package com.baiyi.cratos.service.acme.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.AcmeAccount;
+import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.mapper.AcmeAccountMapper;
 import com.baiyi.cratos.service.acme.AcmeAccountService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -34,6 +40,13 @@ public class AcmeAccountServiceImpl implements AcmeAccountService {
         criteria.andEqualTo("email", record.getEmail())
                 .andEqualTo("acmeProvider", record.getAcmeProvider());
         return acmeAccountMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public DataTable<AcmeAccount> queryAcmeAccountPage(AcmeAccountParam.AccountPageQuery pageQuery) {
+        Page<AcmeAccount> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<AcmeAccount> data = acmeAccountMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal(), pageQuery);
     }
 
 }

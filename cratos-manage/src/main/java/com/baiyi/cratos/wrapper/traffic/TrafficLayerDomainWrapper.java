@@ -98,13 +98,13 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
     }
 
     @Override
-    public void decorateBusiness(TrafficLayerDomainVO.HasDomain biz) {
-        IdentityUtils.validIdentityRun(biz.getDomainId())
+    public void decorateBusiness(TrafficLayerDomainVO.HasDomain hasBusiness) {
+        IdentityUtils.validIdentityRun(hasBusiness.getDomainId())
                 .withTrue(() -> {
-                    TrafficLayerDomain trafficLayerDomain = domainService.getById(biz.getDomainId());
+                    TrafficLayerDomain trafficLayerDomain = domainService.getById(hasBusiness.getDomainId());
                     TrafficLayerDomainVO.Domain domain = this.convert(trafficLayerDomain);
                     delegateWrap(domain);
-                    biz.setDomain(domain);
+                    hasBusiness.setDomain(domain);
                 });
     }
 

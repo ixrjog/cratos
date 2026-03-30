@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
@@ -34,6 +36,15 @@ public class AcmeCertificateDeploymentServiceImpl implements AcmeCertificateDepl
         criteria.andEqualTo("edsInstanceId", record.getEdsInstanceId())
                 .andEqualTo("certificateId", record.getCertificateId());
         return acmeCertificateDeploymentMapper.selectOneByExample(example);
+    }
+
+
+    @Override
+    public List<AcmeCertificateDeployment> queryByCertificateId(int certificateId) {
+        Example example = new Example(AcmeCertificateDeployment.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("certificateId", certificateId);
+        return acmeCertificateDeploymentMapper.selectByExample(example);
     }
 
 }

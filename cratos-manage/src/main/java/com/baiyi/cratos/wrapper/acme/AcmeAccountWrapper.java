@@ -33,17 +33,17 @@ public class AcmeAccountWrapper extends BaseDataTableConverter<AcmeAccountVO.Acc
     }
 
     @Override
-    public void decorateBusiness(AcmeAccountVO.HasAcmeAccount biz) {
-        if (!IdentityUtils.hasIdentity(biz.getAccountId())) {
+    public void decorateBusiness(AcmeAccountVO.HasAcmeAccount hasBusiness) {
+        if (!IdentityUtils.hasIdentity(hasBusiness.getAccountId())) {
             return;
         }
-        AcmeAccount acmeAccount = acmeAccountService.getById(biz.getAccountId());
+        AcmeAccount acmeAccount = acmeAccountService.getById(hasBusiness.getAccountId());
         if (acmeAccount == null) {
             return;
         }
         AcmeAccountVO.Account accountVO = convert(acmeAccount);
         delegateWrap(accountVO);
-        biz.setAccount(accountVO);
+        hasBusiness.setAccount(accountVO);
     }
 
 }

@@ -79,6 +79,9 @@ public enum BusinessTypeEnum {
     CRATOS_INSTANCE,
 
     ACME_DOMAIN,
-    ACME_ACCOUNT
+    ACME_ACCOUNT,
+    ACME_ORDER,
+
+    ACME_CERTIFICATE_DEPLOYMENT
 
 }

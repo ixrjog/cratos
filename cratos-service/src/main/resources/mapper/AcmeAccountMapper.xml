@@ -19,4 +19,20 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam$AccountPageQuery"
+            resultMap="BaseResultMap">
+        select * from acme_account
+        <where>
+            <if test="valid != null">
+                and valid = #{valid}
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and name like "%" #{queryName} "%"
+                order by replace(name, #{queryName}, '')
+            </if>
+        </where>
+    </select>
+
 </mapper>

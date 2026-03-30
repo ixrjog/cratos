@@ -54,11 +54,11 @@ public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkO
     }
 
     @Override
-   public void decorateBusiness(WorkOrderTicketVO.HasTicketEntries biz) {
-        if (!StringUtils.hasText(biz.getTicketNo())) {
+   public void decorateBusiness(WorkOrderTicketVO.HasTicketEntries hasBusiness) {
+        if (!StringUtils.hasText(hasBusiness.getTicketNo())) {
             return;
         }
-        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(biz.getTicketNo());
+        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasBusiness.getTicketNo());
         if (Objects.isNull(ticket)) {
             return;
         }
@@ -67,7 +67,7 @@ public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkO
                 .map(this::wrapToTarget)
                 .peek(this::populateInstance)
                 .collect(Collectors.toUnmodifiableList());
-        biz.setEntries(entries);
+        hasBusiness.setEntries(entries);
     }
 
     private void populateInstance(WorkOrderTicketVO.TicketEntry<?> entry) {

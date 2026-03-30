@@ -48,14 +48,14 @@ public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, 
     }
 
     @Override
-    public void decorateBusiness(RbacGroupVO.HasRbacGroup biz) {
-        IdentityUtils.validIdentityRun(biz.getRbacGroupId())
+    public void decorateBusiness(RbacGroupVO.HasRbacGroup hasBusiness) {
+        IdentityUtils.validIdentityRun(hasBusiness.getRbacGroupId())
                 .withTrue(() -> {
-                    RbacGroup rbacGroup = rbacGroupService.getById(biz.getRbacGroupId());
+                    RbacGroup rbacGroup = rbacGroupService.getById(hasBusiness.getRbacGroupId());
                     if (rbacGroup != null) {
                         RbacGroupVO.Group groupVO = this.convert(rbacGroup);
                         delegateWrap(groupVO);
-                        biz.setRbacGroup(groupVO);
+                        hasBusiness.setRbacGroup(groupVO);
                     }
                 });
     }

@@ -55,16 +55,16 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
     }
 
     @Override
-    public void decorateBusiness(WorkOrderVO.HasWorkOrderList biz) {
-        if (IdentityUtils.hasIdentity(biz.getGroupId())) {
-            List<WorkOrderVO.WorkOrder> workOrderList = workOrderService.queryByGroupId(biz.getGroupId())
+    public void decorateBusiness(WorkOrderVO.HasWorkOrderList hasBusiness) {
+        if (IdentityUtils.hasIdentity(hasBusiness.getGroupId())) {
+            List<WorkOrderVO.WorkOrder> workOrderList = workOrderService.queryByGroupId(hasBusiness.getGroupId())
                     .stream()
                     .map(this::wrapToTarget)
                     // 过滤无效的工单
                     .filter(WorkOrderVO.WorkOrder::getValid)
                     .sorted(Comparator.comparing(WorkOrderVO.WorkOrder::getSeq))
                     .toList();
-            biz.setWorkOrderList(workOrderList);
+            hasBusiness.setWorkOrderList(workOrderList);
         }
     }
 

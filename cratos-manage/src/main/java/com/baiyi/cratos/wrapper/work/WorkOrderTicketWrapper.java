@@ -122,10 +122,10 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
     }
 
     @Override
-    public void decorateBusiness(WorkOrderTicketVO.HasTicket biz) {
-        if (StringUtils.hasText(biz.getTicketNo())) {
-            WorkOrderTicket workOrderTicket = workOrderTicketService.getByTicketNo(biz.getTicketNo());
-            biz.setTicket(wrapToTarget(workOrderTicket));
+    public void decorateBusiness(WorkOrderTicketVO.HasTicket hasBusiness) {
+        if (StringUtils.hasText(hasBusiness.getTicketNo())) {
+            WorkOrderTicket workOrderTicket = workOrderTicketService.getByTicketNo(hasBusiness.getTicketNo());
+            hasBusiness.setTicket(wrapToTarget(workOrderTicket));
         }
     }
 

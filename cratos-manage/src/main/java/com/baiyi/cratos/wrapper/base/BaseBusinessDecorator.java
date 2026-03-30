@@ -11,7 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public interface BaseBusinessDecorator<Business, VO> extends BaseWrapper<VO>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
-    void decorateBusiness(Business biz);
+    void decorateBusiness(Business hasBusiness);
 
     default void afterPropertiesSet() {
         BusinessDecoratorFactory.register(this);

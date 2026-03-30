@@ -36,8 +36,8 @@ public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.Bus
     }
 
     @Override
-    public void decorateBusiness(BusinessTagVO.HasBusinessTags biz) {
-        biz.setBusinessTags(businessTagService.selectByBusiness(biz)
+    public void decorateBusiness(BusinessTagVO.HasBusinessTags hasBusiness) {
+        hasBusiness.setBusinessTags(businessTagService.selectByBusiness(hasBusiness)
                 .stream()
                 .map(bizTag -> {
                     BusinessTagVO.BusinessTag businessTag = this.convert(bizTag);

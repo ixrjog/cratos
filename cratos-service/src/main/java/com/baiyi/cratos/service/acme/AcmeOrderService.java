@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service.acme;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
+import com.baiyi.cratos.domain.param.http.acme.AcmeOrderParam;
 import com.baiyi.cratos.mapper.AcmeOrderMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 
@@ -16,5 +18,7 @@ public interface AcmeOrderService extends BaseUniqueKeyService<AcmeOrder, AcmeOr
     AcmeOrder getByOrderUrl(String orderUrl);
 
     List<AcmeOrder> queryByDomainId(int domainId, int length);
+
+    DataTable<AcmeOrder> queryAcmeOrderPage(AcmeOrderParam.OrderPageQuery pageQuery);
 
 }

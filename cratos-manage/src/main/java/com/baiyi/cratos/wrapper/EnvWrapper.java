@@ -32,12 +32,12 @@ public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implement
     }
 
     @Override
-    public void decorateBusiness(EnvVO.HasEnv biz) {
-        if (!StringUtils.hasText(biz.getEnvName())) {
+    public void decorateBusiness(EnvVO.HasEnv hasBusiness) {
+        if (!StringUtils.hasText(hasBusiness.getEnvName())) {
             return;
         }
         Env uniqueKey = Env.builder()
-                .envName(biz.getEnvName())
+                .envName(hasBusiness.getEnvName())
                 .build();
         Env env = envService.getByUniqueKey(uniqueKey);
         if (env == null) {
@@ -45,7 +45,7 @@ public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implement
         }
         EnvVO.Env envVO = this.convert(env);
         delegateWrap(envVO);
-        biz.setEnv(envVO);
+        hasBusiness.setEnv(envVO);
     }
 
 }

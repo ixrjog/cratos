@@ -5,7 +5,11 @@ import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
+import com.baiyi.cratos.domain.param.http.acme.AcmeOrderParam;
+import com.baiyi.cratos.domain.view.acme.AcmeAccountVO;
+import com.baiyi.cratos.domain.view.acme.AcmeCertificateVO;
 import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
+import com.baiyi.cratos.domain.view.acme.AcmeOrderVO;
 
 /**
  * &#064;Author  baiyi
@@ -58,6 +62,14 @@ public interface AcmeFacade {
      */
     void autoDeployToEdsInstances(int acmeCertificateId);
 
+    DataTable<AcmeAccountVO.Account> queryAccountPage(AcmeAccountParam.AccountPageQuery pageQuery);
+
     DataTable<AcmeDomainVO.Domain> queryDomainPage(AcmeDomainParam.DomainPageQuery pageQuery);
+
+    DataTable<AcmeOrderVO.Order> queryOrderPage(AcmeOrderParam.OrderPageQuery pageQuery);
+
+    AcmeCertificateVO.Certificate getAcmeCertificateById(int id);
+
+    void updateAcmeDomain(AcmeDomainParam.UpdateDomain updateDomain);
 
 }

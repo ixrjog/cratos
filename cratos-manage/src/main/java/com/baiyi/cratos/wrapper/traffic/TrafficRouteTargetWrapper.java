@@ -33,15 +33,15 @@ public class TrafficRouteTargetWrapper extends BaseDataTableConverter<TrafficRou
     }
 
     @Override
-    public void decorateBusiness(TrafficRouteVO.HasRecordTargets biz) {
-        if (!IdentityUtils.hasIdentity(biz.getTrafficRouteId())) {
+    public void decorateBusiness(TrafficRouteVO.HasRecordTargets hasBusiness) {
+        if (!IdentityUtils.hasIdentity(hasBusiness.getTrafficRouteId())) {
             return;
         }
-        List<TrafficRecordTarget> targets = trafficRecordTargetService.queryByTrafficRouteId(biz.getTrafficRouteId());
+        List<TrafficRecordTarget> targets = trafficRecordTargetService.queryByTrafficRouteId(hasBusiness.getTrafficRouteId());
         if (CollectionUtils.isEmpty(targets)) {
             return;
         }
-        biz.setRecordTargets(targets.stream()
+        hasBusiness.setRecordTargets(targets.stream()
                                      .map(this::wrapToTarget)
                                      .toList());
     }

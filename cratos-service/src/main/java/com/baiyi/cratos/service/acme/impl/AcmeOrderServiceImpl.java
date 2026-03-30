@@ -1,9 +1,12 @@
 package com.baiyi.cratos.service.acme.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
+import com.baiyi.cratos.domain.param.http.acme.AcmeOrderParam;
 import com.baiyi.cratos.mapper.AcmeOrderMapper;
 import com.baiyi.cratos.service.acme.AcmeOrderService;
 import com.baiyi.cratos.service.base.BaseService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -51,12 +54,23 @@ public class AcmeOrderServiceImpl implements AcmeOrderService {
 
     @Override
     public List<AcmeOrder> queryByDomainId(int domainId, int length) {
-         PageHelper.startPage(1, length);
+        PageHelper.startPage(1, length);
         Example example = new Example(AcmeOrder.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("domainId", domainId);
         example.setOrderByClause("id DESC");
         return acmeOrderMapper.selectByExample(example);
+    }
+
+    @Override
+    public DataTable<AcmeOrder> queryAcmeOrderPage(AcmeOrderParam.OrderPageQuery pageQuery) {
+        Page<AcmeOrder> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        Example example = new Example(AcmeOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("domainId", pageQuery.getAcmeDomainId());
+        example.setOrderByClause("id DESC");
+        List<AcmeOrder> data = acmeOrderMapper.selectByExample(example);
+        return new DataTable<>(data, page.getTotal(), pageQuery);
     }
 
 }
