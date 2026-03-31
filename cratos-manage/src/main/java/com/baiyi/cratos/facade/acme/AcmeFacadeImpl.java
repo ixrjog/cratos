@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.acme;
 
 import com.baiyi.cratos.annotation.InjectSessionUser;
-import com.baiyi.cratos.annotation.SingleTaskLock;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
@@ -331,7 +330,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
-    @SingleTaskLock(key = "#acmeDomainId", keyPrefix = "ACME:CERT:ISSUE")
+    //@SingleTaskLock(key = "#acmeDomainId", keyPrefix = "ACME:CERT:ISSUE")
     public void issueCertificate(int acmeDomainId) {
         AcmeDomain acmeDomain = acmeDomainService.getById(acmeDomainId);
         if (acmeDomain == null) {

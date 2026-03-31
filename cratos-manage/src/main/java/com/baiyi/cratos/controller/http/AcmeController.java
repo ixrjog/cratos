@@ -61,7 +61,7 @@ public class AcmeController {
     @Operation(summary = "Issue acme domain certificate")
     @PutMapping(value = "/certificate/issue", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> issueCertificate(@RequestParam int acmeDomainId) {
-        acmeFacade.issueCertificate(acmeDomainId);
+        acmeFacade.asyncIssueCertificate(acmeDomainId);
         return HttpResult.SUCCESS;
     }
 
