@@ -52,7 +52,7 @@ public class CertificateVO {
         private Date notAfter;
         private String comment;
         @Schema(description = "Expired time")
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date expiredTime;
 
         @Override
@@ -87,9 +87,7 @@ public class CertificateVO {
     public static class CertificateDistributionStatistics implements Serializable {
         @Serial
         private static final long serialVersionUID = 8118707998521967281L;
-
-       // private Cloud cloud;
-
+        // private Cloud cloud;
     }
 
 }

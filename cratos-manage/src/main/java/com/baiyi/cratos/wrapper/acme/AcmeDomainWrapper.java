@@ -7,12 +7,15 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
+import com.baiyi.cratos.service.acme.AcmeOrderService;
 import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -27,10 +30,18 @@ import java.util.Optional;
 public class AcmeDomainWrapper extends BaseDataTableConverter<AcmeDomainVO.Domain, AcmeDomain> implements BaseBusinessDecorator<AcmeDomainVO.HasAcmeDomain, AcmeDomainVO.Domain> {
 
     private final AcmeDomainService acmeDomainService;
+    private final AcmeOrderService acmeOrderService;
 
     @Override
     @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ACME_ACCOUNT, BusinessTypeEnum.EDS_INSTANCE})
     public void wrap(AcmeDomainVO.Domain vo) {
+        vo.setResourceCount(makeResourceCountForAcmeOrder(vo));
+    }
+
+    private Map<String, Integer> makeResourceCountForAcmeOrder(AcmeDomainVO.Domain vo) {
+        Map<String, Integer> resourceCount = Maps.newHashMap();
+        resourceCount.put(BusinessTypeEnum.ACME_ORDER.name(), acmeOrderService.countByDomainId(vo.getId()));
+        return resourceCount;
     }
 
     @Override

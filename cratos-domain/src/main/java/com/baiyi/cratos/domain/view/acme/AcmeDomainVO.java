@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.HasEdsInstance;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
@@ -15,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -26,6 +28,7 @@ public class AcmeDomainVO {
     public interface HasAcmeDomain {
 
         Integer getAcmeDomainId();
+
         void setAcmeDomain(Domain domain);
 
     }
@@ -34,7 +37,7 @@ public class AcmeDomainVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.ACME_DOMAIN)
-    public static class Domain extends BaseVO implements HasEdsInstance, AcmeAccountVO.HasAcmeAccount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Domain extends BaseVO implements HasEdsInstance, AcmeAccountVO.HasAcmeAccount, HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
         @Serial
         private static final long serialVersionUID = 3525022281699968894L;
         private Integer id;
@@ -52,6 +55,7 @@ public class AcmeDomainVO {
 
         private EdsInstanceVO.EdsInstance edsInstance;
         private AcmeAccountVO.Account account;
+        private Map<String, Integer> resourceCount;
 
         public Integer getInstanceId() {
             return dnsResolverInstanceId;

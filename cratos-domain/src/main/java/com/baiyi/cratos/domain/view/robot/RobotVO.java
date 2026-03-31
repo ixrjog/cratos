@@ -35,7 +35,7 @@ public class RobotVO {
         private Boolean trail;
         private String createdBy;
         @Schema(description = "Expired time")
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date expiredTime;
         private String comment;
     }
@@ -49,7 +49,7 @@ public class RobotVO {
         private String username;
         private String token;
         @Schema(description = "Expired time")
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date expiredTime;
     }
 

@@ -29,7 +29,9 @@ public class SshInstanceVO {
 
     public interface HasSessionInstances {
         String getSessionId();
+
         void setSessionInstances(List<Instance> instances);
+
         List<Instance> getSessionInstances();
     }
 
@@ -50,9 +52,9 @@ public class SshInstanceVO {
         private Long outputSize;
         private Boolean instanceClosed;
         private String auditPath;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date startTime;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date endTime;
         @Schema(description = "Resource Count")
         private Map<String, Integer> resourceCount;

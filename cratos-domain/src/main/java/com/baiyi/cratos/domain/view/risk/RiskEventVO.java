@@ -44,7 +44,7 @@ public class RiskEventVO {
         private Integer id;
         private String name;
         // YYYY-MM-DDThh:mm:ssZ
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date eventTime;
         private String states;
         private String year;
@@ -85,9 +85,9 @@ public class RiskEventVO {
          * 影响内容
          */
         private String content;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date startTime;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date endTime;
         /**
          * SLA
@@ -100,13 +100,16 @@ public class RiskEventVO {
         private CostDetail costDetail;
         private Boolean valid;
         private String comment;
+
         public Long getSeq() {
             return this.startTime == null ? 0L : startTime.getTime();
         }
+
         @Override
         public Integer getBusinessId() {
             return id;
         }
+
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
     }

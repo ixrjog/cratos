@@ -30,6 +30,7 @@ public class CredentialVO {
 
     public interface HasCredential {
         Integer getCredentialId();
+
         void setCredential(Credential cred);
     }
 
@@ -57,12 +58,14 @@ public class CredentialVO {
         private String comment;
         private String tips;
         @Schema(description = "Expired time")
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
         private Date expiredTime;
+
         @Override
         public Integer getBusinessId() {
             return id;
         }
+
         private List<BusinessTagVO.BusinessTag> businessTags;
     }
 

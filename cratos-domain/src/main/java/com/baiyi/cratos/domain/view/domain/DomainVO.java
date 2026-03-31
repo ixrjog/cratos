@@ -39,16 +39,18 @@ public class DomainVO {
         private Integer id;
         private String name;
         private Boolean valid;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date registrationTime;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date expiry;
         private String domainType;
         private String comment;
+
         @Override
         public Integer getBusinessId() {
             return id;
         }
+
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")

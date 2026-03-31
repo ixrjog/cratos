@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.view;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,6 +63,7 @@ public class LifeCycleVO {
     public static class Expires implements Serializable {
         @Serial
         private static final long serialVersionUID = 287487054916730530L;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;
         private int survivalRate;
     }

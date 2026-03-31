@@ -19,6 +19,8 @@ public interface AcmeOrderService extends BaseUniqueKeyService<AcmeOrder, AcmeOr
 
     List<AcmeOrder> queryByDomainId(int domainId, int length);
 
+    int countByDomainId(int domainId);
+
     DataTable<AcmeOrder> queryAcmeOrderPage(AcmeOrderParam.OrderPageQuery pageQuery);
 
 }

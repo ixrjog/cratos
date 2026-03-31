@@ -34,7 +34,7 @@ public class CachedVO {
         private static final long serialVersionUID = 323180444117750385L;
         @Builder.Default
         @Schema(description = "Create time")
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private Date createTime = new Date();
         @Schema(description = "Cache duration(s)")
         @Builder.Default

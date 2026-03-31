@@ -39,16 +39,14 @@ public class AcmeController {
 
     @Operation(summary = "Add acme domain")
     @PostMapping(value = "/domain/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addAcmeDomain(
-            @RequestBody @Valid AcmeDomainParam.AddDomain addDomain) {
+    public HttpResult<Boolean> addAcmeDomain(@RequestBody @Valid AcmeDomainParam.AddDomain addDomain) {
         acmeFacade.addAcmeDomain(addDomain);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Update acme domain")
     @PutMapping(value = "/domain/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateAcmeDomain(
-            @RequestBody @Valid AcmeDomainParam.UpdateDomain updateDomain) {
+    public HttpResult<Boolean> updateAcmeDomain(@RequestBody @Valid AcmeDomainParam.UpdateDomain updateDomain) {
         acmeFacade.updateAcmeDomain(updateDomain);
         return HttpResult.SUCCESS;
     }
@@ -60,11 +58,25 @@ public class AcmeController {
         return HttpResult.of(acmeFacade.queryDomainPage(pageQuery));
     }
 
+    @Operation(summary = "Issue acme domain certificate")
+    @PutMapping(value = "/certificate/issue", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> issueCertificate(@RequestParam int acmeDomainId) {
+        acmeFacade.issueCertificate(acmeDomainId);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Pagination query acme order")
     @PostMapping(value = "/order/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<AcmeOrderVO.Order>> queryAcmeOrderPage(
             @RequestBody @Valid AcmeOrderParam.OrderPageQuery pageQuery) {
         return HttpResult.of(acmeFacade.queryOrderPage(pageQuery));
+    }
+
+    @Operation(summary = "Delete acme order by id")
+    @DeleteMapping(value = "/order/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteAcmeOrderById(@RequestParam int id) {
+        acmeFacade.deleteAcmeOrderById(id);
+        return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Get acme order certificate")

@@ -41,9 +41,9 @@ public class SshSessionVO {
         private String serverHostname;
         private String serverAddr;
         private String sessionType;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date startTime;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date endTime;
         private List<SshInstanceVO.Instance> sessionInstances;
         private String durationTime;

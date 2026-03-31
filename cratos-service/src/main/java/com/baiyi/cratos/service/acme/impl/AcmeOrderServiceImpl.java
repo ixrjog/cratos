@@ -63,6 +63,14 @@ public class AcmeOrderServiceImpl implements AcmeOrderService {
     }
 
     @Override
+    public int countByDomainId(int domainId) {
+        Example example = new Example(AcmeOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("domainId", domainId);
+        return acmeOrderMapper.selectCountByExample(example);
+    }
+
+    @Override
     public DataTable<AcmeOrder> queryAcmeOrderPage(AcmeOrderParam.OrderPageQuery pageQuery) {
         Page<AcmeOrder> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         Example example = new Example(AcmeOrder.class);

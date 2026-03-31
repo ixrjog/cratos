@@ -49,6 +49,7 @@ public class UserVO {
         private String email;
         private Boolean valid;
         @Schema(description = "最后登录时间")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private Date lastLogin;
         @FieldSensitive(type = SensitiveType.MOBILE_PHONE)
         private String mobilePhone;
@@ -60,7 +61,7 @@ public class UserVO {
         private String password;
         private String comment;
         @Schema(description = "Expired time")
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;
         private Boolean locked;
 

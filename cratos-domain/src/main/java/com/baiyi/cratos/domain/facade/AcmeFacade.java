@@ -72,4 +72,6 @@ public interface AcmeFacade {
 
     void updateAcmeDomain(AcmeDomainParam.UpdateDomain updateDomain);
 
+    void deleteAcmeOrderById(int id);
+
 }

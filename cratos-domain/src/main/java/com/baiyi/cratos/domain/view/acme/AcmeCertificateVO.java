@@ -38,9 +38,9 @@ public class AcmeCertificateVO {
         private Integer domainId;
         private Integer orderId;
         private String domains;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date notBefore;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date notAfter;
         private String serialNumber;
         private String issuer;
@@ -72,9 +72,9 @@ public class AcmeCertificateVO {
         private Integer certificateId;
         private String domain;
         private String domains;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date notBefore;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        @JsonFormat(pattern = Global.ISO8601)
         private Date notAfter;
         private Boolean valid;
         private String deploymentDetails;

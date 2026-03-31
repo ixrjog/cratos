@@ -1,10 +1,12 @@
 package com.baiyi.cratos.facade.acme;
 
 import com.baiyi.cratos.annotation.InjectSessionUser;
+import com.baiyi.cratos.annotation.SingleTaskLock;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.common.util.ExpiredUtils;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.facade.AcmeFacade;
@@ -329,6 +331,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
+    @SingleTaskLock(key = "#acmeDomainId", keyPrefix = "ACME:CERT:ISSUE")
     public void issueCertificate(int acmeDomainId) {
         AcmeDomain acmeDomain = acmeDomainService.getById(acmeDomainId);
         if (acmeDomain == null) {
@@ -509,6 +512,32 @@ public class AcmeFacadeImpl implements AcmeFacade {
         acmeDomain.setDcvDelegationTarget(updateDomain.getDcvDelegationTarget());
         acmeDomain.setDnsResolverInstanceId(updateDomain.getDnsResolverInstanceId());
         acmeDomainService.updateByPrimaryKey(acmeDomain);
+    }
+
+    @Override
+    public void deleteAcmeOrderById(int id) {
+        AcmeOrder acmeOrder = acmeOrderService.getById(id);
+        if (acmeOrder == null) {
+            return;
+        }
+        // 有证书禁止删除
+        if (IdentityUtils.hasIdentity(acmeOrder.getCertificateId())) {
+            EdsAcmeException.runtime("ACME订单包含证书.");
+        }
+        // 无效直接删除
+        if ("INVALID".equals(acmeOrder.getOrderStatus())) {
+            acmeOrderService.deleteById(id);
+            return;
+        }
+        // 判断创建时间是否大于1小时，是则删除
+        if ("PENDING".equals(acmeOrder.getOrderStatus())) {
+            long hoursSinceCreated = (System.currentTimeMillis() - acmeOrder.getCreateTime().getTime()) / (1000 * 60 * 60);
+            if (hoursSinceCreated >= 1) {
+                acmeOrderService.deleteById(id);
+                return;
+            }
+            EdsAcmeException.runtime("PENDING订单创建未超过1小时，禁止删除.");
+        }
     }
 
 }
