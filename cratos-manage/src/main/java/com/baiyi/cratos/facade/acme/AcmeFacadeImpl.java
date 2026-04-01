@@ -237,21 +237,16 @@ public class AcmeFacadeImpl implements AcmeFacade {
     public AcmeCertificate downloadCertificate(Order order, AcmeDomain acmeDomain,
                                                AcmeOrder acmeOrder) throws Exception {
         Certificate certificate = order.getCertificate();
-        // 获取证书内容（PEM 格式）
-        StringWriter certWriter = new StringWriter();
-        certificate.writeCertificate(certWriter);
-        String certPem = certWriter.toString();
-        // 获取证书链（包含所有证书）
         List<X509Certificate> chain = certificate.getCertificateChain();
+        // 域名证书
+        String certPem = toPem(chain.getFirst());
+        // 中间证书（不含域名证书和根证书）
         StringBuilder chainBuilder = new StringBuilder();
-        for (X509Certificate cert : chain) {
-            chainBuilder.append("-----BEGIN CERTIFICATE-----\n");
-            chainBuilder.append(Base64.getMimeEncoder(64, "\n".getBytes())
-                                        .encodeToString(cert.getEncoded()));
-            chainBuilder.append("\n-----END CERTIFICATE-----\n");
+        for (int i = 1; i < chain.size() - 1; i++) {
+            chainBuilder.append(toPem(chain.get(i)));
         }
         String certChainPem = chainBuilder.toString();
-        X509Certificate x509Cert = chain.getFirst(); // 第一个是域名证书
+        X509Certificate x509Cert = chain.getFirst();
         AcmeCertificate acmeCertificate = AcmeCertificate.builder()
                 .accountId(acmeDomain.getAccountId())
                 .domainId(acmeDomain.getId())
@@ -450,6 +445,12 @@ public class AcmeFacadeImpl implements AcmeFacade {
         if (acmeDNSResolver != null) {
             acmeDNSResolver.recoverDcvDelegation(acmeDomain);
         }
+    }
+
+    private String toPem(X509Certificate cert) throws Exception {
+        return "-----BEGIN CERTIFICATE-----\n"
+                + Base64.getMimeEncoder(64, "\n".getBytes()).encodeToString(cert.getEncoded())
+                + "\n-----END CERTIFICATE-----\n";
     }
 
     private Account getAccount(int acmeAccountId) throws Exception {
