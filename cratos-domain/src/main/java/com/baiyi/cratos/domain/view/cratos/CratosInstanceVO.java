@@ -39,7 +39,7 @@ public class CratosInstanceVO {
         private Boolean valid;
         private String version;
         private String comment;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date startTime;
         private String commit;
         private String license;

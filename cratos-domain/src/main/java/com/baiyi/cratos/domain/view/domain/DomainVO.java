@@ -39,9 +39,9 @@ public class DomainVO {
         private Integer id;
         private String name;
         private Boolean valid;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date registrationTime;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiry;
         private String domainType;
         private String comment;

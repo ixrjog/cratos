@@ -87,13 +87,13 @@ public class WorkOrderTicketVO {
         private String ticketState;
         private String ticketResult;
         private Boolean success;
-        @JsonFormat( pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date submittedAt;
         private Boolean completed;
-        @JsonFormat( pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date completedAt;
         private Boolean autoProcessing;
-        @JsonFormat( pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date processAt;
         private String applyRemark;
         private Boolean valid;
@@ -148,12 +148,12 @@ public class WorkOrderTicketVO {
         private String subType;
         private Integer businessId;
         private Boolean completed;
-        @JsonFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date completedAt;
         private String entryKey;
         private Boolean valid;
         private String namespace;
-        @JsonFormat( pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date executedAt;
         private Boolean success;
         private String comment;

@@ -52,9 +52,9 @@ public class SshInstanceVO {
         private Long outputSize;
         private Boolean instanceClosed;
         private String auditPath;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date startTime;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date endTime;
         @Schema(description = "Resource Count")
         private Map<String, Integer> resourceCount;

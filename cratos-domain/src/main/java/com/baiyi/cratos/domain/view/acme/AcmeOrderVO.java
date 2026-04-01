@@ -39,7 +39,7 @@ public class AcmeOrderVO {
         private Integer certificateId;
         private String orderUrl;
         private String orderStatus;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expires;
         private String dnsChallengeRecords;
         private String domains;

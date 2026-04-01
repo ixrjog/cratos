@@ -19,9 +19,9 @@ public class BaseVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 7289480709427236439L;
     @Schema(description = "Create time")
-    @JsonFormat(pattern = Global.ISO8601)
+    @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
     private Date createTime;
     @Schema(description = "Update time")
-    @JsonFormat(pattern = Global.ISO8601)
+    @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
     private Date updateTime;
 }

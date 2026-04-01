@@ -39,9 +39,9 @@ public class AssetMaturityVO {
         private Integer id;
         private String name;
         private String itemType;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date subscriptionTime;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiry;
         private Boolean valid;
         private Boolean autoRenewal;

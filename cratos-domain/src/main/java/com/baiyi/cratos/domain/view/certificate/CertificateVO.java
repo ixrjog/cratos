@@ -52,7 +52,7 @@ public class CertificateVO {
         private Date notAfter;
         private String comment;
         @Schema(description = "Expired time")
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
 
         @Override

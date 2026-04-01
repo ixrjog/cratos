@@ -31,7 +31,7 @@ public class LoginVO {
         private String name;
         private String uuid;
         private String token;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
         private Long maxAge;
     }

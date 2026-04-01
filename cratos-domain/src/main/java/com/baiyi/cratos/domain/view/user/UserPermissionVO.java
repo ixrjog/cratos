@@ -40,7 +40,7 @@ public class UserPermissionVO {
         private Boolean valid;
         private Integer seq;
         private String content;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
         private String comment;
         private EnvVO.Env env;

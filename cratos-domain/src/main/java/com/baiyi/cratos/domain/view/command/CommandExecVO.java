@@ -31,7 +31,7 @@ public class CommandExecVO {
         private String approvedBy;
         private String ccTo;
         private Boolean completed;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date completedAt;
         private String namespace;
         private Boolean success;
@@ -126,7 +126,7 @@ public class CommandExecVO {
         private String approvalType;
         private String username;
         private String approvalStatus;
-        @JsonFormat(pattern = Global.ISO8601)
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date approvalAt;
         private Boolean approvalCompleted;
         private String approveRemark;
