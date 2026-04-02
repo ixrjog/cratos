@@ -173,4 +173,19 @@ public enum EdsAssetTypeEnum {
                 .collect(Collectors.toList());
     }
 
+    public static final List<EdsAssetTypeEnum> CLOUD_DOMAIN_TYPES = getCloudDomainTypes();
+
+    private static List<EdsAssetTypeEnum> getCloudDomainTypes() {
+        return Arrays.stream(EdsAssetTypeEnum.values())
+                .filter(assetType -> {
+                    try {
+                        Field field = EdsAssetTypeEnum.class.getField(assetType.name());
+                        return field.isAnnotationPresent(CloudDomain.class);
+                    } catch (NoSuchFieldException e) {
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
 }

@@ -3,6 +3,7 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.domain.DomainParam;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.domain.DomainVO;
 import com.baiyi.cratos.facade.DomainFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import static com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum.CLOUD_DOMAIN_TYPES;
 
 /**
  * @Author baiyi
@@ -24,6 +27,14 @@ import org.springframework.web.bind.annotation.*;
 public class DomainController {
 
     private final DomainFacade domainFacade;
+
+    @Operation(summary = "Get domain type options")
+    @GetMapping(value = "/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getDomainTypeOptions() {
+        return HttpResult.of(OptionsVO.toOptions(CLOUD_DOMAIN_TYPES.stream()
+                                                         .map(Enum::name)
+                                                         .toList()));
+    }
 
     @Operation(summary = "Add domain")
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,7 +59,8 @@ public class DomainController {
 
     @Operation(summary = "Pagination query domain")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<DomainVO.Domain>> queryDomainPage(@RequestBody @Valid DomainParam.DomainPageQuery pageQuery) {
+    public HttpResult<DataTable<DomainVO.Domain>> queryDomainPage(
+            @RequestBody @Valid DomainParam.DomainPageQuery pageQuery) {
         return HttpResult.of(domainFacade.queryDomainPage(pageQuery));
     }
 

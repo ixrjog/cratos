@@ -26,6 +26,9 @@
                     #{id}
                 </foreach>
             </if>
+            <if test="domainType != null and domainType != ''">
+                and domain_type = #{domainType}
+            </if>
             <choose>
                 <when test="queryName != null and queryName != ''">
                     and name like "%" #{queryName} "%"

@@ -35,6 +35,7 @@ public class DomainParam {
     public static class DomainPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
         @Schema(description = "查询名称")
         private String queryName;
+        private String domainType;
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
 
@@ -43,6 +44,7 @@ public class DomainParam {
                     .page(getPage())
                     .length(getLength())
                     .queryName(queryName)
+                    .domainType(domainType)
                     .idList(idList)
                     .build();
         }
@@ -55,6 +57,7 @@ public class DomainParam {
     @Schema
     public static class DomainPageQueryParam extends PageParam {
         private String queryName;
+        private String domainType;
         private List<Integer> idList;
     }
 
