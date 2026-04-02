@@ -79,6 +79,7 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
                 simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
             });
         }
+        simpleSshSessionFacade.closeSshSession(sessionId);
     }
 
     private void run(String sessionId, ApplicationKubernetesParam.DeploymentRequest deployment,
