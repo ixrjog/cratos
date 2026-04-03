@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider.ram;
 import com.aliyuncs.ram.model.v20150501.GetPolicyResponse;
 import com.aliyuncs.ram.model.v20150501.ListEntitiesForPolicyResponse;
 import com.aliyuncs.ram.model.v20150501.ListPoliciesResponse;
-import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.enums.DateFormatEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -72,7 +72,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsAssetProvider<EdsCon
                 .nameOf(entity.getPolicyName())
                 .kindOf(entity.getPolicyType())
                 .descriptionOf(entity.getDescription())
-                .createdTimeOf(TimeUtils.toDate(entity.getCreateDate(), TimeZoneEnum.UTC))
+                .createdTimeOf(TimeUtils.toDate(entity.getCreateDate(), DateFormatEnum.ISO8601))
                 .build();
     }
 

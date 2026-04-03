@@ -8,17 +8,15 @@ import lombok.Getter;
  * @Version 1.0
  */
 @Getter
-public enum TimeZoneEnum {
+public enum DateFormatEnum {
 
-    /**
-     * UTC
-     */
-    UTC("yyyy-MM-dd'T'HH:mm:ss'Z'"),
-    DEF("yyyy-MM-dd HH:mm:ss");
+    ISO8601("yyyy-MM-dd'T'HH:mm:ss'Z'"),
+    ISO8601_SHORT("yyyy-MM-dd'T'HH:mm'Z'"),
+    DATETIME("yyyy-MM-dd HH:mm:ss");
 
     private final String format;
 
-    TimeZoneEnum(String format) {
+    DateFormatEnum(String format) {
         this.format = format;
     }
 

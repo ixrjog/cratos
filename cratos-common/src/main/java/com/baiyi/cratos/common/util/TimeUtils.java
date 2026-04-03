@@ -1,6 +1,6 @@
 package com.baiyi.cratos.common.util;
 
-import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.enums.DateFormatEnum;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +41,7 @@ public final class TimeUtils {
         return simpleDateFormat.parse(d);
     }
 
-    public static Date toDate(String time, TimeZoneEnum timeZoneEnum) {
+    public static Date toDate(String time, DateFormatEnum timeZoneEnum) {
         if (StringUtils.isEmpty(time)) {
             return new Date();
         }

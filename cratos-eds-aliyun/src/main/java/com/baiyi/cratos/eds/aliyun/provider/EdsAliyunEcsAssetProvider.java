@@ -4,7 +4,7 @@ import com.aliyuncs.ecs.model.v20140526.DescribeDisksResponse;
 import com.aliyuncs.ecs.model.v20140526.DescribeInstancesResponse;
 import com.aliyuncs.ecs.model.v20140526.ListTagResourcesResponse;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.enums.DateFormatEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -47,8 +47,6 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     private static final String VPC = "vpc";
     private static final String PRE_PAID = "PrePaid";
 
-    //private static final String[] TAGS = {"Group", "Env", "Name", "ServerAccount"};
-
     private static final SysTagKeys[] COMPUTER_TAGS = {SysTagKeys.GROUP, SysTagKeys.NAME, SysTagKeys.SERVER_ACCOUNT};
 
     public EdsAliyunEcsAssetProvider(EdsAssetProviderContext context, AliyunEcsRepo aliyunEcsRepo,
@@ -61,9 +59,8 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
         this.businessTagFacade = businessTagFacade;
     }
 
-
     public static Date toUtcDate(String time) {
-        return TimeUtils.toDate(time, TimeZoneEnum.UTC);
+        return TimeUtils.toDate(time, DateFormatEnum.ISO8601_SHORT);
     }
 
     @Override
@@ -110,18 +107,15 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
         if (optionalExpiredTime.isPresent()) {
             expiredTime = toUtcDate(optionalExpiredTime.get());
         }
-        return createAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
-                                                                      .getInstanceId())
+        return createAssetBuilder(instance, entity)
+                .assetIdOf(entity.getInstance().getInstanceId())
                 .nameOf(entity.getInstance()
                                 .getInstanceName())
                 .assetKeyOf(privateIp)
-                .kindOf(entity.getInstance()
-                                .getInstanceType())
+                .kindOf(entity.getInstance().getInstanceType())
                 .regionOf(entity.getRegionId())
-                .zoneOf(entity.getInstance()
-                                .getZoneId())
-                .createdTimeOf(toUtcDate(entity.getInstance()
-                                                 .getCreationTime()))
+                .zoneOf(entity.getInstance().getZoneId())
+                .createdTimeOf(toUtcDate(entity.getInstance().getCreationTime()))
                 .expiredTimeOf(expiredTime)
                 .descriptionOf(entity.getInstance()
                                        .getDescription())
@@ -142,7 +136,8 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunEcs.Ecs entity) {
+    protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                                           AliyunEcs.Ecs entity) {
         EdsAsset asset = super.importEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
         List<ListTagResourcesResponse.TagResource> tagResources = aliyunTagRepo.listTagResources(

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.provider.ram;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.*;
-import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.enums.DateFormatEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -79,7 +79,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsAssetProvider<EdsConfi
                 .nameOf(entity.getDisplayName())
                 .assetKeyOf(entity.getUserName())
                 .descriptionOf(entity.getComments())
-                .createdTimeOf(TimeUtils.toDate(entity.getCreateDate(), TimeZoneEnum.UTC))
+                .createdTimeOf(TimeUtils.toDate(entity.getCreateDate(), DateFormatEnum.ISO8601))
                 .build();
     }
 

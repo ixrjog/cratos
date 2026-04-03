@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider.kms;
 import com.aliyun.sdk.service.kms20160120.models.GetSecretValueResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.ListSecretsResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.enums.DateFormatEnum;
 import com.baiyi.cratos.common.util.InfoSummaryUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -116,7 +116,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     public static Date toUtcDate(String time) {
-        return TimeUtils.toDate(time, TimeZoneEnum.UTC);
+        return TimeUtils.toDate(time, DateFormatEnum.ISO8601);
     }
 
     @Override
