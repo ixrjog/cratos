@@ -29,7 +29,7 @@ public class ServerAccountVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.SERVER_ACCOUNT)
+    @BusinessType(type = BusinessTypeEnum.API_SECURITY_RISK)
     public static class ServerAccount extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, CredentialVO.HasCredential, Serializable {
         @Serial
         private static final long serialVersionUID = -7504148829629508983L;

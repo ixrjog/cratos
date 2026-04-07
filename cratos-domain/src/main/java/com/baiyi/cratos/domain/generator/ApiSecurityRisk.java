@@ -25,11 +25,13 @@ public class ApiSecurityRisk implements HasValid, HasIntegerPrimaryKey, Serializ
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String riskNo;
+
     /**
-     * 风险名称
+     * 风险描述
      */
-    @Column(name = "risk_name")
-    private String riskName;
+    @Column(name = "risk_description")
+    private String riskDescription;
 
     /**
      * 接口地址
@@ -59,6 +61,8 @@ public class ApiSecurityRisk implements HasValid, HasIntegerPrimaryKey, Serializ
      */
     @Column(name = "contact_person")
     private String contactPerson;
+
+    private String securityOfficer;
 
     /**
      * 处理跟进群
