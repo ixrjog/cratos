@@ -3,6 +3,7 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.certificate.CertificateParam;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 import com.baiyi.cratos.facade.CertificateFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum.CLOUD_CERTIFICATE_TYPES;
 
 /**
  * @Author baiyi
@@ -47,6 +50,14 @@ public class CertificateController {
     public HttpResult<Boolean> setCertificateValidById(@RequestParam int id) {
         certificateFacade.setValidById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Get certificate type options")
+    @GetMapping(value = "/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getCertificateTypeOptions() {
+        return HttpResult.of(OptionsVO.toOptions(CLOUD_CERTIFICATE_TYPES.stream()
+                                                         .map(Enum::name)
+                                                         .toList()));
     }
 
     @Operation(summary = "Pagination query certificate")

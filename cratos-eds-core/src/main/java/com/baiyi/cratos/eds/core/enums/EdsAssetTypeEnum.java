@@ -6,10 +6,10 @@ import com.baiyi.cratos.eds.core.annotation.CloudDomain;
 import com.baiyi.cratos.eds.core.annotation.CloudIdentity;
 import lombok.Getter;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * &#064;Author baiyi
@@ -143,49 +143,25 @@ public enum EdsAssetTypeEnum {
         this.seq = seq;
     }
 
-    public static final List<EdsAssetTypeEnum> CLOUD_IDENTITY_TYPES = getCloudIdentityTypes();
+    public static final List<EdsAssetTypeEnum> CLOUD_IDENTITY_TYPES = getCloudTypes(CloudIdentity.class);
 
-    private static List<EdsAssetTypeEnum> getCloudIdentityTypes() {
+    public static final List<EdsAssetTypeEnum> CLOUD_COMPUTER_TYPES = getCloudTypes(CloudComputer.class);
+
+    public static final List<EdsAssetTypeEnum> CLOUD_DOMAIN_TYPES = getCloudTypes(CloudDomain.class);
+
+    public static final List<EdsAssetTypeEnum> CLOUD_CERTIFICATE_TYPES = getCloudTypes(CloudCertificate.class);
+
+    private static List<EdsAssetTypeEnum> getCloudTypes(Class<? extends Annotation> annotationClass) {
         return Arrays.stream(EdsAssetTypeEnum.values())
                 .filter(assetType -> {
                     try {
                         Field field = EdsAssetTypeEnum.class.getField(assetType.name());
-                        return field.isAnnotationPresent(CloudIdentity.class);
+                        return field.isAnnotationPresent(annotationClass);
                     } catch (NoSuchFieldException e) {
                         return false;
                     }
                 })
-                .collect(Collectors.toList());
-    }
-
-    public static final List<EdsAssetTypeEnum> CLOUD_COMPUTER_TYPES = getCloudComputerTypes();
-
-    private static List<EdsAssetTypeEnum> getCloudComputerTypes() {
-        return Arrays.stream(EdsAssetTypeEnum.values())
-                .filter(assetType -> {
-                    try {
-                        Field field = EdsAssetTypeEnum.class.getField(assetType.name());
-                        return field.isAnnotationPresent(CloudComputer.class);
-                    } catch (NoSuchFieldException e) {
-                        return false;
-                    }
-                })
-                .collect(Collectors.toList());
-    }
-
-    public static final List<EdsAssetTypeEnum> CLOUD_DOMAIN_TYPES = getCloudDomainTypes();
-
-    private static List<EdsAssetTypeEnum> getCloudDomainTypes() {
-        return Arrays.stream(EdsAssetTypeEnum.values())
-                .filter(assetType -> {
-                    try {
-                        Field field = EdsAssetTypeEnum.class.getField(assetType.name());
-                        return field.isAnnotationPresent(CloudDomain.class);
-                    } catch (NoSuchFieldException e) {
-                        return false;
-                    }
-                })
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

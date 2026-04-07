@@ -24,9 +24,16 @@
             parameterType="com.baiyi.cratos.domain.param.http.certificate.CertificateParam$CertificatePageQuery"
             resultMap="BaseResultMap">
         select * from certificate
+        <where>
+            <if test="certificateType != null and certificateType != ''">
+                certificate_type = #{certificateType}
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and name like "%" #{queryName} "%"
+            </if>
+        </where>
         <choose>
             <when test="queryName != null and queryName != ''">
-                where name like "%" #{queryName} "%"
                 order by replace(name, #{queryName}, ''), not_after
             </when>
             <otherwise>
@@ -35,7 +42,8 @@
         </choose>
     </select>
 
-    <select id="getCertificateNameOptions" parameterType="com.baiyi.cratos.domain.param.http.certificate.CertificateParam$GetCertificateNameOptions"
+    <select id="getCertificateNameOptions"
+            parameterType="com.baiyi.cratos.domain.param.http.certificate.CertificateParam$GetCertificateNameOptions"
             resultType="java.lang.String">
         select distinct name from certificate
         <if test="queryName != null and queryName != ''">

@@ -80,6 +80,7 @@ public class CertificateParam {
     public static class CertificatePageQuery extends PageParam {
         @Schema(description = "查询名称")
         private String queryName;
+        private String certificateType;
     }
 
     @Data
