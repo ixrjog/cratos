@@ -1,30 +1,24 @@
-package com.baiyi.cratos.facade.inspection.impl;
+package com.baiyi.cratos.eds.aliyun.util;
 
 import com.aliyun.oss.model.Bucket;
-import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOss;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOssRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
-import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.facade.inspection.base.BaseEdsInspectionTask;
-import com.baiyi.cratos.facade.inspection.context.InspectionTaskContext;
-import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,42 +28,25 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.ALIYUN_OSS_BUCKET_POLICY_INSPECTION_NOTIFICATION;
-
 /**
  * &#064;Author  baiyi
- * &#064;Date  2026/3/6 13:58
+ * &#064;Date  2026/4/8 10:02
  * &#064;Version 1.0
  */
 @Slf4j
 @Component
-public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<EdsConfigs.Aliyun> {
+@RequiredArgsConstructor
+public class AliyunOssBucketSecUtils {
 
+    private final EdsInstanceService edsInstanceService;
+    private final EdsAssetService edsAssetService;
+    private final EdsProviderHolderFactory edsProviderHolderFactory;
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Pattern RESOURCE_PREFIX_PATTERN = Pattern.compile("acs:oss:\\*:\\d+:");
     private static final String POLICIES_FIELD = "policies";
 
-    public AliyunOssBucketPolicyInspectionTask(InspectionTaskContext context,
-                                               EdsProviderHolderFactory edsProviderHolderFactory,
-                                               EdsInstanceService edsInstanceService,
-                                               ConfigCredTemplate configCredTemplate,
-                                               CredentialService credentialService, EdsAssetService edsAssetService) {
-        super(
-                context, edsProviderHolderFactory, edsInstanceService, configCredTemplate, credentialService,
-                edsAssetService
-        );
-    }
-
-    @Override
-    protected String getMsg() throws IOException {
-        NotificationTemplate notificationTemplate = getNotificationTemplate(
-                ALIYUN_OSS_BUCKET_POLICY_INSPECTION_NOTIFICATION);
+    public void run() {
         List<AliyunOss.Policy> policies = queryAliyunOssBucketPolicies();
-        return BeetlUtil.renderTemplate(
-                notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                        .put(POLICIES_FIELD, policies)
-                        .build()
-        );
     }
 
     private List<AliyunOss.Policy> queryAliyunOssBucketPolicies() {
@@ -79,8 +56,15 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
                 .collect(Collectors.toList());
     }
 
+    private EdsConfigs.Aliyun getConfig(EdsInstance instance) {
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ?> providerHolder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ?>) edsProviderHolderFactory.createHolder(
+                instance.getId(), EdsAssetTypeEnum.ALIYUN_OSS_BUCKET.name());
+        return providerHolder.getInstance()
+                .getConfig();
+    }
+
     private Stream<AliyunOss.Policy> queryInstancePolicies(EdsInstance instance) {
-        EdsConfigs.Aliyun aliyun = getConfig(instance.getConfigId());
+        EdsConfigs.Aliyun aliyun = getConfig(instance);
         String endpoint = Optional.ofNullable(aliyun.getOss())
                 .map(EdsAliyunConfigModel.OSS::getEndpoints)
                 .filter(list -> !list.isEmpty())
@@ -100,7 +84,7 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
     }
 
     private Stream<AliyunOss.Policy> processBucket(Bucket bucket, EdsConfigs.Aliyun aliyun,
-                                                              Map<String, EdsAsset> ramUserMap, String instanceName) {
+                                                   Map<String, EdsAsset> ramUserMap, String instanceName) {
         try {
             String policyJson = AliyunOssRepo.getBucketPolicy(bucket.getExtranetEndpoint(), aliyun, bucket.getName());
             if (policyJson == null) {

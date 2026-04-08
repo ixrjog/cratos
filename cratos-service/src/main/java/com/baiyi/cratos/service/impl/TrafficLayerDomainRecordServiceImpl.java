@@ -1,6 +1,7 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -39,18 +40,19 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
         Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         Example example = new Example(TrafficLayerDomainRecord.class);
         Example.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(pageQuery.getQueryName())) {
-            criteria.andLike("recordName", SqlUtils.ofLike(pageQuery.getQueryName()));
-        }
-        if (pageQuery.getDomainId() != null) {
+        if (IdentityUtils.hasIdentity(pageQuery.getDomainId())) {
             criteria.andEqualTo("domainId", pageQuery.getDomainId());
-        }
-        if (pageQuery.getHasRouteTrafficTo() != null) {
-            if (pageQuery.getHasRouteTrafficTo()) {
-                criteria.andIsNotNull("routeTrafficTo")
-                        .andNotEqualTo("routeTrafficTo", "");
-            } else {
-                criteria.andCondition("(route_traffic_to is null or route_traffic_to = '')");
+        } else {
+            if (StringUtils.isNotBlank(pageQuery.getQueryName())) {
+                criteria.andLike("recordName", SqlUtils.ofLike(pageQuery.getQueryName()));
+            }
+            if (pageQuery.getHasRouteTrafficTo() != null) {
+                if (pageQuery.getHasRouteTrafficTo()) {
+                    criteria.andIsNotNull("routeTrafficTo")
+                            .andNotEqualTo("routeTrafficTo", "");
+                } else {
+                    criteria.andCondition("(route_traffic_to is null or route_traffic_to = '')");
+                }
             }
         }
         List<TrafficLayerDomainRecord> data = trafficLayerDomainRecordMapper.selectByExample(example);

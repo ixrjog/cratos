@@ -41,4 +41,19 @@ public class AliyunOss {
         private List<String> action;
     }
 
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    @Builder
+    public static class Policy {
+        String instanceName;
+        String ramUser;
+        String ramName;
+        String endpoint;
+        String bucketName;
+        String effect;
+        String resources;
+        String action;
+    }
+
 }

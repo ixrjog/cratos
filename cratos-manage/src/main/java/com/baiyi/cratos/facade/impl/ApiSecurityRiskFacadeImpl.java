@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ApiSecurityRisk;
 import com.baiyi.cratos.domain.param.http.security.ApiSecurityRiskParam;
@@ -41,6 +42,9 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
         risk.setCompleted(false);
         if (addRisk.getDiscoveredTime() == null) {
             risk.setDiscoveredTime(new java.util.Date());
+        }
+        if (StringUtils.hasText(addRisk.getSecurityOfficer())) {
+            risk.setSecurityOfficer(SessionUtils.getUsername());
         }
         apiSecurityRiskService.add(risk);
     }
