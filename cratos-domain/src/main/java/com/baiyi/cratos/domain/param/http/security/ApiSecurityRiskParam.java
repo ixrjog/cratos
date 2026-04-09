@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.http.security;
 
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.generator.ApiSecurityRisk;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
@@ -32,7 +33,7 @@ public class ApiSecurityRiskParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class AddRisk implements IToTarget<ApiSecurityRisk> {
+    public static class AddRisk implements HasSessionUser,IToTarget<ApiSecurityRisk> {
         private String riskNo;
         private String apiEndpoint;
         private String riskDescription;
@@ -43,10 +44,16 @@ public class ApiSecurityRiskParam {
         private String contactPerson;
         private String followUpGroup;
         private String progress;
+        private String createdBy;
         private String analysisDesc;
         private Date discoveredTime;
         private Date expectedTime;
         private String comment;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.createdBy = username;
+        }
     }
 
     @Data
@@ -66,6 +73,7 @@ public class ApiSecurityRiskParam {
         private String contactPerson;
         private String followUpGroup;
         private String progress;
+        private String createdBy;
         private String analysisDesc;
         private Date discoveredTime;
         private Date expectedTime;

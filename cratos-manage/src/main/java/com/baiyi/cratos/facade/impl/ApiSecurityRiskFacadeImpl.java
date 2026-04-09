@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
@@ -35,6 +36,7 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
     }
 
     @Override
+    @InjectSessionUser
     public void addRisk(ApiSecurityRiskParam.AddRisk addRisk) {
         ApiSecurityRisk risk = addRisk.toTarget();
         risk.setRiskNo(PasswordGenerator.generateNo());
@@ -51,6 +53,8 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
 
     @Override
     public void updateRisk(ApiSecurityRiskParam.UpdateRisk updateRisk) {
+        ApiSecurityRisk risk = apiSecurityRiskService.getById(updateRisk.getId());
+        updateRisk.setCreatedBy(risk.getCreatedBy());
         apiSecurityRiskService.updateByPrimaryKey(updateRisk.toTarget());
     }
 

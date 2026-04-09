@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.DatacenterNetworkAllocationMapper">
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.DatacenterNetworkAllocation">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="network_id" jdbcType="INTEGER" property="networkId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="cidr" jdbcType="VARCHAR" property="cidr"/>
+        <result column="ip_start" jdbcType="INTEGER" property="ipStart"/>
+        <result column="ip_end" jdbcType="INTEGER" property="ipEnd"/>
+        <result column="allocation_type" jdbcType="VARCHAR" property="allocationType"/>
+        <result column="allow_overlap" jdbcType="BIT" property="allowOverlap"/>
+        <result column="nat" jdbcType="VARCHAR" property="nat"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.datacenter.DatacenterNetworkParam$AllocationPageQuery"
+            resultMap="BaseResultMap">
+        select * from datacenter_network_allocation
+        <where>
+            <if test="networkId != null">
+                and network_id = #{networkId}
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and (name like "%" #{queryName} "%" or cidr like "%" #{queryName} "%")
+            </if>
+        </where>
+        <choose>
+            <when test="queryName != null and queryName != ''">
+                order by replace(name, #{queryName}, '')
+            </when>
+            <otherwise>
+                order by ip_start
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryOverlapping" resultMap="BaseResultMap">
+        select * from datacenter_network_allocation
+        where ip_start &lt;= #{ipEnd} and ip_end &gt;= #{ipStart}
+        and allow_overlap = 0
+        <if test="excludeId != null">
+            and id != #{excludeId}
+        </if>
+        order by ip_start
+    </select>
+
+</mapper>

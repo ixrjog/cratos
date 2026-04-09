@@ -75,4 +75,6 @@ public interface ErrorCodeConstants {
 
     int EDS_ACME_ERROR = 64000;
 
+    int DATACENTER_NETWORK_ERROR = 65000;
+
 }

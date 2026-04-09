@@ -35,6 +35,12 @@ public class ExtDataSourceController {
 
     // Instance
 
+    @Operation(summary = "Query eds instance datacenter type options")
+    @GetMapping(value = "/instance/type/datacenter/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getEdsInstanceDatacenterTypeOptions() {
+        return HttpResult.of(  OptionsVO.toOptions(EdsInstanceTypeEnum.DATACENTER_TYPES.stream().map(Enum::name).toList()));
+    }
+
     @Operation(summary = "Query eds instance type options")
     @GetMapping(value = "/instance/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getEdsInstanceTypeOptions() {

@@ -16,6 +16,7 @@
         <result column="contact_person" jdbcType="VARCHAR" property="contactPerson"/>
         <result column="follow_up_group" jdbcType="VARCHAR" property="followUpGroup"/>
         <result column="progress" jdbcType="VARCHAR" property="progress"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
         <result column="discovered_time" jdbcType="TIMESTAMP" property="discoveredTime"/>
         <result column="expected_time" jdbcType="TIMESTAMP" property="expectedTime"/>
         <result column="valid" jdbcType="BIT" property="valid"/>

@@ -44,13 +44,13 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
         return businessCredentialMapper.selectByExample(example);
     }
 
-    public List<BusinessCredential> selectByKey(BaseBusiness.HasBusiness business) {
-        Example example = new Example(BusinessCredential.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("businessType", business.getBusinessType())
-                .andEqualTo("businessId", business.getBusinessId());
-        return businessCredentialMapper.selectByExample(example);
-    }
+//    public List<BusinessCredential> selectByKey(BaseBusiness.HasBusiness business) {
+//        Example example = new Example(BusinessCredential.class);
+//        Example.Criteria criteria = example.createCriteria();
+//        criteria.andEqualTo("businessType", business.getBusinessType())
+//                .andEqualTo("businessId", business.getBusinessId());
+//        return businessCredentialMapper.selectByExample(example);
+//    }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})

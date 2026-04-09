@@ -81,6 +81,9 @@ public class ApiSecurityRisk implements HasValid, HasIntegerPrimaryKey, Serializ
     @Column(name = "discovered_time")
     private Date discoveredTime;
 
+    @Column(name = "created_by")
+    private String createdBy;
+
     /**
      * 预计完结时间
      */

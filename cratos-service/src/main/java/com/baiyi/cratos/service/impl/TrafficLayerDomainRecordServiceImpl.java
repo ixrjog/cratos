@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.AccountEntity;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.mapper.TrafficLayerDomainRecordMapper;
@@ -37,7 +38,7 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
 
     @Override
     public DataTable<TrafficLayerDomainRecord> queryPageByParam(TrafficLayerRecordParam.RecordPageQuery pageQuery) {
-        Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        Page<AccountEntity> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         Example example = new Example(TrafficLayerDomainRecord.class);
         Example.Criteria criteria = example.createCriteria();
         if (IdentityUtils.hasIdentity(pageQuery.getDomainId())) {
