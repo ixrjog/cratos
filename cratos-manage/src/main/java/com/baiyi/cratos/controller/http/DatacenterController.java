@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2026/4/8 17:12
@@ -51,6 +53,19 @@ public class DatacenterController {
     public HttpResult<DataTable<DatacenterVO.Network>> queryNetworkPage(
             @RequestBody @Valid DatacenterNetworkParam.NetworkPageQuery pageQuery) {
         return HttpResult.of(datacenterFacade.queryNetworkPage(pageQuery));
+    }
+
+    @Operation(summary = "Query allocations by CIDR range")
+    @GetMapping(value = "/allocation/cidr/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<DatacenterVO.Allocation>> queryAllocationsByCidr(@RequestParam String cidr) {
+        return HttpResult.of(datacenterFacade.queryAllocationsByCidr(cidr));
+    }
+
+    @Operation(summary = "Get subnet allocation map")
+    @GetMapping(value = "/allocation/subnet/map/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DatacenterVO.SubnetMap> getSubnetMap(
+            @RequestParam String parentCidr, @RequestParam int prefixLength) {
+        return HttpResult.of(datacenterFacade.getSubnetMap(parentCidr, prefixLength));
     }
 
     @Operation(summary = "Find available CIDRs in a private address range")

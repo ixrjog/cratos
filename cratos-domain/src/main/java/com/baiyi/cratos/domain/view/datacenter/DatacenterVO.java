@@ -130,4 +130,33 @@ public class DatacenterVO {
         private List<String> availableCidrs;
     }
 
+    @Data
+    @Schema
+    @lombok.Builder
+    @lombok.NoArgsConstructor
+    @lombok.AllArgsConstructor
+    public static class SubnetBlock implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 1L;
+        private String cidr;
+        private boolean allocated;
+        private String allocationName;
+        private String allocationType;
+    }
+
+    @Data
+    @Schema
+    @lombok.Builder
+    @lombok.NoArgsConstructor
+    @lombok.AllArgsConstructor
+    public static class SubnetMap implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 1L;
+        private String parentCidr;
+        private int prefixLength;
+        private int cols;
+        private int rows;
+        private List<SubnetBlock> blocks;
+    }
+
 }

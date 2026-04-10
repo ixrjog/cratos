@@ -128,8 +128,8 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
         // Find earliest and latest discovered time from data
         Date now = new Date();
         Date earliest = all.stream()
-                .filter(r -> r.getDiscoveredTime() != null)
                 .map(ApiSecurityRisk::getDiscoveredTime)
+                .filter(Objects::nonNull)
                 .min(Date::compareTo)
                 .orElse(now);
         Date latest = all.stream()

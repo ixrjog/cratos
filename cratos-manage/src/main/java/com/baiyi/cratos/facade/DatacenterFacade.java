@@ -4,6 +4,8 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.datacenter.DatacenterNetworkParam;
 import com.baiyi.cratos.domain.view.datacenter.DatacenterVO;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2026/4/8 17:11
@@ -28,6 +30,10 @@ public interface DatacenterFacade {
     DatacenterVO.CidrConflictResult checkCidrConflict(DatacenterNetworkParam.CheckCidrConflict checkCidrConflict);
 
     DatacenterVO.AvailableCidrResult findAvailableCidrs(DatacenterNetworkParam.FindAvailableCidr findAvailableCidr);
+
+    DatacenterVO.SubnetMap getSubnetMap(String parentCidr, int prefixLength);
+
+    List<DatacenterVO.Allocation> queryAllocationsByCidr(String cidr);
 
     void scanNetworkAllocation(int networkId);
 

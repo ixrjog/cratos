@@ -25,11 +25,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 /**
  * &#064;Author  baiyi
@@ -196,7 +195,7 @@ public class DatacenterFacadeImpl implements DatacenterFacade {
         Map<String, DatacenterNetworkAllocation> networkAllocationMap = allocationService.queryByNetworkId(networkId)
                 .stream()
                 .collect(Collectors.toMap(DatacenterNetworkAllocation::getCidr, Function.identity()));
-        for (NetworkModel.Allocation allocation : allocations) {
+        allocations.forEach(allocation -> {
             String cidr = allocation.getCidr();
             if (!networkAllocationMap.containsKey(cidr)) {
                 long[] range = NetworkUtils.cidrToRange(cidr);
@@ -217,7 +216,64 @@ public class DatacenterFacadeImpl implements DatacenterFacade {
                         .build();
                 allocationService.add(datacenterNetworkAllocation);
             }
+        });
+    }
+
+    @Override
+    public DatacenterVO.SubnetMap getSubnetMap(String parentCidr, int prefixLength) {
+        long[] parentRange = NetworkUtils.cidrToRange(parentCidr);
+        long parentStart = parentRange[0];
+        long parentEnd = parentRange[1];
+        long subnetSize = 1L << (32 - prefixLength);
+
+        List<DatacenterNetworkAllocation> existing = allocationService.queryAllocationsInRange(parentStart, parentEnd);
+        // Build lookup: key = subnet start IP
+        Map<Long, DatacenterNetworkAllocation> allocMap = new HashMap<>();
+        for (DatacenterNetworkAllocation alloc : existing) {
+            // Map each allocation to the /prefixLength blocks it covers
+            long allocStart = Math.max(alloc.getIpStart(), parentStart);
+            long allocEnd = Math.min(alloc.getIpEnd(), parentEnd);
+            long blockStart = (allocStart / subnetSize) * subnetSize;
+            while (blockStart <= allocEnd && blockStart + subnetSize - 1 <= parentEnd) {
+                if (blockStart >= parentStart) {
+                    allocMap.put(blockStart, alloc);
+                }
+                blockStart += subnetSize;
+            }
         }
+
+        int totalBlocks = (int) ((parentEnd - parentStart + 1) / subnetSize);
+        int cols = (int) Math.ceil(Math.sqrt(totalBlocks));
+        int rows = (int) Math.ceil((double) totalBlocks / cols);
+
+        List<DatacenterVO.SubnetBlock> blocks = new ArrayList<>();
+        LongStream.iterate(parentStart, ip -> ip + subnetSize - 1 <= parentEnd, ip -> ip + subnetSize)
+                .forEach(ip -> {
+                    DatacenterNetworkAllocation alloc = allocMap.get(ip);
+                    blocks.add(DatacenterVO.SubnetBlock.builder()
+                                       .cidr(NetworkUtils.longToIp(ip) + "/" + prefixLength)
+                                       .allocated(alloc != null)
+                                       .allocationName(alloc != null ? alloc.getName() : null)
+                                       .allocationType(alloc != null ? alloc.getAllocationType() : null)
+                                       .build());
+                });
+
+        return DatacenterVO.SubnetMap.builder()
+                .parentCidr(parentCidr)
+                .prefixLength(prefixLength)
+                .cols(cols)
+                .rows(rows)
+                .blocks(blocks)
+                .build();
+    }
+
+    @Override
+    public List<DatacenterVO.Allocation> queryAllocationsByCidr(String cidr) {
+        long[] range = NetworkUtils.cidrToRange(cidr);
+        return allocationService.queryAllocationsInRange(range[0], range[1]).stream()
+                .map(allocationWrapper::convert)
+                .peek(allocationWrapper::wrap)
+                .toList();
     }
 
 }
