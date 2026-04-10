@@ -12,8 +12,12 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * &#064;Date  2026/4/3 16:36
  * &#064;Version 1.0
  */
+import java.util.List;
+
 public interface ApiSecurityRiskService extends BaseValidService<ApiSecurityRisk, ApiSecurityRiskMapper>, SupportBusinessService {
 
     DataTable<ApiSecurityRisk> queryApiSecurityRiskPage(ApiSecurityRiskParam.RiskPageQuery pageQuery);
+
+    List<ApiSecurityRisk> selectAll();
 
 }

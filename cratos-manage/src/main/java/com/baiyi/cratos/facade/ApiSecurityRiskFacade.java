@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.security.ApiSecurityRiskParam;
+import com.baiyi.cratos.domain.view.security.ApiSecurityRiskReportVO;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskVO;
 
 /**
@@ -18,5 +19,7 @@ public interface ApiSecurityRiskFacade {
     void updateRisk(ApiSecurityRiskParam.UpdateRisk updateRisk);
 
     void deleteRiskById(int id);
+
+    ApiSecurityRiskReportVO.Report getReport();
 
 }

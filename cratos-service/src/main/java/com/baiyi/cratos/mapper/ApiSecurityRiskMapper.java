@@ -12,4 +12,6 @@ public interface ApiSecurityRiskMapper extends Mapper<ApiSecurityRisk> {
 
     List<ApiSecurityRisk> queryPageByParam(ApiSecurityRiskParam.RiskPageQuery pageQuery);
 
+    List<ApiSecurityRisk> selectAll();
+
 }

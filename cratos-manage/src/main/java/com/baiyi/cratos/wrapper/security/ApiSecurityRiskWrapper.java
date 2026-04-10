@@ -1,7 +1,6 @@
 package com.baiyi.cratos.wrapper.security;
 
 import com.baiyi.cratos.annotation.BusinessDecorator;
-import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ApiSecurityRisk;
@@ -32,7 +31,6 @@ public class ApiSecurityRiskWrapper extends BaseDataTableConverter<ApiSecurityRi
 
     @Override
     @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG})
-    @Sensitive
     public void wrap(ApiSecurityRiskVO.Risk vo) {
         if (StringUtils.hasText(vo.getAnalyst())) {
             User analystUser = userService.getByUsername(vo.getAnalyst());
@@ -41,13 +39,13 @@ public class ApiSecurityRiskWrapper extends BaseDataTableConverter<ApiSecurityRi
             }
         }
         if (StringUtils.hasText(vo.getSecurityOfficer())) {
-            User securityOfficerUser = userService.getByUsername(vo.getAnalyst());
+            User securityOfficerUser = userService.getByUsername(vo.getSecurityOfficer());
             if (securityOfficerUser != null) {
                 vo.setSecurityOfficerUser(BeanCopierUtils.copyProperties(securityOfficerUser, UserVO.User.class));
             }
         }
         if (StringUtils.hasText(vo.getContactPerson())) {
-            User contactPersonUser = userService.getByUsername(vo.getAnalyst());
+            User contactPersonUser = userService.getByUsername(vo.getContactPerson());
             if (contactPersonUser != null) {
                 vo.setContactPersonUser(BeanCopierUtils.copyProperties(contactPersonUser, UserVO.User.class));
             }

@@ -42,4 +42,8 @@
         </where>
     </select>
 
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from api_security_risk order by discovered_time desc
+    </select>
+
 </mapper>

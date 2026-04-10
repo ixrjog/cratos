@@ -41,4 +41,9 @@ public class ApiSecurityRiskServiceImpl implements ApiSecurityRiskService {
         return new DataTable<>(data, page.getTotal(), pageQuery);
     }
 
+    @Override
+    public List<ApiSecurityRisk> selectAll() {
+        return apiSecurityRiskMapper.selectAll();
+    }
+
 }
