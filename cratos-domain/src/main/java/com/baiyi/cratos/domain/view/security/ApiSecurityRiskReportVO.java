@@ -28,6 +28,7 @@ public class ApiSecurityRiskReportVO {
         private Map<String, Integer> progressDistribution;
         private List<MonthlyTrend> monthlyTrends;
         private List<AnalystStat> analystStats;
+        private List<ApiSecurityRiskVO.Risk> highRisks;
         private List<ApiSecurityRiskVO.Risk> overdueRisks;
     }
 

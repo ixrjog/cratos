@@ -103,6 +103,14 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
         // Analyst stats
         List<ApiSecurityRiskReportVO.AnalystStat> analystStats = buildAnalystStats(all);
 
+        // High risks (CRITICAL + HIGH, incomplete)
+        List<ApiSecurityRiskVO.Risk> highRisks = all.stream()
+                .filter(r -> !Boolean.TRUE.equals(r.getCompleted()))
+                .filter(r -> "CRITICAL".equals(r.getRiskLevel()) || "HIGH".equals(r.getRiskLevel()))
+                .sorted(Comparator.comparing(ApiSecurityRisk::getDiscoveredTime, Comparator.nullsLast(Comparator.reverseOrder())))
+                .map(apiSecurityRiskWrapper::convert)
+                .toList();
+
         // Overdue risks
         List<ApiSecurityRiskVO.Risk> overdueRisks = all.stream()
                 .filter(r -> !Boolean.TRUE.equals(r.getCompleted()))
@@ -119,6 +127,7 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
                 .progressDistribution(progressDist)
                 .monthlyTrends(trends)
                 .analystStats(analystStats)
+                .highRisks(highRisks)
                 .overdueRisks(overdueRisks)
                 .build();
     }
