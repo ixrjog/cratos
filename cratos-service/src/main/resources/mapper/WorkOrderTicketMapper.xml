@@ -53,6 +53,10 @@
             and work_order_id in ( select id from work_order where work_order_key = #{workOrderKey} )
         </if>
         <choose>
+            <when test="myApproval != null and myApproval">
+                and ticket_state = 'IN_APPROVAL'
+                and node_id in ( select id from work_order_ticket_node where username = #{myUsername} and (approval_completed is null or approval_completed = false) )
+            </when>
             <when test="mySubmitted != null and mySubmitted">
                 and username = #{myUsername}
             </when>

@@ -55,6 +55,8 @@ public class WorkOrderTicketParam {
         private String username;
         @Schema(description = "我的提交")
         private Boolean mySubmitted;
+        @Schema(description = "我的待审批")
+        private Boolean myApproval;
         private String myUsername;
 
         @Override
