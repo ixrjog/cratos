@@ -2,7 +2,7 @@ package com.baiyi.cratos.shell.listeners.event.impl;
 
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
-import com.baiyi.cratos.shell.listeners.SshShellEventType;
+import com.baiyi.cratos.ssh.core.enums.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import org.springframework.stereotype.Component;

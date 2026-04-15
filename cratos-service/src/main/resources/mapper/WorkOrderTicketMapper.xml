@@ -55,7 +55,12 @@
         <choose>
             <when test="myApproval != null and myApproval">
                 and ticket_state = 'IN_APPROVAL'
-                and node_id in ( select id from work_order_ticket_node where username = #{myUsername} and (approval_completed is null or approval_completed = false) )
+                and (
+                    node_id in ( select id from work_order_ticket_node where username = #{myUsername} and (approval_completed is null or approval_completed = false) )
+                    or
+                    (node_id in ( select id from work_order_ticket_node where approval_type = 'OR_BATCH' and (approval_completed is null or approval_completed = false) )
+                     and id in ( select ticket_id from work_order_ticket_subscriber where username = #{myUsername} and subscribe_status = 'APPROVED_BY' ))
+                )
             </when>
             <when test="mySubmitted != null and mySubmitted">
                 and username = #{myUsername}

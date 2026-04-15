@@ -32,7 +32,7 @@ public class SshShellEvent implements IEventMessage {
 
     @Serial
     private static final long serialVersionUID = -8045055731655249141L;
-    private SshShellEventType type;
+    private com.baiyi.cratos.ssh.core.enums.SshShellEventType type;
 
     private ChannelSession session;
 

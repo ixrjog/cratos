@@ -3,7 +3,7 @@ package com.baiyi.cratos.shell.listeners.event.impl;
 import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
-import com.baiyi.cratos.shell.listeners.SshShellEventType;
+import com.baiyi.cratos.ssh.core.enums.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import org.apache.sshd.common.auth.UsernameHolder;
@@ -38,7 +38,7 @@ public class SshShellStoppedEvent extends BaseSshShellEvent {
                 .ifPresent(username -> SiemSecurityLogger.log(
                         SiemSecurityLogger.EventType.LOGOUT, event.getSession()
                                 .getServerSession()
-                                .getUsername(), SiemSecurityLogger.Action.LOGOUT, "User logoutCratos SSH-Server"
+                                .getUsername(), SiemSecurityLogger.Action.LOGOUT, "User logout Cratos SSH-Server"
                 ));
         endSession(event);
         this.destroySessionData(event);

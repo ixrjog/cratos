@@ -45,6 +45,7 @@
         <module>cratos-eds-acme</module>
         <module>cratos-eds-ucloud</module>
         <module>cratos-eds-sre</module>
+        <module>cratos-eds-security</module>
     </modules>
 
     <properties>

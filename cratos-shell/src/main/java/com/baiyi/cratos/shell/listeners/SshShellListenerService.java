@@ -41,7 +41,7 @@ public class SshShellListenerService {
      * @param channelSession ssh channel session
      */
     public void onSessionStarted(ChannelSession channelSession) {
-        notify(new SshShellEvent(SshShellEventType.SESSION_STARTED, channelSession));
+        notify(new SshShellEvent(com.baiyi.cratos.ssh.core.enums.SshShellEventType.SESSION_STARTED, channelSession));
     }
 
     /**
@@ -50,7 +50,7 @@ public class SshShellListenerService {
      * @param channelSession ssh channel session
      */
     public void onSessionStopped(ChannelSession channelSession) {
-        notify(new SshShellEvent(SshShellEventType.SESSION_STOPPED, channelSession));
+        notify(new SshShellEvent(com.baiyi.cratos.ssh.core.enums.SshShellEventType.SESSION_STOPPED, channelSession));
     }
 
     /**
@@ -59,7 +59,7 @@ public class SshShellListenerService {
      * @param channelSession ssh channel session
      */
     public void onSessionError(ChannelSession channelSession) {
-        notify(new SshShellEvent(SshShellEventType.SESSION_STOPPED_UNEXPECTEDLY, channelSession));
+        notify(new SshShellEvent(com.baiyi.cratos.ssh.core.enums.SshShellEventType.SESSION_STOPPED_UNEXPECTEDLY, channelSession));
     }
 
     private void notify(SshShellEvent event) {

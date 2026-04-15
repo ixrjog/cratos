@@ -41,7 +41,6 @@ public class GcpMemberUtils {
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final BusinessTagFacade businessTagFacade;
 
-
     public void printAllGcpMemberTable() {
         List<EdsInstance> instances = edsInstanceQueryHelper.queryInstance(EdsInstanceTypeEnum.GCP);
         instances.forEach(instance -> printGcpMemberTable(instance.getId()));

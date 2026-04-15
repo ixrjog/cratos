@@ -47,7 +47,8 @@ public enum EdsInstanceTypeEnum {
     CRT,
     SRE_EVENTBRIDGE,
     @DataCenter
-    CUSTOM_IDC;
+    CUSTOM_IDC,
+    APIRISK;
 
     public static OptionsVO.Options toOptions() {
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values())

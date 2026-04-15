@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
-import com.baiyi.cratos.shell.listeners.SshShellEventType;
+import com.baiyi.cratos.ssh.core.enums.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
 import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;
@@ -23,9 +23,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SshShellStartedEvent extends BaseSshShellEvent {
 
+    private final SshShellHelper sshShellHelper;
+
     public SshShellStartedEvent(SimpleSshSessionFacade simpleSshSessionFacade, UserService userService,
                                 SshShellHelper sshShellHelper) {
         super(simpleSshSessionFacade, userService);
+        this.sshShellHelper = sshShellHelper;
     }
 
     @Override
@@ -40,20 +43,20 @@ public class SshShellStartedEvent extends BaseSshShellEvent {
 
     private void startSession(SshShellEvent event) {
         String sessionId = SshSessionIdMapper.getSessionId(event.getSession()
-                .getServerSession()
-                .getIoSession());
+                                                                   .getServerSession()
+                                                                   .getIoSession());
         SessionContext sc = event.getSession()
                 .getSessionContext();
-        SshSession sshSession = SshSessionBuilder.build(sessionId, event.getSession()
-                .getServerSession()
-                .getUsername(), CratosHostHolder.get(), sc.getRemoteAddress(), SshSessionTypeEnum.SSH_SERVER);
+        SshSession sshSession = SshSessionBuilder.build(
+                sessionId, event.getSession()
+                        .getServerSession()
+                        .getUsername(), CratosHostHolder.get(), sc.getRemoteAddress(), SshSessionTypeEnum.SSH_SERVER
+        );
         simpleSshSessionFacade.addSshSession(sshSession);
-
         SiemSecurityLogger.log(
                 SiemSecurityLogger.EventType.LOGIN, event.getSession()
                         .getServerSession()
-                        .getUsername(), SiemSecurityLogger.Action.LOGIN_SUCCESS,
-                "User login Cratos SSH-Server"
+                        .getUsername(), SiemSecurityLogger.Action.LOGIN_SUCCESS, "User login Cratos SSH-Server"
         );
     }
 

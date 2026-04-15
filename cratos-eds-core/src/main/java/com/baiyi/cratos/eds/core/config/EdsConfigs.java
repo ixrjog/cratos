@@ -351,4 +351,14 @@ public class EdsConfigs {
         private EdsSreEventBridgeConfigModel.Cred cred;
     }
 
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class ApiRisk implements HasEdsConfig {
+        private EdsInstance edsInstance;
+        private String name;
+        private String url;
+        private EdsApiRiskConfigModel.Cred cred;
+    }
+
 }

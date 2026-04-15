@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.service.session.SshSessionInstanceService;
 import com.baiyi.cratos.service.session.SshSessionService;
+import com.baiyi.cratos.ssh.core.enums.SshShellEventType;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -90,6 +91,7 @@ public class SimpleSshSessionFacadeImpl implements SimpleSshSessionFacade {
         }
         sshSession.setEndTime(new Date());
         sshSession.setValid(sshSessionInstanceService.countBySessionId(sessionId) > 0);
+        sshSession.setSessionStatus(SshShellEventType.SESSION_STOPPED.name());
         sshSessionService.updateByPrimaryKey(sshSession);
     }
 

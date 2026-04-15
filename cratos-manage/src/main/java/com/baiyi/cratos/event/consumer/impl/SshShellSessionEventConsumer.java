@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.annotation.Topic;
 import com.baiyi.cratos.event.Event;
 import com.baiyi.cratos.event.consumer.base.BaseEventConsumer;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
-import com.baiyi.cratos.shell.listeners.SshShellEventType;
+import com.baiyi.cratos.ssh.core.enums.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.ISshShellEvent;
 import com.baiyi.cratos.shell.listeners.event.SshShellEventFactory;
 import lombok.extern.slf4j.Slf4j;
