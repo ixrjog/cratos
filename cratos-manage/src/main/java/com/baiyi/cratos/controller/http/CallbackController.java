@@ -25,10 +25,9 @@ public class CallbackController {
 
     private final WorkOrderTicketFacade workOrderTicketFacade;
 
-    @SuppressWarnings("rawtypes")
     @Operation(summary = "Approve work order ticket")
     @GetMapping(value = "/workorder/ticket/approval", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult approveTicket(@RequestParam String ticketNo, String username, String approvalType, String token) {
+    public HttpResult<Boolean> approveTicket(@RequestParam String ticketNo, String username, String approvalType, String token) {
         WorkOrderTicketParam.CallbackApprovalTicket approvalTicket = WorkOrderTicketParam.CallbackApprovalTicket.builder()
                 .ticketNo(ticketNo)
                 .approvalType(approvalType)

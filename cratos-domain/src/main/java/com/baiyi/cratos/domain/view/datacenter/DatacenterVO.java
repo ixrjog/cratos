@@ -142,6 +142,7 @@ public class DatacenterVO {
         private boolean allocated;
         private String allocationName;
         private String allocationType;
+        private List<String> allocationTypes;
     }
 
     @Data

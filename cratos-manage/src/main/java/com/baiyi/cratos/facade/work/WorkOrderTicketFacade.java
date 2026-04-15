@@ -24,8 +24,7 @@ public interface WorkOrderTicketFacade {
 
     void approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket);
 
-    @SuppressWarnings("rawtypes")
-    HttpResult approvalTicket(WorkOrderTicketParam.CallbackApprovalTicket callbackApprovalTicket);
+    HttpResult<Boolean> approvalTicket(WorkOrderTicketParam.CallbackApprovalTicket callbackApprovalTicket);
 
     WorkOrderTicketVO.TicketDetails doNextStateOfTicket(WorkOrderTicketParam.SimpleTicketNo simpleTicketNo);
 

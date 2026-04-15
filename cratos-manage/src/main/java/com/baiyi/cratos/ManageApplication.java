@@ -56,6 +56,7 @@ public class ManageApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageApplication.class, args);
         System.setProperty("AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT", "true");
+        System.setProperty("AWS_JAVA_V1_PRINT_LOCATION", "true");
         log.info("Cratos <Spring Boot {}>", SpringBootVersion.getVersion());
         log.info("Swagger UI page http://127.0.0.1:8081/swagger-ui/index.html");
     }

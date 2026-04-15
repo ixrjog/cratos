@@ -116,10 +116,9 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         TicketInStateProcessorFactory.change(TicketState.IN_APPROVAL, TicketStateChangeAction.APPROVAL, event);
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     @UserTokenAuth(ofTicketNo = "#callbackApprovalTicket.ticketNo", ofUsername = "#callbackApprovalTicket.username", ofToken = "#callbackApprovalTicket.token")
-    public HttpResult approvalTicket(WorkOrderTicketParam.CallbackApprovalTicket callbackApprovalTicket) {
+    public HttpResult<Boolean> approvalTicket(WorkOrderTicketParam.CallbackApprovalTicket callbackApprovalTicket) {
         try {
             this.approvalTicket(callbackApprovalTicket.toApprovalTicket());
             return HttpResult.SUCCESS;

@@ -132,7 +132,7 @@ public class TrafficRouteParam {
     @NoArgsConstructor
     @Schema
     public static class UpdateRecordTarget implements IToTarget<TrafficRecordTarget> {
-        @Null(message = "ID must be null")
+        @NotNull(message = "Id cannot be null")
         private Integer id;
         @NotNull(message = "Traffic Route Id cannot be null")
         private Integer trafficRouteId;

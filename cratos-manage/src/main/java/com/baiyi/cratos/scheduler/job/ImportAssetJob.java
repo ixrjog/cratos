@@ -46,6 +46,10 @@ public class ImportAssetJob extends QuartzJobBean {
                 .instanceId(instanceId)
                 .build();
         try {
+            if (edsFacade == null) {
+                log.warn("Import asset job skipped: edsFacade not yet initialized, assetType={}, instanceId={}", assetType, instanceId);
+                return;
+            }
             edsFacade.importEdsInstanceAsset(importInstanceAsset);
             log.info("Import asset job: assetType={}, instanceId={}, trigger={}", assetType, instanceId,
                     jobExecutionContext.getTrigger());

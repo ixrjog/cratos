@@ -227,16 +227,15 @@ public class DatacenterFacadeImpl implements DatacenterFacade {
         long subnetSize = 1L << (32 - prefixLength);
 
         List<DatacenterNetworkAllocation> existing = allocationService.queryAllocationsInRange(parentStart, parentEnd);
-        // Build lookup: key = subnet start IP
-        Map<Long, DatacenterNetworkAllocation> allocMap = new HashMap<>();
+        // Build lookup: key = subnet start IP, value = list of allocations
+        Map<Long, List<DatacenterNetworkAllocation>> allocMap = new HashMap<>();
         for (DatacenterNetworkAllocation alloc : existing) {
-            // Map each allocation to the /prefixLength blocks it covers
             long allocStart = Math.max(alloc.getIpStart(), parentStart);
             long allocEnd = Math.min(alloc.getIpEnd(), parentEnd);
             long blockStart = (allocStart / subnetSize) * subnetSize;
             while (blockStart <= allocEnd && blockStart + subnetSize - 1 <= parentEnd) {
                 if (blockStart >= parentStart) {
-                    allocMap.put(blockStart, alloc);
+                    allocMap.computeIfAbsent(blockStart, k -> new ArrayList<>()).add(alloc);
                 }
                 blockStart += subnetSize;
             }
@@ -249,12 +248,19 @@ public class DatacenterFacadeImpl implements DatacenterFacade {
         List<DatacenterVO.SubnetBlock> blocks = new ArrayList<>();
         LongStream.iterate(parentStart, ip -> ip + subnetSize - 1 <= parentEnd, ip -> ip + subnetSize)
                 .forEach(ip -> {
-                    DatacenterNetworkAllocation alloc = allocMap.get(ip);
+                    List<DatacenterNetworkAllocation> allocs = allocMap.get(ip);
+                    boolean allocated = allocs != null && !allocs.isEmpty();
+                    DatacenterNetworkAllocation first = allocated ? allocs.get(0) : null;
+                    List<String> types = allocated ? allocs.stream()
+                            .map(DatacenterNetworkAllocation::getAllocationType)
+                            .distinct()
+                            .collect(Collectors.toList()) : List.of();
                     blocks.add(DatacenterVO.SubnetBlock.builder()
                                        .cidr(NetworkUtils.longToIp(ip) + "/" + prefixLength)
-                                       .allocated(alloc != null)
-                                       .allocationName(alloc != null ? alloc.getName() : null)
-                                       .allocationType(alloc != null ? alloc.getAllocationType() : null)
+                                       .allocated(allocated)
+                                       .allocationName(first != null ? first.getName() : null)
+                                       .allocationType(first != null ? first.getAllocationType() : null)
+                                       .allocationTypes(types)
                                        .build());
                 });
 
