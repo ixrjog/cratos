@@ -9,6 +9,7 @@ import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
+import io.fabric8.kubernetes.api.model.apps.ReplicaSet;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.Resource;
 import lombok.RequiredArgsConstructor;
@@ -104,6 +105,27 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
                             .getNamespace())
                     .resource(deployment)
                     .update();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询 Deployment 正在执行的 ReplicaSet（spec.replicas > 0）
+     */
+    public List<ReplicaSet> listActiveReplicaSets(EdsConfigs.Kubernetes kubernetes, String namespace, String deploymentName) {
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.apps()
+                    .replicaSets()
+                    .inNamespace(namespace)
+                    .list()
+                    .getItems()
+                    .stream()
+                    .filter(rs -> rs.getMetadata().getOwnerReferences().stream()
+                            .anyMatch(ref -> "Deployment".equals(ref.getKind()) && deploymentName.equals(ref.getName())))
+                    .filter(rs -> rs.getSpec().getReplicas() != null && rs.getSpec().getReplicas() > 0)
+                    .toList();
         } catch (Exception e) {
             log.warn(e.getMessage());
             throw e;

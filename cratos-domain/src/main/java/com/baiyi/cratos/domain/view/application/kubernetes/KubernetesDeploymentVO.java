@@ -26,6 +26,16 @@ public class KubernetesDeploymentVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class ReplicaSet implements  Serializable {
+        @Serial
+        private static final long serialVersionUID = -3325381376458200531L;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class Deployment implements KubernetesCommonVO.HasKubernetesCluster, Comparable<Deployment>, BusinessTagVO.HasBusinessTags, EnvVO.HasEnv, Serializable {
         @Serial
         private static final long serialVersionUID = 9137044441466358774L;
@@ -47,6 +57,8 @@ public class KubernetesDeploymentVO {
         private String envName;
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
+
+        private List<ReplicaSet> replicaSets;
 
         @Override
         public Integer getBusinessId() {
