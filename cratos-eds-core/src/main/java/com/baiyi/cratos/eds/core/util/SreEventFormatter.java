@@ -67,13 +67,37 @@ public class SreEventFormatter {
         INSPECT_CERTIFICATE("inspectCertificate"),
         INSPECT_IMAGE("inspectImage"),
         INSPECT_GCP_IAM("inspectGcpIam"),
-        TRIGGER_EVENT("triggerEvent");
+        TRIGGER_EVENT("triggerEvent"),
+        SWITCH_TRAFFIC_ROUTE("switchTrafficRoute");
 
         private final String value;
 
         Action(String value) {
             this.value = value;
         }
+    }
+
+    public static com.baiyi.cratos.domain.model.SreBridgeModel.Event switchTrafficRoute(User user, String record, String recordType, String recordValue) {
+        Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
+        Map<String, String> targetContent = Map.ofEntries(
+                entry("record", record),
+                entry("recordType", recordType),
+                entry("recordValue", recordValue)
+        );
+        return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
+                .operator(user.getEmail())
+                .action(Action.SWITCH_TRAFFIC_ROUTE.value)
+                .description(StringFormatter.arrayFormat(
+                       "用户修改DNS切换流量层路由"
+                ))
+                .target(record)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
+                .affection("")
+                .severity("low")
+                .status("executed")
+                .type(Type.CHANGE.value)
+                .ext(ext)
+                .build();
     }
 
     public static com.baiyi.cratos.domain.model.SreBridgeModel.Event uploadCertificate(User user, String certName,
@@ -101,6 +125,7 @@ public class SreEventFormatter {
                 .affection("")
                 .severity("low")
                 .status("executed")
+                .type(Type.CHANGE.value)
                 .ext(ext)
                 .build();
     }
@@ -127,6 +152,7 @@ public class SreEventFormatter {
                 .affection("")
                 .severity("low")
                 .status("executed")
+                .type(Type.CHANGE.value)
                 .ext(ext)
                 .build();
     }
@@ -163,6 +189,7 @@ public class SreEventFormatter {
                 .affection("")
                 .severity("low")
                 .status("executed")
+                .type(Type.CHANGE.value)
                 .ext(ext)
                 .build();
     }
@@ -196,6 +223,7 @@ public class SreEventFormatter {
                 .affection("")
                 .severity("low")
                 .status("executed")
+                .type(Type.CHANGE.value)
                 .ext(ext)
                 .build();
     }
@@ -232,6 +260,7 @@ public class SreEventFormatter {
                 .affection("")
                 .severity("low")
                 .status("executed")
+                .type(Type.CHANGE.value)
                 .ext(ext)
                 .build();
     }

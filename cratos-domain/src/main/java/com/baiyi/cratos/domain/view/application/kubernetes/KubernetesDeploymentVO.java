@@ -26,9 +26,29 @@ public class KubernetesDeploymentVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class ReplicaSet implements  Serializable {
+    public static class ReplicaSet implements Serializable {
         @Serial
         private static final long serialVersionUID = -3325381376458200531L;
+        private String name;
+        private String namespace;
+        @Schema(description = "期望副本数")
+        private Integer replicas;
+        @Schema(description = "当前副本数")
+        private Integer currentReplicas;
+        @Schema(description = "就绪副本数")
+        private Integer readyReplicas;
+        @Schema(description = "可用副本数")
+        private Integer availableReplicas;
+        @Schema(description = "创建时间")
+        private String creationTimestamp;
+        @Schema(description = "镜像")
+        private List<String> images;
+        @Schema(description = "所属 Deployment")
+        private String ownerDeployment;
+        @Schema(description = "是否活跃 (replicas > 0)")
+        private Boolean active;
+        @Schema(description = "是否正在调度 (replicas != readyReplicas)")
+        private Boolean progressing;
     }
 
     @Data

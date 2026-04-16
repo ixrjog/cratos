@@ -37,6 +37,7 @@ public class ApplicationKubernetesParam {
         //@NotBlank
         private String namespace;
         private String name;
+        private String countryCode;
     }
 
 

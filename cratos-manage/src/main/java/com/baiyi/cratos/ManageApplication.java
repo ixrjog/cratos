@@ -3,6 +3,7 @@ package com.baiyi.cratos;
 
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +26,7 @@ import java.security.Security;
  * {@code @Version} 1.0
  */
 @EnableTransactionManagement
-@SpringBootApplication(exclude = {SecurityFilterAutoConfiguration.class})
+@SpringBootApplication(exclude = {SecurityFilterAutoConfiguration.class, MybatisAutoConfiguration.class})
 @EnableAspectJAutoProxy(exposeProxy = true)
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "10m")
@@ -45,7 +46,8 @@ public class ManageApplication {
         // 强制加载正确版本的 BouncyCastle
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
 
-        String version = Security.getProvider("BC").getVersionStr();
+        String version = Security.getProvider("BC")
+                .getVersionStr();
         log.info("BouncyCastle Provider version: {}", version);
 
         if (!version.startsWith("1.78")) {

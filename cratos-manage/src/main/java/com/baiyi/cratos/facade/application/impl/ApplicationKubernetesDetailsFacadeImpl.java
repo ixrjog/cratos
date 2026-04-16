@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.application.impl;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.KubernetesResourceOperationException;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesDeploymentConverter;
@@ -37,10 +38,7 @@ import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.facade.application.EdsArmsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
-import com.baiyi.cratos.service.ApplicationResourceService;
-import com.baiyi.cratos.service.ApplicationService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
 import com.baiyi.cratos.workorder.holder.ApplicationRedeployTokenHolder;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
@@ -53,10 +51,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.SHORT_TERM;
 import static com.baiyi.cratos.domain.view.base.OptionsVO.NO_OPTIONS_AVAILABLE;
@@ -88,6 +89,8 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsArmsFacade edsArmsFacade;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final UserService userService;
+    private final TagService tagService;
+    private final BusinessTagService businessTagService;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -127,14 +130,45 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     }
 
     private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
-        List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(
-                applicationResourceService.queryApplicationResource(
-                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
-                        param
-                ));
+        List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
+        resources = filterByCountryCode(resources, param);
+        List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(resources);
         return KubernetesVO.Workloads.builder()
                 .deployments(deployments)
                 .build();
+    }
+
+    private List<ApplicationResource> filterByCountryCode(List<ApplicationResource> resources,
+                                                          ApplicationKubernetesParam.QueryKubernetesDetails param) {
+        if (!StringUtils.hasText(param.getCountryCode())) {
+            return resources;
+        }
+        Tag tag = tagService.getByTagKey(SysTagKeys.COUNTRY_CODE.getKey());
+        if (tag == null) {
+            return resources;
+        }
+        // 批量查询 countryCode 标签，避免 N+1
+        Map<String, BusinessTag> tagMap = resources.stream()
+                .map(e -> BusinessTag.builder()
+                        .tagId(tag.getId())
+                        .businessType(e.getBusinessType())
+                        .businessId(e.getBusinessId())
+                        .build())
+                .map(businessTagService::getByUniqueKey)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(
+                        bt -> bt.getBusinessType() + ":" + bt.getBusinessId(),
+                        bt -> bt,
+                        (a, b) -> a
+                ));
+        return resources.stream()
+                .filter(e -> {
+                    BusinessTag bt = tagMap.get(e.getBusinessType() + ":" + e.getBusinessId());
+                    // 没有标签的默认放行
+                    return bt == null || param.getCountryCode().equalsIgnoreCase(bt.getTagValue());
+                })
+                .toList();
     }
 
     private KubernetesVO.Network makeNetwork(ApplicationKubernetesParam.QueryKubernetesDetails param) {

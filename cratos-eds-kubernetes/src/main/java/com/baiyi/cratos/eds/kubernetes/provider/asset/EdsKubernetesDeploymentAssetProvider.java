@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.kubernetes.provider.asset;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
@@ -20,6 +21,7 @@ import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAsse
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -49,15 +51,18 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
+    private final BusinessTagService businessTagService;
 
     public EdsKubernetesDeploymentAssetProvider(EdsAssetProviderContext context,
                                                 KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                                 KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                BusinessTagFacade businessTagFacade, TagService tagService) {
+                                                BusinessTagFacade businessTagFacade, TagService tagService,
+                                                BusinessTagService businessTagService) {
         super(context, kubernetesNamespaceRepo);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.businessTagFacade = businessTagFacade;
         this.tagService = tagService;
+        this.businessTagService = businessTagService;
     }
 
     @Override
@@ -102,8 +107,8 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                 .map(Deployment::getMetadata)
                 .map(ObjectMeta::getLabels)
                 .orElse(Map.of());
-        if (metadataLabels.containsKey("countrycode")) {
-            indices.add(createEdsAssetIndex(edsAsset, COUNTRYCODE, metadataLabels.get("countrycode")));
+        if (metadataLabels.containsKey(COUNTRYCODE)) {
+            indices.add(createEdsAssetIndex(edsAsset, COUNTRYCODE, metadataLabels.get(COUNTRYCODE)));
         }
         return indices;
     }
@@ -111,25 +116,31 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     @Override
     protected void processAssetTags(EdsAsset asset, ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
                                     Deployment entity, List<EdsAssetIndex> indices) {
-        if (CollectionUtils.isEmpty(indices)) {
+        Tag tag = tagService.getByTagKey(SysTagKeys.COUNTRY_CODE);
+        if (tag == null || CollectionUtils.isEmpty(indices)) {
             return;
         }
-        indices.stream()
-                .filter(e -> "countrycode".equalsIgnoreCase(e.getName()))
+        String countryCode = indices.stream()
+                .filter(e -> COUNTRYCODE.equalsIgnoreCase(e.getName()))
                 .findFirst()
-                .ifPresent(e -> {
-                    String countryCode = e.getValue();
-                    Tag tag = tagService.getByTagKey(SysTagKeys.COUNTRY_CODE);
-                    if (tag != null) {
-                        BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
-                                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                                .businessId(asset.getId())
-                                .tagId(tag.getId())
-                                .tagValue(countryCode)
-                                .build();
-                        businessTagFacade.saveBusinessTag(saveBusinessTag);
-                    }
+                .map(e -> e.getValue().toLowerCase())
+                .orElseGet(() -> {
+                    BusinessTag uniqueKey = BusinessTag.builder()
+                            .tagId(tag.getId())
+                            .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                            .businessId(instance.getEdsInstance().getId())
+                            .build();
+                    BusinessTag businessTag = businessTagService.getByUniqueKey(uniqueKey);
+                    return businessTag != null ? businessTag.getTagValue() : null;
                 });
+        if (StringUtils.hasText(countryCode)) {
+            businessTagFacade.saveBusinessTag(BusinessTagParam.SaveBusinessTag.builder()
+                    .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                    .businessId(asset.getId())
+                    .tagId(tag.getId())
+                    .tagValue(countryCode)
+                    .build());
+        }
     }
 
     @Override

@@ -125,6 +125,6 @@ public interface EdsAssetIndexConstants {
     String CLOUDFLARE_ZONE_DNS_RECORD_PROXIED = "cloudflare.zone.dns.record.proxied";
     String CLOUDFLARE_ZONE_DNS_RECORD_CONTENT = "cloudflare.zone.dns.record.content";
 
-    String COUNTRYCODE = "countrycode";
+    String COUNTRYCODE = "countryCode";
 
 }

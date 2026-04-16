@@ -25,6 +25,7 @@ public class ApplicationKubernetesParam {
         private String instanceName;
         @NotBlank
         private String namespace;
+        private String countryCode;
         @Schema(description = "Resource Name")
         private String name;
     }

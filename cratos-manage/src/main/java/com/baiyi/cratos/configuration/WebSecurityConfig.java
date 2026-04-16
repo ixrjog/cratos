@@ -35,7 +35,7 @@ public class WebSecurityConfig {
                         // 明确允许静态资源访问
                         .requestMatchers("/", "/index.html", "/static/**", "/*.html", "/*.css", "/*.js", "/*.png", "/*.jpg", "/*.gif", "/*.ico")
                         .permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("**"))
+                        .requestMatchers(new AntPathRequestMatcher("/**"))
                         .permitAll()
                         .anyRequest()
                         .authenticated())

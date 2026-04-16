@@ -3,7 +3,10 @@ package com.baiyi.cratos.eds.dns.impl;
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
 import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
+import com.baiyi.cratos.common.util.SessionUtils;
+import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
@@ -13,9 +16,13 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
 import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
+import com.baiyi.cratos.service.TrafficRecordTargetService;
+import com.baiyi.cratos.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -36,9 +43,14 @@ import java.util.stream.Collectors;
 public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
 
     private static final String CONSOLE_URL = "https://dnsnext.console.aliyun.com/authoritative/domains/{}?RRKeyWord={}";
+    private final UserService userService;
+    private final TrafficRecordTargetService trafficRecordTargetService;
 
-    public AliyunDNSResolver(DNSResolverContext context) {
+    public AliyunDNSResolver(DNSResolverContext context, UserService userService,
+                             TrafficRecordTargetService trafficRecordTargetService) {
         super(context);
+        this.userService = userService;
+        this.trafficRecordTargetService = trafficRecordTargetService;
     }
 
     @Override
@@ -66,6 +78,15 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
             SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context = buildSwitchContext(
                     switchRecordTarget);
             handleSingleTargetRouting(context);
+            try {
+                TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.getById(
+                        switchRecordTarget.getRecordTargetId());
+                User user = userService.getByUsername(SessionUtils.getUsername());
+                com.baiyi.cratos.domain.model.SreBridgeModel.Event event = SreEventFormatter.switchTrafficRoute(
+                        user, trafficRecordTarget.getResourceRecord(),trafficRecordTarget.getRecordType(), trafficRecordTarget.getRecordValue());
+                SreBridgeUtils.publish(event);
+            } catch (Exception e) {
+            }
         } else {
             TrafficRouteException.runtime("Current operation not implemented.");
         }
@@ -106,7 +127,6 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 AliyunDnsRepo.deleteDomainRecord(context.getConfig(), conflictingMatchedRecord.getRecordId());
             }
         }
-
         List<DescribeDomainRecordsResponseBody.Record> records = context.getMatchedRecordMap()
                 .get(context.getDnsRRType()
                              .name());

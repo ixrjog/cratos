@@ -22,6 +22,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
+import io.fabric8.kubernetes.api.model.apps.ReplicaSet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Component;
@@ -103,12 +104,46 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .withPods(pods)
                 .withEnvName(namespace)
                 .build();
+        vo.setReplicaSets(toReplicaSetVOs(kubernetesDeploymentRepo.listActiveReplicaSets(kubernetes, namespace, resource.getName())));
         ((ApplicationKubernetesDeploymentConverter) AopContext.currentProxy()).wrap(vo);
         return vo;
     }
 
     @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.ENV})
     public void wrap(KubernetesDeploymentVO.Deployment vo) {
+    }
+
+    private List<KubernetesDeploymentVO.ReplicaSet> toReplicaSetVOs(List<ReplicaSet> replicaSets) {
+        return replicaSets.stream()
+                .map(this::toReplicaSetVO)
+                .toList();
+    }
+
+    private KubernetesDeploymentVO.ReplicaSet toReplicaSetVO(ReplicaSet rs) {
+        int replicas = Optional.ofNullable(rs.getSpec().getReplicas()).orElse(0);
+        int readyReplicas = Optional.ofNullable(rs.getStatus().getReadyReplicas()).orElse(0);
+        List<String> images = rs.getSpec().getTemplate().getSpec().getContainers()
+                .stream()
+                .map(io.fabric8.kubernetes.api.model.Container::getImage)
+                .toList();
+        String ownerDeployment = rs.getMetadata().getOwnerReferences().stream()
+                .filter(ref -> "Deployment".equals(ref.getKind()))
+                .map(io.fabric8.kubernetes.api.model.OwnerReference::getName)
+                .findFirst()
+                .orElse(null);
+        return KubernetesDeploymentVO.ReplicaSet.builder()
+                .name(rs.getMetadata().getName())
+                .namespace(rs.getMetadata().getNamespace())
+                .replicas(replicas)
+                .currentReplicas(Optional.ofNullable(rs.getStatus().getReplicas()).orElse(0))
+                .readyReplicas(readyReplicas)
+                .availableReplicas(Optional.ofNullable(rs.getStatus().getAvailableReplicas()).orElse(0))
+                .creationTimestamp(rs.getMetadata().getCreationTimestamp())
+                .images(images)
+                .ownerDeployment(ownerDeployment)
+                .active(replicas > 0)
+                .progressing(replicas != readyReplicas || Optional.ofNullable(rs.getStatus().getReplicas()).orElse(0) != replicas)
+                .build();
     }
 
     private List<Pod> getPods(EdsConfigs.Kubernetes kubernetes, Deployment deployment) {

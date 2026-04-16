@@ -114,7 +114,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsAssetProvider<EdsConfig
         // Manager
         try {
             DingtalkUserModel.GetUser getUser = dingtalkUserRepo.getUser(instance.getConfig(), entity.getUserid());
-            if (StringUtils.hasText(getUser.getManagerUserid())) {
+            if (getUser != null && StringUtils.hasText(getUser.getManagerUserid())) {
                 indices.add(createEdsAssetIndex(edsAsset, DINGTALK_MANAGER_USER_ID, getUser.getManagerUserid()));
             }
         } catch (Exception e) {
