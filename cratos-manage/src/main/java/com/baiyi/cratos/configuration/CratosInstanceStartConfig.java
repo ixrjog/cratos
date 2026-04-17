@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.enums.InstanceHealthStatus;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.CratosInstance;
+import com.baiyi.cratos.facade.SshSessionFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.CratosInstanceService;
 import com.baiyi.cratos.service.TagService;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -34,6 +36,7 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
     private final CratosInstanceService cratosInstanceService;
     private final TagService tagService;
     private final BusinessTagService businessTagService;
+    private final SshSessionFacade sshSessionFacade;
 
     @Value("${spring.profiles.active}")
     private String env;
@@ -47,8 +50,15 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
     public static final InetAddress INET_ADDRESS = CratosInstanceStartConfig.getInetAddress();
 
     @Override
-    public void run(String... args) throws Exception {
-        this.register();
+    public void run(String... args) {
+        try {
+            CratosInstance cratosInstance = this.register();
+            if (cratosInstance != null && StringUtils.hasText(cratosInstance.getHostname())) {
+                sshSessionFacade.closeSessionByCratosServer(cratosInstance.getHostname());
+            }
+        } catch (Exception e) {
+            log.error("Failed to register cratos instance", e);
+        }
     }
 
     private static InetAddress getInetAddress() {
@@ -59,24 +69,23 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
         }
     }
 
-    private void register() throws UnknownHostException {
+    private CratosInstance register() throws UnknownHostException {
         if (!autoRegister) {
-            return;
+            return null;
         }
         InetAddress inetAddress = HostUtils.getInetAddress();
-        // 已存在
         CratosInstance instance = cratosInstanceService.getByHostIp(inetAddress.getHostAddress());
         if (instance != null) {
             instance.setStartTime(new Date());
             instance.setVersion(version);
             instance.setCommit(getCommit());
             cratosInstanceService.updateByPrimaryKey(instance);
-        } else {
-            registerNewInstance(inetAddress);
+            return instance;
         }
+        return registerNewInstance(inetAddress);
     }
 
-    private void registerNewInstance(InetAddress inetAddress) {
+    private CratosInstance registerNewInstance(InetAddress inetAddress) {
         CratosInstance instance = CratosInstance.builder()
                 .hostIp(inetAddress.getHostAddress())
                 .hostname(inetAddress.getHostName())
@@ -99,6 +108,7 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
                             .build();
                     businessTagService.add(businessTag);
                 });
+        return instance;
     }
 
     private String getCommit() {

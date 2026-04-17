@@ -18,4 +18,6 @@ public interface SshSessionFacade {
     DataTable<SshCommandVO.Command> querySshCommandPage(
             SshCommandParam.SshCommandPageQuery pageQuery);
 
+    void closeSessionByCratosServer(String serverName);
+
 }

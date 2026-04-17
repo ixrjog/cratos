@@ -7,6 +7,8 @@ import com.baiyi.cratos.mapper.SshSessionMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import lombok.NonNull;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/23 上午11:39
@@ -17,5 +19,7 @@ public interface SshSessionService extends BaseUniqueKeyService<SshSession, SshS
     DataTable<SshSession> querySshSessionPage(SshSessionParam.SshSessionPageQuery pageQuery);
 
     SshSession getBySessionId(@NonNull String sessionId);
+
+    List<SshSession> queryBySessionStatusAndServerHostname(@NonNull String sessionStatus, @NonNull String serverHostname);
 
 }

@@ -56,4 +56,13 @@ public class SshSessionServiceImpl implements SshSessionService {
     public void clearCacheById(int id) {
     }
 
+    @Override
+    public List<SshSession> queryBySessionStatusAndServerHostname(@NonNull String sessionStatus, @NonNull String serverHostname) {
+        Example example = new Example(SshSession.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("sessionStatus", sessionStatus)
+                .andEqualTo("serverHostname", serverHostname);
+        return sshSessionMapper.selectByExample(example);
+    }
+
 }
