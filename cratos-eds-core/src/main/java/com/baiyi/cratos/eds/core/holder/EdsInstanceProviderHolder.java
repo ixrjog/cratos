@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.core.holder;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
+import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +25,13 @@ public class EdsInstanceProviderHolder<Config extends HasEdsConfig, A> {
 
     @Schema(description = "Eds instance")
     private ExternalDataSourceInstance<Config> instance;
+
+    public ExternalDataSourceInstance<Config> getInstance() {
+        if(instance == null) {
+            throw new EdsInstanceProviderException("Eds instance is not initialized");
+        }
+        return instance;
+    }
 
     @Schema(description = "Eds provider")
     private EdsInstanceAssetProvider<Config, A> provider;

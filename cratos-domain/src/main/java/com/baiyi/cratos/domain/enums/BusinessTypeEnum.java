@@ -42,6 +42,7 @@ public enum BusinessTypeEnum {
     EDS_INSTANCE,
     EDS_CONFIG,
 
+    CHANNEL,
     CHANNEL_NETWORK,
 
     ENV,

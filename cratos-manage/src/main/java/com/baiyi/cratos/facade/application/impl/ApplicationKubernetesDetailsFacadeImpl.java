@@ -129,11 +129,10 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
         );
     }
 
-    private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
-        List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
-                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
-        resources = filterByCountryCode(resources, param);
-        List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(resources);
+    private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param,
+                                                 List<ApplicationResource> resources) {
+        List<ApplicationResource> queryResources = filterByCountryCode(resources, param);
+        List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(queryResources);
         return KubernetesVO.Workloads.builder()
                 .deployments(deployments)
                 .build();
@@ -157,16 +156,14 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                         .build())
                 .map(businessTagService::getByUniqueKey)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toMap(
-                        bt -> bt.getBusinessType() + ":" + bt.getBusinessId(),
-                        bt -> bt,
-                        (a, b) -> a
-                ));
+                .collect(
+                        Collectors.toMap(bt -> bt.getBusinessType() + ":" + bt.getBusinessId(), bt -> bt, (a, b) -> a));
         return resources.stream()
                 .filter(e -> {
                     BusinessTag bt = tagMap.get(e.getBusinessType() + ":" + e.getBusinessId());
                     // 没有标签的默认放行
-                    return bt == null || param.getCountryCode().equalsIgnoreCase(bt.getTagValue());
+                    return bt == null || param.getCountryCode()
+                            .equalsIgnoreCase(bt.getTagValue());
                 })
                 .toList();
     }
@@ -197,7 +194,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
         KubernetesVO.KubernetesDetails kubernetesDetails = KubernetesVO.KubernetesDetails.builder()
                 .application(applicationWrapper.convert(application))
                 .namespace(param.getNamespace())
-                .workloads(makeWorkloads(param))
+                .workloads(makeWorkloads(param, resources))
                 .network(makeNetwork(param))
                 .banner(makeBanner(param))
                 .build();
@@ -250,156 +247,148 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
         if (CollectionUtils.isEmpty(resources)) {
             KubernetesResourceOperationException.runtime(
-                    "The deployment={} resource does not exist.",
-                    param.getDeploymentName()
-            );
+                    "The deployment={} resource does not exist.", param.getDeploymentName());
         }
-        resources.forEach(resource -> {
-            EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
-            if (Objects.isNull(deploymentAsset)) {
+        resources.forEach(resource -> doDeletePod(resource, param, deleteToken));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void doDeletePod(ApplicationResource resource,
+                             ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod param,
+                             ApplicationDeletePodToken.Token deleteToken) {
+        EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
+        if (Objects.isNull(deploymentAsset)) {
+            return;
+        }
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
+                deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        try {
+            Pod pod = kubernetesPodRepo.get(holder.getInstance().getConfig(), param.getNamespace(), param.getPodName());
+            if (Objects.isNull(pod)) {
                 return;
             }
-            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
-                    deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+            Optional<String> optionalAppName = KubeUtils.findApplicationNameOf(pod);
+            if (optionalAppName.isEmpty() || !param.getApplicationName().equals(optionalAppName.get())) {
+                return;
+            }
+            ApplicationDeploymentModel.DeleteDeploymentPod detail = ApplicationDeploymentModel.DeleteDeploymentPod.builder()
+                    .namespace(param.getNamespace())
+                    .podName(param.getPodName())
+                    .ticketNo(deleteToken.getTicketNo())
+                    .ticketId(deleteToken.getTicketId())
+                    .asset(deploymentAsset)
+                    .build();
+            // SRE 事件
+            publishSreDeletePodEvent(holder, resource, param, deleteToken);
+            // 删除 Pod
             try {
-                Pod pod = kubernetesPodRepo.get(
-                        holder.getInstance()
-                                .getConfig(), param.getNamespace(), param.getPodName()
-                );
-                if (Objects.isNull(pod)) {
-                    return;
-                }
-                Optional<String> optionalApplicationName = KubeUtils.findApplicationNameOf(pod);
-                if (optionalApplicationName.isPresent() && param.getApplicationName()
-                        .equals(optionalApplicationName.get())) {
-                    final String cluster = Optional.of(holder)
-                            .map(EdsInstanceProviderHolder::getInstance)
-                            .map(ExternalDataSourceInstance::getEdsInstance)
-                            .map(EdsInstance::getInstanceName)
-                            .orElse("--");
-                    final String namespace = param.getNamespace();
-                    final String ticketNo = deleteToken.getTicketNo();
-                    final Integer ticketId = deleteToken.getTicketId();
-                    final String podName = param.getPodName();
-                    // 匹配到应用名称
-                    ApplicationDeploymentModel.DeleteDeploymentPod detail = ApplicationDeploymentModel.DeleteDeploymentPod.builder()
-                            .namespace(namespace)
-                            .podName(podName)
-                            .ticketNo(ticketNo)
-                            .ticketId(ticketId)
-                            .asset(deploymentAsset)
-                            .build();
-                    try {
-                        // SRE
-                        try {
-                            User user = userService.getByUsername(SessionUtils.getUsername());
-                            final String deploymentName = resource.getName();
-                            SreBridgeUtils.publish(
-                                    SreEventFormatter.deletePod(
-                                            user, ticketNo, String.valueOf(ticketId), cluster, namespace,
-                                            deploymentName, podName
-                                    ));
-                        } catch (Exception e) {
-                            log.error(e.getMessage());
-                        }
-                        kubernetesPodRepo.delete(
-                                holder.getInstance()
-                                        .getConfig(), param.getNamespace(), param.getPodName()
-                        );
-                    } catch (Exception e) {
-                        detail.setSuccess(false);
-                        detail.setResult("Operation failed err: " + e.getMessage());
-                    }
-                    // 写入工单
-                    WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry = WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry.builder()
+                kubernetesPodRepo.delete(holder.getInstance().getConfig(), param.getNamespace(), param.getPodName());
+            } catch (Exception e) {
+                detail.setSuccess(false);
+                detail.setResult("Operation failed err: " + e.getMessage());
+            }
+            // 写入工单
+            workOrderTicketEntryFacade.addDeploymentPodTicketEntry(
+                    WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry.builder()
                             .detail(detail)
                             .ticketId(deleteToken.getTicketId())
-                            .build();
-                    workOrderTicketEntryFacade.addDeploymentPodTicketEntry(addTicketEntry);
-                }
-            } catch (Exception exception) {
-                log.debug(exception.getMessage());
-            }
-        });
+                            .build());
+        } catch (Exception e) {
+            log.warn("Failed to delete pod {} for resource {}: {}", param.getPodName(), resource.getName(), e.getMessage());
+        }
+    }
+
+    private void publishSreDeletePodEvent(EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder,
+                                          ApplicationResource resource,
+                                          ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod param,
+                                          ApplicationDeletePodToken.Token deleteToken) {
+        try {
+            String cluster = Optional.of(holder)
+                    .map(EdsInstanceProviderHolder::getInstance)
+                    .map(ExternalDataSourceInstance::getEdsInstance)
+                    .map(EdsInstance::getInstanceName)
+                    .orElse("--");
+            User user = userService.getByUsername(SessionUtils.getUsername());
+            SreBridgeUtils.publish(SreEventFormatter.deletePod(
+                    user, deleteToken.getTicketNo(), String.valueOf(deleteToken.getTicketId()),
+                    cluster, param.getNamespace(), resource.getName(), param.getPodName()));
+        } catch (Exception e) {
+            log.error("Failed to publish SRE delete pod event: {}", e.getMessage());
+        }
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void redeployApplicationResourceKubernetesDeployment(
             ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param) {
-        ApplicationRedeployToken.Token deleteToken = applicationRedeployTokenHolder.getToken(
-                SessionUtils.getUsername(),
-                param.getApplicationName()
-        );
-        if (!deleteToken.getValid()) {
+        ApplicationRedeployToken.Token redeployToken = applicationRedeployTokenHolder.getToken(
+                SessionUtils.getUsername(), param.getApplicationName());
+        if (!redeployToken.getValid()) {
             KubernetesResourceOperationException.runtime("Unauthorized access");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
         if (CollectionUtils.isEmpty(resources)) {
             KubernetesResourceOperationException.runtime(
-                    "The deployment={} resource does not exist.",
-                    param.getDeploymentName()
-            );
+                    "The deployment={} resource does not exist.", param.getDeploymentName());
         }
-        resources.forEach(resource -> {
-            EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
-            if (Objects.isNull(deploymentAsset)) {
-                return;
+        resources.forEach(resource -> doRedeploy(resource, param, redeployToken));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void doRedeploy(ApplicationResource resource,
+                            ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param,
+                            ApplicationRedeployToken.Token redeployToken) {
+        EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
+        if (Objects.isNull(deploymentAsset)) {
+            return;
+        }
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
+                deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        ApplicationDeploymentModel.RedeployDeployment detail = ApplicationDeploymentModel.RedeployDeployment.builder()
+                .namespace(param.getNamespace())
+                .ticketNo(redeployToken.getTicketNo())
+                .ticketId(redeployToken.getTicketId())
+                .asset(deploymentAsset)
+                .build();
+        try {
+            Deployment deployment = kubernetesDeploymentRepo.get(
+                    holder.getInstance().getConfig(), param.getNamespace(), resource.getName());
+            if (Objects.isNull(deployment)) {
+                detail.setSuccess(false);
+                detail.setResult("Deployment does not exist");
+            } else {
+                publishSreRedeployEvent(holder, resource, param, redeployToken);
+                kubernetesDeploymentRepo.redeploy(holder.getInstance().getConfig(), deployment);
             }
-            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsProviderHolderFactory.createHolder(
-                    deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-            final String cluster = Optional.ofNullable(holder)
+        } catch (Exception e) {
+            detail.setSuccess(false);
+            detail.setResult("Operation failed err: " + e.getMessage());
+        }
+        workOrderTicketEntryFacade.addDeploymentRedeployTicketEntry(
+                WorkOrderTicketParam.AddDeploymentRedeployTicketEntry.builder()
+                        .detail(detail)
+                        .ticketId(redeployToken.getTicketId())
+                        .build());
+    }
+
+    private void publishSreRedeployEvent(EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder,
+                                         ApplicationResource resource,
+                                         ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param,
+                                         ApplicationRedeployToken.Token redeployToken) {
+        try {
+            String cluster = Optional.of(holder)
                     .map(EdsInstanceProviderHolder::getInstance)
                     .map(ExternalDataSourceInstance::getEdsInstance)
                     .map(EdsInstance::getInstanceName)
                     .orElse("--");
-            final String namespace = param.getNamespace();
-            final String ticketNo = deleteToken.getTicketNo();
-            final Integer ticketId = deleteToken.getTicketId();
-            ApplicationDeploymentModel.RedeployDeployment detail = ApplicationDeploymentModel.RedeployDeployment.builder()
-                    .namespace(namespace)
-                    .ticketNo(ticketNo)
-                    .ticketId(ticketId)
-                    .asset(deploymentAsset)
-                    .build();
-            try {
-                final String deploymentName = resource.getName();
-                Deployment deployment = kubernetesDeploymentRepo.get(
-                        holder.getInstance()
-                                .getConfig(), namespace, deploymentName
-                );
-                if (Objects.nonNull(deployment)) {
-                    // SRE
-                    try {
-                        User user = userService.getByUsername(SessionUtils.getUsername());
-                        SreBridgeUtils.publish(
-                                SreEventFormatter.redeployDeployment(
-                                        user, ticketNo, String.valueOf(ticketId), cluster,
-                                        namespace, deploymentName
-                                ));
-                    } catch (Exception e) {
-                        log.error(e.getMessage());
-                    }
-                    kubernetesDeploymentRepo.redeploy(
-                            holder.getInstance()
-                                    .getConfig(), deployment
-                    );
-                } else {
-                    detail.setSuccess(false);
-                    detail.setResult("Deployment does not exist");
-                }
-            } catch (Exception e) {
-                detail.setSuccess(false);
-                detail.setResult("Operation failed err: " + e.getMessage());
-            }
-            // 写入工单
-            WorkOrderTicketParam.AddDeploymentRedeployTicketEntry addTicketEntry = WorkOrderTicketParam.AddDeploymentRedeployTicketEntry.builder()
-                    .detail(detail)
-                    .ticketId(deleteToken.getTicketId())
-                    .build();
-            workOrderTicketEntryFacade.addDeploymentRedeployTicketEntry(addTicketEntry);
-        });
+            User user = userService.getByUsername(SessionUtils.getUsername());
+            SreBridgeUtils.publish(SreEventFormatter.redeployDeployment(
+                    user, redeployToken.getTicketNo(), String.valueOf(redeployToken.getTicketId()),
+                    cluster, param.getNamespace(), resource.getName()));
+        } catch (Exception e) {
+            log.error("Failed to publish SRE redeploy event: {}", e.getMessage());
+        }
     }
 
 }

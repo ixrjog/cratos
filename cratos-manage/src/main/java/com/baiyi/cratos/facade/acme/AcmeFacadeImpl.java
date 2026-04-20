@@ -242,7 +242,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
         String certPem = toPem(chain.getFirst());
         // 中间证书（不含域名证书和根证书）
         StringBuilder chainBuilder = new StringBuilder();
-        for (int i = 1; i < chain.size() - 1; i++) {
+        for (int i = 1; i < chain.size(); i++) {
             chainBuilder.append(toPem(chain.get(i)));
         }
         String certChainPem = chainBuilder.toString();

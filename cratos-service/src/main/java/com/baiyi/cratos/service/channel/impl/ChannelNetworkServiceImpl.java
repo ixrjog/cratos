@@ -1,4 +1,4 @@
-package com.baiyi.cratos.service.impl;
+package com.baiyi.cratos.service.channel.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;
 import com.baiyi.cratos.domain.param.http.channel.ChannelNetworkParam;
 import com.baiyi.cratos.mapper.ChannelNetworkMapper;
-import com.baiyi.cratos.service.ChannelNetworkService;
+import com.baiyi.cratos.service.channel.ChannelNetworkService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;

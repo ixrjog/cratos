@@ -1,4 +1,4 @@
-package com.baiyi.cratos.service;
+package com.baiyi.cratos.service.channel;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;

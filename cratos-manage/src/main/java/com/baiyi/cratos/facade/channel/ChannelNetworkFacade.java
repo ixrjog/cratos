@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos.facade.channel;
 
 import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.domain.DataTable;

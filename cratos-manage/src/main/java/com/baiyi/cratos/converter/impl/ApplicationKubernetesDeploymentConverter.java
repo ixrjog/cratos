@@ -16,7 +16,6 @@ import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.facade.application.builder.KubernetesDeploymentBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
@@ -24,13 +23,15 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import io.fabric8.kubernetes.api.model.apps.ReplicaSet;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.framework.AopContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * &#064;Author  baiyi
@@ -43,24 +44,37 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final KubernetesPodRepo kubernetesPodRepo;
+    @Lazy
+    private final ApplicationKubernetesDeploymentConverter self;
 
     public ApplicationKubernetesDeploymentConverter(EdsInstanceService edsInstanceService,
                                                     EdsProviderHolderFactory edsProviderHolderFactory,
                                                     EdsAssetService edsAssetService,
                                                     KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                    KubernetesPodRepo kubernetesPodRepo) {
+                                                    KubernetesPodRepo kubernetesPodRepo,
+                                                    @Lazy ApplicationKubernetesDeploymentConverter self) {
         super(edsInstanceService, edsProviderHolderFactory, edsAssetService);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.kubernetesPodRepo = kubernetesPodRepo;
+        this.self = self;
     }
 
     @Override
     public List<KubernetesDeploymentVO.Deployment> toResourceVO(List<ApplicationResource> resources) {
-        Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
-        return resources.stream()
-                .map(resource -> to(edsInstanceConfigMap, resource))
+        Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap = new ConcurrentHashMap<>();
+        List<CompletableFuture<KubernetesDeploymentVO.Deployment>> futures = resources.stream()
+                .map(resource -> CompletableFuture.supplyAsync(() -> {
+                    try {
+                        return to(edsInstanceConfigMap, resource);
+                    } catch (Exception e) {
+                        log.warn("Failed to convert resource {}: {}", resource.getName(), e.getMessage());
+                        return null;
+                    }
+                }))
+                .toList();
+        return futures.stream()
+                .map(CompletableFuture::join)
                 .filter(Objects::nonNull)
-                // 按名称排序
                 .sorted()
                 .toList();
     }
@@ -85,6 +99,8 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .map(PodTemplateSpec::getMetadata)
                 .map(ObjectMeta::getLabels)
                 .orElse(Map.of());
+        // 查一次 ReplicaSet，复用给 Pod 过滤和 VO
+        List<ReplicaSet> activeReplicaSets = kubernetesDeploymentRepo.listActiveReplicaSets(kubernetes, namespace, resource.getName());
         List<Pod> pods;
         if (labels.containsKey("group")) {
             pods = kubernetesPodRepo.list(
@@ -92,7 +108,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                     Map.of("app", labels.get("app"), "group", labels.get("group"))
             );
         } else {
-            pods = getPods(kubernetes, deployment);
+            pods = kubernetesPodRepo.listByReplicaSet(kubernetes, namespace, resource.getName());
         }
         KubernetesCommonVO.KubernetesCluster kubernetesCluster = KubernetesCommonVO.KubernetesCluster.builder()
                 .name(edsInstance.getInstanceName())
@@ -104,8 +120,8 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .withPods(pods)
                 .withEnvName(namespace)
                 .build();
-        vo.setReplicaSets(toReplicaSetVOs(kubernetesDeploymentRepo.listActiveReplicaSets(kubernetes, namespace, resource.getName())));
-        ((ApplicationKubernetesDeploymentConverter) AopContext.currentProxy()).wrap(vo);
+        vo.setReplicaSets(toReplicaSetList(activeReplicaSets));
+        self.wrap(vo);
         return vo;
     }
 
@@ -113,7 +129,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
     public void wrap(KubernetesDeploymentVO.Deployment vo) {
     }
 
-    private List<KubernetesDeploymentVO.ReplicaSet> toReplicaSetVOs(List<ReplicaSet> replicaSets) {
+    private List<KubernetesDeploymentVO.ReplicaSet> toReplicaSetList(List<ReplicaSet> replicaSets) {
         return replicaSets.stream()
                 .map(this::toReplicaSetVO)
                 .toList();
