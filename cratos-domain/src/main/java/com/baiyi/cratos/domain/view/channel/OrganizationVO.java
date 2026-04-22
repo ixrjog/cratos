@@ -15,6 +15,12 @@ import java.io.Serializable;
  */
 public class OrganizationVO {
 
+    public interface HasOrganization {
+        Integer getOrganizationId();
+
+        void setOrganization(Organization organization);
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema

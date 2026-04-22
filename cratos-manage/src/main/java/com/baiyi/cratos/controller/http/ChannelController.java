@@ -1,11 +1,17 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.common.enums.ChannelBusinessTypeEnum;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.http.channel.ChannelNetworkParam;
-import com.baiyi.cratos.domain.param.http.channel.OrganizationParam;
+import com.baiyi.cratos.domain.generator.ChannelExtension;
+import com.baiyi.cratos.domain.param.http.channel.*;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.domain.view.channel.ChannelBusinessVO;
 import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
+import com.baiyi.cratos.domain.view.channel.ChannelVO;
 import com.baiyi.cratos.domain.view.channel.OrganizationVO;
+import com.baiyi.cratos.facade.channel.ChannelBusinessFacade;
+import com.baiyi.cratos.facade.channel.ChannelFacade;
 import com.baiyi.cratos.facade.channel.ChannelNetworkFacade;
 import com.baiyi.cratos.facade.channel.OrganizationFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +20,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 /**
  * @Author baiyi
@@ -27,9 +35,48 @@ import org.springframework.web.bind.annotation.*;
 public class ChannelController {
 
     private final OrganizationFacade organizationFacade;
+    private final ChannelBusinessFacade channelBusinessFacade;
     private final ChannelNetworkFacade channelNetworkFacade;
+    private final ChannelFacade channelFacade;
 
-    @Operation(summary = "Pagination query organization")
+    // Channel
+
+    @Operation(summary = "Pagination query channel")
+    @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<ChannelVO.Channel>> queryChannelPage(
+            @RequestBody @Valid ChannelParam.ChannelPageQuery pageQuery) {
+        return HttpResult.of(channelFacade.queryChannelPage(pageQuery));
+    }
+
+    @Operation(summary = "Add channel")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addChannel(@RequestBody @Valid ChannelParam.AddChannel addChannel) {
+        channelFacade.addChannel(addChannel);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update channel")
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateChannel(@RequestBody @Valid ChannelParam.UpdateChannel updateChannel) {
+        channelFacade.updateChannel(updateChannel);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update channel valid")
+    @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setChannelValidById(@RequestParam int id) {
+        channelFacade.setValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete channel by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteChannelById(@RequestParam int id) {
+        channelFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    // Organization
     @PostMapping(value = "/organization/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<OrganizationVO.Organization>> queryOrganizationPage(
             @RequestBody @Valid OrganizationParam.OrganizationPageQuery pageQuery) {
@@ -38,8 +85,7 @@ public class ChannelController {
 
     @Operation(summary = "Add organization")
     @PostMapping(value = "/organization/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addOrganization(
-            @RequestBody @Valid OrganizationParam.AddOrganization addOrganization) {
+    public HttpResult<Boolean> addOrganization(@RequestBody @Valid OrganizationParam.AddOrganization addOrganization) {
         organizationFacade.addOrganization(addOrganization);
         return HttpResult.SUCCESS;
     }
@@ -96,6 +142,76 @@ public class ChannelController {
     public HttpResult<Boolean> deleteChannelNetworkById(@RequestParam int id) {
         channelNetworkFacade.deleteById(id);
         return HttpResult.SUCCESS;
+    }
+
+    // Extension
+
+    @Operation(summary = "Query channel extensions by channelId")
+    @GetMapping(value = "/extension/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<java.util.List<ChannelExtension>> queryChannelExtensions(@RequestParam int channelId) {
+        return HttpResult.of(channelFacade.queryChannelExtensions(channelId));
+    }
+
+    @Operation(summary = "Add channel extension")
+    @PostMapping(value = "/extension/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addChannelExtension(
+            @RequestBody @Valid ChannelExtensionParam.AddChannelExtension addChannelExtension) {
+        channelFacade.addChannelExtension(addChannelExtension);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete channel extension by id")
+    @DeleteMapping(value = "/extension/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteChannelExtensionById(@RequestParam int id) {
+        channelFacade.deleteChannelExtensionById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    // Business
+
+    @Operation(summary = "Pagination query channel business")
+    @PostMapping(value = "/business/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<ChannelBusinessVO.Business>> queryChannelBusinessPage(
+            @RequestBody @Valid ChannelBusinessParam.ChannelBusinessPageQuery pageQuery) {
+        return HttpResult.of(channelBusinessFacade.queryChannelBusinessPage(pageQuery));
+    }
+
+    @Operation(summary = "Add channel business")
+    @PostMapping(value = "/business/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addChannelBusiness(
+            @RequestBody @Valid ChannelBusinessParam.AddChannelBusiness addChannelBusiness) {
+        channelBusinessFacade.addChannelBusiness(addChannelBusiness);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update channel business")
+    @PutMapping(value = "/business/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateChannelBusiness(
+            @RequestBody @Valid ChannelBusinessParam.UpdateChannelBusiness updateChannelBusiness) {
+        channelBusinessFacade.updateChannelBusiness(updateChannelBusiness);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update channel business valid")
+    @PutMapping(value = "/business/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setChannelBusinessValidById(@RequestParam int id) {
+        channelBusinessFacade.setValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete channel business by id")
+    @DeleteMapping(value = "/business/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteChannelBusinessById(@RequestParam int id) {
+        channelBusinessFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Get channel business type options")
+    @GetMapping(value = "/business/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getChannelBusinessTypeOptions() {
+        return HttpResult.of(OptionsVO.toOptions(Arrays.stream(ChannelBusinessTypeEnum.values())
+                                                         .map(Enum::name)
+                                                         .toList()));
     }
 
 }

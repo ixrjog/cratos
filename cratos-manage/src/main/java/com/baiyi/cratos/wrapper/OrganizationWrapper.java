@@ -1,9 +1,13 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Organization;
 import com.baiyi.cratos.domain.view.channel.OrganizationVO;
+import com.baiyi.cratos.service.channel.OrganizationService;
+import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,11 +20,26 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OrganizationWrapper extends BaseDataTableConverter<OrganizationVO.Organization, Organization> implements BaseWrapper<OrganizationVO.Organization> {
+@BusinessType(type = BusinessTypeEnum.ORGANIZATION)
+public class OrganizationWrapper extends BaseDataTableConverter<OrganizationVO.Organization, Organization> implements BaseBusinessDecorator<OrganizationVO.HasOrganization, OrganizationVO.Organization> {
+
+    private final OrganizationService organizationService;
 
     @Override
     public void wrap(OrganizationVO.Organization vo) {
         // This is a good idea
+    }
+
+    @Override
+    public void decorateBusiness(OrganizationVO.HasOrganization hasBusiness) {
+        if (IdentityUtils.hasIdentity(hasBusiness.getOrganizationId())) {
+            Organization organization = organizationService.getById(hasBusiness.getOrganizationId());
+            if (organization != null) {
+                OrganizationVO.Organization bVO = this.convert(organization);
+                delegateWrap(bVO);
+                hasBusiness.setOrganization(bVO);
+            }
+        }
     }
 
 }

@@ -38,7 +38,7 @@ public class Channel implements HasValid, HasIntegerPrimaryKey, Serializable {
     /**
      * 级别(优先级)
      */
-    private Integer priority;
+    private String priority;
 
     /**
      * 国家
