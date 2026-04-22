@@ -236,9 +236,7 @@ public class EdsKubernetes2Test extends BaseEdsTest<EdsConfigs.Kubernetes> {
 
         System.out.println(pt);
 
-        handle(appMap,
-             dcHolder,
-             drHolder);
+      //  handle(appMap, dcHolder, drHolder);
     }
 
 

@@ -7,13 +7,14 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 public class ChannelBusinessVO {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class Business extends BaseVO implements ChannelVO.HasChannel, OrganizationVO.HasOrganization, Serializable {
+    public static class Business extends BaseVO implements ChannelVO.HasChannel, ChannelLineVO.HasChannelLines, OrganizationVO.HasOrganization, Serializable {
         @Serial
         private static final long serialVersionUID = 4148816104425592602L;
         private Integer id;
@@ -24,6 +25,8 @@ public class ChannelBusinessVO {
         private String businessDirection;
         private Boolean valid;
         private String comment;
+
+        private List<ChannelLineVO.Line> lines;
 
         private OrganizationVO.Organization organization;
         private ChannelVO.Channel channel;

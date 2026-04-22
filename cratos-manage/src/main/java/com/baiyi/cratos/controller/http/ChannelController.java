@@ -6,14 +6,8 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ChannelExtension;
 import com.baiyi.cratos.domain.param.http.channel.*;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
-import com.baiyi.cratos.domain.view.channel.ChannelBusinessVO;
-import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
-import com.baiyi.cratos.domain.view.channel.ChannelVO;
-import com.baiyi.cratos.domain.view.channel.OrganizationVO;
-import com.baiyi.cratos.facade.channel.ChannelBusinessFacade;
-import com.baiyi.cratos.facade.channel.ChannelFacade;
-import com.baiyi.cratos.facade.channel.ChannelNetworkFacade;
-import com.baiyi.cratos.facade.channel.OrganizationFacade;
+import com.baiyi.cratos.domain.view.channel.*;
+import com.baiyi.cratos.facade.channel.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -38,6 +33,7 @@ public class ChannelController {
     private final ChannelBusinessFacade channelBusinessFacade;
     private final ChannelNetworkFacade channelNetworkFacade;
     private final ChannelFacade channelFacade;
+    private final ChannelLineFacade channelLineFacade;
 
     // Channel
 
@@ -73,6 +69,13 @@ public class ChannelController {
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteChannelById(@RequestParam int id) {
         channelFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Call channel alert")
+    @PostMapping(value = "/alert/call", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> callChannelAlert(@RequestBody @Valid ChannelParam.CallAlert callAlert) {
+        channelFacade.callChannelAlert(callAlert);
         return HttpResult.SUCCESS;
     }
 
@@ -212,6 +215,55 @@ public class ChannelController {
         return HttpResult.of(OptionsVO.toOptions(Arrays.stream(ChannelBusinessTypeEnum.values())
                                                          .map(Enum::name)
                                                          .toList()));
+    }
+
+    // Line
+    @Operation(summary = "Pagination query channel line")
+    @PostMapping(value = "/line/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<ChannelLineVO.Line>> queryChannelLinePage(@RequestBody @Valid ChannelLineParam.ChannelLinePageQuery pageQuery) {
+        return HttpResult.of(channelLineFacade.queryChannelLinePage(pageQuery));
+    }
+
+    @Operation(summary = "Add channel line")
+    @PostMapping(value = "/line/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addChannelLine(@RequestBody @Valid ChannelLineParam.AddChannelLine addChannelLine) {
+        channelLineFacade.addChannelLine(addChannelLine);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update channel line")
+    @PutMapping(value = "/line/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateChannelLine(@RequestBody @Valid ChannelLineParam.UpdateChannelLine updateChannelLine) {
+        channelLineFacade.updateChannelLine(updateChannelLine);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete channel line by id")
+    @DeleteMapping(value = "/line/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteChannelLineById(@RequestParam int id) {
+        channelLineFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    // Business Line
+    @Operation(summary = "Query channel business lines")
+    @GetMapping(value = "/business/line/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<ChannelLineVO.Line>> queryChannelBusinessLines(@RequestParam int channelBusinessId) {
+        return HttpResult.of(channelLineFacade.queryChannelBusinessLines(channelBusinessId));
+    }
+
+    @Operation(summary = "Add channel business line")
+    @PostMapping(value = "/business/line/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addChannelBusinessLine(@RequestBody @Valid ChannelBusinessLineParam.AddChannelBusinessLine param) {
+        channelLineFacade.addChannelBusinessLine(param);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete channel business line by id")
+    @DeleteMapping(value = "/business/line/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteChannelBusinessLineById(@RequestParam int id) {
+        channelLineFacade.deleteChannelBusinessLineById(id);
+        return HttpResult.SUCCESS;
     }
 
 }

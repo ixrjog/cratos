@@ -2,11 +2,10 @@ package com.baiyi.cratos.facade.channel;
 
 import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.ChannelExtension;
 import com.baiyi.cratos.domain.param.http.channel.ChannelExtensionParam;
 import com.baiyi.cratos.domain.param.http.channel.ChannelParam;
 import com.baiyi.cratos.domain.view.channel.ChannelVO;
-
-import com.baiyi.cratos.domain.generator.ChannelExtension;
 
 import java.util.List;
 
@@ -25,5 +24,7 @@ public interface ChannelFacade extends HasSetValid {
     void addChannelExtension(ChannelExtensionParam.AddChannelExtension addChannelExtension);
 
     void deleteChannelExtensionById(int id);
+
+    void callChannelAlert(ChannelParam.CallAlert callAlert);
 
 }
