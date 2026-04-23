@@ -6,6 +6,7 @@ import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.facade.AcmeFacade;
@@ -130,7 +131,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
         DNSResolver dnsResolver = DNSResolverFactory.getDNSResolver(edsInstance.getEdsType());
         String zoneId = dnsResolver.getZoneId(acmeDomain);
         acmeDomain.setZoneId(zoneId);
-        if (StringUtils.hasText(addDomain.getDomains())) {
+        if (!StringUtils.hasText(addDomain.getDomains())) {
             String domains = Stream.of("*." + addDomain.getDomain(), addDomain.getDomain())
                     .sorted()
                     .collect(Collectors.joining(","));
@@ -316,8 +317,9 @@ public class AcmeFacadeImpl implements AcmeFacade {
 
     @Async
     @Override
-    public void asyncIssueCertificate(int acmeDomainId) {
+    public void asyncIssueCertificate(int acmeDomainId, String username) {
         try {
+            SessionUtils.setUsername(username);
             this.issueCertificate(acmeDomainId);
         } catch (Exception ex) {
             log.error(ex.getMessage());
@@ -431,6 +433,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
                     .domains(acmeDomain.getDomains())
                     .dnsChallengeRecords(JSONUtils.writeValueAsString(dnsRecords))
                     .domainKeyPair(keyPairStr)
+                    .createdBy(SessionUtils.getUsername())
                     .build();
             acmeOrderService.add(acmeOrder);
         }
@@ -448,9 +451,8 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     private String toPem(X509Certificate cert) throws Exception {
-        return "-----BEGIN CERTIFICATE-----\n"
-                + Base64.getMimeEncoder(64, "\n".getBytes()).encodeToString(cert.getEncoded())
-                + "\n-----END CERTIFICATE-----\n";
+        return "-----BEGIN CERTIFICATE-----\n" + Base64.getMimeEncoder(64, "\n" .getBytes())
+                .encodeToString(cert.getEncoded()) + "\n-----END CERTIFICATE-----\n";
     }
 
     private Account getAccount(int acmeAccountId) throws Exception {
@@ -525,13 +527,14 @@ public class AcmeFacadeImpl implements AcmeFacade {
             EdsAcmeException.runtime("ACME订单包含证书.");
         }
         // 无效直接删除
-        if ("INVALID".equals(acmeOrder.getOrderStatus())) {
+        if ("INVALID" .equals(acmeOrder.getOrderStatus())) {
             acmeOrderService.deleteById(id);
             return;
         }
         // 判断创建时间是否大于1小时，是则删除
-        if ("PENDING".equals(acmeOrder.getOrderStatus())) {
-            long hoursSinceCreated = (System.currentTimeMillis() - acmeOrder.getCreateTime().getTime()) / (1000 * 60 * 60);
+        if ("PENDING" .equals(acmeOrder.getOrderStatus())) {
+            long hoursSinceCreated = (System.currentTimeMillis() - acmeOrder.getCreateTime()
+                    .getTime()) / (1000 * 60 * 60);
             if (hoursSinceCreated >= 1) {
                 acmeOrderService.deleteById(id);
                 return;

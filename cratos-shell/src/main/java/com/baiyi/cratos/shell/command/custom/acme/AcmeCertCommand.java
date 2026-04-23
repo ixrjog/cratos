@@ -3,6 +3,7 @@ package com.baiyi.cratos.shell.command.custom.acme;
 import com.aliyun.cas20200407.models.ListCloudResourcesResponseBody;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.AcmeCertificate;
@@ -106,7 +107,7 @@ public class AcmeCertCommand extends AbstractCommand {
         }
         AcmeDomain acmeDomain = AcmeContext.getDomainContext()
                 .get(domainId);
-        acmeFacade.asyncIssueCertificate(acmeDomain.getId());
+        acmeFacade.asyncIssueCertificate(acmeDomain.getId(), SessionUtils.getUsername());
         helper.print(
                 "Issuing the certificate will take some time, please check the order in a few minutes.",
                 PromptColor.GREEN

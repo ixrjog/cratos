@@ -86,4 +86,7 @@ public class AcmeOrder implements HasIntegerPrimaryKey, Serializable {
      */
     @Column(name = "error_message")
     private String errorMessage;
+
+    @Column(name = "created_by")
+    private String createdBy;
 }

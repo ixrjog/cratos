@@ -1,6 +1,7 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
@@ -61,7 +62,7 @@ public class AcmeController {
     @Operation(summary = "Issue acme domain certificate")
     @PutMapping(value = "/certificate/issue", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> issueCertificate(@RequestParam int acmeDomainId) {
-        acmeFacade.asyncIssueCertificate(acmeDomainId);
+        acmeFacade.asyncIssueCertificate(acmeDomainId, SessionUtils.getUsername());
         return HttpResult.SUCCESS;
     }
 

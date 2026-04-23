@@ -46,6 +46,7 @@ public class AcmeOrderVO {
         @FieldSensitive(type = SensitiveType.ERASE)
         private String domainKeyPair;
         private String errorMessage;
+        private String createdBy;
 
         private AcmeAccountVO.Account account;
         private AcmeDomainVO.Domain acmeDomain;

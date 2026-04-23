@@ -22,10 +22,16 @@ public class ImportAssetJob extends QuartzJobBean {
     public static final String ASSET_TYPE = "assetType";
     public static final String INSTANCE_ID = "instanceId";
     private static EdsFacade edsFacade;
+    private static String activeProfile;
 
     @Autowired
     public void setEdsFacade(EdsFacade edsFacade) {
         setFacade(edsFacade);
+    }
+
+    @Autowired
+    public void setEnvironment(org.springframework.core.env.Environment environment) {
+        ImportAssetJob.activeProfile = String.join(",", environment.getActiveProfiles());
     }
 
     private static void setFacade(EdsFacade edsFacade) {
@@ -34,6 +40,10 @@ public class ImportAssetJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        if (activeProfile != null && activeProfile.contains("dev")) {
+            log.info("Import asset job skipped in dev environment.");
+            return;
+        }
         // 获取参数
         JobDataMap jobDataMap = jobExecutionContext.getJobDetail()
                 .getJobDataMap();

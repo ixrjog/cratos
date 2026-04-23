@@ -66,7 +66,7 @@ public class AcmeFacadeTest extends BaseUnit {
 
     @Test
     void test31() throws Exception {
-        AcmeOrder acmeOrder = acmeOrderService.getById(9);
+        AcmeOrder acmeOrder = acmeOrderService.getById(38);
         acmeFacade.resumeOrderIssuance(acmeOrder);
     }
 

@@ -44,7 +44,7 @@ public interface AcmeFacade {
      *
      * @param acmeDomainId
      */
-    void asyncIssueCertificate(int acmeDomainId);
+    void asyncIssueCertificate(int acmeDomainId, String username);
 
     void resumeOrderIssuance(AcmeOrder acmeOrder) throws Exception;
 

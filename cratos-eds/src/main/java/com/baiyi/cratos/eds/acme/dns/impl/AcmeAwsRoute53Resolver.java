@@ -15,13 +15,11 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetService;
 import org.shredzone.acme4j.Order;
-import org.shredzone.acme4j.challenge.Dns01Challenge;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,13 +33,12 @@ import java.util.stream.Collectors;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_HOSTED_ZONE)
 public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, ResourceRecordSet> {
 
-    public AcmeAwsRoute53Resolver(EdsAssetService edsAssetService,
-                                  EdsProviderHolderFactory edsProviderHolderFactory) {
+    public AcmeAwsRoute53Resolver(EdsAssetService edsAssetService, EdsProviderHolderFactory edsProviderHolderFactory) {
         super(edsAssetService, edsProviderHolderFactory);
     }
 
     @Override
-    public void deleteAcmeChallenge(AcmeDomain acmeDomain,Order order) {
+    public void deleteAcmeChallenge(AcmeDomain acmeDomain, Order order) {
         // 获取托管区域
         final String hostedZoneId = getZoneId(acmeDomain);
         if (!StringUtils.hasText(hostedZoneId)) {
@@ -69,34 +66,27 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
 
     @Override
     public void addOrderChallengeRecords(AcmeDomain acmeDomain, Order order) {
-        // 获取托管区域
         final String hostedZoneId = getZoneId(acmeDomain);
         if (!StringUtils.hasText(hostedZoneId)) {
             return;
         }
-        // 获取 AWS 配置
         EdsConfigs.Aws config = getEdsConfig(acmeDomain);
-        // 提取所有 DNS Challenge 的 digest 值
-        List<String> recordValues = order.getAuthorizations()
-                .stream()
-                .map(auth -> auth.findChallenge(Dns01Challenge.class))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(Dns01Challenge::getDigest)
-                .toList();
-        if (recordValues.isEmpty()) {
+        List<AcmeDnsRecord> acmeDnsRecords = getAcmeDnsRecords(order);
+        if (CollectionUtils.isEmpty(acmeDnsRecords)) {
             return;
         }
-        // 构建记录名（去掉通配符）
-        String recordName = ACME_CHALLENGE_NAME + "." + acmeDomain.getDomain()
-                .replace("*.", "");
-        ResourceRecordSet rrs = new ResourceRecordSet(toFQDN(recordName), RRType.TXT);
-        rrs.setTTL(300L);
-        rrs.setResourceRecords(recordValues.stream()
-                                       .map(v -> new ResourceRecord("\"" + v + "\""))
-                                       .toList());
-        Change upsertChange = new Change(ChangeAction.UPSERT, rrs);
-        AwsRoute53Repo.changeResourceRecordSets(config, hostedZoneId, List.of(upsertChange));
+        List<Change> changes = acmeDnsRecords.stream()
+                .collect(Collectors.groupingBy(r -> toFQDN(r.getRecordName() + "." + r.getDomain())))
+                .entrySet().stream()
+                .map(entry -> {
+                    ResourceRecordSet rrs = new ResourceRecordSet(entry.getKey(), RRType.TXT);
+                    rrs.setTTL(300L);
+                    rrs.setResourceRecords(entry.getValue().stream()
+                            .map(r -> new ResourceRecord("\"" + r.getDigest() + "\""))
+                            .toList());
+                    return new Change(ChangeAction.UPSERT, rrs);
+                }).toList();
+        AwsRoute53Repo.changeResourceRecordSets(config, hostedZoneId, changes);
     }
 
     @Override
@@ -104,12 +94,12 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
         // 获取 AWS 配置
         EdsConfigs.Aws config = getEdsConfig(acmeDomain);
         final String hostedZoneId = getZoneId(acmeDomain);
-        
+
         String recordName = ACME_CHALLENGE_NAME + "." + acmeDomain.getDomain();
         ResourceRecordSet rrs = new ResourceRecordSet(toFQDN(recordName), RRType.CNAME);
         rrs.setTTL(300L);
         rrs.setResourceRecords(List.of(new ResourceRecord(dcvRecordValue)));
-        
+
         Change upsertChange = new Change(ChangeAction.UPSERT, rrs);
         AwsRoute53Repo.changeResourceRecordSets(config, hostedZoneId, List.of(upsertChange));
     }
@@ -117,11 +107,12 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
     @Override
     protected List<ResourceRecordSet> findMatchedRecord(List<AcmeDnsRecord> acmeDnsRecords,
                                                         List<ResourceRecordSet> resourceRecordSets) {
-        Set<String> acmeChallengeRecords =acmeDnsRecords.stream()
+        Set<String> acmeChallengeRecords = acmeDnsRecords.stream()
                 .map(e -> toFQDN(e.getRecordName() + "." + e.getDomain()))
                 .collect(Collectors.toSet());
         return resourceRecordSets.stream()
-                .filter(record -> isCnameOrTxtRecord(record.getType()) && acmeChallengeRecords.contains(record.getName()))
+                .filter(record -> isCnameOrTxtRecord(record.getType()) && acmeChallengeRecords.contains(
+                        record.getName()))
                 .toList();
     }
 

@@ -18,5 +18,6 @@
     <result column="domain_key_pair" jdbcType="LONGVARCHAR" property="domainKeyPair" />
     <result column="dns_challenge_records" jdbcType="LONGVARCHAR" property="dnsChallengeRecords" />
     <result column="error_message" jdbcType="LONGVARCHAR" property="errorMessage" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
   </resultMap>
 </mapper>
