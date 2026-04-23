@@ -58,8 +58,11 @@ public class ChannelLineFacadeImpl implements ChannelLineFacade {
 
     @Override
     public List<ChannelLineVO.Line> queryChannelBusinessLines(int channelBusinessId) {
-        return BeanCopierUtils.copyListProperties(
-                channelBusinessLineService.queryByChannelBusinessId(channelBusinessId), ChannelLineVO.Line.class);
+        return channelBusinessLineService.queryByChannelBusinessId(channelBusinessId)
+                .stream()
+                .map(e -> BeanCopierUtils.copyProperties(
+                        channelLineService.getById(e.getChannelLineId()), ChannelLineVO.Line.class))
+                .toList();
     }
 
     @Override

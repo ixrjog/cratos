@@ -53,6 +53,7 @@ public class AcmeDomainVO {
         private String dcvDelegationTarget;
         private String comment;
 
+        private Boolean hasDcvRecord;
         private EdsInstanceVO.EdsInstance edsInstance;
         private AcmeAccountVO.Account account;
         private Map<String, Integer> resourceCount;

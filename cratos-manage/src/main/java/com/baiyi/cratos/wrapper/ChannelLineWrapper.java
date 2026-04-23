@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.Channel;
 import com.baiyi.cratos.domain.generator.ChannelLine;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.channel.ChannelLineVO;
+import com.baiyi.cratos.service.channel.ChannelBusinessLineService;
 import com.baiyi.cratos.service.channel.ChannelLineService;
 import com.baiyi.cratos.service.channel.ChannelService;
 import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
@@ -14,16 +15,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.CHANNEL_LINE)
-public class ChannelLineWrapper extends BaseDataTableConverter<ChannelLineVO.Line, ChannelLine> implements BaseBusinessDecorator<ChannelLineVO.HasChannelLines, ChannelLineVO.Line> {
+public class ChannelLineWrapper extends BaseDataTableConverter<ChannelLineVO.Line, ChannelLine> implements BaseBusinessDecorator<ChannelLineVO.HasChannelBusinessLines, ChannelLineVO.Line> {
 
     private final ChannelService channelService;
     private final ChannelLineService channelLineService;
+    private final ChannelBusinessLineService channelBusinessLineService;
 
     @Override
     public void wrap(ChannelLineVO.Line vo) {
@@ -37,10 +37,15 @@ public class ChannelLineWrapper extends BaseDataTableConverter<ChannelLineVO.Lin
     }
 
     @Override
-    public void decorateBusiness(ChannelLineVO.HasChannelLines hasBusiness) {
+    public void decorateBusiness(ChannelLineVO.HasChannelBusinessLines hasBusiness) {
         try {
-            List<ChannelLine> lines = channelLineService.queryByChannelId(hasBusiness.getChannelId());
-            hasBusiness.setLines(BeanCopierUtils.copyListProperties(lines, ChannelLineVO.Line.class));
+            hasBusiness.setLines(channelBusinessLineService.queryByChannelBusinessId(hasBusiness.getChannelBusinessId())
+                                         .stream()
+                                         .map(e -> {
+                                             ChannelLine line = channelLineService.getById(e.getChannelLineId());
+                                             return BeanCopierUtils.copyProperties(line, ChannelLineVO.Line.class);
+                                         })
+                                         .toList());
         } catch (Exception ignored) {
         }
     }

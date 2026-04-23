@@ -33,8 +33,7 @@ import java.util.stream.Collectors;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
 public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
 
-    public AcmeAliyunDNSResolver(EdsAssetService edsAssetService,
-                                 EdsProviderHolderFactory edsProviderHolderFactory) {
+    public AcmeAliyunDNSResolver(EdsAssetService edsAssetService, EdsProviderHolderFactory edsProviderHolderFactory) {
         super(edsAssetService, edsProviderHolderFactory);
     }
 
@@ -105,6 +104,23 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
             AliyunDnsRepo.addDomainRecord(
                     config, acmeDomain.getDomain(), rr, DnsRRType.TXT.name(), acmeDnsRecord.getDigest(), 600L);
         }
+    }
+
+    @Override
+    public boolean hasDcvChallengeRecord(AcmeDomain acmeDomain, String dcvRecordValue) {
+        String fullDcvRecordValue = acmeDomain.getDomain() + "." + dcvRecordValue;
+        EdsConfigs.Aliyun config = getEdsConfig(acmeDomain);
+        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
+                config, acmeDomain.getDomain());
+        String dcv = ACME_CHALLENGE_NAME + "." + acmeDomain.getDomain();
+        for (DescribeDomainRecordsResponseBody.Record record : records) {
+            if (DnsRRType.CNAME.name()
+                    .equals(record.getType()) && dcv.equals(buildFullRecordName(record))) {
+                return record.getValue()
+                        .equals(fullDcvRecordValue);
+            }
+        }
+        return false;
     }
 
     @Override

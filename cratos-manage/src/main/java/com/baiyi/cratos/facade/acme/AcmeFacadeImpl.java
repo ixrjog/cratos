@@ -441,7 +441,14 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
-    public void recoverDcvDelegation(AcmeDomain acmeDomain) {
+    public void recoverDcvDelegation(int acmeDomainId) {
+        AcmeDomain acmeDomain = acmeDomainService.getById(acmeDomainId);
+        if (acmeDomain != null) {
+            recoverDcvDelegation(acmeDomain);
+        }
+    }
+
+    private void recoverDcvDelegation(AcmeDomain acmeDomain) {
         EdsInstance acmeDNSResolverInstance = edsInstanceService.getById(acmeDomain.getDnsResolverInstanceId());
         AcmeDNSResolver acmeDNSResolver = AcmeDNSResolverFactory.getAcmeDNSResolver(
                 acmeDNSResolverInstance.getEdsType());

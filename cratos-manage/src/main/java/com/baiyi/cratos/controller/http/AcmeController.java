@@ -59,6 +59,13 @@ public class AcmeController {
         return HttpResult.of(acmeFacade.queryDomainPage(pageQuery));
     }
 
+    @Operation(summary = "Recover acme domain dcv delegation")
+    @PutMapping(value = "/domain/dcv/relegation/recover", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> recoverDcvDelegation(@RequestParam @Valid int acmeDomainId) {
+        acmeFacade.recoverDcvDelegation(acmeDomainId);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Issue acme domain certificate")
     @PutMapping(value = "/certificate/issue", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> issueCertificate(@RequestParam int acmeDomainId) {

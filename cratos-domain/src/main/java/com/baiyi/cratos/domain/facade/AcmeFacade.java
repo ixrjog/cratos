@@ -1,7 +1,6 @@
 package com.baiyi.cratos.domain.facade;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
@@ -48,12 +47,7 @@ public interface AcmeFacade {
 
     void resumeOrderIssuance(AcmeOrder acmeOrder) throws Exception;
 
-    /**
-     * 恢复 DCV
-     *
-     * @param acmeDomain
-     */
-    void recoverDcvDelegation(AcmeDomain acmeDomain);
+    void recoverDcvDelegation(int acmeDomainId);
 
     /**
      * 证书自动部署到云实例

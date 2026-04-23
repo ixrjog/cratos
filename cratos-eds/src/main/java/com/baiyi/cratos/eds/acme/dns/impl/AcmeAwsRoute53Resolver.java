@@ -13,6 +13,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.service.EdsAssetService;
 import org.shredzone.acme4j.Order;
 import org.springframework.stereotype.Component;
@@ -77,15 +78,18 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
         }
         List<Change> changes = acmeDnsRecords.stream()
                 .collect(Collectors.groupingBy(r -> toFQDN(r.getRecordName() + "." + r.getDomain())))
-                .entrySet().stream()
+                .entrySet()
+                .stream()
                 .map(entry -> {
                     ResourceRecordSet rrs = new ResourceRecordSet(entry.getKey(), RRType.TXT);
                     rrs.setTTL(300L);
-                    rrs.setResourceRecords(entry.getValue().stream()
-                            .map(r -> new ResourceRecord("\"" + r.getDigest() + "\""))
-                            .toList());
+                    rrs.setResourceRecords(entry.getValue()
+                                                   .stream()
+                                                   .map(r -> new ResourceRecord("\"" + r.getDigest() + "\""))
+                                                   .toList());
                     return new Change(ChangeAction.UPSERT, rrs);
-                }).toList();
+                })
+                .toList();
         AwsRoute53Repo.changeResourceRecordSets(config, hostedZoneId, changes);
     }
 
@@ -126,6 +130,25 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
                 acmeDomain.getDnsResolverInstanceId(), EdsAssetTypeEnum.AWS_HOSTED_ZONE.name(), domainFqdn, false);
         return CollectionUtils.isEmpty(hostedZoneAssets) ? null : hostedZoneAssets.getFirst()
                 .getAssetId();
+    }
+
+    @Override
+    public boolean hasDcvChallengeRecord(AcmeDomain acmeDomain, String dcvRecordValue) {
+        String fullDcvRecordValue = acmeDomain.getDomain() + "." + dcvRecordValue;
+        EdsConfigs.Aws config = getEdsConfig(acmeDomain);
+        final String hostedZoneId = getZoneId(acmeDomain);
+        List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
+        String dcv = toFQDN(ACME_CHALLENGE_NAME + "." + acmeDomain.getDomain());
+        for (ResourceRecordSet record : resourceRecordSets) {
+            if (DnsRRType.CNAME.name()
+                    .equals(record.getType()) && dcv.equals(record.getName())) {
+                return record.getResourceRecords()
+                        .getFirst()
+                        .getValue()
+                        .equals(fullDcvRecordValue);
+            }
+        }
+        return false;
     }
 
 }

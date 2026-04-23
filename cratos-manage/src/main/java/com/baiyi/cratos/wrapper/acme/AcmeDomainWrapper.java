@@ -5,7 +5,12 @@ import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
+import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
+import com.baiyi.cratos.eds.acme.dns.AcmeDNSResolver;
+import com.baiyi.cratos.eds.acme.dns.AcmeDNSResolverFactory;
+import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
 import com.baiyi.cratos.service.acme.AcmeOrderService;
 import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
@@ -14,6 +19,7 @@ import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Optional;
@@ -31,11 +37,22 @@ public class AcmeDomainWrapper extends BaseDataTableConverter<AcmeDomainVO.Domai
 
     private final AcmeDomainService acmeDomainService;
     private final AcmeOrderService acmeOrderService;
+    private final EdsInstanceService edsInstanceService;
 
     @Override
     @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ACME_ACCOUNT, BusinessTypeEnum.EDS_INSTANCE})
     public void wrap(AcmeDomainVO.Domain vo) {
         vo.setResourceCount(makeResourceCountForAcmeOrder(vo));
+        if (StringUtils.hasText(vo.getDcvType()) && StringUtils.hasText(vo.getDcvDelegationTarget())) {
+            EdsInstance acmeDNSResolverInstance = edsInstanceService.getById(vo.getDnsResolverInstanceId());
+            AcmeDNSResolver acmeDNSResolver = AcmeDNSResolverFactory.getAcmeDNSResolver(
+                    acmeDNSResolverInstance.getEdsType());
+            if (acmeDNSResolver != null) {
+                boolean hasDcvRecord = acmeDNSResolver.hasDcvChallengeRecord(
+                        BeanCopierUtils.copyProperties(vo, AcmeDomain.class), vo.getDcvDelegationTarget());
+                vo.setHasDcvRecord(hasDcvRecord);
+            }
+        }
     }
 
     private Map<String, Integer> makeResourceCountForAcmeOrder(AcmeDomainVO.Domain vo) {

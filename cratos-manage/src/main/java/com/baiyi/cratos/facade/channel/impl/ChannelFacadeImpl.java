@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.channel.impl;
 
 import com.baiyi.cratos.common.exception.BusinessException;
-import com.baiyi.cratos.common.util.PhoneNumberUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Channel;
 import com.baiyi.cratos.domain.generator.ChannelExtension;
@@ -95,7 +94,6 @@ public class ChannelFacadeImpl implements ChannelFacade {
         if (validUsernames.isEmpty()) {
             throw new BusinessException("No valid users to call.");
         }
-
         EdsConfigs.Aliyun aliyun = edsAliyunConfigLoader.getConfig(2);
         validUsernames.forEach(username -> {
             User user = userService.getByUsername(username);
@@ -103,11 +101,11 @@ public class ChannelFacadeImpl implements ChannelFacade {
                 log.warn("User {} has no mobile phone, skip call.", username);
                 return;
             }
-            String phone = PhoneNumberUtils.convertPhoneNumber(user.getMobilePhone());
-            // 只呼叫有效号码
-            if (!PhoneNumberUtils.isValidPhoneNumber(phone)) {
-                log.warn("User {} phone number invalid: {}, skip call.", username, user.getMobilePhone());
-                return;
+            // 这里有bug，给我直接去掉手机号-前面的部分
+            String phone = user.getMobilePhone().replaceAll("[\\s+]", "");
+            // 去掉国家码前缀（-前面的部分）
+            if (phone.contains("-")) {
+                phone = phone.substring(phone.lastIndexOf("-") + 1);
             }
             try {
                 AliyunDyvmsRepo.callChannelFault(aliyun, channel.getName(), phone);

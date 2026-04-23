@@ -23,6 +23,8 @@ public interface AcmeDNSResolver extends EdsInstanceTypeOfAnnotate, Initializing
 
     void recoverDcvDelegation(AcmeDomain acmeDomain);
 
+    boolean hasDcvChallengeRecord(AcmeDomain acmeDomain, String dcvRecordValue);
+
     default EdsAssetTypeEnum getAssetTypeEnum() {
         return AopUtils.getTargetClass(this)
                 .getAnnotation(EdsInstanceAssetType.class)

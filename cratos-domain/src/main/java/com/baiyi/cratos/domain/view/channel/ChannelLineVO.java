@@ -11,8 +11,8 @@ import java.util.List;
 
 public class ChannelLineVO {
 
-    public interface HasChannelLines {
-        Integer getChannelId();
+    public interface HasChannelBusinessLines {
+        Integer getChannelBusinessId();
 
         void setLines(List<Line> lines);
     }

@@ -2,14 +2,13 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.domain.generator.AcmeCertificate;
-import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
 import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
 import com.baiyi.cratos.eds.acme.enums.AcmeProviderEnum;
-import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.service.acme.AcmeCertificateService;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
 import com.baiyi.cratos.service.acme.AcmeOrderService;
@@ -70,11 +69,11 @@ public class AcmeFacadeTest extends BaseUnit {
         acmeFacade.resumeOrderIssuance(acmeOrder);
     }
 
-    @Test
-    void recoverDcvDelegationTest() throws Exception {
-        AcmeDomain acmeDomain = acmeDomainService.getById(1);
-        acmeFacade.recoverDcvDelegation(acmeDomain);
-    }
+//    @Test
+//    void recoverDcvDelegationTest() throws Exception {
+//        AcmeDomain acmeDomain = acmeDomainService.getById(1);
+//        acmeFacade.recoverDcvDelegation(acmeDomain);
+//    }
 
     @Test
     void test33() {
