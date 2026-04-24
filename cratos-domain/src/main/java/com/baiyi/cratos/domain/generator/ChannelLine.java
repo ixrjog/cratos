@@ -52,6 +52,12 @@ public class ChannelLine implements HasValid, HasIntegerPrimaryKey, Serializable
     private String monitorUrl;
 
     /**
+     * 是否与渠道相连
+     */
+    @Column(name = "linked_channel")
+    private Boolean linkedChannel;
+
+    /**
      * 有效
      */
     private Boolean valid;

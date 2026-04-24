@@ -23,6 +23,7 @@ public class ChannelLineParam {
         private String lineType;
         private String sourceEndpoint;
         private String monitorUrl;
+        private Boolean linkedChannel;
         private Boolean valid;
         private String comment;
     }
@@ -38,6 +39,7 @@ public class ChannelLineParam {
         private String lineType;
         private String sourceEndpoint;
         private String monitorUrl;
+        private Boolean linkedChannel;
         private Boolean valid;
         private String comment;
     }

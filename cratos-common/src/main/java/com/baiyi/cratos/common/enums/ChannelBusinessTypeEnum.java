@@ -17,6 +17,10 @@ public enum ChannelBusinessTypeEnum {
     ELECTRICITY,
     TV,
     POS,
-    BETTING
+    BETTING,
+    PAYBILL,
+    DEBIT,
+    MOMO,
+    TRANSFER
 
 }

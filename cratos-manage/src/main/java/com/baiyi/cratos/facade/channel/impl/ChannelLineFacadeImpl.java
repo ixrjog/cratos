@@ -35,7 +35,7 @@ public class ChannelLineFacadeImpl implements ChannelLineFacade {
     public void addChannelLine(ChannelLineParam.AddChannelLine addChannelLine) {
         channelLineService.add(addChannelLine.toTarget());
     }
-
+ 
     @Override
     public void updateChannelLine(ChannelLineParam.UpdateChannelLine updateChannelLine) {
         channelLineService.updateByPrimaryKey(updateChannelLine.toTarget());
