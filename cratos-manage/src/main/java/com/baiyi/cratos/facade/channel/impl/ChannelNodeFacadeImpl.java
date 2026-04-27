@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.channel.impl;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.ChannelBusinessNode;
 import com.baiyi.cratos.domain.generator.ChannelNode;
 import com.baiyi.cratos.domain.param.http.channel.ChannelBusinessNodeParam;
 import com.baiyi.cratos.domain.param.http.channel.ChannelNodeParam;
@@ -35,7 +36,7 @@ public class ChannelNodeFacadeImpl implements ChannelNodeFacade {
     public void addChannelNode(ChannelNodeParam.AddChannelNode addChannelNode) {
         channelNodeService.add(addChannelNode.toTarget());
     }
- 
+
     @Override
     public void updateChannelNode(ChannelNodeParam.UpdateChannelNode updateChannelNode) {
         channelNodeService.updateByPrimaryKey(updateChannelNode.toTarget());
@@ -52,8 +53,15 @@ public class ChannelNodeFacadeImpl implements ChannelNodeFacade {
     }
 
     @Override
-    public void deleteChannelBusinessNodeById(int id) {
-        channelBusinessNodeService.deleteById(id);
+    public void deleteChannelBusinessNode(int businessId, int nodeId) {
+        ChannelBusinessNode uniqueKey = ChannelBusinessNode.builder()
+                .channelBusinessId(businessId)
+                .channelNodeId(nodeId)
+                .build();
+        ChannelBusinessNode node = channelBusinessNodeService.getByUniqueKey(uniqueKey);
+        if (node != null) {
+            channelBusinessNodeService.deleteById(node.getId());
+        }
     }
 
     @Override

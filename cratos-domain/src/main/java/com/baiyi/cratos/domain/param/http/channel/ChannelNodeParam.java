@@ -26,6 +26,7 @@ public class ChannelNodeParam {
         private Boolean linkedChannel;
         private Boolean valid;
         private String comment;
+        private String nodeInfo;
     }
 
     @Data
@@ -42,6 +43,7 @@ public class ChannelNodeParam {
         private Boolean linkedChannel;
         private Boolean valid;
         private String comment;
+        private String nodeInfo;
     }
 
     @EqualsAndHashCode(callSuper = true)

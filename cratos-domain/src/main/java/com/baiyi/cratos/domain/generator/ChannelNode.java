@@ -78,4 +78,10 @@ public class ChannelNode implements HasValid, HasIntegerPrimaryKey, Serializable
      * 说明
      */
     private String comment;
+
+    /**
+     * 节点文档
+     */
+    @Column(name = "node_info")
+    private String nodeInfo;
 }

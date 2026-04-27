@@ -220,7 +220,8 @@ public class ChannelController {
     // Node
     @Operation(summary = "Pagination query channel node")
     @PostMapping(value = "/node/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<ChannelNodeVO.Node>> queryChannelNodePage(@RequestBody @Valid ChannelNodeParam.ChannelNodePageQuery pageQuery) {
+    public HttpResult<DataTable<ChannelNodeVO.Node>> queryChannelNodePage(
+            @RequestBody @Valid ChannelNodeParam.ChannelNodePageQuery pageQuery) {
         return HttpResult.of(channelNodeFacade.queryChannelNodePage(pageQuery));
     }
 
@@ -233,7 +234,8 @@ public class ChannelController {
 
     @Operation(summary = "Update channel node")
     @PutMapping(value = "/node/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateChannelNode(@RequestBody @Valid ChannelNodeParam.UpdateChannelNode updateChannelNode) {
+    public HttpResult<Boolean> updateChannelNode(
+            @RequestBody @Valid ChannelNodeParam.UpdateChannelNode updateChannelNode) {
         channelNodeFacade.updateChannelNode(updateChannelNode);
         return HttpResult.SUCCESS;
     }
@@ -254,15 +256,16 @@ public class ChannelController {
 
     @Operation(summary = "Add channel business node")
     @PostMapping(value = "/business/node/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addChannelBusinessNode(@RequestBody @Valid ChannelBusinessNodeParam.AddChannelBusinessNode param) {
+    public HttpResult<Boolean> addChannelBusinessNode(
+            @RequestBody @Valid ChannelBusinessNodeParam.AddChannelBusinessNode param) {
         channelNodeFacade.addChannelBusinessNode(param);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Delete channel business node by id")
     @DeleteMapping(value = "/business/node/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteChannelBusinessNodeById(@RequestParam int id) {
-        channelNodeFacade.deleteChannelBusinessNodeById(id);
+    public HttpResult<Boolean> deleteChannelBusinessNodeById(@RequestParam int businessId, int nodeId) {
+        channelNodeFacade.deleteChannelBusinessNode(businessId, nodeId);
         return HttpResult.SUCCESS;
     }
 
