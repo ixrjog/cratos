@@ -3,11 +3,11 @@ package com.baiyi.cratos.wrapper;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Channel;
-import com.baiyi.cratos.domain.generator.ChannelLine;
+import com.baiyi.cratos.domain.generator.ChannelNode;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
-import com.baiyi.cratos.domain.view.channel.ChannelLineVO;
-import com.baiyi.cratos.service.channel.ChannelBusinessLineService;
-import com.baiyi.cratos.service.channel.ChannelLineService;
+import com.baiyi.cratos.domain.view.channel.ChannelNodeVO;
+import com.baiyi.cratos.service.channel.ChannelBusinessNodeService;
+import com.baiyi.cratos.service.channel.ChannelNodeService;
 import com.baiyi.cratos.service.channel.ChannelService;
 import com.baiyi.cratos.wrapper.base.BaseBusinessDecorator;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
@@ -19,14 +19,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.CHANNEL_LINE)
-public class ChannelLineWrapper extends BaseDataTableConverter<ChannelLineVO.Line, ChannelLine> implements BaseBusinessDecorator<ChannelLineVO.HasChannelBusinessLines, ChannelLineVO.Line> {
+public class ChannelNodeWrapper extends BaseDataTableConverter<ChannelNodeVO.Node, ChannelNode> implements BaseBusinessDecorator<ChannelNodeVO.HasChannelBusinessNodes, ChannelNodeVO.Node> {
 
     private final ChannelService channelService;
-    private final ChannelLineService channelLineService;
-    private final ChannelBusinessLineService channelBusinessLineService;
+    private final ChannelNodeService channelNodeService;
+    private final ChannelBusinessNodeService channelBusinessNodeService;
 
     @Override
-    public void wrap(ChannelLineVO.Line vo) {
+    public void wrap(ChannelNodeVO.Node vo) {
         try {
             Channel channel = channelService.getById(vo.getChannelId());
             if (channel != null) {
@@ -37,13 +37,13 @@ public class ChannelLineWrapper extends BaseDataTableConverter<ChannelLineVO.Lin
     }
 
     @Override
-    public void decorateBusiness(ChannelLineVO.HasChannelBusinessLines hasBusiness) {
+    public void decorateBusiness(ChannelNodeVO.HasChannelBusinessNodes hasBusiness) {
         try {
-            hasBusiness.setLines(channelBusinessLineService.queryByChannelBusinessId(hasBusiness.getChannelBusinessId())
+            hasBusiness.setNodes(channelBusinessNodeService.queryByChannelBusinessId(hasBusiness.getChannelBusinessId())
                                          .stream()
                                          .map(e -> {
-                                             ChannelLine line = channelLineService.getById(e.getChannelLineId());
-                                             return BeanCopierUtils.copyProperties(line, ChannelLineVO.Line.class);
+                                             ChannelNode node = channelNodeService.getById(e.getChannelNodeId());
+                                             return BeanCopierUtils.copyProperties(node, ChannelNodeVO.Node.class);
                                          })
                                          .toList());
         } catch (Exception ignored) {

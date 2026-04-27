@@ -14,7 +14,7 @@ public class ChannelBusinessVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class Business extends BaseVO implements ChannelVO.HasChannel, ChannelLineVO.HasChannelBusinessLines, OrganizationVO.HasOrganization, Serializable {
+    public static class Business extends BaseVO implements ChannelVO.HasChannel, ChannelNodeVO.HasChannelBusinessNodes, OrganizationVO.HasOrganization, Serializable {
         @Serial
         private static final long serialVersionUID = 4148816104425592602L;
         private Integer id;
@@ -26,7 +26,7 @@ public class ChannelBusinessVO {
         private Boolean valid;
         private String comment;
 
-        private List<ChannelLineVO.Line> lines;
+        private List<ChannelNodeVO.Node> nodes;
 
         public Integer getChannelBusinessId() {
             return this.id;

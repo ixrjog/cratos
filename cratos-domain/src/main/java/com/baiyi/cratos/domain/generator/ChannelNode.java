@@ -10,29 +10,52 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 表名：channel_business_line
- * 表注释：渠道业务线路关联
+ * 表名：channel_node
+ * 表注释：渠道线路
  */
 @Data
-@Table(name = "channel_business_line")
-public class ChannelBusinessLine implements HasValid, HasIntegerPrimaryKey, Serializable {
+@Table(name = "channel_node")
+public class ChannelNode implements HasValid, HasIntegerPrimaryKey, Serializable {
     @Serial
-    private static final long serialVersionUID = 5649789814325336283L;
+    private static final long serialVersionUID = 8707414256945487869L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**
-     * 渠道业务ID
+     * 渠道ID
      */
-    @Column(name = "channel_business_id")
-    private Integer channelBusinessId;
+    @Column(name = "channel_id")
+    private Integer channelId;
 
     /**
-     * 渠道线路ID
+     * 线路名称
      */
-    @Column(name = "channel_line_id")
-    private Integer channelLineId;
+    private String name;
+
+    /**
+     * 线路类型
+     */
+    @Column(name = "node_type")
+    private String nodeType;
+
+    /**
+     * 源端
+     */
+    @Column(name = "source_endpoint")
+    private String sourceEndpoint;
+
+    /**
+     * 监控URL
+     */
+    @Column(name = "monitor_url")
+    private String monitorUrl;
+
+    /**
+     * 是否与渠道相连
+     */
+    @Column(name = "linked_channel")
+    private Boolean linkedChannel;
 
     /**
      * 有效

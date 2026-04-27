@@ -9,24 +9,24 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-public class ChannelLineVO {
+public class ChannelNodeVO {
 
-    public interface HasChannelBusinessLines {
+    public interface HasChannelBusinessNodes {
         Integer getChannelBusinessId();
 
-        void setLines(List<Line> lines);
+        void setNodes(List<Node> nodes);
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class Line extends BaseVO implements Serializable {
+    public static class Node extends BaseVO implements Serializable {
         @Serial
         private static final long serialVersionUID = -1353416654145553636L;
         private Integer id;
         private Integer channelId;
         private String name;
-        private String lineType;
+        private String nodeType;
         private String sourceEndpoint;
         private String monitorUrl;
         private Boolean linkedChannel;

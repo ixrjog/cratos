@@ -1,10 +1,10 @@
 package com.baiyi.cratos.service.channel.impl;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.ChannelLine;
-import com.baiyi.cratos.domain.param.http.channel.ChannelLineParam;
-import com.baiyi.cratos.mapper.ChannelLineMapper;
-import com.baiyi.cratos.service.channel.ChannelLineService;
+import com.baiyi.cratos.domain.generator.ChannelNode;
+import com.baiyi.cratos.domain.param.http.channel.ChannelNodeParam;
+import com.baiyi.cratos.mapper.ChannelNodeMapper;
+import com.baiyi.cratos.service.channel.ChannelNodeService;
 import com.baiyi.cratos.util.SqlUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -20,18 +20,18 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
 
 @Service
 @RequiredArgsConstructor
-public class ChannelLineServiceImpl implements ChannelLineService {
-    private final ChannelLineMapper channelLineMapper;
+public class ChannelNodeServiceImpl implements ChannelNodeService {
+    private final ChannelNodeMapper channelNodeMapper;
 
     @Override
-    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:CHANNELLINE:ID:' + #id")
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:CHANNELNODE:ID:' + #id")
     public void clearCacheById(int id) {
     }
 
     @Override
-    public DataTable<ChannelLine> queryChannelLinePage(ChannelLineParam.ChannelLinePageQuery pageQuery) {
-        Page<ChannelLine> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        Example example = new Example(ChannelLine.class);
+    public DataTable<ChannelNode> queryChannelNodePage(ChannelNodeParam.ChannelNodePageQuery pageQuery) {
+        Page<ChannelNode> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        Example example = new Example(ChannelNode.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtils.hasText(pageQuery.getQueryName())) {
             criteria.andLike("name", SqlUtils.ofLike(pageQuery.getQueryName()
@@ -41,16 +41,16 @@ public class ChannelLineServiceImpl implements ChannelLineService {
         if (pageQuery.getChannelId() != null) {
             criteria.andEqualTo("channelId", pageQuery.getChannelId());
         }
-        List<ChannelLine> data = channelLineMapper.selectByExample(example);
+        List<ChannelNode> data = channelNodeMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
     }
 
     @Override
-    public List<ChannelLine> queryByChannelId(int channelId) {
-        Example example = new Example(ChannelLine.class);
+    public List<ChannelNode> queryByChannelId(int channelId) {
+        Example example = new Example(ChannelNode.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("channelId", channelId);
-        return channelLineMapper.selectByExample(example);
+        return channelNodeMapper.selectByExample(example);
     }
 
 }

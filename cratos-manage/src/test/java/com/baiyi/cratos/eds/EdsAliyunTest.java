@@ -254,7 +254,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     @Test
     void test99() throws  Exception {
         EdsConfigs.Aliyun aliyun = getConfig(2);
-        AliyunDyvmsRepo.callChannelFault(aliyun, "13456768044" );
+       //  AliyunDyvmsRepo.callChannelFault(aliyun, "13456768044" );
     }
 
 }
