@@ -31,6 +31,7 @@ public class ChannelNodeVO {
         private String monitorUrl;
         private Boolean linkedChannel;
         private Boolean valid;
+        private Integer seq;
         private String comment;
         private String nodeInfo;
         private String channelName;

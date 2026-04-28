@@ -62,6 +62,8 @@ public class ChannelNode implements HasValid, HasIntegerPrimaryKey, Serializable
      */
     private Boolean valid;
 
+    private Integer seq;
+
     /**
      * 创建时间
      */
