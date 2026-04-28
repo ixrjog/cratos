@@ -11,10 +11,11 @@ import com.baiyi.cratos.facade.channel.ChannelNodeFacade;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.channel.ChannelBusinessNodeService;
 import com.baiyi.cratos.service.channel.ChannelNodeService;
-import com.baiyi.cratos.wrapper.ChannelNodeWrapper;
+import com.baiyi.cratos.wrapper.channel.ChannelNodeWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -44,6 +45,10 @@ public class ChannelNodeFacadeImpl implements ChannelNodeFacade {
 
     @Override
     public void deleteById(int id) {
+        List<ChannelBusinessNode> nodes = channelBusinessNodeService.queryByChannelNodeId(id);
+        if (!CollectionUtils.isEmpty(nodes)) {
+            nodes.forEach(channelBusinessNode -> channelBusinessNodeService.deleteById(channelBusinessNode.getId()));
+        }
         channelNodeService.deleteById(id);
     }
 
@@ -60,7 +65,7 @@ public class ChannelNodeFacadeImpl implements ChannelNodeFacade {
                 .build();
         ChannelBusinessNode node = channelBusinessNodeService.getByUniqueKey(uniqueKey);
         if (node != null) {
-            channelBusinessNodeService.deleteById(node.getId());
+            this.deleteById(node.getId());
         }
     }
 

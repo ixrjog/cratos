@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
 import com.baiyi.cratos.facade.channel.ChannelNetworkFacade;
 import com.baiyi.cratos.service.channel.ChannelNetworkService;
 import com.baiyi.cratos.service.base.BaseValidService;
-import com.baiyi.cratos.wrapper.ChannelNetworkWrapper;
+import com.baiyi.cratos.wrapper.channel.ChannelNetworkWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

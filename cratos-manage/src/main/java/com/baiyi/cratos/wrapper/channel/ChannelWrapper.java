@@ -1,4 +1,4 @@
-package com.baiyi.cratos.wrapper;
+package com.baiyi.cratos.wrapper.channel;
 
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;

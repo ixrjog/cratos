@@ -11,4 +11,6 @@ public interface ChannelBusinessNodeService extends BaseUniqueKeyService<Channel
 
     List<ChannelBusinessNode> queryByChannelBusinessId(int channelBusinessId);
 
+    List<ChannelBusinessNode> queryByChannelNodeId(int channelNodeId);
+
 }

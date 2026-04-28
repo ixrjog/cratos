@@ -20,7 +20,7 @@ public interface ChannelNodeFacade extends HasSetValid {
 
     void addChannelBusinessNode(ChannelBusinessNodeParam.AddChannelBusinessNode param);
 
-    void deleteChannelBusinessNode(int businessId,int nodeId);
+    void deleteChannelBusinessNode(int businessId, int nodeId);
 
     List<ChannelNodeVO.Node> queryChannelBusinessNodes(int channelBusinessId);
 

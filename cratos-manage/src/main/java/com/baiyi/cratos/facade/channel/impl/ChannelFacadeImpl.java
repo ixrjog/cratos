@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.ChannelExtension;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.channel.ChannelExtensionParam;
 import com.baiyi.cratos.domain.param.http.channel.ChannelParam;
+import com.baiyi.cratos.domain.view.channel.ChannelExtensionVO;
 import com.baiyi.cratos.domain.view.channel.ChannelVO;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDyvmsRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -16,7 +17,8 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.channel.ChannelExtensionService;
 import com.baiyi.cratos.service.channel.ChannelService;
-import com.baiyi.cratos.wrapper.ChannelWrapper;
+import com.baiyi.cratos.wrapper.channel.ChannelExtensionWrapper;
+import com.baiyi.cratos.wrapper.channel.ChannelWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,6 +36,7 @@ public class ChannelFacadeImpl implements ChannelFacade {
     private final ChannelService channelService;
     private final ChannelExtensionService channelExtensionService;
     private final ChannelWrapper channelWrapper;
+    private final ChannelExtensionWrapper channelExtensionWrapper;
     private final UserService userService;
     private final EdsAliyunConfigLoader edsAliyunConfigLoader;
 
@@ -59,8 +62,11 @@ public class ChannelFacadeImpl implements ChannelFacade {
     }
 
     @Override
-    public List<ChannelExtension> queryChannelExtensions(int channelId) {
-        return channelExtensionService.queryByChannelId(channelId);
+    public List<ChannelExtensionVO.Extension> queryChannelExtensions(int channelId) {
+        return channelExtensionService.queryByChannelId(channelId)
+                .stream()
+                .map(channelExtensionWrapper::wrapToTarget)
+                .toList();
     }
 
     @Override
@@ -102,7 +108,8 @@ public class ChannelFacadeImpl implements ChannelFacade {
                 return;
             }
             // 这里有bug，给我直接去掉手机号-前面的部分
-            String phone = user.getMobilePhone().replaceAll("[\\s+]", "");
+            String phone = user.getMobilePhone()
+                    .replaceAll("[\\s+]", "");
             // 去掉国家码前缀（-前面的部分）
             if (phone.contains("-")) {
                 phone = phone.substring(phone.lastIndexOf("-") + 1);

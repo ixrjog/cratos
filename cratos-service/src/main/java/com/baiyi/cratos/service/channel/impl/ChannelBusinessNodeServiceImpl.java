@@ -33,6 +33,14 @@ public class ChannelBusinessNodeServiceImpl implements ChannelBusinessNodeServic
     }
 
     @Override
+    public List<ChannelBusinessNode> queryByChannelNodeId(int channelNodeId) {
+        Example example = new Example(ChannelBusinessNode.class);
+        example.createCriteria()
+                .andEqualTo("channelNodeId", channelNodeId);
+        return channelBusinessNodeMapper.selectByExample(example);
+    }
+
+    @Override
     public ChannelBusinessNode getByUniqueKey(@NonNull ChannelBusinessNode record) {
         Example example = new Example(ChannelBusinessNode.class);
         Example.Criteria criteria = example.createCriteria();

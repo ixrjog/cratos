@@ -3,7 +3,6 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.enums.ChannelBusinessTypeEnum;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.ChannelExtension;
 import com.baiyi.cratos.domain.param.http.channel.*;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.channel.*;
@@ -151,7 +150,7 @@ public class ChannelController {
 
     @Operation(summary = "Query channel extensions by channelId")
     @GetMapping(value = "/extension/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<java.util.List<ChannelExtension>> queryChannelExtensions(@RequestParam int channelId) {
+    public HttpResult<java.util.List<ChannelExtensionVO.Extension>> queryChannelExtensions(@RequestParam int channelId) {
         return HttpResult.of(channelFacade.queryChannelExtensions(channelId));
     }
 
