@@ -20,6 +20,7 @@ public class ChannelBusinessParam {
     @Schema
     public static class AddChannelBusiness implements IToTarget<ChannelBusiness> {
         private Integer organizationId;
+        private Integer accountEntityId;
         private Integer channelId;
         private String businessName;
         private String type;
@@ -36,6 +37,7 @@ public class ChannelBusinessParam {
     public static class UpdateChannelBusiness implements IToTarget<ChannelBusiness> {
         private Integer id;
         private Integer organizationId;
+        private Integer accountEntityId;
         private Integer channelId;
         private String businessName;
         private String type;
@@ -55,6 +57,7 @@ public class ChannelBusinessParam {
         private String queryName;
         private Integer channelId;
         private Integer organizationId;
+        private Integer accountEntityId;
     }
 
 }

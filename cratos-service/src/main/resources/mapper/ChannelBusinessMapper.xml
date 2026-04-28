@@ -7,6 +7,7 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="organization_id" jdbcType="INTEGER" property="organizationId" />
+    <result column="account_entity_id" jdbcType="INTEGER" property="accountEntityId" />
     <result column="channel_id" jdbcType="INTEGER" property="channelId" />
     <result column="business_name" jdbcType="VARCHAR" property="businessName" />
     <result column="type" jdbcType="VARCHAR" property="type" />

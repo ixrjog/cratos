@@ -28,6 +28,9 @@ public class ChannelBusiness implements HasValid, HasIntegerPrimaryKey, Serializ
     @Column(name = "organization_id")
     private Integer organizationId;
 
+    @Column(name = "account_entity_id")
+    private Integer accountEntityId;
+
     /**
      * 渠道ID
      */

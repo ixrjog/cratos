@@ -19,6 +19,7 @@ public class ChannelBusinessVO {
         private static final long serialVersionUID = 4148816104425592602L;
         private Integer id;
         private Integer organizationId;
+        private Integer accountEntityId;
         private Integer channelId;
         private String businessName;
         private String type;
