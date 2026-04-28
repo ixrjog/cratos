@@ -25,6 +25,7 @@ public class ChannelBusinessParam {
         private String type;
         private String businessDirection;
         private Boolean valid;
+        private Integer seq;
         private String comment;
     }
 
@@ -40,6 +41,7 @@ public class ChannelBusinessParam {
         private String type;
         private String businessDirection;
         private Boolean valid;
+        private Integer seq;
         private String comment;
     }
 

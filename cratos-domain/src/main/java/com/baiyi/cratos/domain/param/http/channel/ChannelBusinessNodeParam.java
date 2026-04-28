@@ -19,6 +19,7 @@ public class ChannelBusinessNodeParam {
         private Integer channelBusinessId;
         private Integer channelNodeId;
         private Boolean valid;
+        private Integer seq;
         private String comment;
     }
 }

@@ -45,6 +45,8 @@ public class ChannelBusinessNode implements HasValid, HasIntegerPrimaryKey, Seri
      */
     private Boolean valid;
 
+    private Integer seq;
+
     /**
      * 创建时间
      */

@@ -56,9 +56,7 @@ public class ChannelBusiness implements HasValid, HasIntegerPrimaryKey, Serializ
      */
     private Boolean valid;
 
-    /**
-     * 创建时间
-     */
+    private Integer seq;
     @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 

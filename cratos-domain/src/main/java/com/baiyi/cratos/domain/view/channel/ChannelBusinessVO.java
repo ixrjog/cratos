@@ -24,6 +24,7 @@ public class ChannelBusinessVO {
         private String type;
         private String businessDirection;
         private Boolean valid;
+        private Integer seq;
         private String comment;
 
         private List<ChannelNodeVO.Node> nodes;
