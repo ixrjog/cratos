@@ -57,6 +57,8 @@ public class ChannelParam {
     public static class ChannelPageQuery extends PageParam {
         @Schema(description = "查询名称")
         private String queryName;
+        @Schema(description = "国家码")
+        private String country;
     }
 
     @Data

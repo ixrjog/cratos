@@ -40,6 +40,9 @@ public class ChannelServiceImpl implements ChannelService {
         if (StringUtils.hasText(pageQuery.getQueryName())) {
             criteria.andLike("name", SqlUtils.ofLike(pageQuery.getQueryName().trim()));
         }
+        if (StringUtils.hasText(pageQuery.getCountry())) {
+            criteria.andEqualTo("country", pageQuery.getCountry());
+        }
         List<Channel> data = channelMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
     }
