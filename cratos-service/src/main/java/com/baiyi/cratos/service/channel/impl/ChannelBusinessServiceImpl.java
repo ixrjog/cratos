@@ -43,6 +43,7 @@ public class ChannelBusinessServiceImpl implements ChannelBusinessService {
         if (pageQuery.getOrganizationId() != null) {
             criteria.andEqualTo("organizationId", pageQuery.getOrganizationId());
         }
+        example.setOrderByClause("seq");
         List<ChannelBusiness> data = channelBusinessMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
     }

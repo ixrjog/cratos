@@ -41,6 +41,7 @@ public class ChannelNodeServiceImpl implements ChannelNodeService {
         if (pageQuery.getChannelId() != null) {
             criteria.andEqualTo("channelId", pageQuery.getChannelId());
         }
+        example.setOrderByClause("seq");
         List<ChannelNode> data = channelNodeMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
     }
