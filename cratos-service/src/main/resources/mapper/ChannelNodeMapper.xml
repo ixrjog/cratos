@@ -18,5 +18,6 @@
     <result column="linked_channel" jdbcType="BIT" property="linkedChannel" />
     <result column="node_info" jdbcType="LONGVARCHAR" property="nodeInfo" />
     <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="style" jdbcType="VARCHAR" property="style" />
   </resultMap>
 </mapper>
