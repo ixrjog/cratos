@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class ChannelBusinessWrapper extends BaseDataTableConverter<ChannelBusinessVO.Business, ChannelBusiness> implements BaseWrapper<ChannelBusinessVO.Business> {
 
     @Override
-    @BusinessDecorator(types = {BusinessTypeEnum.CHANNEL,BusinessTypeEnum.CHANNEL_LINE, BusinessTypeEnum.ORGANIZATION})
+    @BusinessDecorator(types = {BusinessTypeEnum.CHANNEL, BusinessTypeEnum.CHANNEL_LINE, BusinessTypeEnum.ORGANIZATION, BusinessTypeEnum.ACCOUNT_ENTITY})
     public void wrap(ChannelBusinessVO.Business vo) {
     }
 
