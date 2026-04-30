@@ -7,6 +7,8 @@ import com.baiyi.cratos.mapper.ChannelMapper;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
 
+import com.baiyi.cratos.domain.view.base.OptionsVO;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2026/4/20 17:09
@@ -15,5 +17,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
 public interface ChannelService extends BaseValidService<Channel, ChannelMapper>, SupportBusinessService {
 
     DataTable<Channel> queryChannelPage(ChannelParam.ChannelPageQuery pageQuery);
+
+    OptionsVO.Options queryCountryOptions();
 
 }

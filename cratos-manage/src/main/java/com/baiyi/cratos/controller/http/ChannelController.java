@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.param.http.channel.*;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.channel.*;
 import com.baiyi.cratos.facade.channel.*;
+import com.baiyi.cratos.service.channel.ChannelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,8 +34,15 @@ public class ChannelController {
     private final ChannelNetworkFacade channelNetworkFacade;
     private final ChannelFacade channelFacade;
     private final ChannelNodeFacade channelNodeFacade;
+    private final ChannelService channelService;
 
     // Channel
+
+    @Operation(summary = "Get channel country options")
+    @GetMapping(value = "/country/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getChannelCountryOptions() {
+        return HttpResult.of(channelService.queryCountryOptions());
+    }
 
     @Operation(summary = "Pagination query channel")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

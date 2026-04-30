@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.Channel;
 import com.baiyi.cratos.domain.param.http.channel.ChannelParam;
 import com.baiyi.cratos.mapper.ChannelMapper;
 import com.baiyi.cratos.service.channel.ChannelService;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.util.SqlUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -17,6 +18,8 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -45,6 +48,22 @@ public class ChannelServiceImpl implements ChannelService {
         }
         List<Channel> data = channelMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public OptionsVO.Options queryCountryOptions() {
+        List<Channel> all = channelMapper.selectAll();
+        Map<String, Long> countMap = all.stream()
+                .filter(c -> StringUtils.hasText(c.getCountry()))
+                .collect(Collectors.groupingBy(Channel::getCountry, Collectors.counting()));
+        List<OptionsVO.Option> options = countMap.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .map(e -> OptionsVO.Option.builder()
+                        .label(e.getKey() + " (" + e.getValue() + ")")
+                        .value(e.getKey())
+                        .build())
+                .collect(Collectors.toList());
+        return OptionsVO.Options.builder().options(options).build();
     }
 
 }
