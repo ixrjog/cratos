@@ -59,8 +59,9 @@ public class ChannelServiceImpl implements ChannelService {
         List<OptionsVO.Option> options = countMap.entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .map(e -> OptionsVO.Option.builder()
-                        .label(e.getKey() + " (" + e.getValue() + ")")
+                        .label(e.getKey())
                         .value(e.getKey())
+                        .comment(e.getValue())
                         .build())
                 .collect(Collectors.toList());
         return OptionsVO.Options.builder().options(options).build();
