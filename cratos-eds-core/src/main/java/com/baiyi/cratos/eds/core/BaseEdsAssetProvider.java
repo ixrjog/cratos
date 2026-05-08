@@ -52,11 +52,11 @@ import java.util.stream.Collectors;
 public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
 
     protected final EdsAssetProviderContext context;
-
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
     protected EdsInstanceProviderHolder<C, A> getHolder(int instanceId) {
-        return (EdsInstanceProviderHolder<C, A>) context.getEdsProviderHolderFactory().createHolder(instanceId, getAssetType());
+        return (EdsInstanceProviderHolder<C, A>) context.getEdsProviderHolderFactory()
+                .createHolder(instanceId, getAssetType());
     }
 
     /**
@@ -64,10 +64,11 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
      */
     protected List<EdsAsset> queryInstanceAssets(ExternalDataSourceInstance<C> instance,
                                                  EdsAssetTypeEnum edsAssetTypeEnum) {
-        return context.getEdsAssetService().queryInstanceAssets(
-                instance.getEdsInstance()
-                        .getId(), edsAssetTypeEnum.name()
-        );
+        return context.getEdsAssetService()
+                .queryInstanceAssets(
+                        instance.getEdsInstance()
+                                .getId(), edsAssetTypeEnum.name()
+                );
     }
 
     /**
@@ -75,10 +76,11 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
      */
     protected List<EdsAsset> queryInstanceAssets(ExternalDataSourceInstance<C> instance,
                                                  EdsAssetTypeEnum edsAssetTypeEnum, String region) {
-        return context.getEdsAssetService().queryInstanceAssets(
-                instance.getEdsInstance()
-                        .getId(), edsAssetTypeEnum.name(), region
-        );
+        return context.getEdsAssetService()
+                .queryInstanceAssets(
+                        instance.getEdsInstance()
+                                .getId(), edsAssetTypeEnum.name(), region
+                );
     }
 
     /**
@@ -132,22 +134,37 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
      */
     protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<C> instance, A entity) {
         try {
-            EdsAsset edsAsset = upsertAsset(convertToEdsAsset(instance, entity));
-            List<EdsAssetIndex> indices = mergeAssetIndices(instance, edsAsset, entity);
-            context.getEdsAssetIndexFacade().saveAssetIndexList(edsAsset.getId(), indices);
-            processAssetTags(edsAsset, instance, entity, indices);
-            return edsAsset;
+            EdsAsset newAsset = convertToEdsAsset(instance, entity);
+            EdsAsset existingAsset = context.getEdsAssetService().getByUniqueKey(newAsset);
+            boolean isNew = (existingAsset == null);
+            if (isNew) {
+                insertAsset(newAsset);
+            } else {
+                newAsset.setId(existingAsset.getId());
+                if (!isAssetUnchanged(existingAsset, newAsset)) {
+                    context.getEdsAssetService().updateByPrimaryKey(newAsset);
+                    context.getAssetToBusinessObjectUpdater().update(newAsset);
+                }
+            }
+            List<EdsAssetIndex> indices = mergeAssetIndices(instance, newAsset, entity);
+            context.getEdsAssetIndexFacade().saveAssetIndexList(newAsset.getId(), indices);
+            processAssetTags(newAsset, instance, entity, indices);
+            if (isNew) {
+                afterAssetImported(newAsset);
+            }
+            return newAsset;
         } catch (EdsAssetConversionException e) {
-            log.error("Asset conversion error. {}", e.getMessage());
-            throw new EdsAssetException("Asset conversion error. {}", e.getMessage());
+            throw new EdsAssetException("Asset conversion error: {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Import entity as asset error: {}", e.getMessage());
+            throw new EdsAssetException("Import entity as asset error: {}", e.getMessage());
         }
     }
 
     /**
      * 合并 buildIndexes 和 buildIndex 的结果，去重后返回
      */
-    private List<EdsAssetIndex> mergeAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
-                                                  A entity) {
+    private List<EdsAssetIndex> mergeAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
         List<EdsAssetIndex> indices = buildIndexes(instance, edsAsset, entity);
         EdsAssetIndex index = buildIndex(instance, edsAsset, entity);
         if (index == null) {
@@ -168,8 +185,7 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
     /**
      * 构建多个资产索引，子类可重写
      */
-    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
-                                               A entity) {
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
         return Collections.emptyList();
     }
 
@@ -183,8 +199,7 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
     /**
      * 构建单个资产索引，子类可重写
      */
-    protected EdsAssetIndex buildIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
-                                       A entity) {
+    protected EdsAssetIndex buildIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
         return null;
     }
 
@@ -212,55 +227,15 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
                 .build();
     }
 
-    /**
-     * 新增或更新资产，并执行后处理
-     */
-    protected EdsAsset upsertAsset(EdsAsset newEdsAsset) {
-        EdsAsset edsAsset = doUpsertAsset(newEdsAsset);
-        postProcessAsset(edsAsset);
-        return edsAsset;
-    }
-
-    /**
-     * 资产 upsert 后的扩展点，子类可重写
-     */
-    protected void postProcessAsset(EdsAsset edsAsset) {
-    }
-
-    /**
-     * 执行 upsert: 不存在则插入，已存在且有变更则更新
-     */
-    private EdsAsset doUpsertAsset(EdsAsset newEdsAsset) {
-        EdsAsset edsAsset = context.getEdsAssetService().getByUniqueKey(newEdsAsset);
-        if (edsAsset == null) {
-            try {
-                insertAsset(newEdsAsset);
-            } catch (Exception e) {
-                log.error("Insert eds asset err: {}", e.getMessage());
-            }
-        } else {
-            newEdsAsset.setId(edsAsset.getId());
-            if (!isAssetUnchanged(edsAsset, newEdsAsset)) {
-                context.getEdsAssetService().updateByPrimaryKey(newEdsAsset);
-                context.getAssetToBusinessObjectUpdater().update(newEdsAsset);
-            }
-        }
-        return newEdsAsset;
-    }
-
     private void insertAsset(EdsAsset newEdsAsset) {
-        try {
-            context.getEdsAssetService().add(newEdsAsset);
-            afterAssetCreated(newEdsAsset);
-        } catch (Exception e) {
-            log.error("Insert eds asset err: {}", e.getMessage());
-        }
+        context.getEdsAssetService()
+                .add(newEdsAsset);
     }
 
     /**
      * 资产新增后的扩展点，子类可重写
      */
-    protected void afterAssetCreated(EdsAsset asset) {
+    protected void afterAssetImported(EdsAsset asset) {
     }
 
     /**
@@ -283,10 +258,11 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
     }
 
     private List<EdsAsset> queryExistingAssets(ExternalDataSourceInstance<C> instance) {
-        return context.getEdsAssetService().queryInstanceAssets(
-                instance.getEdsInstance()
-                        .getId(), getAssetType()
-        );
+        return context.getEdsAssetService()
+                .queryInstanceAssets(
+                        instance.getEdsInstance()
+                                .getId(), getAssetType()
+                );
     }
 
     /**
@@ -296,9 +272,11 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
     public C loadConfig(EdsConfig edsConfig) {
         String configContent = edsConfig.getConfigContent();
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
-            Credential cred = context.getCredentialService().getById(edsConfig.getCredentialId());
+            Credential cred = context.getCredentialService()
+                    .getById(edsConfig.getCredentialId());
             if (cred != null) {
-                return loadConfig(context.getConfigCredTemplate().renderTemplate(configContent, cred));
+                return loadConfig(context.getConfigCredTemplate()
+                                          .renderTemplate(configContent, cred));
             }
         }
         return loadConfig(configContent);
