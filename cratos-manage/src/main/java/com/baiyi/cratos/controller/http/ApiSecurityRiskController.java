@@ -3,9 +3,12 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.security.ApiSecurityRiskParam;
+import com.baiyi.cratos.domain.param.http.security.ApiTestParam;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskReportVO;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskVO;
+import com.baiyi.cratos.eds.security.apirisk.test.model.GenericCall;
 import com.baiyi.cratos.facade.ApiSecurityRiskFacade;
+import com.baiyi.cratos.facade.ApiSecurityTestFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiSecurityRiskController {
 
     private final ApiSecurityRiskFacade apiSecurityRiskFacade;
+    private final ApiSecurityTestFacade apiSecurityTestFacade;
 
     @Operation(summary = "Add api security risk")
     @PostMapping(value = "/risk/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,6 +62,12 @@ public class ApiSecurityRiskController {
     public HttpResult<Boolean> deleteRiskById(@RequestParam int id) {
         apiSecurityRiskFacade.deleteRiskById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Call test api")
+    @PostMapping(value = "/risk/test/api/call", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<GenericCall.Response> callTestApi(@RequestBody @Valid ApiTestParam.CallApi callApi) {
+        return HttpResult.of(apiSecurityTestFacade.callTestApi(callApi));
     }
 
 }
