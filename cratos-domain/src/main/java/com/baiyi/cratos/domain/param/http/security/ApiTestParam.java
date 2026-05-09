@@ -31,4 +31,14 @@ public class ApiTestParam {
         private Boolean convertToHTTPS;
     }
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class SaveSignMap {
+        @Schema(description = "YAML格式的签名映射配置")
+        private String signMapYaml;
+    }
+
 }

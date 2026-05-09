@@ -10,6 +10,10 @@ import com.baiyi.cratos.eds.security.apirisk.test.model.GenericCall;
  */
 public interface ApiSecurityTestFacade {
 
-    GenericCall.Response  callTestApi(ApiTestParam.CallApi callApi);
+    GenericCall.Response callTestApi(ApiTestParam.CallApi callApi);
+
+    void saveAutoSignMap(ApiTestParam.SaveSignMap saveSignMap);
+
+    String getAutoSignMapYaml();
 
 }

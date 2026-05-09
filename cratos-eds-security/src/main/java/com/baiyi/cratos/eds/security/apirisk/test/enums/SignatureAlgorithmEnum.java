@@ -7,7 +7,10 @@ package com.baiyi.cratos.eds.security.apirisk.test.enums;
  */
 public enum SignatureAlgorithmEnum {
 
+    NONE,
     PALMPAYAPPSIGN,
-    FLEXIBANKAPPSIGN
+    FLEXIBANKAPPSIGN,
+    ADMINPALMMERCHANTSIGN,
+    PARTNERAPPSIGN
 
 }

@@ -41,6 +41,7 @@ public class CachingConfiguration {
         String VERY_SHORT = "CR10m:";
         String SHORT_TERM = "CR1h:";
         String LONG_TERM = "CR30d:";
+        String PERSISTENT = "CR0:";
     }
 
     @Builder
@@ -64,12 +65,17 @@ public class CachingConfiguration {
                 .name(RepositoryName.VERY_SHORT)
                 .ttl((Duration.ofMinutes(10)))
                 .build();
+        public static final CacheRepository PERSISTENT = CacheRepository.builder()
+                .name(RepositoryName.PERSISTENT)
+                .ttl(Duration.ZERO)
+                .build();
         private String name;
         private Duration ttl;
     }
 
     private static final List<CacheRepository> REPOS = Lists.newArrayList(CacheRepository.LONG_TERM,
-            CacheRepository.TEMPORARY, CacheRepository.VERY_SHORT, CacheRepository.SHORT_TERM);
+            CacheRepository.TEMPORARY, CacheRepository.VERY_SHORT, CacheRepository.SHORT_TERM,
+            CacheRepository.PERSISTENT);
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.security.apirisk.test.signature.impl;
 import com.baiyi.cratos.eds.security.apirisk.test.enums.PrivateKeyType;
 import com.baiyi.cratos.eds.security.apirisk.test.enums.SignatureAlgorithmEnum;
 import com.baiyi.cratos.eds.security.apirisk.test.model.GenericCall;
-import com.baiyi.cratos.eds.security.apirisk.test.signature.BaseSignatureAlgorithm;
+import com.baiyi.cratos.eds.security.apirisk.test.signature.impl.base.BasePPSignatureAlgorithm;
 import com.baiyi.cratos.service.CredentialService;
 import org.springframework.stereotype.Component;
 
@@ -15,19 +15,20 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @Component
-public class FBSignatureAlgorithm extends BaseSignatureAlgorithm {
+public class FBSignatureAlgorithm extends BasePPSignatureAlgorithm {
 
     public FBSignatureAlgorithm(CredentialService credentialService) {
         super(credentialService);
     }
 
     @Override
-    protected Map<String, String> calcSign(GenericCall.Request request, String privateKeyB64, String signData1, String signData2) {
+    protected Map<String, String> calcSign(GenericCall.Request request, String privateKeyB64, String signData1,
+                                           String signData2) {
         return Map.of("pp_req_sign_v2", sign(signData2, privateKeyB64));
     }
 
     @Override
-    protected  String getPrivateKey(PrivateKeyType type) {
+    protected String getPrivateKey(PrivateKeyType type) {
         if (PrivateKeyType.RELEASE.equals(type)) {
             return getPrivateKey(253);
         }

@@ -70,4 +70,17 @@ public class ApiSecurityRiskController {
         return HttpResult.of(apiSecurityTestFacade.callTestApi(callApi));
     }
 
+    @Operation(summary = "Get auto sign map yaml")
+    @GetMapping(value = "/risk/test/auto/sign/map/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<String> getAutoSignMapYaml() {
+        return HttpResult.of(apiSecurityTestFacade.getAutoSignMapYaml());
+    }
+
+    @Operation(summary = "Save auto sign map")
+    @PostMapping(value = "/risk/test/auto/sign/map/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> saveAutoSignMap(@RequestBody @Valid ApiTestParam.SaveSignMap saveSignMap) {
+        apiSecurityTestFacade.saveAutoSignMap(saveSignMap);
+        return HttpResult.SUCCESS;
+    }
+
 }

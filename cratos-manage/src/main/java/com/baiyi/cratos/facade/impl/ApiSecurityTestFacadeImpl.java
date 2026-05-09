@@ -1,11 +1,12 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.RedisUtil;
 import com.baiyi.cratos.domain.param.http.security.ApiTestParam;
-import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.eds.security.apirisk.test.enums.PrivateKeyType;
 import com.baiyi.cratos.eds.security.apirisk.test.enums.SignatureAlgorithmEnum;
 import com.baiyi.cratos.eds.security.apirisk.test.generic.GenericCallService;
 import com.baiyi.cratos.eds.security.apirisk.test.generic.HttpRequestParser;
+import com.baiyi.cratos.eds.security.apirisk.test.model.AutoSign;
 import com.baiyi.cratos.eds.security.apirisk.test.model.GenericCall;
 import com.baiyi.cratos.eds.security.apirisk.test.signature.SignatureAlgorithm;
 import com.baiyi.cratos.eds.security.apirisk.test.signature.SignatureFactory;
@@ -27,6 +28,7 @@ import java.util.Map;
 public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
 
     private final GenericCallService genericCallService;
+    private final RedisUtil redisUtil;
 
     @Override
     public GenericCall.Response callTestApi(ApiTestParam.CallApi callApi) {
@@ -68,10 +70,31 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
     }
 
     protected void setToken(ApiTestParam.CallApi callApi, GenericCall.Request request) {
-        if (StringUtils.hasText(callApi.getPpToken())) {
+        if (SignatureAlgorithmEnum.PARTNERAPPSIGN.name()
+                .equals(callApi.getSignatureAlgorithm())) {
             request.getHeaders()
-                    .put("pp_token", callApi.getPpToken());
+                    .put("token", callApi.getPpToken());
+        } else {
+            if (StringUtils.hasText(callApi.getPpToken())) {
+                request.getHeaders()
+                        .put("pp_token", callApi.getPpToken());
+            }
         }
+    }
+
+    private static final String SIGN_MAP_KEY = "API:SEC:TEST:AUTO:SIGN:STR";
+
+    @Override
+    public void saveAutoSignMap(ApiTestParam.SaveSignMap saveSignMap) {
+        // 校验 YAML 格式
+        AutoSign.loadAs(saveSignMap.getSignMapYaml());
+        redisUtil.set(SIGN_MAP_KEY, saveSignMap.getSignMapYaml());
+    }
+
+    @Override
+    public String getAutoSignMapYaml() {
+        Object obj = redisUtil.get(SIGN_MAP_KEY);
+        return obj == null ? "" : (String) obj;
     }
 
 }

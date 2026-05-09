@@ -130,6 +130,7 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
     }
 
     /**
+     * @Core 核心代码
      * 将外部实体转换并持久化为 EdsAsset，同时保存索引和标签
      */
     protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<C> instance, A entity) {
