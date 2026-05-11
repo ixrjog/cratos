@@ -8,6 +8,8 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="token" jdbcType="CHAR" property="token"/>
+        <result column="token_type" jdbcType="VARCHAR" property="tokenType"/>
+        <result column="jti" jdbcType="VARCHAR" property="jti"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
         <result column="comment" jdbcType="VARCHAR" property="comment"/>

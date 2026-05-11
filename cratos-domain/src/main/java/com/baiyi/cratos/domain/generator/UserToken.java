@@ -34,6 +34,17 @@ public class UserToken implements HasIntegerPrimaryKey, Serializable {
     private String token;
 
     /**
+     * token类型: CLASSIC|JWT
+     */
+    @Column(name = "token_type")
+    private String tokenType;
+
+    /**
+     * JWT ID，用于注销
+     */
+    private String jti;
+
+    /**
      * 是否有效
      */
     private Boolean valid;

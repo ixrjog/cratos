@@ -15,6 +15,8 @@ public interface UserTokenFacade {
 
     UserToken getByToken(String token);
 
+    UserToken getByJti(String jti);
+
     /**
      * 验证令牌，如果令牌过期会将令牌置为无效
      * @param token

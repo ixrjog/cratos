@@ -84,6 +84,7 @@ public class LdapAuthProvider extends BaseAuthProvider {
                     .name(user.getDisplayName())
                     .token(userToken.getToken())
                     .uuid(user.getUuid())
+                    .jti(userToken.getJti())
                     .build();
         }
 

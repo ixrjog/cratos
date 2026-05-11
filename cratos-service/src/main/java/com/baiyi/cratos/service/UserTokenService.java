@@ -15,6 +15,8 @@ public interface UserTokenService extends BaseUniqueKeyService<UserToken, UserTo
 
     UserToken getByToken(String token);
 
+    UserToken getByJti(String jti);
+
     List<UserToken> queryValidTokenByUsername(String username);
 
     int countResourcesAuthorizedByToken(String token, String resource);

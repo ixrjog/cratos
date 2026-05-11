@@ -6,6 +6,7 @@ import com.baiyi.cratos.common.configuration.model.CratosModel;
 import com.baiyi.cratos.common.exception.BaseException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.exception.auth.AuthorizationException;
+import com.baiyi.cratos.common.util.RequestSignUtil;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.Robot;
 import com.baiyi.cratos.domain.generator.UserToken;
@@ -83,16 +84,19 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         String authorizationHeader = processedRequest.getHeader(AUTHORIZATION);
+        String jwtSign = processedRequest.getHeader("Jwt-Sign");
 
         try {
-            if (!StringUtils.hasText(authorizationHeader)) {
-                throw new AuthenticationException(ErrorEnum.AUTHENTICATION_REQUEST_NO_TOKEN);
-            }
-            if (!authorizationHeader.startsWith("Bearer ") && !authorizationHeader.startsWith("Robot ")) {
-                throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
-            }
             String username = "";
-            if (authorizationHeader.startsWith("Bearer ")) {
+
+            if (StringUtils.hasText(jwtSign)) {
+                // 请求签名模式：通过 Jti 查表验证，不需要 Authorization
+                UserToken userToken = verifyByRequestSign(processedRequest);
+                rbacFacade.verifyResourceAccessPermissions(userToken, resource);
+                username = userToken.getUsername();
+            } else if (!StringUtils.hasText(authorizationHeader)) {
+                throw new AuthenticationException(ErrorEnum.AUTHENTICATION_REQUEST_NO_TOKEN);
+            } else if (authorizationHeader.startsWith("Bearer ")) {
                 String token = authorizationHeader.substring(7);
                 UserToken userToken = userTokenFacade.verifyToken(token);
                 rbacFacade.verifyResourceAccessPermissions(userToken, resource);
@@ -117,6 +121,33 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     }
 
     /**
+     * 通过请求签名验证身份（不需要 Authorization header）
+     */
+    private UserToken verifyByRequestSign(HttpServletRequest request) {
+        String jti = request.getHeader("Jti");
+        String timestamp = request.getHeader("Timestamp");
+        String jwtSign = request.getHeader("Jwt-Sign");
+
+        if (!StringUtils.hasText(jti) || !StringUtils.hasText(timestamp)) {
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED);
+        }
+        if (!RequestSignUtil.isTimestampValid(timestamp)) {
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED);
+        }
+        UserToken userToken = userTokenFacade.getByJti(jti);
+        if (userToken == null || !userToken.getValid()) {
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
+        }
+        String encryptedBody = (String) request.getAttribute("__encrypted_body__");
+        String bodyHash = (encryptedBody != null) ? RequestSignUtil.sha256Hex(encryptedBody) : "";
+        String signData = jti + timestamp + bodyHash;
+        if (!RequestSignUtil.verify(signData, userToken.getToken(), jwtSign)) {
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED);
+        }
+        return userToken;
+    }
+
+    /**
      * 处理 Body 解密
      */
     private HttpServletRequest handleBodyDecryption(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -135,6 +166,8 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             JsonNode jsonNode = objectMapper.readTree(body);
             String encryptedBody = jsonNode.get("encryptedBody").asText();
             String encryptedKey = jsonNode.get("encryptedKey").asText();
+            // 存储 encryptedBody 用于签名验证
+            request.setAttribute("__encrypted_body__", encryptedBody);
 
             // 获取密钥版本
             String keyVersion = request.getHeader(KEY_VERSION_HEADER);

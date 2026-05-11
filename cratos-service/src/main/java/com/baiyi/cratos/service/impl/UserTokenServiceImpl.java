@@ -33,6 +33,14 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
+    public UserToken getByJti(String jti) {
+        Example example = new Example(UserToken.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("jti", jti);
+        return userTokenMapper.selectOneByExample(example);
+    }
+
+    @Override
     public List<UserToken> queryValidTokenByUsername(String username) {
         Example example = new Example(UserToken.class);
         Example.Criteria criteria = example.createCriteria();

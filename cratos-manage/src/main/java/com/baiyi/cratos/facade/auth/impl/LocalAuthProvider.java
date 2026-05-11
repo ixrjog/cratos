@@ -76,6 +76,7 @@ public class LocalAuthProvider extends BaseAuthProvider {
                     .name(user.getDisplayName())
                     .token(userToken.getToken())
                     .uuid(user.getUuid())
+                    .jti(userToken.getJti())
                     .build();
         } catch (BadCredentialsException | DisabledException e) {
             // 捕获认证异常并转换为业务异常
