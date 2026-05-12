@@ -32,11 +32,22 @@ public class BodyDecryptionUtil {
      */
     public static String decryptBody(String encryptedBody, String encryptedKey, String privateKeyPem) {
         try {
-            byte[] aesKeyBytes = decryptWithRSA(encryptedKey, privateKeyPem);
+            byte[] aesKeyBytes = decryptAESKey(encryptedKey, privateKeyPem);
             return decryptWithAES(encryptedBody, aesKeyBytes);
         } catch (Exception e) {
             log.error("Body decryption failed", e);
             throw new RuntimeException("Body decryption failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 解密 AES 密钥（公开方法，用于响应加密时获取密钥）
+     */
+    public static byte[] decryptAESKey(String encryptedKey, String privateKeyPem) {
+        try {
+            return decryptWithRSA(encryptedKey, privateKeyPem);
+        } catch (Exception e) {
+            throw new RuntimeException("AES key decryption failed", e);
         }
     }
 

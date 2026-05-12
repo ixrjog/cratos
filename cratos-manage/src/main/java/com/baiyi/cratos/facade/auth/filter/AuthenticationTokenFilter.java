@@ -15,7 +15,9 @@ import com.baiyi.cratos.facade.RobotFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.auth.service.KeyManagementService;
 import com.baiyi.cratos.facade.auth.util.BodyDecryptionUtil;
+import com.baiyi.cratos.facade.auth.util.BodyEncryptionUtil;
 import com.baiyi.cratos.facade.auth.wrapper.DecryptedRequestWrapper;
+import com.baiyi.cratos.facade.auth.wrapper.EncryptedResponseWrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -34,6 +36,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.constant.Global.AUTHORIZATION;
@@ -58,6 +61,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     // Body 加密配置
     private static final String ENCRYPTION_HEADER = "X-Body-Encrypted";
     private static final String KEY_VERSION_HEADER = "X-Encryption-Key-Version";
+    private static final String RESPONSE_ENCRYPTION_HEADER = "X-Response-Encryption-Required";
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
@@ -72,14 +76,14 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         // 2. 继续原有的认证逻辑
         final String resource = processedRequest.getServletPath();
         if (cratosConfiguration.isWhitelistResource(resource)) {
-            filterChain.doFilter(processedRequest, response);
+            doFilterWithResponseEncryption(processedRequest, response, filterChain);
             return;
         }
         if (!Optional.of(cratosConfiguration)
                 .map(CratosConfiguration::getAuth)
                 .map(CratosModel.Auth::getEnabled)
                 .orElse(true)) {
-            filterChain.doFilter(processedRequest, response);
+            doFilterWithResponseEncryption(processedRequest, response, filterChain);
             return;
         }
 
@@ -112,7 +116,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                     username, null);
             SecurityContextHolder.getContext()
                     .setAuthentication(usernamePasswordAuthenticationToken);
-            filterChain.doFilter(processedRequest, response);
+            doFilterWithResponseEncryption(processedRequest, response, filterChain);
         } catch (AuthenticationException authenticationException) {
             handleExceptionResult(response, HttpServletResponse.SC_UNAUTHORIZED, authenticationException);
         } catch (AuthorizationException authorizationException) {
@@ -145,6 +149,35 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED);
         }
         return userToken;
+    }
+
+    /**
+     * 执行 filter chain，如果需要则加密响应
+     */
+    private void doFilterWithResponseEncryption(HttpServletRequest request, HttpServletResponse response,
+                                                FilterChain filterChain) throws ServletException, IOException {
+        boolean needEncryptResponse = "true".equalsIgnoreCase(request.getHeader(RESPONSE_ENCRYPTION_HEADER));
+        byte[] aesKey = (byte[]) request.getAttribute("__aes_key__");
+
+        if (!needEncryptResponse || aesKey == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 包装响应以捕获响应体
+        EncryptedResponseWrapper responseWrapper = new EncryptedResponseWrapper(response);
+        filterChain.doFilter(request, responseWrapper);
+
+        // 加密响应体
+        byte[] responseBody = responseWrapper.getResponseBody();
+        String plaintext = new String(responseBody, StandardCharsets.UTF_8);
+        String encryptedData = BodyEncryptionUtil.encryptResponse(plaintext, aesKey);
+
+        // 写入加密后的响应
+        String encryptedResponse = objectMapper.writeValueAsString(java.util.Map.of("encryptedData", encryptedData));
+        response.setContentType("application/json;charset=UTF-8");
+        response.setContentLength(encryptedResponse.getBytes(StandardCharsets.UTF_8).length);
+        response.getWriter().write(encryptedResponse);
     }
 
     /**
@@ -189,7 +222,11 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             // 获取对应版本的私钥
             String privateKey = keyManagementService.getPrivateKey(keyVersion);
 
-            // 解密
+            // 解密 AES 密钥并存储（用于响应加密）
+            byte[] aesKeyBytes = BodyDecryptionUtil.decryptAESKey(encryptedKey, privateKey);
+            request.setAttribute("__aes_key__", aesKeyBytes);
+
+            // 解密 body
             String decryptedBody = BodyDecryptionUtil.decryptBody(encryptedBody, encryptedKey, privateKey);
             log.debug("Body decrypted successfully, keyVersion: {}", keyVersion);
 
