@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.http.security.ApiSecurityRiskParam;
 import com.baiyi.cratos.domain.param.http.security.ApiTestParam;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskReportVO;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskVO;
+import com.baiyi.cratos.domain.view.security.ApiSecurityTestVO;
 import com.baiyi.cratos.eds.security.apirisk.test.model.GenericCall;
 import com.baiyi.cratos.facade.ApiSecurityRiskFacade;
 import com.baiyi.cratos.facade.ApiSecurityTestFacade;
@@ -81,6 +82,18 @@ public class ApiSecurityRiskController {
     public HttpResult<Boolean> saveAutoSignMap(@RequestBody @Valid ApiTestParam.SaveSignMap saveSignMap) {
         apiSecurityTestFacade.saveAutoSignMap(saveSignMap);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Query test record page")
+    @PostMapping(value = "/risk/test/record/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<ApiSecurityTestVO.Record>> queryTestRecordPage(@RequestBody @Valid ApiTestParam.RecordPageQuery pageQuery) {
+        return HttpResult.of(apiSecurityTestFacade.queryRecordPage(pageQuery));
+    }
+
+    @Operation(summary = "Get test record by id")
+    @GetMapping(value = "/risk/test/record/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<ApiSecurityTestVO.RecordSummary> getTestRecordSummary(@RequestParam int id) {
+        return HttpResult.of(apiSecurityTestFacade.getTestRecordSummary(id));
     }
 
 }

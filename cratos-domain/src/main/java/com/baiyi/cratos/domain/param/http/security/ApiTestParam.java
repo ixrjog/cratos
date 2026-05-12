@@ -1,10 +1,9 @@
 package com.baiyi.cratos.domain.param.http.security;
 
+import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * &#064;Author  baiyi
@@ -39,6 +38,18 @@ public class ApiTestParam {
     public static class SaveSignMap {
         @Schema(description = "YAML格式的签名映射配置")
         private String signMapYaml;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class RecordPageQuery extends PageParam {
+        @Schema(description = "查询域名")
+        private String queryName;
+        @Schema(description = "用户名")
+        private String username;
     }
 
 }

@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.security.ApiTestParam;
+import com.baiyi.cratos.domain.view.security.ApiSecurityTestVO;
 import com.baiyi.cratos.eds.security.apirisk.test.model.GenericCall;
 
 /**
@@ -15,5 +17,9 @@ public interface ApiSecurityTestFacade {
     void saveAutoSignMap(ApiTestParam.SaveSignMap saveSignMap);
 
     String getAutoSignMapYaml();
+
+    DataTable<ApiSecurityTestVO.Record> queryRecordPage(ApiTestParam.RecordPageQuery pageQuery);
+
+    ApiSecurityTestVO.RecordSummary getTestRecordSummary(int id);
 
 }

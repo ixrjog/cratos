@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.ApiSecurityTestRecordMapper">
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.ApiSecurityTestRecord">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="request_url" jdbcType="VARCHAR" property="requestUrl"/>
+        <result column="request_method" jdbcType="VARCHAR" property="requestMethod"/>
+        <result column="request_host" jdbcType="VARCHAR" property="requestHost"/>
+        <result column="origin_server" jdbcType="VARCHAR" property="originServer"/>
+        <result column="signature_algorithm" jdbcType="VARCHAR" property="signatureAlgorithm"/>
+        <result column="private_key_type" jdbcType="VARCHAR" property="privateKeyType"/>
+        <result column="request_headers" jdbcType="LONGVARCHAR" property="requestHeaders"/>
+        <result column="request_body" jdbcType="LONGVARCHAR" property="requestBody"/>
+        <result column="response_status" jdbcType="INTEGER" property="responseStatus"/>
+        <result column="response_headers" jdbcType="LONGVARCHAR" property="responseHeaders"/>
+        <result column="response_body" jdbcType="LONGVARCHAR" property="responseBody"/>
+        <result column="elapsed_ms" jdbcType="BIGINT" property="elapsedMs"/>
+        <result column="success" jdbcType="BIT" property="success"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.security.ApiTestParam$RecordPageQuery"
+            resultMap="BaseResultMap">
+        SELECT * FROM api_security_test_record
+        <where>
+            <if test="queryName != null and queryName != ''">
+                AND request_host LIKE CONCAT('%', #{queryName}, '%')
+            </if>
+            <if test="username != null and username != ''">
+                AND username = #{username}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>
