@@ -82,7 +82,7 @@ public class EdsZbxEventAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Za
     }
 
     @Override
-    protected void afterAssetCreated(EdsAsset asset) {
+    protected void afterAssetImported(EdsAsset asset) {
         // 发送告警通知
         alertNotificationSender.sendAlertNotice(asset);
         // SRE

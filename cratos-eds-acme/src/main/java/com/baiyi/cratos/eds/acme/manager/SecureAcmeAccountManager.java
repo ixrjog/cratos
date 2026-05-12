@@ -43,35 +43,27 @@ public class SecureAcmeAccountManager {
                                                   String eabKid,
                                                   String eabHmacKey) throws AcmeException, IOException {
         log.info("Creating new ACME account for email: {}, provider: {}", email, acmeProvider.getProvider());
-
         // 1. 生成账户密钥对
         KeyPair accountKeyPair = KeyPairUtils.createKeyPair(2048);
-
         // 2. 获取 ACME Server URL
         String acmeServer = acmeProvider.getAcmeServer();
-
         // 3. 创建 ACME 账户
         Session session = new Session(acmeServer);
         AccountBuilder accountBuilder = new AccountBuilder()
                 .addContact("mailto:" + email)
                 .agreeToTermsOfService()
                 .useKeyPair(accountKeyPair);
-
         // 4. 如果提供了 EAB 凭证，添加 EAB
         if (eabKid != null && eabHmacKey != null) {
             log.info("Using External Account Binding (EAB) for account creation");
             accountBuilder.withKeyIdentifier(eabKid, eabHmacKey);
         }
-
         Account account = accountBuilder.create(session);
-
         log.info("ACME account created successfully, URL: {}", account.getLocation());
-
         // 5. 转换密钥对为 PEM 字符串
         StringWriter sw = new StringWriter();
         KeyPairUtils.writeKeyPair(accountKeyPair, sw);
         String keyPairPem = sw.toString();
-
         // 6. 构建数据库对象
         return AcmeModel.Account.builder()
                 .email(email)

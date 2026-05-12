@@ -65,6 +65,8 @@ public class OptionsVO {
     @Data
     @Schema
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Option implements Comparable<Option> {
         private String label;
         private Object value;

@@ -33,7 +33,7 @@ public class ApiSecurityRiskParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class AddRisk implements HasSessionUser,IToTarget<ApiSecurityRisk> {
+    public static class AddRisk implements HasSessionUser, IToTarget<ApiSecurityRisk> {
         private String riskNo;
         private String apiEndpoint;
         private String riskDescription;

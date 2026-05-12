@@ -212,7 +212,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected void afterAssetCreated(EdsAsset asset) {
+    protected void afterAssetImported(EdsAsset asset) {
         // SRE
         try {
             Map<String, EdsAssetIndex> indexMap = context.getEdsAssetIndexFacade().queryAssetIndexById(asset.getId())

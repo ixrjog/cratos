@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class ApiSecurityRiskReportVO {
     @AllArgsConstructor
     @Schema
     public static class Report implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -6999487491465615008L;
         private Overview overview;
         private Map<String, Integer> riskLevelDistribution;
         private Map<String, Integer> progressDistribution;
@@ -38,6 +41,8 @@ public class ApiSecurityRiskReportVO {
     @AllArgsConstructor
     @Schema
     public static class Overview implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3181894415768808892L;
         private int total;
         private int incomplete;
         private int completed;
@@ -50,6 +55,8 @@ public class ApiSecurityRiskReportVO {
     @AllArgsConstructor
     @Schema
     public static class MonthlyTrend implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -4320792202701284570L;
         private String month;
         private int discovered;
         private int fixed;
@@ -61,6 +68,8 @@ public class ApiSecurityRiskReportVO {
     @AllArgsConstructor
     @Schema
     public static class AnalystStat implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -4384857102706691126L;
         private String analyst;
         private String securityOfficer;
         private int total;
