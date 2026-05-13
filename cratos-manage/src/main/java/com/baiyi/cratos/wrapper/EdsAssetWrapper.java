@@ -3,6 +3,7 @@ package com.baiyi.cratos.wrapper;
 import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.view.base.LoginServerVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.converter.AssetToBusinessConverterFactory;
@@ -10,6 +11,7 @@ import com.baiyi.cratos.eds.business.converter.AssetToBusinessConverter;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.BaseWrapper;
@@ -47,12 +49,15 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(EdsAssetVO.Asset vo) {
         EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = edsProviderHolderFactory.createHolder(
-                vo.getInstanceId(),
-                vo.getAssetType()
-        );
+                vo.getInstanceId(), vo.getAssetType());
         // TODO 是否要序列化对象？
         vo.setOriginalAsset(edsInstanceProviderHolder.getProvider()
                                     .loadAsset(vo.getOriginalModel()));
+        String instanceName = Optional.ofNullable(edsInstanceProviderHolder.getInstance())
+                .map(ExternalDataSourceInstance::getEdsInstance)
+                .map(EdsInstance::getInstanceName)
+                .orElse("--");
+        vo.setInstanceName(instanceName);
         // ToBusiness
         AssetToBusinessConverter<?> assetToBusinessWrapper = AssetToBusinessConverterFactory.getProvider(
                 vo.getAssetType());

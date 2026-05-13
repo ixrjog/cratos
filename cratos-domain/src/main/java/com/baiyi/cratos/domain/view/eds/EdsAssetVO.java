@@ -90,6 +90,8 @@ public class EdsAssetVO {
         private EdsInstanceVO.EdsInstance edsInstance;
         private LoginServerVO.LoginServer loginServer;
 
+        private String instanceName;
+
         @Override
         public Integer getBusinessId() {
             return id;

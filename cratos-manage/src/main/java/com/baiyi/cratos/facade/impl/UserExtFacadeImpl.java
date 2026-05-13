@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtils;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleCommited;
@@ -18,6 +19,7 @@ import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.UserExtFacade;
 import com.baiyi.cratos.facade.UserFacade;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
@@ -45,6 +47,8 @@ public class UserExtFacadeImpl implements UserExtFacade {
     private final TagService tagService;
     private final UserService userService;
     private final UserPermissionService userPermissionService;
+    private final BusinessTagService businessTagService;
+    private final BusinessTagFacade businessTagFacade;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -69,7 +73,13 @@ public class UserExtFacadeImpl implements UserExtFacade {
         }
         user.setValid(Global.VALID);
         user.setLocked(Global.UNLOCKED);
-        user.setExpiredTime(renewalTime);
+        // 判断是否为外部用户
+        Tag extUserTag = tagService.getByTagKey(SysTagKeys.EXTERNAL_USER);
+        if (businessTagFacade.containsTag(BusinessTypeEnum.USER.name(), user.getId(), extUserTag.getId())) {
+            user.setExpiredTime(renewalTime);
+        } else {
+            user.setExpiredTime(null);
+        }
         userService.updateByPrimaryKey(user);
         // renewalOfAll
         if (Boolean.TRUE.equals(renewalExtUser.getRenewalOfAll())) {
@@ -107,7 +117,7 @@ public class UserExtFacadeImpl implements UserExtFacade {
                 .name(renewalExtUser.getUsername())
                 .commitContent(StringFormatter.arrayFormat("Update: renewalType={}", renewalExtUser.getRenewalType()))
                 .commitMessage(renewalExtUser.getCommit()
-                        .getMessage())
+                                       .getMessage())
                 .build();
     }
 
