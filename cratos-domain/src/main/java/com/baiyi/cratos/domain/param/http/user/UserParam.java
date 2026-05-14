@@ -148,6 +148,7 @@ public class UserParam {
     @Schema
     @Builder
     public static class ResetPassword {
+        private String oldPassword;
         private String password;
     }
 

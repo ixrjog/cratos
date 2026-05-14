@@ -31,6 +31,7 @@ import com.baiyi.cratos.wrapper.CredentialWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -60,6 +61,7 @@ public class UserFacadeImpl implements UserFacade {
     private final CratosConfiguration cratosConfiguration;
     private final RbacUserRoleFacade rbacUserRoleFacade;
     private final EdsLdapIdentityExtension ldapIdentityExtension;
+    private final org.springframework.security.authentication.AuthenticationManager authenticationManager;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
     private final RbacRoleService rbacRoleService;
@@ -144,6 +146,17 @@ public class UserFacadeImpl implements UserFacade {
                 .getName();
         if (!StringUtils.hasText(username)) {
             return;
+        }
+        // 校验旧密码
+        if (StringUtils.hasText(resetPassword.getOldPassword())) {
+            try {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(username, resetPassword.getOldPassword()));
+            } catch (Exception e) {
+                throw new UserException("Old password is incorrect.");
+            }
+        } else {
+            throw new UserException("Old password is required.");
         }
         if (!PasswordGenerator.isPasswordStrong(resetPassword.getPassword())) {
             UserException.runtime("Password is too weak.");
