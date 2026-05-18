@@ -6,7 +6,6 @@ import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
 
-
 import java.util.List;
 
 
@@ -28,6 +27,8 @@ public interface TrafficRouteFacade {
     void updateTrafficRecordTarget(TrafficRouteParam.UpdateRecordTarget updateRecordTarget);
 
     void switchToTarget(TrafficRouteParam.SwitchRecordTarget switchRecordTarget);
+
+    void switchToDcTarget(TrafficRouteParam.SwitchDataCenterTarget switchDataCenterTarget);
 
     TrafficRouteVO.Route getTrafficRouteById(int id);
 

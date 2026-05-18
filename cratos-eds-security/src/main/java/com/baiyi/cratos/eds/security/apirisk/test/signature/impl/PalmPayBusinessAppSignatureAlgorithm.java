@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Component
-public class PPBusinessSignatureAlgorithm extends FBSignatureAlgorithm {
+public class PalmPayBusinessAppSignatureAlgorithm extends FlexiBankAppSignatureAlgorithm {
 
-    public PPBusinessSignatureAlgorithm(CredentialService credentialService) {
+    public PalmPayBusinessAppSignatureAlgorithm(CredentialService credentialService) {
         super(credentialService);
     }
 

@@ -100,6 +100,14 @@ public class TrafficRouteController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Switch to datacenter target")
+    @PutMapping(value = "/dc/target/switch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> switchToDcTarget(
+            @RequestBody @Valid TrafficRouteParam.SwitchDataCenterTarget switchDataCenterTarget) {
+        trafficRouteFacade.switchToDcTarget(switchDataCenterTarget);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Delete traffic record target by id")
     @DeleteMapping(value = "/record/target/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteTrafficRecordTargetById(@RequestParam int id) {

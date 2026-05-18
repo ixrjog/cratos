@@ -11,33 +11,40 @@ import java.util.Map;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2026/5/7 16:58
+ * &#064;Date  2026/5/7 14:12
  * &#064;Version 1.0
  */
 @Component
-public class FBSignatureAlgorithm extends BasePPSignatureAlgorithm {
+public class PalmPayAppSignatureAlgorithm extends BasePPSignatureAlgorithm {
 
-    public FBSignatureAlgorithm(CredentialService credentialService) {
+    public PalmPayAppSignatureAlgorithm(CredentialService credentialService) {
         super(credentialService);
     }
 
     @Override
     protected Map<String, String> calcSign(GenericCall.Request request, String privateKeyB64, String signData1,
                                            String signData2) {
-        return Map.of("pp_req_sign_v2", sign(signData2, privateKeyB64));
+        if (request.getHeaders()
+                .containsKey("appsource")) {
+            if ("0".equals(request.getHeaders()
+                                   .get("appsource"))) {
+                return Map.of("pp_req_sign_v2", sign(signData2, privateKeyB64));
+            }
+        }
+        return Map.of("pp_req_sign", sign(signData1, privateKeyB64), "pp_req_sign_2", sign(signData2, privateKeyB64));
     }
 
     @Override
     protected String getPrivateKey(PrivateKeyType type) {
         if (PrivateKeyType.RELEASE.equals(type)) {
-            return getPrivateKey(253);
+            return getPrivateKey(255);
         }
-        return getPrivateKey(252);
+        return getPrivateKey(254);
     }
 
     @Override
     public SignatureAlgorithmEnum getSignatureAlgorithmEnum() {
-        return SignatureAlgorithmEnum.FLEXIBANKAPPSIGN;
+        return SignatureAlgorithmEnum.PALMPAYAPPSIGN;
     }
 
 }

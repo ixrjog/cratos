@@ -19,7 +19,7 @@ import java.util.*;
  * &#064;Version 1.0
  */
 @Component
-public class APPH5SignatureAlgorithm extends BaseSignatureAlgorithm {
+public class ApiPalmPayH5SignatureAlgorithm extends BaseSignatureAlgorithm {
 
     @Override
     public Map<String, String> calcSign(GenericCall.Request request, PrivateKeyType type) {

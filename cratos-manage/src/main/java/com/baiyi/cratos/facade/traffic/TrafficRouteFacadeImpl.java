@@ -3,14 +3,14 @@ package com.baiyi.cratos.facade.traffic;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.enums.TrafficRecordTargetTypes;
+import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.Tag;
-import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
-import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
@@ -21,10 +21,7 @@ import com.baiyi.cratos.eds.dns.DNSResolverFactory;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.TrafficRouteFacade;
-import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.TagService;
-import com.baiyi.cratos.service.TrafficRecordTargetService;
-import com.baiyi.cratos.service.TrafficRouteService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.traffic.TrafficRouteWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +49,8 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
     private final EdsInstanceService edsInstanceService;
     private final EdsFacade edsFacade;
     private final TagService tagService;
+    private final BusinessTagService businessTagService;
+    private final BusinessTagFacade businessTagFacade;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.TRAFFIC_ROUTE)
@@ -74,6 +73,32 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
         DNSResolver dnsResolver = Optional.ofNullable(DNSResolverFactory.getDNSResolver(edsInstance.getEdsType()))
                 .orElseThrow(() -> new TrafficRouteException("DNS resolver type not found"));
         dnsResolver.switchToRoute(switchRecordTarget);
+    }
+
+    @Override
+    public void switchToDcTarget(TrafficRouteParam.SwitchDataCenterTarget switchDataCenterTarget) {
+        TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.queryByTrafficRouteId(
+                        switchDataCenterTarget.getRouteId())
+                .stream()
+                .filter(e -> {
+                    BusinessTag businessTag = businessTagFacade.getBusinessTag(
+                            SimpleBusiness.builder()
+                                    .businessId(e.getId())
+                                    .businessType(BusinessTypeEnum.TRAFFIC_RECORD_TARGET.name())
+                                    .build(), SysTagKeys.DATACENTER_ROLE.getKey()
+                    );
+                    return businessTag != null && switchDataCenterTarget.getDcRole()
+                            .equals(businessTag.getTagValue());
+                })
+                .findFirst()
+                .orElseThrow(() -> new TrafficRouteException(
+                        "No target found with DC role: " + switchDataCenterTarget.getDcRole()));
+
+        TrafficRouteParam.SwitchRecordTarget switchRecordTarget = TrafficRouteParam.SwitchRecordTarget.builder()
+                .recordTargetId(trafficRecordTarget.getId())
+                .routingOptions(TrafficRoutingOptions.SINGLE_TARGET.name())
+                .build();
+        this.switchToTarget(switchRecordTarget);
     }
 
     @Override

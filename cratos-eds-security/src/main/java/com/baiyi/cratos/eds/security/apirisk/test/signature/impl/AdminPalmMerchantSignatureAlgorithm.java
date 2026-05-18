@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
@@ -20,26 +21,47 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @Component
-public class APMSignatureAlgorithm extends BaseSignatureAlgorithm {
+public class AdminPalmMerchantSignatureAlgorithm extends BaseSignatureAlgorithm {
 
     @Override
     public Map<String, String> calcSign(GenericCall.Request request, PrivateKeyType type) {
         Map<String, String> headers = request.getHeaders();
         String timestamp = String.valueOf(System.currentTimeMillis());
         headers.put("timestamp", timestamp);
-
+        // GET请求用URL query参数（URL解码后），POST请求用body
+        String param = getParam(request);
         String signData = "app-code" + filterValue(headers.get("app-code"))
                 + "country-code" + filterValue(headers.get("country-code"))
                 + "device-id" + filterValue(headers.get("device-id"))
                 + "device-type" + filterValue(headers.get("device-type"))
                 + "lang" + filterValue(headers.get("lang"))
-                + "param" + filterValue(request.getBodyStr())
+                + "param" + filterValue(param)
                 + "timestamp" + timestamp
                 + "token" + filterValue(headers.get("token"))
                 + "version" + filterValue(headers.get("version"));
-
         String sign = hmacSha1Base64(signData, md5(timestamp));
         return Map.of("sign", sign, "timestamp", timestamp);
+    }
+
+    private String getParam(GenericCall.Request request) {
+        if ("GET".equalsIgnoreCase(request.getMethod())) {
+            String url = request.getUrl();
+            int paramIdx = url.indexOf("param=");
+            if (paramIdx > 0) {
+                String encoded = url.substring(paramIdx + 6);
+                int ampIdx = encoded.indexOf('&');
+                if (ampIdx > 0) {
+                    encoded = encoded.substring(0, ampIdx);
+                }
+                try {
+                    return URLDecoder.decode(encoded, StandardCharsets.UTF_8);
+                } catch (Exception e) {
+                    return encoded;
+                }
+            }
+            return "";
+        }
+        return request.getBodyStr() != null ? request.getBodyStr() : "";
     }
 
     private String filterValue(String value) {

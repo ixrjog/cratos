@@ -47,6 +47,7 @@ public enum SysTagKeys {
     CERT_ABUSE("CertAbuse"),
     ACME("ACME"),
     SECURITY_LEVEL("SecurityLevel"),
+    DATACENTER_ROLE("DCRole")
     ;
 
     private final String key;

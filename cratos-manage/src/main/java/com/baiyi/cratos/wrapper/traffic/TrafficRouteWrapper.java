@@ -40,14 +40,17 @@ public class TrafficRouteWrapper extends BaseDataTableConverter<TrafficRouteVO.R
         try {
             vo.setConsoleUrl(dnsResolver.generateConsoleURL(vo.toTrafficRoute()));
         } catch (Exception e) {
-             log.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
-        DNS.ResourceRecordSet resourceRecordSet = dnsResolver.getDNSResourceRecordSet(vo.toTrafficRoute());
-        // No data
-        if (resourceRecordSet.isNoData()) {
-            return;
+        try {
+            DNS.ResourceRecordSet resourceRecordSet = dnsResolver.getDNSResourceRecordSet(vo.toTrafficRoute());
+            // No data
+            if (resourceRecordSet.isNoData()) {
+                return;
+            }
+            wrapResourceRecordSet(vo, resourceRecordSet);
+        } catch (Exception ex) {
         }
-        wrapResourceRecordSet(vo, resourceRecordSet);
     }
 
     private void wrapResourceRecordSet(TrafficRouteVO.Route vo, DNS.ResourceRecordSet resourceRecordSet) {

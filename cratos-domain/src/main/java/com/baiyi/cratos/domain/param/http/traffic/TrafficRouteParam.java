@@ -167,4 +167,16 @@ public class TrafficRouteParam {
         private Boolean proxied;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class SwitchDataCenterTarget {
+        @NotNull
+        private Integer routeId;
+        @NotBlank
+        private String dcRole;
+    }
+
 }

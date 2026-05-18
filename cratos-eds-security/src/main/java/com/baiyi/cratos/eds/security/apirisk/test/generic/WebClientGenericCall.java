@@ -104,7 +104,7 @@ public class WebClientGenericCall {
         }
 
         WebClient.RequestBodySpec requestSpec = client.method(method)
-                .uri(url);
+                .uri(URI.create(decodeUrlIfNeeded(url)));
 
         if (headers != null) {
             headers.entrySet()
@@ -141,5 +141,24 @@ public class WebClientGenericCall {
 
     public Mono<Map<String, Object>> postForMap(String url, Object requestBody) {
         return genericCallForMap(url, HttpMethod.POST, null, requestBody);
+    }
+
+    /**
+     * 如果 URL 中的 query 参数已编码（包含 %），则解码还原后再调用
+     */
+    private String decodeUrlIfNeeded(String url) {
+        int queryIdx = url.indexOf('?');
+        if (queryIdx < 0) {
+            return url;
+        }
+        String path = url.substring(0, queryIdx);
+        String query = url.substring(queryIdx + 1);
+        if (query.contains("%")) {
+            try {
+                query = java.net.URLDecoder.decode(query, java.nio.charset.StandardCharsets.UTF_8);
+            } catch (Exception ignored) {
+            }
+        }
+        return path + "?" + query;
     }
 }

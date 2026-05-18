@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -42,6 +43,9 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
     private final RedisUtil redisUtil;
     private final ApiSecurityTestRecordService recordService;
     private final ApiSecurityTestRecordWrapper apiSecurityTestRecordWrapper;
+
+    private final String[] SIGN_HEADERS = {"pp_req_sign", "pp_req_sign_2", "pp_req_sign_v2", "sign"};
+    private final String[] TIMESTAMP_HEADERS = {"pp_timestamp", "timestamp"};
 
     @Override
     public GenericCall.Response callTestApi(ApiTestParam.CallApi callApi) {
@@ -108,27 +112,20 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
     }
 
     protected void removeSign(GenericCall.Request request) {
-        request.getHeaders()
-                .remove("pp_req_sign");
-        request.getHeaders()
-                .remove("pp_req_sign_2");
-        request.getHeaders()
-                .remove("pp_req_sign_v2");
-        request.getHeaders()
-                .remove("sign");
+        Arrays.stream(SIGN_HEADERS)
+                .forEach(header -> request.getHeaders()
+                        .remove(header));
     }
 
     protected void resetTimestamp(GenericCall.Request request) {
-        if (request.getHeaders()
-                .containsKey("pp_timestamp")) {
-            request.getHeaders()
-                    .put("pp_timestamp", String.valueOf(System.currentTimeMillis()));
-        }
-        if (request.getHeaders()
-                .containsKey("timestamp")) {
-            request.getHeaders()
-                    .put("timestamp", String.valueOf(System.currentTimeMillis()));
-        }
+        Arrays.stream(TIMESTAMP_HEADERS)
+                .forEach(header -> {
+                    if (request.getHeaders()
+                            .containsKey(header)) {
+                        request.getHeaders()
+                                .put(header, String.valueOf(System.currentTimeMillis()));
+                    }
+                });
     }
 
     protected void setToken(ApiTestParam.CallApi callApi, GenericCall.Request request) {
@@ -136,6 +133,7 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
             return;
         }
         switch (SignatureAlgorithmEnum.valueOf(callApi.getSignatureAlgorithm())) {
+            case ADMINPALMMERCHANTSIGN:
             case PARTNERAPPSIGN:
                 request.getHeaders()
                         .put("token", callApi.getPpToken());

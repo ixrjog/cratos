@@ -19,7 +19,7 @@ import java.util.*;
  * &#064;Version 1.0
  */
 @Component
-public class PASignatureAlgorithm extends BaseSignatureAlgorithm {
+public class PartnerAppSignatureAlgorithm extends BaseSignatureAlgorithm {
 
     private static final String[] SIGN_KEYS = {
             "token", "timestamp", "version", "device-id",
