@@ -80,6 +80,8 @@ cratos:
         - /swagger-ui/
         - /v3/api-docs
         - /api/log/login
+        - /api/webauthn/login/options
+        - /api/webauthn/login/complete
         - /api/instance/health/lb-check
         # WebSocket 独立鉴权
         - /socket/
@@ -209,3 +211,8 @@ jwt:
   secret: ENC(TXqBxzaqovSLX4vjOAfcuGUUG7PbqkeESV8BTUOG3kJup0M7yxIVBugOXWioXUyc58798Mlc0BCkjVzG/XxWu8ZYvbY7bDKcaymukj4fx7g=)
   # 24h in milliseconds
   expiration: 86400000
+
+webauthn:
+  rp-id: cratos.palmpay-inc.com
+  rp-name: Cratos
+  origin: https://cratos.palmpay-inc.com

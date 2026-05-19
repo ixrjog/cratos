@@ -103,8 +103,22 @@ public class WebClientGenericCall {
             }
         }
 
+        String finalUrl = decodeUrlIfNeeded(url);
         WebClient.RequestBodySpec requestSpec = client.method(method)
-                .uri(URI.create(decodeUrlIfNeeded(url)));
+                .uri(uriBuilder -> {
+                    try {
+                        java.net.URL parsedUrl = new java.net.URL(finalUrl);
+                        return uriBuilder
+                                .scheme(parsedUrl.getProtocol())
+                                .host(parsedUrl.getHost())
+                                .port(parsedUrl.getPort())
+                                .path(parsedUrl.getPath())
+                                .query(parsedUrl.getQuery())
+                                .build();
+                    } catch (Exception e) {
+                        return URI.create(url);
+                    }
+                });
 
         if (headers != null) {
             headers.entrySet()

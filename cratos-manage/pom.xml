@@ -58,6 +58,11 @@
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-socks-server</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.webauthn4j</groupId>
+            <artifactId>webauthn4j-core</artifactId>
+            <version>0.28.4.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <profiles>
