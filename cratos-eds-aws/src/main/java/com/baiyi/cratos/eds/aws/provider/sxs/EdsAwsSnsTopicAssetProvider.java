@@ -58,7 +58,7 @@ public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsC
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsSns.Topic entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsSns.Topic entity) {
         return createAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getTopic()

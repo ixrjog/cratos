@@ -66,8 +66,8 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsAssetProvider<EdsCon
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         GetPolicyResponse.Policy entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               GetPolicyResponse.Policy entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getPolicyName())
                 .nameOf(entity.getPolicyName())
                 .kindOf(entity.getPolicyType())

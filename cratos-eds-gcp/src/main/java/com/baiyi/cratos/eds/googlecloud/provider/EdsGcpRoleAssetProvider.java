@@ -34,8 +34,8 @@ public class EdsGcpRoleAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Gcp
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
-                                         GcpIamModel.Role entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
+                               GcpIamModel.Role entity) throws EdsAssetConversionException {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .assetKeyOf(entity.getName())
                 .nameOf(entity.getTitle())

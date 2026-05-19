@@ -54,8 +54,8 @@ public class EdsAzureUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.A
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Azure> instance,
-                                         GraphUserModel.User entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Azure> instance,
+                               GraphUserModel.User entity) throws EdsAssetConversionException {
         String name = Joiner.on("|")
                 .skipNulls()
                 .join(entity.getDisplayName(), entity.getSurname(), entity.getGivenName());

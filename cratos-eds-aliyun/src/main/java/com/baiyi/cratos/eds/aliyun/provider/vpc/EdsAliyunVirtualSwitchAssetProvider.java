@@ -65,8 +65,8 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunVirtualSwitch.Switch entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               AliyunVirtualSwitch.Switch entity) {
         final String key = Joiner.on(":")
                 .join(
                         entity.getVirtualSwitch()

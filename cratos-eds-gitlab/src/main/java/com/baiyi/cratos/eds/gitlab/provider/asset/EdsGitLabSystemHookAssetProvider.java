@@ -40,8 +40,8 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
-                                  GitLabEventParam.SystemHook entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
+                               GitLabEventParam.SystemHook entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.hashCode())
                 .nameOf(entity.getEventName())
                 .kindOf(entity.getEventName())

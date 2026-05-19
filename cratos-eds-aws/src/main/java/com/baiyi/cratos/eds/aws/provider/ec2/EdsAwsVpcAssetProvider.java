@@ -55,7 +55,7 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Vpc entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Vpc entity) {
         final String tagName = AmazonEc2Util.getName(entity.getVpc()
                                                              .getTags());
         return createAssetBuilder(instance, entity).assetIdOf(entity.getVpc()

@@ -61,7 +61,7 @@ public class EdsAwsIamUserProvider extends BaseEdsAssetProvider<EdsConfigs.Aws, 
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, User entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, User entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getUserName())
                 .assetKeyOf(entity.getArn())

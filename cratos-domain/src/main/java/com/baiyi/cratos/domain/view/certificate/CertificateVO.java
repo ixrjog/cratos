@@ -36,6 +36,8 @@ public class CertificateVO {
         @Serial
         private static final long serialVersionUID = -799350802297993186L;
         private Integer id;
+        private Integer instanceId;
+        private Integer assetId;
         private String certificateId;
         private String name;
         @Schema(description = "域名")
@@ -54,6 +56,8 @@ public class CertificateVO {
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
+
+        private String instanceName;
 
         @Override
         public Integer getBusinessId() {

@@ -58,7 +58,7 @@ public class EdsHwcElbCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance, HwcElb.Cert entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance, HwcElb.Cert entity) {
         //  https://support.huaweicloud.com/intl/zh-cn/api-elb/ListCertificates.html
         try {
             String description = StringUtils.hasText(entity.getDomain()) ? entity.getDomain() : Joiner.on(",")

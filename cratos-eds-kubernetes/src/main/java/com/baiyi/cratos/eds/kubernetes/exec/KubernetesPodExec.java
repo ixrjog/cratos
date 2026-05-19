@@ -37,15 +37,15 @@ public class KubernetesPodExec {
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
                 .usingListener(newListener(execLatch))
-                //.withReadyWaitTimeout(Math.toIntExact(execContext.getMaxWaitingTime()))
                 .exec(execContext.toExec())) {
             boolean latchTerminationStatus = execLatch.await(execContext.getMaxWaitingTime(), TimeUnit.SECONDS);
             if (!latchTerminationStatus) {
-                log.warn("Latch could not terminate within specified time");
+                execContext.getError()
+                        .write("Exec timeout: command did not complete within specified time".getBytes());
+                execContext.setExitCode(1);
+            } else {
+                execContext.setExitCode(execWatch.exitCode().get());
             }
-            log.debug("Exec Output: {}", execContext.getOut());
-            execContext.setExitCode(execWatch.exitCode()
-                                            .get());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
@@ -58,11 +58,13 @@ public class KubernetesPodExec {
             } catch (IOException ignored) {
             }
             log.warn("Execution Exception while waiting for the exec: {}", executionException.getMessage());
+        } catch (IOException e) {
+            log.debug("IO error during exec: {}", e.getMessage());
         }
     }
 
-    public void exec(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String podName,
-                     String containerName, PodExecContext execContext, CountDownLatch execLatch) {
+    public void exec(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String podName, String containerName,
+                     PodExecContext execContext, CountDownLatch execLatch) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
                 .withName(podName)
@@ -73,13 +75,26 @@ public class KubernetesPodExec {
                 .exec(execContext.toExec())) {
             boolean latchTerminationStatus = execLatch.await(execContext.getMaxWaitingTime(), TimeUnit.SECONDS);
             if (!latchTerminationStatus) {
-                log.warn("Latch could not terminate within specified time");
+                execContext.getError()
+                        .write("Exec timeout: command did not complete within specified time".getBytes());
+                execContext.setExitCode(1);
+            } else {
+                execContext.setExitCode(execWatch.exitCode().get());
             }
-            log.debug("Exec Output: {}", execContext.getOut());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
             log.warn("Interrupted while waiting for the exec: {}", ie.getMessage());
+        } catch (ExecutionException executionException) {
+            try {
+                execContext.getError()
+                        .write(executionException.getMessage()
+                                       .getBytes());
+            } catch (IOException ignored) {
+            }
+            log.warn("Execution Exception while waiting for the exec: {}", executionException.getMessage());
+        } catch (IOException e) {
+            log.debug("IO error during exec: {}", e.getMessage());
         }
     }
 
@@ -96,7 +111,7 @@ public class KubernetesPodExec {
 
         @Override
         public void onFailure(Throwable t, Response failureResponse) {
-            log.debug("Some error encountered");
+            log.warn("Exec failure: {}", t.getMessage());
             execLatch.countDown();
         }
 

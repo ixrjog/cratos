@@ -168,24 +168,18 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
             monthMap.put(sdf.format(cal.getTime()), new int[]{0, 0});
             cal.add(Calendar.MONTH, 1);
         }
-        for (ApiSecurityRisk r : all) {
-            Date d = r.getDiscoveredTime() != null ? r.getDiscoveredTime() : r.getCreateTime();
-            if (d != null) {
-                String month = sdf.format(d);
-                if (monthMap.containsKey(month)) {
-                    monthMap.get(month)[0]++;
-                }
-            }
-        }
+        all.stream()
+                .map(r -> r.getDiscoveredTime() != null ? r.getDiscoveredTime() : r.getCreateTime())
+                .filter(Objects::nonNull)
+                .map(sdf::format)
+                .filter(monthMap::containsKey)
+                .forEach(month -> monthMap.get(month)[0]++);
         // Count fixed by update_time or discovered_time month for completed
-        for (ApiSecurityRisk r : all) {
-            if (Boolean.TRUE.equals(r.getCompleted()) && r.getUpdateTime() != null) {
-                String month = sdf.format(r.getUpdateTime());
-                if (monthMap.containsKey(month)) {
-                    monthMap.get(month)[1]++;
-                }
-            }
-        }
+        all.stream()
+                .filter(r -> Boolean.TRUE.equals(r.getCompleted()) && r.getUpdateTime() != null)
+                .map(r -> sdf.format(r.getUpdateTime()))
+                .filter(monthMap::containsKey)
+                .forEach(month -> monthMap.get(month)[1]++);
         return monthMap.entrySet().stream()
                 .map(e -> ApiSecurityRiskReportVO.MonthlyTrend.builder()
                         .month(e.getKey()).discovered(e.getValue()[0]).fixed(e.getValue()[1])

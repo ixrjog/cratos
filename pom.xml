@@ -36,7 +36,6 @@
         <module>cratos-ssh-kubernetes</module>
         <module>cratos-workorder</module>
         <module>cratos-eds-cratos</module>
-        <module>cratos-eds-remote-gateway</module>
         <module>cratos-socks-server</module>
         <module>cratos-eds-azure</module>
         <module>cratos-eds-eaglecloud</module>
@@ -46,6 +45,7 @@
         <module>cratos-eds-ucloud</module>
         <module>cratos-eds-sre</module>
         <module>cratos-eds-security</module>
+        <module>cratos-eds-remote-gateway</module>
     </modules>
 
     <properties>

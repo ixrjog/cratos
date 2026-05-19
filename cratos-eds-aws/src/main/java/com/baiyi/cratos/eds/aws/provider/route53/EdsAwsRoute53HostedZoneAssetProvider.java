@@ -46,7 +46,7 @@ public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsAssetProvider<E
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, HostedZone entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, HostedZone entity) {
         // https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ListDomains.html
         return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())

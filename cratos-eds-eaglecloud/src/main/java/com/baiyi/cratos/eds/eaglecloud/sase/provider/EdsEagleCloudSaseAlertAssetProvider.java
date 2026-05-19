@@ -34,8 +34,8 @@ public class EdsEagleCloudSaseAlertAssetProvider extends BaseEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Sase> instance,
-                                         EagleCloudEventParam.Alert entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Sase> instance,
+                               EagleCloudEventParam.Alert entity) {
         EagleCloudEventParam.Content content = entity.getContent();
         return createAssetBuilder(instance, entity).assetIdOf(content.getEventId())
                 .nameOf(content.getEntityName())

@@ -56,7 +56,7 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsCon
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Subnet entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Subnet entity) {
         final String tagName = AmazonEc2Util.getName(entity.getSubnet()
                 .getTags());
         return createAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()

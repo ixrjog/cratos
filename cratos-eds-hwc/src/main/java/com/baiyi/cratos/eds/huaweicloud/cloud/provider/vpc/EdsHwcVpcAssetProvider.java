@@ -55,8 +55,8 @@ public class EdsHwcVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
-                                  HwcVpc.Vpc entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
+                               HwcVpc.Vpc entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getVpc()
                         .getId())
                 .nameOf(entity.getVpc()

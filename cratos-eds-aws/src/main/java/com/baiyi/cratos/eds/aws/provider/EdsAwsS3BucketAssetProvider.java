@@ -41,7 +41,7 @@ public class EdsAwsS3BucketAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Bucket entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Bucket entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .nameOf(entity.getName())
                 .createdTimeOf(entity.getCreationDate())

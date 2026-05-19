@@ -84,7 +84,7 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, A entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, A entity) {
         return createAssetBuilder(instance, entity).assetIdOf(getAssetId(entity))
                 .nameOf(getName(entity))
                 .kindOf(entity.getKind())

@@ -72,8 +72,8 @@ public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetP
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  AliyunKms.KmsInstance entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               AliyunKms.KmsInstance entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
                         .getKmsInstanceId())
                 .nameOf(entity.getInstance()

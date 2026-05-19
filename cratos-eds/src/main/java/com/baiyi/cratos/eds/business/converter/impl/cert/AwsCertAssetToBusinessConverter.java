@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.eds.aws.model.AwsCert;
 import com.baiyi.cratos.eds.business.converter.impl.BaseAssetToBusinessConverter;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_CERT)
-public class AwsCertAssetToBusinessConverter extends BaseAssetToBusinessConverter<Certificate, CertificateSummary> {
+public class AwsCertAssetToBusinessConverter extends BaseAssetToBusinessConverter<Certificate, AwsCert.Cert> {
 
     public AwsCertAssetToBusinessConverter(BusinessAssetBoundService businessAssetBoundService) {
         super(businessAssetBoundService);
@@ -28,13 +29,16 @@ public class AwsCertAssetToBusinessConverter extends BaseAssetToBusinessConverte
 
     @Override
     protected Certificate toTarget(EdsAssetVO.Asset asset) {
-        CertificateSummary model = getAssetModel(asset);
+        AwsCert.Cert cert = getAssetModel(asset);
+        CertificateSummary certificateSummary = cert.getCertificateSummary();
         return Certificate.builder()
+                .instanceId(asset.getInstanceId())
+                .assetId(asset.getId())
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(asset.getName())
                 .certificateType(getAssetType())
-                .keyAlgorithm(model.getKeyAlgorithm())
+                .keyAlgorithm(certificateSummary.getKeyAlgorithm())
                 .valid(asset.getValid())
                 .notBefore(asset.getCreatedTime())
                 .notAfter(asset.getExpiredTime())

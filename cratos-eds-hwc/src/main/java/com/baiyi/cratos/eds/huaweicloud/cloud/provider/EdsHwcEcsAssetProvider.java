@@ -77,8 +77,8 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
-                                  HwcEcs.Ecs entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
+                               HwcEcs.Ecs entity) {
         Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()
                 .getAddresses());
         String privateIp = addressTypeMap.get(ServerAddress.OsEXTIPSTypeEnum.FIXED.getValue())

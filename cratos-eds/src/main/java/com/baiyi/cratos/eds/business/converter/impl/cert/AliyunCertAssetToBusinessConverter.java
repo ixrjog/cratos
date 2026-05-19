@@ -32,6 +32,8 @@ public class AliyunCertAssetToBusinessConverter extends BaseAssetToBusinessConve
     protected Certificate toTarget(EdsAssetVO.Asset asset) {
         ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList model = getAssetModel(asset);
         return Certificate.builder()
+                .instanceId(asset.getInstanceId())
+                .assetId(asset.getId())
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(asset.getName())

@@ -35,6 +35,8 @@ public class HwcElbCertAssetToBusinessConverter extends BaseAssetToBusinessConve
         String domainName = StringUtils.hasText(model.getDomain()) ? model.getDomain() : Joiner.on(",")
                 .join(model.getSubjectAlternativeNames());
         return Certificate.builder()
+                .instanceId(asset.getInstanceId())
+                .assetId(asset.getId())
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(domainName)

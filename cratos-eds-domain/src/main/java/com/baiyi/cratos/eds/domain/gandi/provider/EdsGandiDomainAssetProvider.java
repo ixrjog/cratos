@@ -40,8 +40,8 @@ public class EdsGandiDomainAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gandi> instance,
-                                  GandiDomain.Domain entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Gandi> instance,
+                               GandiDomain.Domain entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getFqdn())
                 .descriptionOf(entity.getDomainOwner())

@@ -135,7 +135,7 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
      */
     protected EdsAsset importEntityAsAsset(ExternalDataSourceInstance<C> instance, A entity) {
         try {
-            EdsAsset newAsset = convertToEdsAsset(instance, entity);
+            EdsAsset newAsset = toAsset(instance, entity);
             EdsAsset existingAsset = context.getEdsAssetService().getByUniqueKey(newAsset);
             boolean isNew = (existingAsset == null);
             if (isNew) {
@@ -249,8 +249,8 @@ public abstract class BaseEdsAssetProvider<C extends HasEdsConfig, A> implements
     /**
      * 将外部实体转换为 EdsAsset，由子类实现
      */
-    abstract protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<C> instance,
-                                                  A entity) throws EdsAssetConversionException;
+    abstract protected EdsAsset toAsset(ExternalDataSourceInstance<C> instance,
+                                        A entity) throws EdsAssetConversionException;
 
     private Set<Integer> getExistingAssetIds(ExternalDataSourceInstance<C> instance) {
         return queryExistingAssets(instance).stream()

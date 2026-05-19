@@ -28,6 +28,8 @@ public class CertificateParam {
     @Schema
     @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
     public static class AddCertificate implements IToTarget<Certificate>, HasImportFromAsset {
+        private Integer instanceId;
+        private Integer assetId;
         private String certificateId;
         private String name;
         @Schema(description = "域名")
@@ -53,6 +55,8 @@ public class CertificateParam {
     @Schema
     public static class UpdateCertificate implements IToTarget<Certificate> {
         private Integer id;
+        private Integer instanceId;
+        private Integer assetId;
         private String certificateId;
         private String name;
         @Schema(description = "域名")

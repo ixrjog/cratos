@@ -59,8 +59,8 @@ public class EdsZbxHostAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Zab
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
-                                         ZbxHostResult.Host entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
+                               ZbxHostResult.Host entity) {
         String assetKey = Optional.ofNullable(entity)
                 .map(ZbxHostResult.Host::getHostExtend)
                 .map(ZbxHostResult.HostExtend::getInterfaces)

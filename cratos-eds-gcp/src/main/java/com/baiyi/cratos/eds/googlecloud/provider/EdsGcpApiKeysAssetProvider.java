@@ -47,8 +47,8 @@ public class EdsGcpApiKeysAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
-                                         GcpApiKeysModel.Key entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
+                               GcpApiKeysModel.Key entity) throws EdsAssetConversionException {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getUid())
                 .assetKeyOf(entity.getName())
                 .nameOf(entity.getDisplayName())

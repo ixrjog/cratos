@@ -124,8 +124,8 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsAssetProvider<EdsConfig
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance,
-                                         DingtalkUserModel.User entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance,
+                               DingtalkUserModel.User entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getUserid())
                 .assetKeyOf(entity.getUnionid())
                 .nameOf(entity.getName())

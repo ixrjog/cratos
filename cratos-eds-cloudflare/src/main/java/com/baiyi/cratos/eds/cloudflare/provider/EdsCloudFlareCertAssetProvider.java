@@ -55,8 +55,8 @@ public class EdsCloudFlareCertAssetProvider extends BaseHasNamespaceEdsAssetProv
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
-                                  CloudFlareCert.Certificate entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
+                               CloudFlareCert.Certificate entity) {
         final String hosts = Joiner.on(",")
                 .join(entity.getHosts());
         final String name = entity.getHosts()

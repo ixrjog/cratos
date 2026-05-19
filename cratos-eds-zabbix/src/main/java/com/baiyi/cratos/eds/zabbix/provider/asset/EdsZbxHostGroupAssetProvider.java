@@ -39,8 +39,8 @@ public class EdsZbxHostGroupAssetProvider extends BaseEdsAssetProvider<EdsConfig
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
-                                         ZbxHostGroupResult.HostGroup entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
+                               ZbxHostGroupResult.HostGroup entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getGroupid())
                 .assetKeyOf(entity.getName())
                 .nameOf(entity.getName())

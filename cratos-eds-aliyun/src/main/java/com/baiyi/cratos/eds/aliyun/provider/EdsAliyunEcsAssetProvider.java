@@ -92,7 +92,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunEcs.Ecs entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, AliyunEcs.Ecs entity) {
         final String privateIp = entity.getInstance()
                 .getInstanceNetworkType()
                 .equals(VPC) ? entity.getInstance()

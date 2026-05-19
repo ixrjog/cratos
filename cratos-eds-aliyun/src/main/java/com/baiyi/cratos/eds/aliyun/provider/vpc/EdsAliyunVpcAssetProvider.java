@@ -45,8 +45,8 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         DescribeVpcsResponse.Vpc entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               DescribeVpcsResponse.Vpc entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getVpcId())
                 .nameOf(entity.getVpcName())
                 .regionOf(entity.getRegionId())

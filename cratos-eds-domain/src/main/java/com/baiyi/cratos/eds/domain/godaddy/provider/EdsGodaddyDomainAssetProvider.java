@@ -40,8 +40,8 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Godaddy> instance,
-                                  GodaddyDomain.Domain entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Godaddy> instance,
+                               GodaddyDomain.Domain entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getDomainId())
                 .nameOf(entity.getDomain())
                 .createdTimeOf(entity.getCreatedAt())

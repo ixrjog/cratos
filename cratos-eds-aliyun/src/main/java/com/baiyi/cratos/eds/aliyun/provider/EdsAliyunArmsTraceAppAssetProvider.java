@@ -86,8 +86,8 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunArms.TraceApps entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               AliyunArms.TraceApps entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getAppId())
                 .nameOf(entity.getAppName())
                 .assetKeyOf(entity.getPid())

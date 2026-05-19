@@ -79,8 +79,8 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         try {
             final String key = Joiner.on(":")
                     .join(entity.getInstanceId(), entity.getTopicName());

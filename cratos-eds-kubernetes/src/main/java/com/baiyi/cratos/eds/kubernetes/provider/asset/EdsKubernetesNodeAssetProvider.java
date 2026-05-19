@@ -58,8 +58,8 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, Node entity) {
-        EdsAsset edsAsset = super.convertToEdsAsset(instance, entity);
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, Node entity) {
+        EdsAsset edsAsset = super.toAsset(instance, entity);
         Map<String, String> labels = Optional.of(entity)
                 .map(Node::getMetadata)
                 .map(ObjectMeta::getLabels)

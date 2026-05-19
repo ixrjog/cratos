@@ -42,7 +42,7 @@ public class EdsGitLabGroupAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance, Group entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance, Group entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getFullName())
                 .assetKeyOf(entity.getFullPath())

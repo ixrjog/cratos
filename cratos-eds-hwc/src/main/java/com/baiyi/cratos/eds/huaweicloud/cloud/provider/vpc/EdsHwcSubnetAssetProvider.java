@@ -57,8 +57,8 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
-                                  HwcSubnet.Subnet entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
+                               HwcSubnet.Subnet entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
                         .getId())
                 .nameOf(entity.getSubnet()

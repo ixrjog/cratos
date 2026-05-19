@@ -49,8 +49,8 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsAssetProvider<EdsC
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Alimail> instance,
-                                  AlimailDepartment.Department entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Alimail> instance,
+                               AlimailDepartment.Department entity) {
         return createAssetBuilder(instance, entity)
                 // 资源 ID
                 .assetIdOf(entity.getId())

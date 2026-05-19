@@ -48,8 +48,8 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
-                                  KeystoneListUsersResult entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
+                               KeystoneListUsersResult entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getName())

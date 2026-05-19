@@ -45,8 +45,8 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         ListNamespaceResponse.NamespacesItem entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               ListNamespaceResponse.NamespacesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getNamespaceName());
         return createAssetBuilder(instance, entity).assetIdOf(entity.getNamespaceName())

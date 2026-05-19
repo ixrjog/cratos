@@ -6,6 +6,8 @@
           WARNING - @mbg.generated
         -->
         <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="instance_id" jdbcType="INTEGER" property="instanceId"/>
+        <result column="asset_id" jdbcType="INTEGER" property="assetId"/>
         <result column="certificate_id" jdbcType="VARCHAR" property="certificateId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="domain_name" jdbcType="VARCHAR" property="domainName"/>

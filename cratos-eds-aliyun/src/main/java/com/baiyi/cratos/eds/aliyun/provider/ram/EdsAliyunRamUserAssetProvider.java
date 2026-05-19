@@ -73,8 +73,8 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         GetUserResponse.User entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               GetUserResponse.User entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getDisplayName())
                 .assetKeyOf(entity.getUserName())

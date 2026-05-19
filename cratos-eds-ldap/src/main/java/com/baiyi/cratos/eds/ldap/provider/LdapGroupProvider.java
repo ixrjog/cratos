@@ -46,7 +46,7 @@ public class LdapGroupProvider extends BaseEdsAssetProvider<EdsConfigs.Ldap, Lda
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Ldap> instance, LdapGroup.Group entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Ldap> instance, LdapGroup.Group entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getGroupName())
                 .nameOf(entity.getGroupName())
                 .build();

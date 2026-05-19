@@ -43,7 +43,7 @@ public class EdsGitLabUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance, User entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance, User entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getUsername())

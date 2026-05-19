@@ -30,6 +30,8 @@ public class CloudflareCertAssetToBusinessConverter extends BaseAssetToBusinessC
     protected Certificate toTarget(EdsAssetVO.Asset asset) {
         CloudFlareCert.Certificate model = getAssetModel(asset);
         return Certificate.builder()
+                .instanceId(asset.getInstanceId())
+                .assetId(asset.getId())
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(asset.getDescription())

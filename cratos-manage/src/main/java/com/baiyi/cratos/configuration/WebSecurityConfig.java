@@ -40,7 +40,15 @@ public class WebSecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .cors(Customizer.withDefaults())
-                //.csrf(csrf -> csrf.disable()) // 禁用CSRF以便测试
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.deny())
+                        .contentTypeOptions(Customizer.withDefaults())
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31536000))
+                        .referrerPolicy(referrer -> referrer
+                                .policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                )
                 .authenticationManager(authManager);
         return http.build();
     }

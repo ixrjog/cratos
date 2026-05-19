@@ -107,8 +107,8 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunOnsV5.ConsumerGroupSubscription entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               AliyunOnsV5.ConsumerGroupSubscription entity) {
         try {
             // instanceId:consumerGroupId:topicName
             final String key = Joiner.on(":")

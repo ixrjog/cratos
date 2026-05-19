@@ -50,7 +50,7 @@ public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, Bucket entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, Bucket entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .nameOf(entity.getName())
                 .assetKeyOf(Joiner.on(".")

@@ -23,6 +23,10 @@ public final class IdentityUtils {
         return id > 0;
     }
 
+    public static boolean notIdentity(Integer id) {
+        return !hasIdentity(id);
+    }
+
     public static boolean hasIdentity(Long id) {
         if (id == null) {
             return false;

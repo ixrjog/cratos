@@ -40,8 +40,8 @@ public class EdsCloudFlareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
-                                  CloudFlareDns.DnsRecord entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
+                               CloudFlareDns.DnsRecord entity) throws EdsAssetConversionException {
         String key = Joiner.on(":")
                 .join(entity.getZoneId(), entity.getName());
         return createAssetBuilder(instance, entity).assetIdOf(entity.getId())

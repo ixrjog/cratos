@@ -108,8 +108,8 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance,
-                                  DingtalkDepartmentModel.Department entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance,
+                               DingtalkDepartmentModel.Department entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getDeptId())
                 .nameOf(entity.getName())
                 .build();

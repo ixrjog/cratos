@@ -98,8 +98,8 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunKms.KmsSecret entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               AliyunKms.KmsSecret entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getSecret()
                                                                       .getSecretName())
                 .nameOf(entity.getSecret()

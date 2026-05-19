@@ -61,8 +61,8 @@ public class EdsGcpMemberAssetProvider extends BaseEdsAssetProvider<EdsConfigs.G
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
-                                         GcpMemberModel.Member entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
+                               GcpMemberModel.Member entity) throws EdsAssetConversionException {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .assetKeyOf(entity.getName())
                 .nameOf(entity.getName())

@@ -53,8 +53,8 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                 .nameOf(entity.getInstanceName())
                 .kindOf(entity.getInstanceType())

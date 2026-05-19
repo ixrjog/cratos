@@ -77,8 +77,8 @@ public class EdsCrtLogAssetProvider extends BaseEdsAssetProvider<EdsConfigs.CrtS
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.CrtSh> instance,
-                                         CrtSh.CertificateLog entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.CrtSh> instance,
+                               CrtSh.CertificateLog entity) throws EdsAssetConversionException {
         // "Domain:{}|CommonName{}|MatchingIdentities:{}"
         String matchingIdentities = entity.getNameValue()
                 .replaceAll("\\n", ",");

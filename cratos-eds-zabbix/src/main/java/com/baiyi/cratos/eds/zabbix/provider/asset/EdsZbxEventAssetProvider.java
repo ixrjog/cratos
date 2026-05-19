@@ -60,8 +60,8 @@ public class EdsZbxEventAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Za
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
-                                         ZbxEventResult.Event entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
+                               ZbxEventResult.Event entity) {
         String hostName = "Unknown Host";
         List<ZbxHostResult.Host> hosts = Optional.of(entity)
                 .map(ZbxEventResult.Event::getHosts)

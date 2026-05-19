@@ -74,8 +74,8 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         AliyunAlb.Alb entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               AliyunAlb.Alb entity) {
         // https://help.aliyun.com/zh/slb/application-load-balancer/developer-reference/api-alb-2020-06-16-listloadbalancers?spm=a2c4g.11186623.0.i4
         return createAssetBuilder(instance, entity).assetIdOf(entity.getLoadBalancers()
                         .getLoadBalancerId())

@@ -95,8 +95,8 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsAssetProvider<EdsConfig
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
-                                         SshKeyData entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
+                               SshKeyData entity) {
         SshKey sshKey = entity.getSshKey();
         return createAssetBuilder(instance, entity).assetIdOf(sshKey.getId())
                 .nameOf(entity.getUsername())

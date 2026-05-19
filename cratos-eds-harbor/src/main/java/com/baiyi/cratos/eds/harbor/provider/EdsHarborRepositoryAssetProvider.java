@@ -57,8 +57,8 @@ public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAsse
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Harbor> instance,
-                                         HarborRepository.Repository entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Harbor> instance,
+                               HarborRepository.Repository entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getProjectId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getName())

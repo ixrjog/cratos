@@ -49,8 +49,8 @@ public class LdapPersonProvider extends BaseEdsAssetProvider<EdsConfigs.Ldap, Ld
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Ldap> instance,
-                                         LdapPerson.Person entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Ldap> instance,
+                               LdapPerson.Person entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getUsername())
                 .nameOf(entity.getDisplayName())
                 .build();

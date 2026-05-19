@@ -40,8 +40,8 @@ public class EdsSreBridgeEventAssetProvider extends BaseEdsAssetProvider<EdsConf
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.SreEventBridge> instance,
-                                         SreBridgeModel.Event entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.SreEventBridge> instance,
+                               SreBridgeModel.Event entity) {
         Map<String, String> ext = Optional.of(entity)
                 .map(SreBridgeModel.Event::getExt)
                 .orElse(Map.of());

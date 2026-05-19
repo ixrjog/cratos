@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.aws.provider;
 
 import com.amazonaws.services.certificatemanager.model.CertificateSummary;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.aws.model.AwsCert;
 import com.baiyi.cratos.eds.aws.repo.AwsCertRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -22,29 +23,34 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_CERT)
-public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, CertificateSummary> {
+public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, AwsCert.Cert> {
 
     public EdsAwsCertAssetProvider(EdsAssetProviderContext context) {
         super(context);
     }
 
     @Override
-    protected List<CertificateSummary> listEntities(String regionId, EdsConfigs.Aws aws) {
-        return AwsCertRepo.listCert(regionId, aws);
+    protected List< AwsCert.Cert> listEntities(String regionId, EdsConfigs.Aws aws) {
+        return AwsCertRepo.listCert(regionId, aws).stream().map(e-> AwsCert.Cert.builder()
+                .regionId(regionId)
+                .certificateSummary(e)
+                .build()).toList();
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                         CertificateSummary entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
+                               AwsCert.Cert entity) {
         // https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html
+        CertificateSummary certificateSummary = entity.getCertificateSummary();
         return createAssetBuilder(instance, entity)
                 // ARN
-                .assetIdOf(entity.getCertificateArn())
-                .nameOf(entity.getDomainName())
-                .kindOf(entity.getType())
-                .statusOf(entity.getStatus())
-                .createdTimeOf(entity.getNotBefore())
-                .expiredTimeOf(entity.getNotAfter())
+                .assetIdOf(certificateSummary.getCertificateArn())
+                .nameOf(certificateSummary.getDomainName())
+                .kindOf(certificateSummary.getType())
+                .statusOf(certificateSummary.getStatus())
+                .regionOf(entity.getRegionId())
+                .createdTimeOf(certificateSummary.getNotBefore())
+                .expiredTimeOf(certificateSummary.getNotAfter())
                 .build();
     }
 

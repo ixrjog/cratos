@@ -73,8 +73,8 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         ListRepositoryResponse.RepositoriesItem entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               ListRepositoryResponse.RepositoriesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getRepoId());
         return createAssetBuilder(instance, entity).assetIdOf(entity.getRepoId())

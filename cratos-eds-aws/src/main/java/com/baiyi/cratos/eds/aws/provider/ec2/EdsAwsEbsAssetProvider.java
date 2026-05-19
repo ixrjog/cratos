@@ -40,7 +40,7 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsCo
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Volume entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Volume entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getVolumeId())
                 .nameOf(AmazonEc2Util.getName(entity.getTags()))
                 .kindOf(entity.getVolumeType())

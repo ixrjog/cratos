@@ -77,8 +77,8 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
         try {
             final String key = Joiner.on(":")
                     .join(entity.getInstanceId(), entity.getConsumerGroupId());

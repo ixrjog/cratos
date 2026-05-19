@@ -34,8 +34,8 @@ public class EdsEagleCloudSaseHookAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Sase> instance,
-                                         EagleCloudEventParam.SaseHook entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Sase> instance,
+                               EagleCloudEventParam.SaseHook entity) {
         EagleCloudEventParam.Content content = EagleCloudEventParam.Content.parse(entity);
         return createAssetBuilder(instance, entity).assetIdOf(content.getEventId())
                 .nameOf(content.getEntityName())

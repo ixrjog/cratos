@@ -61,8 +61,8 @@ public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsAssetProvider<EdsC
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                         DescribeDatabasesResponse.Database entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               DescribeDatabasesResponse.Database entity) {
         final String key = Joiner.on(":")
                 .join(entity.getDBInstanceId(), entity.getDBName());
         return createAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())

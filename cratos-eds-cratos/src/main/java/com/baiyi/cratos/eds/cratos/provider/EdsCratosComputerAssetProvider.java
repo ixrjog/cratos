@@ -43,8 +43,8 @@ public class EdsCratosComputerAssetProvider extends BaseEdsAssetProvider<EdsConf
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cratos> instance,
-                                         CustomAssetParam.AssetPrototype entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Cratos> instance,
+                               CustomAssetParam.AssetPrototype entity) throws EdsAssetConversionException {
         String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtils.randomUUID();
         if (!IpUtils.isIP(entity.getAssetKey())) {
             EdsAssetConversionException.runtime("`Remote Management IP` not a valid IP address.");

@@ -39,8 +39,8 @@ public class EdsZbxTemplateAssetProvider extends BaseEdsAssetProvider<EdsConfigs
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
-                                         ZbxTemplateResult.Template entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
+                               ZbxTemplateResult.Template entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getTemplateid())
                 .assetKeyOf(entity.getHost())
                 // 显示名

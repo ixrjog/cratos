@@ -45,8 +45,8 @@ public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
-                                  CertificateDetail entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
+                               CertificateDetail entity) {
         //  https://support.huaweicloud.com/intl/en-us/api-ccm/ListCertificates.html
         try {
             return createAssetBuilder(instance, entity)

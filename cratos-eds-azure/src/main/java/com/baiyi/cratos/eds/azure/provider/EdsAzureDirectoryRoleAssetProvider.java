@@ -37,8 +37,8 @@ public class EdsAzureDirectoryRoleAssetProvider extends BaseEdsAssetProvider<Eds
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Azure> instance,
-                                         GraphDirectoryModel.Role entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Azure> instance,
+                               GraphDirectoryModel.Role entity) throws EdsAssetConversionException {
         final String key = Joiner.on("|")
                 .skipNulls()
                 .join(entity.getId(), entity.getRoleTemplateId());

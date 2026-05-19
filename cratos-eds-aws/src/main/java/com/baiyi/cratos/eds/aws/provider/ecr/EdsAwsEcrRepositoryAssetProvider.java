@@ -49,8 +49,8 @@ public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                         AwsEcr.RegionRepository entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
+                               AwsEcr.RegionRepository entity) {
         return createAssetBuilder(instance, entity).assetIdOf(entity.getRepository()
                                                                       .getRegistryId())
                 .nameOf(entity.getRepository()

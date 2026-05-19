@@ -66,8 +66,8 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
-                                         AwsSns.Subscription entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
+                               AwsSns.Subscription entity) {
         return createAssetBuilder(instance, entity)
                 // ID
                 .assetIdOf(StringUtils.substringAfterLast(

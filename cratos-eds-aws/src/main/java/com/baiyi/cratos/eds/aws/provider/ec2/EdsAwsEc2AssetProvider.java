@@ -69,7 +69,7 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Ec2 entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Ec2 entity) {
         return createAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getInstance()

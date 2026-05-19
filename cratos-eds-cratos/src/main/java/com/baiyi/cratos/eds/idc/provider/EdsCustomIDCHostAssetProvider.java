@@ -44,8 +44,8 @@ public class EdsCustomIDCHostAssetProvider extends BaseEdsAssetProvider<EdsConfi
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.CustomIdc> instance,
-                                         CustomAssetParam.AssetPrototype entity) throws EdsAssetConversionException {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.CustomIdc> instance,
+                               CustomAssetParam.AssetPrototype entity) throws EdsAssetConversionException {
         if (!IpUtils.isIP(entity.getAssetKey())) {
             throw new EdsAssetConversionException("`Remote Management IP` not a valid IP address.");
         }

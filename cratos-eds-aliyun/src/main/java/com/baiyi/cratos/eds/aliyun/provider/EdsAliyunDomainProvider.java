@@ -45,8 +45,8 @@ public class EdsAliyunDomainProvider extends BaseEdsAssetProvider<EdsConfigs.Ali
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  AliyunDomain entity) {
+    protected EdsAsset toAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
+                               AliyunDomain entity) {
         // 域名过期状态。取值：1：域名未过期。 2：域名已过期。
         boolean valid = entity.getExpirationDateStatus()
                 .equals("1");

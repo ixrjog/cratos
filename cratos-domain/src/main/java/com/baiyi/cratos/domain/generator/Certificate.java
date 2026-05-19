@@ -27,6 +27,11 @@ public class Certificate implements HasValid, ToBusinessTarget, HasIntegerPrimar
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "instance_id")
+    private Integer instanceId;
+
+    @Column(name = "asset_id")
+    private Integer assetId;
     /**
      * 证书ID
      */
