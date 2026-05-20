@@ -138,6 +138,10 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
                 request.getHeaders()
                         .put("token", callApi.getPpToken());
                 break;
+            case APIBUSINESSWEBSIGN:
+                request.getHeaders()
+                        .put("PP_TOKEN", callApi.getPpToken());
+                break;
             case APIPALMPAYH5SIGN:
                 request.getHeaders()
                         .put("m_token", callApi.getPpToken());
