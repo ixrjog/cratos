@@ -40,6 +40,12 @@ public class UserToken implements HasIntegerPrimaryKey, Serializable {
     private String tokenType;
 
     /**
+     * 认证方式: PASSWORD|BIOMETRIC
+     */
+    @Column(name = "auth_type")
+    private String authType;
+
+    /**
      * JWT ID，用于注销
      */
     private String jti;

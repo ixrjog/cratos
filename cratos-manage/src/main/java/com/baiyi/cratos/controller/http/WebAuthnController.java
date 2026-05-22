@@ -34,7 +34,11 @@ public class WebAuthnController {
 
     @Operation(summary = "Get login options")
     @GetMapping(value = "/login/options", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Map<String, Object>> getLoginOptions(@RequestParam String username) {
+    public HttpResult<Map<String, Object>> getLoginOptions(
+            @RequestParam(required = false) String username) {
+        if (username == null || username.isBlank()) {
+            return HttpResult.of(webAuthnFacade.getLoginOptions());
+        }
         return HttpResult.of(webAuthnFacade.getLoginOptions(username));
     }
 

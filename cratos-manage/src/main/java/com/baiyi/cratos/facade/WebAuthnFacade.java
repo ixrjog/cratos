@@ -13,6 +13,8 @@ public interface WebAuthnFacade {
 
     Map<String, Object> getLoginOptions(String username);
 
+    Map<String, Object> getLoginOptions();
+
     Map<String, Object> completeLogin(Map<String, Object> assertion);
 
     List<UserCredentialWebauthn> listMyCredentials();

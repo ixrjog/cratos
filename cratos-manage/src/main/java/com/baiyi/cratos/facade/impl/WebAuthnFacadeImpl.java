@@ -89,7 +89,8 @@ public class WebAuthnFacadeImpl implements WebAuthnFacade {
         );
         options.put(
                 "authenticatorSelection",
-                Map.of("authenticatorAttachment", "platform", "userVerification", "required")
+                Map.of("authenticatorAttachment", "platform", "userVerification", "required",
+                        "residentKey", "required", "requireResidentKey", true)
         );
         options.put("timeout", 60000);
         options.put("attestation", "none");
@@ -215,11 +216,50 @@ public class WebAuthnFacadeImpl implements WebAuthnFacade {
     }
 
     @Override
+    public Map<String, Object> getLoginOptions() {
+        byte[] challenge = generateChallenge();
+        String challengeStr = Base64.getUrlEncoder().withoutPadding().encodeToString(challenge);
+        redisUtil.set(CHALLENGE_KEY_PREFIX + "LOGIN:DISCOVERABLE:" + challengeStr, challengeStr, CHALLENGE_TTL);
+
+        Map<String, Object> options = new LinkedHashMap<>();
+        options.put("challenge", challengeStr);
+        options.put("rpId", rpId);
+        options.put("allowCredentials", List.of());
+        options.put("userVerification", "required");
+        options.put("timeout", 60000);
+        return options;
+    }
+
+    @Override
     public Map<String, Object> completeLogin(Map<String, Object> assertion) {
         String credentialId = (String) assertion.get("id");
         String username = (String) assertion.get("username");
 
-        String challengeStr = (String) redisUtil.get(CHALLENGE_KEY_PREFIX + "LOGIN:" + username);
+        // 无用户名模式：从 userHandle 或 credentialId 反查用户
+        String challengeStr;
+        if (username == null || username.isBlank()) {
+            UserCredentialWebauthn storedCredential = webauthnService.getByCredentialId(credentialId);
+            if (storedCredential == null || !storedCredential.getValid()) {
+                throw new RuntimeException("Credential not found or invalid");
+            }
+            username = storedCredential.getUsername();
+
+            // 尝试从 userHandle 获取用户名（优先）
+            Map<String, Object> response = (Map<String, Object>) assertion.get("response");
+            String userHandle = (String) response.get("userHandle");
+            if (userHandle != null && !userHandle.isBlank()) {
+                String decoded = new String(Base64.getUrlDecoder().decode(userHandle));
+                if (!decoded.equals(username)) {
+                    throw new RuntimeException("UserHandle does not match credential owner");
+                }
+            }
+
+            // discoverable 模式的 challenge 验证
+            challengeStr = findDiscoverableChallenge(response);
+        } else {
+            challengeStr = (String) redisUtil.get(CHALLENGE_KEY_PREFIX + "LOGIN:" + username);
+        }
+
         if (challengeStr == null) {
             throw new RuntimeException("Challenge expired or not found");
         }
@@ -228,8 +268,7 @@ public class WebAuthnFacadeImpl implements WebAuthnFacade {
         if (storedCredential == null || !storedCredential.getValid()) {
             throw new RuntimeException("Credential not found or invalid");
         }
-        if (!storedCredential.getUsername()
-                .equals(username)) {
+        if (!storedCredential.getUsername().equals(username)) {
             throw new RuntimeException("Credential does not belong to user");
         }
 
@@ -240,14 +279,10 @@ public class WebAuthnFacadeImpl implements WebAuthnFacade {
 
         // Verify using webauthn4j
         WebAuthnManager webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
-        byte[] authenticatorDataBytes = Base64.getUrlDecoder()
-                .decode(authenticatorData);
-        byte[] clientDataJSONBytes = Base64.getUrlDecoder()
-                .decode(clientDataJSON);
-        byte[] signatureBytes = Base64.getUrlDecoder()
-                .decode(signature);
-        byte[] challengeBytes = Base64.getUrlDecoder()
-                .decode(challengeStr);
+        byte[] authenticatorDataBytes = Base64.getUrlDecoder().decode(authenticatorData);
+        byte[] clientDataJSONBytes = Base64.getUrlDecoder().decode(clientDataJSON);
+        byte[] signatureBytes = Base64.getUrlDecoder().decode(signature);
+        byte[] challengeBytes = Base64.getUrlDecoder().decode(challengeStr);
 
         Origin originObj = new Origin(origin);
         Challenge challenge = new DefaultChallenge(challengeBytes);
@@ -262,8 +297,7 @@ public class WebAuthnFacadeImpl implements WebAuthnFacade {
                 attestedCredentialData, null, storedCredential.getSignCount());
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(
-                Base64.getUrlDecoder()
-                        .decode(credentialId), authenticatorDataBytes, clientDataJSONBytes, signatureBytes
+                Base64.getUrlDecoder().decode(credentialId), authenticatorDataBytes, clientDataJSONBytes, signatureBytes
         );
         AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 serverProperty, authenticator, null, false, true);
@@ -277,12 +311,11 @@ public class WebAuthnFacadeImpl implements WebAuthnFacade {
         }
 
         // Update sign count
-        storedCredential.setSignCount(authenticationData.getAuthenticatorData()
-                                              .getSignCount());
+        storedCredential.setSignCount(authenticationData.getAuthenticatorData().getSignCount());
         webauthnService.updateByPrimaryKey(storedCredential);
 
         // Issue token
-        UserToken userToken = userTokenFacade.revokeAndIssueNewToken(username);
+        UserToken userToken = userTokenFacade.revokeAndIssueNewToken(username, "BIOMETRIC");
 
         // Clean up
         redisUtil.del(CHALLENGE_KEY_PREFIX + "LOGIN:" + username);
@@ -295,6 +328,27 @@ public class WebAuthnFacadeImpl implements WebAuthnFacade {
         result.put("username", username);
         result.put("name", user.getName());
         return result;
+    }
+
+    private String findDiscoverableChallenge(Map<String, Object> response) {
+        String clientDataJSON = (String) response.get("clientDataJSON");
+        byte[] clientDataBytes = Base64.getUrlDecoder().decode(clientDataJSON);
+        String clientDataStr = new String(clientDataBytes);
+        // 从 clientDataJSON 中提取 challenge
+        try {
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            Map<String, Object> clientData = mapper.readValue(clientDataStr, Map.class);
+            String challenge = (String) clientData.get("challenge");
+            String redisKey = CHALLENGE_KEY_PREFIX + "LOGIN:DISCOVERABLE:" + challenge;
+            String stored = (String) redisUtil.get(redisKey);
+            if (stored != null) {
+                redisUtil.del(redisKey);
+                return challenge;
+            }
+        } catch (Exception e) {
+            log.error("Failed to parse clientDataJSON for discoverable challenge", e);
+        }
+        return null;
     }
 
     @Override

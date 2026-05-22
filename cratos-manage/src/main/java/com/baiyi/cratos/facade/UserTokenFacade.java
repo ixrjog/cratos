@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.UserToken;
  */
 public interface UserTokenFacade {
 
-    UserToken revokeAndIssueNewToken(String username);
+    UserToken revokeAndIssueNewToken(String username, String authType);
 
     void logout(String username);
 

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.googlecloud.model;
+package com.baiyi.cratos.domain.model.gcp;
 
 import com.google.api.apikeys.v2.ApiTarget;
 import com.google.protobuf.Timestamp;

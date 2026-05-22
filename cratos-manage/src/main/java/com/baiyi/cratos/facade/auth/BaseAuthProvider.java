@@ -56,7 +56,7 @@ public abstract class BaseAuthProvider implements AuthProvider, InitializingBean
      * @return 新签发的 UserToken
      */
     protected UserToken revokeAndIssueNewToken(LoginParam.Login loginParam) {
-        return userTokenFacade.revokeAndIssueNewToken(loginParam.getUsername());
+        return userTokenFacade.revokeAndIssueNewToken(loginParam.getUsername(), "PASSWORD");
     }
 
     /**

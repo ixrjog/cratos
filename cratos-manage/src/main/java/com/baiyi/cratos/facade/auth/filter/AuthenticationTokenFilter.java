@@ -93,11 +93,13 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             String username = "";
 
+            String authType = null;
             if (StringUtils.hasText(jwtSign)) {
                 // 请求签名模式：通过 Jti 查表验证，不需要 Authorization
                 UserToken userToken = verifyByRequestSign(processedRequest);
                 rbacFacade.verifyResourceAccessPermissions(userToken, resource);
                 username = userToken.getUsername();
+                authType = userToken.getAuthType();
             } else if (!StringUtils.hasText(authorizationHeader)) {
                 throw new AuthenticationException(ErrorEnum.AUTHENTICATION_REQUEST_NO_TOKEN);
             } else if (authorizationHeader.startsWith("Bearer ")) {
@@ -105,15 +107,18 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                 UserToken userToken = userTokenFacade.verifyToken(token);
                 rbacFacade.verifyResourceAccessPermissions(userToken, resource);
                 username = userToken.getUsername();
+                authType = userToken.getAuthType();
             } else if (authorizationHeader.startsWith("Robot ")) {
                 // 先验证 Token 是否有效
                 String token = authorizationHeader.substring(6);
                 Robot robot = robotFacade.verifyToken(token);
                 rbacFacade.verifyResourceAccessPermissions(robot, resource);
                 username = robot.getUsername();
+                authType = "ROBOT";
             }
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     username, null);
+            usernamePasswordAuthenticationToken.setDetails(authType);
             SecurityContextHolder.getContext()
                     .setAuthentication(usernamePasswordAuthenticationToken);
             doFilterWithResponseEncryption(processedRequest, response, filterChain);

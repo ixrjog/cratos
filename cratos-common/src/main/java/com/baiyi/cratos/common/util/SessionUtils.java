@@ -35,6 +35,17 @@ public class SessionUtils {
         }
     }
 
+    public static String getAuthType() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext()
+                    .getAuthentication();
+            Object details = authentication.getDetails();
+            return details instanceof String ? (String) details : null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     /**
      * 获取当前会话语言
      *

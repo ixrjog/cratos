@@ -37,9 +37,9 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
     private static final String TOKEN_TYPE_JWT = "JWT";
 
     @Transactional(rollbackFor = {Exception.class})
-    public UserToken revokeAndIssueNewToken(String username) {
+    public UserToken revokeAndIssueNewToken(String username, String authType) {
         revokeToken(username, "Open revocation token");
-        return issueJwtToken(username);
+        return issueJwtToken(username, authType);
     }
 
     @Transactional(rollbackFor = {Exception.class})
@@ -61,13 +61,14 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
         }
     }
 
-    private UserToken issueJwtToken(String username) {
+    private UserToken issueJwtToken(String username, String authType) {
         String jti = UUID.randomUUID().toString();
         String jwt = jwtUtil.generateToken(username, jti);
         UserToken userToken = UserToken.builder()
                 .username(username)
                 .token(jwt)
                 .tokenType(TOKEN_TYPE_JWT)
+                .authType(authType)
                 .jti(jti)
                 .expiredTime(ExpiredUtils.generateExpirationTime(TOKEN_VALIDITY_TIME, TimeUnit.MILLISECONDS))
                 .valid(true)
