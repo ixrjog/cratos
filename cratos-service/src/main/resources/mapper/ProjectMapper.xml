@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Project">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.http.project.ProjectParam$ProjectPageQueryParam"
+          resultMap="BaseResultMap">
+    select * from project
+    <where>
+      <if test="queryName != null and queryName != ''">
+        and (`key` like "%" #{queryName} "%" or name like "%" #{queryName} "%")
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+</mapper>
