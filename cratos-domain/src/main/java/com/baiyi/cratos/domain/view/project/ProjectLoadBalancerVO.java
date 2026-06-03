@@ -75,6 +75,7 @@ public class ProjectLoadBalancerVO {
         private String serverGroupId;
         private String listenerStatus;
         private List<Server> serverGroupServers;
+        private Integer forwardTo;
     }
 
     @Data

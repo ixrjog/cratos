@@ -1,6 +1,8 @@
 package com.baiyi.cratos.domain.param.http.project;
 
 import com.baiyi.cratos.domain.generator.Project;
+import com.baiyi.cratos.domain.generator.ProjectGroup;
+import com.baiyi.cratos.domain.generator.ProjectGroupMember;
 import com.baiyi.cratos.domain.generator.ProjectLoadBalancer;
 import com.baiyi.cratos.domain.generator.ProjectTenant;
 import com.baiyi.cratos.domain.param.IToTarget;
@@ -153,6 +155,52 @@ public class ProjectParam {
         private Boolean valid;
         private String comment;
         private String config;
+    }
+
+    @Data
+    @Schema
+    public static class AddProjectGroup implements IToTarget<ProjectGroup> {
+        private Integer projectId;
+        private Integer tenantId;
+        private String name;
+        private Boolean valid;
+        private String comment;
+    }
+
+    @Data
+    @Schema
+    public static class UpdateProjectGroup implements IToTarget<ProjectGroup> {
+        private Integer id;
+        private Integer projectId;
+        private Integer tenantId;
+        private String name;
+        private Boolean valid;
+        private String comment;
+    }
+
+    @Data
+    @Schema
+    public static class AddProjectGroupMember implements IToTarget<ProjectGroupMember> {
+        private Integer groupId;
+        private String businessType;
+        private Integer businessId;
+        private String role;
+        private String name;
+        private Boolean valid;
+        private String comment;
+    }
+
+    @Data
+    @Schema
+    public static class UpdateProjectGroupMember implements IToTarget<ProjectGroupMember> {
+        private Integer id;
+        private Integer groupId;
+        private String businessType;
+        private Integer businessId;
+        private String role;
+        private String name;
+        private Boolean valid;
+        private String comment;
     }
 
 }

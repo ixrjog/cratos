@@ -141,4 +141,43 @@ public class ProjectVO {
         private EdsInstanceVO.EdsInstance edsInstance;
     }
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class GroupDetail implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 5918274650183746505L;
+        private Integer id;
+        private Integer projectId;
+        private Integer tenantId;
+        private String name;
+        private Boolean valid;
+        private String comment;
+        private Date createTime;
+        private Date updateTime;
+        private List<GroupMemberDetail> members;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class GroupMemberDetail implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 6918274650183746506L;
+        private Integer id;
+        private Integer groupId;
+        private String businessType;
+        private Integer businessId;
+        private String role;
+        private String name;
+        private Boolean valid;
+        private String comment;
+        private Date createTime;
+        private Date updateTime;
+    }
+
 }

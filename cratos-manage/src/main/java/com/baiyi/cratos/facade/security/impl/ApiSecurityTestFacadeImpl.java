@@ -1,6 +1,7 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.security.impl;
 
 import com.baiyi.cratos.common.RedisUtil;
+import com.baiyi.cratos.common.exception.ApiSecurityTestException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ApiSecurityTestRecord;
 import com.baiyi.cratos.domain.param.http.security.ApiTestParam;
@@ -15,8 +16,9 @@ import com.baiyi.cratos.eds.security.apirisk.test.model.AutoSign;
 import com.baiyi.cratos.eds.security.apirisk.test.model.GenericCall;
 import com.baiyi.cratos.eds.security.apirisk.test.signature.SignatureAlgorithm;
 import com.baiyi.cratos.eds.security.apirisk.test.signature.SignatureFactory;
-import com.baiyi.cratos.facade.ApiSecurityTestFacade;
+import com.baiyi.cratos.facade.security.ApiSecurityTestFacade;
 import com.baiyi.cratos.service.ApiSecurityTestRecordService;
+import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.wrapper.security.ApiSecurityTestRecordWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +44,7 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
     private final GenericCallService genericCallService;
     private final RedisUtil redisUtil;
     private final ApiSecurityTestRecordService recordService;
+    private final TrafficLayerDomainRecordService trafficLayerDomainRecordService;
     private final ApiSecurityTestRecordWrapper apiSecurityTestRecordWrapper;
 
     private final String[] SIGN_HEADERS = {"pp_req_sign", "pp_req_sign_2", "pp_req_sign_v2", "sign"};
@@ -63,6 +66,25 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
 
         long start = System.currentTimeMillis();
         GenericCall.Response resp = null;
+        // URL白名单校验, 防止 SSRF
+        String url = request.getUrl();
+        if (!StringUtils.hasText(url)) {
+            ApiSecurityTestException.runtime("URL is empty");
+        }
+        String host = "";
+        try {
+            host = java.net.URI.create(url)
+                    .getHost();
+        } catch (Exception e) {
+            ApiSecurityTestException.runtime("Invalid URL format");
+        }
+        if (!StringUtils.hasText(host)) {
+            ApiSecurityTestException.runtime("Host is empty");
+        }
+        if (trafficLayerDomainRecordService.queryByRecordName(host)
+                .isEmpty()) {
+            ApiSecurityTestException.runtime("The test URL={} is not in the whitelist", request.getUrl());
+        }
         try {
             Mono<GenericCall.Response> response = genericCallService.callDynamicApiWithResponse(
                     request.getUrl(),
@@ -145,6 +167,10 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
             case APIPALMPAYH5SIGN:
                 request.getHeaders()
                         .put("m_token", callApi.getPpToken());
+                break;
+            case NILEWEBSIGN:
+                request.getHeaders()
+                        .put("OP-M-TOKEN", callApi.getPpToken());
                 break;
             default:
                 request.getHeaders()

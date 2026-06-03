@@ -108,4 +108,45 @@ public class ProjectTenantController {
                                                          .toList()));
     }
 
+    @Operation(summary = "Query groups by tenant id")
+    @GetMapping(value = "/group/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<ProjectVO.GroupDetail>> queryGroupsByTenantId(@RequestParam int tenantId) {
+        return HttpResult.of(projectFacade.queryGroupsByTenantId(tenantId));
+    }
+
+    @Operation(summary = "Add project group")
+    @PostMapping(value = "/group/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addProjectGroup(@RequestBody @Valid ProjectParam.AddProjectGroup param) {
+        projectFacade.addProjectGroup(param);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update project group")
+    @PutMapping(value = "/group/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateProjectGroup(@RequestBody @Valid ProjectParam.UpdateProjectGroup param) {
+        projectFacade.updateProjectGroup(param);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete project group by id")
+    @DeleteMapping(value = "/group/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteProjectGroupById(@RequestParam int id) {
+        projectFacade.deleteProjectGroupById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Add project group member")
+    @PostMapping(value = "/group/member/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addProjectGroupMember(@RequestBody @Valid ProjectParam.AddProjectGroupMember param) {
+        projectFacade.addProjectGroupMember(param);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete project group member by id")
+    @DeleteMapping(value = "/group/member/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteProjectGroupMemberById(@RequestParam int id) {
+        projectFacade.deleteProjectGroupMemberById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }
