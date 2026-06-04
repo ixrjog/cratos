@@ -121,13 +121,13 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         String applicationName = Optional.ofNullable(param)
                 .map(WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry::getDetail)
                 .map(ApplicationModel.CreateFrontEndApplication::getApplicationName)
-                .orElseThrow(() -> new WorkOrderTicketException("Application name cannot be empty."));
+                .orElseThrow(() -> new WorkOrderTicketException("ApplicationVersion name cannot be empty."));
         if (!ValidationUtils.isApplicationName(applicationName)) {
             WorkOrderTicketException.runtime(
-                    "Application name is not valid, it must start with a letter and can only contain lowercase letters, numbers, and hyphens.");
+                    "ApplicationVersion name is not valid, it must start with a letter and can only contain lowercase letters, numbers, and hyphens.");
         }
         if (applicationService.getByName(applicationName) != null) {
-            WorkOrderTicketException.runtime("Application name already exists.");
+            WorkOrderTicketException.runtime("ApplicationVersion name already exists.");
         }
         // 校验 tags
         Map<String, String> tags = Optional.of(param)
@@ -225,7 +225,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
-                .desc("Application creation")
+                .desc("ApplicationVersion creation")
                 .build();
     }
 

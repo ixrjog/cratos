@@ -65,6 +65,8 @@ public class UserVO {
         private Date expiredTime;
         private Boolean locked;
 
+        private List<WebAuthn> webAuths;
+
         @Override
         public Integer getBusinessId() {
             return this.id;
@@ -97,6 +99,17 @@ public class UserVO {
         private Boolean valid = true;
         private String source;
         private String url;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class WebAuthn implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3628632192213895981L;
+        private String deviceName;
     }
 
 }

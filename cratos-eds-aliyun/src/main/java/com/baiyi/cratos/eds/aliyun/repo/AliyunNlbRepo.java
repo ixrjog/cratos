@@ -1,9 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.repo;
 
 
-import com.aliyun.nlb20220430.models.ListLoadBalancersRequest;
-import com.aliyun.nlb20220430.models.ListLoadBalancersResponse;
-import com.aliyun.nlb20220430.models.ListLoadBalancersResponseBody;
+import com.aliyun.nlb20220430.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunNlbClient;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
@@ -48,6 +46,71 @@ public class AliyunNlbRepo {
                     .orElse("");
         } while (StringUtils.hasText(nextToken));
         return nlbList;
+    }
+
+    /**
+     * 查询监听
+     *
+     * @param endpoint
+     * @param aliyun
+     * @param loadBalancerId
+     * @return
+     * @throws Exception
+     */
+    public static List<ListListenersResponseBody.ListListenersResponseBodyListeners> listListeners(String endpoint,
+                                                                                                   EdsConfigs.Aliyun aliyun,
+                                                                                                   String loadBalancerId) throws Exception {
+        ListListenersRequest request = new ListListenersRequest();
+        request.setLoadBalancerIds(List.of(loadBalancerId));
+        request.setMaxResults(100);
+        com.aliyun.nlb20220430.Client client = AliyunNlbClient.createClient(endpoint, aliyun);
+        List<ListListenersResponseBody.ListListenersResponseBodyListeners> listeners = Lists.newArrayList();
+        String nextToken = "";
+        do {
+            request.setNextToken(nextToken);
+
+            ListListenersResponse response = client.listListeners(request);
+            List<ListListenersResponseBody.ListListenersResponseBodyListeners> results = Optional.ofNullable(response)
+                    .map(ListListenersResponse::getBody)
+                    .map(ListListenersResponseBody::getListeners)
+                    .orElse(Collections.emptyList());
+            if (!CollectionUtils.isEmpty(results)) {
+                listeners.addAll(results);
+            }
+            nextToken = Optional.ofNullable(response)
+                    .map(ListListenersResponse::getBody)
+                    .map(ListListenersResponseBody::getNextToken)
+                    .orElse("");
+        } while (StringUtils.hasText(nextToken));
+        return listeners;
+    }
+
+    public static List<ListServerGroupServersResponseBody.ListServerGroupServersResponseBodyServers> listServerGroupServers(
+            String endpoint, EdsConfigs.Aliyun aliyun, String serverGroupId) throws Exception {
+
+        ListServerGroupServersRequest request = new ListServerGroupServersRequest();
+        request.setServerGroupId(serverGroupId);
+        request.setMaxResults(100);
+        com.aliyun.nlb20220430.Client client = AliyunNlbClient.createClient(endpoint, aliyun);
+        List<ListServerGroupServersResponseBody.ListServerGroupServersResponseBodyServers> servers = Lists.newArrayList();
+        String nextToken = "";
+        do {
+            request.setNextToken(nextToken);
+            ListServerGroupServersResponse response = client.listServerGroupServers(request);
+            List<ListServerGroupServersResponseBody.ListServerGroupServersResponseBodyServers> results = Optional.ofNullable(
+                            response)
+                    .map(ListServerGroupServersResponse::getBody)
+                    .map(ListServerGroupServersResponseBody::getServers)
+                    .orElse(Collections.emptyList());
+            if (!CollectionUtils.isEmpty(results)) {
+                servers.addAll(results);
+            }
+            nextToken = Optional.ofNullable(response)
+                    .map(ListServerGroupServersResponse::getBody)
+                    .map(ListServerGroupServersResponseBody::getNextToken)
+                    .orElse("");
+        } while (StringUtils.hasText(nextToken));
+        return servers;
     }
 
 }

@@ -1,7 +1,7 @@
-package com.baiyi.cratos.eds.secutity.apirisk.service;
+package com.baiyi.cratos.eds.security.apirisk.service;
 
-import com.baiyi.cratos.eds.secutity.apirisk.result.ApiRiskAccountResult;
-import com.baiyi.cratos.eds.secutity.apirisk.result.base.ApiRiskResponse;
+import com.baiyi.cratos.eds.security.apirisk.result.ApiRiskAccountResult;
+import com.baiyi.cratos.eds.security.apirisk.result.base.ApiRiskResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;

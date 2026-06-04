@@ -26,6 +26,12 @@ import java.util.List;
  */
 public class AcmeOrderVO {
 
+    public interface HasRecentOrder {
+        Integer getAcmeDomainId();
+
+        void setRecentOrder(Order recentOrder);
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema

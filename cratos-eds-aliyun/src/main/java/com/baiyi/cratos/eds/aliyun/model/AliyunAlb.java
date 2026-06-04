@@ -19,6 +19,7 @@ public class AliyunAlb {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Alb implements HasRegionId {
+        private String endpoint;
         private String regionId;
         private ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers loadBalancers;
     }

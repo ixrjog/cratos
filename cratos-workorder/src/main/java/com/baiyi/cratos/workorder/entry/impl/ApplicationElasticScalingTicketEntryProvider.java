@@ -100,7 +100,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
-                .desc("Application elastic scaling")
+                .desc("ApplicationVersion elastic scaling")
                 .build();
     }
 

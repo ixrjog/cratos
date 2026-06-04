@@ -38,7 +38,7 @@ import static com.baiyi.cratos.shell.command.custom.ApplicationCommand.GROUP;
  */
 @Slf4j
 @SshShellComponent
-@ShellCommandGroup("Application Commands")
+@ShellCommandGroup("ApplicationVersion Commands")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class ApplicationCommand extends AbstractCommand {
 
@@ -60,14 +60,14 @@ public class ApplicationCommand extends AbstractCommand {
         this.listAppGroup = deploymentSubGroupReport;
     }
 
-    @ShellMethod(key = COMMAND_APP_GROUPING, value = "Grouping Application")
+    @ShellMethod(key = COMMAND_APP_GROUPING, value = "Grouping ApplicationVersion")
     @ShellMethodAvailability("appGroupingAvailability")
     @ShellAuthentication(resource = "/application/app-grouping")
-    public void appGrouping(@ShellOption(help = "Application Name", defaultValue = "") String name,
+    public void appGrouping(@ShellOption(help = "ApplicationVersion Name", defaultValue = "") String name,
                             @ShellOption(help = "Specify the total number of replicas for the group", defaultValue = "0") int replicas,
                             @ShellOption(help = "Preview group details", defaultValue = "false") boolean preview) {
         if (!StringUtils.hasText(name)) {
-            helper.printError("Application name must be specified.");
+            helper.printError("ApplicationVersion name must be specified.");
             return;
         }
         Map<String, AppGroupSpec.GroupSpec> groupMap = listAppGroup.getGroupMap(name, true);
@@ -114,10 +114,10 @@ public class ApplicationCommand extends AbstractCommand {
         groupingAppExecutor.doGrouping(groupMap.get(name), name, replicas);
     }
 
-    @ShellMethod(key = COMMAND_APP_GROUP_LIST, value = "List Application Group")
+    @ShellMethod(key = COMMAND_APP_GROUP_LIST, value = "List ApplicationVersion Group")
     @ShellMethodAvailability("appGroupListAvailability")
-    public void appGroupList(@ShellOption(help = "Application Name", defaultValue = "") String name,
-                             @ShellOption(help = "Display Application Grouping Specifications", defaultValue = "false") boolean specifications,
+    public void appGroupList(@ShellOption(help = "ApplicationVersion Name", defaultValue = "") String name,
+                             @ShellOption(help = "Display ApplicationVersion Grouping Specifications", defaultValue = "false") boolean specifications,
                              @ShellOption(help = "Filter Invalid Applications", defaultValue = "false") boolean filter) {
         if (specifications) {
             displayApplicationGroupingSpecifications();

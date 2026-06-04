@@ -1,11 +1,11 @@
-package com.baiyi.cratos.eds.secutity.apirisk.repo;
+package com.baiyi.cratos.eds.security.apirisk.repo;
 
 import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.secutity.apirisk.result.ApiRiskAccountResult;
-import com.baiyi.cratos.eds.secutity.apirisk.result.base.ApiRiskResponse;
-import com.baiyi.cratos.eds.secutity.apirisk.service.ApiRiskService;
-import com.baiyi.cratos.eds.secutity.apirisk.service.ApiRiskServiceFactory;
+import com.baiyi.cratos.eds.security.apirisk.result.ApiRiskAccountResult;
+import com.baiyi.cratos.eds.security.apirisk.result.base.ApiRiskResponse;
+import com.baiyi.cratos.eds.security.apirisk.service.ApiRiskService;
+import com.baiyi.cratos.eds.security.apirisk.service.ApiRiskServiceFactory;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

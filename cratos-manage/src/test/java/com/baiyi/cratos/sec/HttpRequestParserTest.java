@@ -4,7 +4,7 @@ import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.param.http.security.ApiTestParam;
 import com.baiyi.cratos.eds.security.apirisk.test.enums.PrivateKeyType;
 import com.baiyi.cratos.eds.security.apirisk.test.enums.SignatureAlgorithmEnum;
-import com.baiyi.cratos.facade.ApiSecurityTestFacade;
+import com.baiyi.cratos.facade.security.ApiSecurityTestFacade;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 

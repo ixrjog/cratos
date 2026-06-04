@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds;
 
 import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.secutity.apirisk.repo.ApiRiskAccountRepo;
+import com.baiyi.cratos.eds.security.apirisk.repo.ApiRiskAccountRepo;
 import org.junit.jupiter.api.Test;
 
 /**

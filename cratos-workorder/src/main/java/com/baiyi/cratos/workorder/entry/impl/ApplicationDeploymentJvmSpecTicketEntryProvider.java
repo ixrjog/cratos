@@ -94,7 +94,7 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
         ApplicationDeploymentModel.DeploymentJvmSpec deploymentJvmSpec = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         // String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
-        //  String APPLICATION_DEPLOYMENT_JVM_SPEC = "| Application Name | Instance Name | Namespace | Deployment | Spec | New Java Opts |";
+        //  String APPLICATION_DEPLOYMENT_JVM_SPEC = "| ApplicationVersion Name | Instance Name | Namespace | Deployment | Spec | New Java Opts |";
         return MarkdownUtils.createTableRow(
                 deploymentJvmSpec.getApplicationName(), instance.getInstanceName(), deploymentJvmSpec.getNamespace(),
                 deploymentJvmSpec.getDeployment()
@@ -160,10 +160,10 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
         String applicationName = Optional.of(param)
                 .map(WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry::getDetail)
                 .map(ApplicationDeploymentModel.DeploymentJvmSpec::getApplicationName)
-                .orElseThrow(() -> new WorkOrderTicketException("Application name cannot be empty."));
+                .orElseThrow(() -> new WorkOrderTicketException("ApplicationVersion name cannot be empty."));
         Application application = applicationService.getByName(applicationName);
         if (Objects.isNull(application)) {
-            WorkOrderTicketException.runtime(StringFormatter.format("Application {} does not exist.", applicationName));
+            WorkOrderTicketException.runtime(StringFormatter.format("ApplicationVersion {} does not exist.", applicationName));
         }
         deploymentJvmSpec.setApplication(BeanCopierUtils.copyProperties(application, ApplicationVO.Application.class));
         // deployment

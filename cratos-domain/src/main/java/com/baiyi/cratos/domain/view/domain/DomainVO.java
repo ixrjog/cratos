@@ -37,6 +37,11 @@ public class DomainVO {
         @Serial
         private static final long serialVersionUID = -7504148829629508983L;
         private Integer id;
+
+        private Integer instanceId;
+        private Integer assetId;
+        private String instanceName;
+
         private String name;
         private Boolean valid;
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)

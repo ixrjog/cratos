@@ -70,7 +70,7 @@ public class ApplicationFacadeTest extends BaseUnit {
                 EdsAsset asset = edsAssetService.getById(e.getBusinessId());
                 if (Objects.isNull(asset)) {
                     System.out.println(
-                            "ID=" + e.getId() + ",Application Name=" + e.getApplicationName() + ",Instance name: " + e.getInstanceName() + ", name=" + e.getName());
+                            "ID=" + e.getId() + ",ApplicationVersion Name=" + e.getApplicationName() + ",Instance name: " + e.getInstanceName() + ", name=" + e.getName());
                     applicationResourceFacade.deleteById(e.getId());
                 }
 

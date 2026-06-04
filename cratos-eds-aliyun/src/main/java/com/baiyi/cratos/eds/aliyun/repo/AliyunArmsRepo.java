@@ -6,7 +6,6 @@ import com.aliyun.sdk.service.arms20190808.models.ListTraceAppsResponse;
 import com.aliyun.sdk.service.arms20190808.models.ListTraceAppsResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunArmsClient;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,6 @@ public class AliyunArmsRepo {
 
     public static List<ListTraceAppsResponseBody.TraceApps> listTraceApps(String regionId,
                                                                           EdsConfigs.Aliyun aliyun) throws Exception {
-        List<ListTraceAppsResponseBody.TraceApps> result = Lists.newArrayList();
         try (AsyncClient client = AliyunArmsClient.buildAsyncClient(regionId, aliyun)) {
             ListTraceAppsRequest listProjectsRequest = ListTraceAppsRequest.builder()
                     .regionId(regionId)

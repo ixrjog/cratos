@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/application/resource/baseline")
-@Tag(name = "Application Resource Baseline")
+@Tag(name = "ApplicationVersion Resource Baseline")
 @RequiredArgsConstructor
 public class ApplicationResourceBaselineController {
 

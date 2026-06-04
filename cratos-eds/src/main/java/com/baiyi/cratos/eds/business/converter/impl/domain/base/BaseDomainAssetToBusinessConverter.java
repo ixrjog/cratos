@@ -30,6 +30,8 @@ public abstract class BaseDomainAssetToBusinessConverter<B> extends BaseAssetToB
     protected Domain toTarget(EdsAssetVO.Asset asset) {
         // AliyunDomain model = getAssetModel(asset);
         return Domain.builder()
+                .instanceId(asset.getInstanceId())
+                .assetId(asset.getId())
                 .expiry(asset.getExpiredTime())
                 .registrationTime(asset.getCreatedTime())
                 .domainType(getDomainType())

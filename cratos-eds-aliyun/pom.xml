@@ -95,6 +95,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- https://api.aliyun.com/api-tools/sdk/Slb?version=2014-05-15&language=java-tea&tab=primer-doc -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>slb20140515</artifactId>
+            <version>3.3.31</version>
+        </dependency>
         <!-- https://api.aliyun.com/api-tools/sdk/Domain?version=2018-01-29&language=java-async-tea&tab=primer-doc -->
         <dependency>
             <groupId>com.aliyun</groupId>

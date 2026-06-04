@@ -1,9 +1,6 @@
 package com.baiyi.cratos.eds.core.enums;
 
-import com.baiyi.cratos.eds.core.annotation.CloudCertificate;
-import com.baiyi.cratos.eds.core.annotation.CloudComputer;
-import com.baiyi.cratos.eds.core.annotation.CloudDomain;
-import com.baiyi.cratos.eds.core.annotation.CloudIdentity;
+import com.baiyi.cratos.eds.core.annotation.*;
 import lombok.Getter;
 
 import java.lang.annotation.Annotation;
@@ -18,10 +15,11 @@ import java.util.List;
  */
 @Getter
 public enum EdsAssetTypeEnum {
-    @CloudComputer CRATOS_COMPUTER("Computer", 1),
+    @CloudComputer CRATOS_COMPUTER("Computer", 0),
 
-    ALIYUN_ALB("ALB", 2),
-    ALIYUN_NLB("NLB", 3),
+    @CloudLoadBalancer ALIYUN_CLB("CLB", 1),
+    @CloudLoadBalancer ALIYUN_ALB("ALB", 2),
+    @CloudLoadBalancer ALIYUN_NLB("NLB", 3),
     @CloudComputer ALIYUN_ECS("ECS", 4),
     @CloudDomain ALIYUN_DOMAIN("Domain", 5),
     @CloudIdentity ALIYUN_RAM_USER("RAM User", 6),
@@ -52,7 +50,7 @@ public enum EdsAssetTypeEnum {
     ALIMAIL_USER("User", 30),
     @CloudCertificate AWS_CERT("Certificate", 31),
     AWS_STS_VPN("Site-to-Site VPN", 32),
-    AWS_ELB("ELB", 33),
+    @CloudLoadBalancer AWS_ELB("ELB", 33),
     @CloudComputer AWS_EC2("EC2", 34),
     AWS_EBS("EBS", 35),
     @CloudDomain AWS_DOMAIN("Domain", 36),
@@ -71,7 +69,8 @@ public enum EdsAssetTypeEnum {
     @CloudComputer HUAWEICLOUD_ECS("ECS", 49),
     @CloudIdentity HUAWEICLOUD_IAM_USER("IAM User", 50),
     HUAWEICLOUD_SCM_CERT("SCM Certificate", 52),
-    @CloudCertificate HUAWEICLOUD_ELB_CERT("ELB Certificate", 51),
+    @CloudLoadBalancer HUAWEICLOUD_ELB("ELB", 51),
+    @CloudCertificate HUAWEICLOUD_ELB_CERT("ELB Certificate", 52),
     HUAWEICLOUD_VPC("VPC", 53),
     HUAWEICLOUD_SUBNET("Subnet", 54),
 
@@ -150,6 +149,8 @@ public enum EdsAssetTypeEnum {
     public static final List<EdsAssetTypeEnum> CLOUD_DOMAIN_TYPES = getCloudTypes(CloudDomain.class);
 
     public static final List<EdsAssetTypeEnum> CLOUD_CERTIFICATE_TYPES = getCloudTypes(CloudCertificate.class);
+
+    public static final List<EdsAssetTypeEnum> CLOUD_LB_TYPES = getCloudTypes(CloudLoadBalancer.class);
 
     private static List<EdsAssetTypeEnum> getCloudTypes(Class<? extends Annotation> annotationClass) {
         return Arrays.stream(EdsAssetTypeEnum.values())

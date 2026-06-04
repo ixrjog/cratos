@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos.facade.security;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.security.ApiSecurityRiskParam;

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/application")
-@Tag(name = "Application")
+@Tag(name = "ApplicationVersion")
 @RequiredArgsConstructor
 public class ApplicationController {
 

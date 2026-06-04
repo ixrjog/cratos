@@ -32,6 +32,12 @@ public class Domain implements HasValid, ToBusinessTarget, HasIntegerPrimaryKey,
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "instance_id")
+    private Integer instanceId;
+
+    @Column(name = "asset_id")
+    private Integer assetId;
+
     /**
      * 名称
      */

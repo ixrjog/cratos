@@ -234,9 +234,9 @@ public class EdsKubernetes2Test extends BaseEdsTest<EdsConfigs.Kubernetes> {
             pt.addRow(k, dcImages, drImages);
         });
 
-        System.out.println(pt);
+    //    System.out.println(pt);
 
-       // handle(appMap, dcHolder, drHolder);
+        handle(appMap, dcHolder, drHolder);
     }
 
 

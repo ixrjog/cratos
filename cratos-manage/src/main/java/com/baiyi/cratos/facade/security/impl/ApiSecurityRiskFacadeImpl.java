@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.security.impl;
 
 import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.util.PasswordGenerator;
@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.ApiSecurityRisk;
 import com.baiyi.cratos.domain.param.http.security.ApiSecurityRiskParam;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskReportVO;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskVO;
-import com.baiyi.cratos.facade.ApiSecurityRiskFacade;
+import com.baiyi.cratos.facade.security.ApiSecurityRiskFacade;
 import com.baiyi.cratos.service.security.ApiSecurityRiskService;
 import com.baiyi.cratos.wrapper.security.ApiSecurityRiskWrapper;
 import lombok.RequiredArgsConstructor;

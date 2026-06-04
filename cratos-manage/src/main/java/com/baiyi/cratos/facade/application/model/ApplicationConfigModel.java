@@ -34,7 +34,7 @@ public class ApplicationConfigModel {
         try {
             return YamlUtils.loadAs(content, ApplicationConfigModel.Config.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application config format error: {}", e.getMessage());
+            throw new ApplicationConfigException("ApplicationVersion config format error: {}", e.getMessage());
         }
     }
 

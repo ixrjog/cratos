@@ -35,7 +35,7 @@ public class OpenAPIConfiguration {
 
         Contact contact = new Contact()
                 .url("https://github.com/ixrjog/cratos")
-                .name("Jan & Xiu")
+                .name("Jan")
                 .email("");
 
         return new OpenAPI()

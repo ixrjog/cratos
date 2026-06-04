@@ -75,7 +75,7 @@ public class DeploymentBaselineConverter {
         try {
             return YamlUtils.loadAs(lifecycle, DeploymentBaselineModel.Lifecycle.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
+            throw new ApplicationConfigException("ApplicationVersion actuator lifecycle format error: {}", e.getMessage());
         }
     }
 
@@ -86,7 +86,7 @@ public class DeploymentBaselineConverter {
         try {
             return YamlUtils.loadAs(probe, DeploymentBaselineModel.Probe.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
+            throw new ApplicationConfigException("ApplicationVersion actuator lifecycle format error: {}", e.getMessage());
         }
     }
 

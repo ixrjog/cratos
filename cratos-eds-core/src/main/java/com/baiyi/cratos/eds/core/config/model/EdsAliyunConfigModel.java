@@ -49,6 +49,13 @@ public class EdsAliyunConfigModel {
     @Data
     @NoArgsConstructor
     @Schema
+    public static class CLB {
+        private List<String> endpoints;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
     public static class OSS {
         private List<String> endpoints;
     }

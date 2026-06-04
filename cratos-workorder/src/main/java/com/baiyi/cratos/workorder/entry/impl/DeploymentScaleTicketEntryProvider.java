@@ -86,7 +86,7 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
-                .desc("Application deployment")
+                .desc("ApplicationVersion deployment")
                 .build();
     }
 

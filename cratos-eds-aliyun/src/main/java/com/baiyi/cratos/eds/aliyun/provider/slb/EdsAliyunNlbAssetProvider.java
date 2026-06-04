@@ -64,6 +64,7 @@ public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     private AliyunNlb.Nlb toNlb(String endpoint,
                                 ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers loadBalancers) {
         return AliyunNlb.Nlb.builder()
+                .endpoint(endpoint)
                 .regionId(AliyunRegionUtils.toRegionId(endpoint))
                 .loadBalancers(loadBalancers)
                 .build();

@@ -37,7 +37,7 @@ public class AcmeDomainVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.ACME_DOMAIN)
-    public static class Domain extends BaseVO implements HasEdsInstance, AcmeAccountVO.HasAcmeAccount, HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Domain extends BaseVO implements AcmeOrderVO.HasRecentOrder, HasEdsInstance, AcmeAccountVO.HasAcmeAccount, HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
         @Serial
         private static final long serialVersionUID = 3525022281699968894L;
         private Integer id;
@@ -67,10 +67,17 @@ public class AcmeDomainVO {
             return id;
         }
 
+        private AcmeOrderVO.Order recentOrder;
+
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
         private List<BusinessDocVO.BusinessDoc> businessDocs;
+
+        @Override
+        public Integer getAcmeDomainId() {
+            return id;
+        }
     }
 
 }

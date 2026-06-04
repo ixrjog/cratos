@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.param.http.eds.EdsAssetParam;
 import com.baiyi.cratos.mapper.EdsAssetIndexMapper;
 import com.baiyi.cratos.service.EdsAssetIndexService;
+import com.baiyi.cratos.util.SqlUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
@@ -127,6 +128,15 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", name)
                 .andEqualTo("value", value);
+        return edsAssetIndexMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<EdsAssetIndex> queryIndexByNameAndValueLike(@NonNull String name, @NonNull String likeValue) {
+        Example example = new Example(EdsAssetIndex.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("name", name)
+                .andLike("value", SqlUtils.ofLike(likeValue));
         return edsAssetIndexMapper.selectByExample(example);
     }
 

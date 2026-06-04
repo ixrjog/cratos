@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.secutity.apirisk.result.base;
+package com.baiyi.cratos.eds.security.apirisk.result.base;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

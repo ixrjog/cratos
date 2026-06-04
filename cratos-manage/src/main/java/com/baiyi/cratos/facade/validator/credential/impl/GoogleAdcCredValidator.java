@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class GoogleAdcCredValidator implements BaseCredentialValidator {
 
     private static final CredValidationRules rules = CredValidationRules.builder()
-            .credentialNullMessage("The Application Default Credentials (ADC) must be specified.")
+            .credentialNullMessage("The ApplicationVersion Default Credentials (ADC) must be specified.")
             .verifyExpiredTime(true)
             .maxExpiredTime(TimeUnit.MILLISECONDS.convert(366L * 5, TimeUnit.DAYS))
             .build();

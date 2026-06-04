@@ -97,7 +97,7 @@ public class DeploymentBaselineModel {
         try {
             return YamlUtils.loadAs(lifecycle, Lifecycle.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application resource container lifecycle format error: {}", e.getMessage());
+            throw new ApplicationConfigException("ApplicationVersion resource container lifecycle format error: {}", e.getMessage());
         }
     }
 
@@ -108,7 +108,7 @@ public class DeploymentBaselineModel {
         try {
             return YamlUtils.loadAs(probe, Probe.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application resource container probe format error: {}", e.getMessage());
+            throw new ApplicationConfigException("ApplicationVersion resource container probe format error: {}", e.getMessage());
         }
     }
 
@@ -142,7 +142,7 @@ public class DeploymentBaselineModel {
         try {
             return YamlUtils.loadAs(envVar, EnvVar.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application resource container envVar format error: {}", e.getMessage());
+            throw new ApplicationConfigException("ApplicationVersion resource container envVar format error: {}", e.getMessage());
         }
     }
 

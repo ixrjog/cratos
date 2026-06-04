@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * 表名：application_resource_baseline
- * 表注释：Application Baseline
+ * 表注释：ApplicationVersion Baseline
 */
 @Data
 @Builder

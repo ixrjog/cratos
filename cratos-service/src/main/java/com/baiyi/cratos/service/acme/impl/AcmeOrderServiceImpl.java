@@ -13,6 +13,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -79,6 +80,21 @@ public class AcmeOrderServiceImpl implements AcmeOrderService {
         example.setOrderByClause("id DESC");
         List<AcmeOrder> data = acmeOrderMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal(), pageQuery);
+    }
+
+    @Override
+    public AcmeOrder getRecentOrder(int domainId) {
+        Example example = new Example(AcmeOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("domainId", domainId)
+                .andEqualTo("orderStatus", "VALID")
+                .andIsNotNull("certificateId");
+        example.setOrderByClause("id DESC limit 1");
+        List<AcmeOrder> orders = acmeOrderMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(orders)){
+            return null;
+        }
+        return orders.getFirst();
     }
 
 }

@@ -41,6 +41,7 @@ public class EdsConfigs {
         private EdsAliyunConfigModel.Cred cred;
         private EdsAliyunConfigModel.ALB alb;
         private EdsAliyunConfigModel.NLB nlb;
+        private EdsAliyunConfigModel.CLB clb;
         private EdsAliyunConfigModel.OSS oss;
         private EdsAliyunConfigModel.Domain domain;
         private EdsInstance edsInstance;

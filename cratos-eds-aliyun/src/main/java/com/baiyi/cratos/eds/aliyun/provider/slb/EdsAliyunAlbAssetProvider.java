@@ -68,6 +68,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     private AliyunAlb.Alb toAlb(String endpoint,
                                 ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers loadBalancers) {
         return AliyunAlb.Alb.builder()
+                .endpoint(endpoint)
                 .regionId(AliyunRegionUtils.toRegionId(endpoint))
                 .loadBalancers(loadBalancers)
                 .build();

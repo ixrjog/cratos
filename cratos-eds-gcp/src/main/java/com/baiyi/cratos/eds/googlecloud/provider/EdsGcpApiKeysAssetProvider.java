@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.googlecloud.provider;
 
 import com.baiyi.cratos.common.enums.SecurityLevel;
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.RequestSignUtil;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -19,11 +20,15 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.googlecloud.model.GcpApiKeysModel;
 import com.baiyi.cratos.eds.googlecloud.repo.GcpApiKeysRepo;
-import org.apache.commons.collections4.CollectionUtils;
 import com.baiyi.cratos.service.TagService;
+import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.HASH_SHA256;
 
 /**
  * &#064;Author  baiyi
@@ -70,6 +75,19 @@ public class EdsGcpApiKeysAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     }
 
     @Override
+    protected List<EdsAssetIndex> buildIndexes(ExternalDataSourceInstance<EdsConfigs.Gcp> instance, EdsAsset edsAsset,
+                                               GcpApiKeysModel.Key entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        try {
+            String sha256 = RequestSignUtil.sha256Hex(
+                    gcpApiKeysRepo.getKeyString(instance.getConfig(), entity.getName()));
+            indices.add(createEdsAssetIndex(edsAsset, HASH_SHA256, sha256));
+        } catch (IOException ignored) {
+        }
+        return indices;
+    }
+
+    @Override
     protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
@@ -79,7 +97,8 @@ public class EdsGcpApiKeysAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
                                     GcpApiKeysModel.Key entity, List<EdsAssetIndex> indices) {
         SecurityLevel level = evaluateSecurityLevel(entity.getRestrictions());
         BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
-                .tagId(tagService.getByTagKey(SysTagKeys.SECURITY_LEVEL.getKey()).getId())
+                .tagId(tagService.getByTagKey(SysTagKeys.SECURITY_LEVEL.getKey())
+                               .getId())
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(asset.getId())
                 .tagValue(level.name())
@@ -99,9 +118,9 @@ public class EdsGcpApiKeysAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
             return SecurityLevel.HIGH;
         }
         boolean hasApiRestriction = !CollectionUtils.isEmpty(restrictions.getApiTargets());
-        boolean hasAppRestriction = !CollectionUtils.isEmpty(restrictions.getAllowedApplications())
-                || !CollectionUtils.isEmpty(restrictions.getClientRestrictions())
-                || !CollectionUtils.isEmpty(restrictions.getAllowedIps());
+        boolean hasAppRestriction = !CollectionUtils.isEmpty(
+                restrictions.getAllowedApplications()) || !CollectionUtils.isEmpty(
+                restrictions.getClientRestrictions()) || !CollectionUtils.isEmpty(restrictions.getAllowedIps());
         if (hasApiRestriction && hasAppRestriction) {
             return SecurityLevel.LOW;
         }

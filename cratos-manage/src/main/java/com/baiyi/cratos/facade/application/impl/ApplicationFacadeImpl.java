@@ -54,7 +54,7 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
     public ApplicationVO.Application getApplicationByName(ApplicationParam.GetApplication getApplication) {
         Application application = applicationService.getByName(getApplication.getName());
         if (Objects.isNull(application)) {
-            throw new NullPointerException("Application not found");
+            throw new NullPointerException("ApplicationVersion not found");
         }
         return applicationWrapper.wrapToTarget(application);
     }

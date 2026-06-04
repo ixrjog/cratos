@@ -19,8 +19,8 @@ public interface TableHeaderConstants {
     String AWS_IAM_USER_RESET = "| Aws Instance | Account ID or alias | IAM Username | Login Link |";
     String AWS_TRANSFER_SFTP_USER_PERMISSION = "| Aws Instance | Transfer Username@Server | Key Fingerprint | Desc |";
     String AWS_IAM_USER_PERMISSION = "| AWS Instance | Account ID | IAM Login Username | Login Link |";
-    String APPLICATION_DELETE_POD = "| Application Name | Tags |";
-    String APPLICATION_REDEPLOY = "| Application Name | Tags |";
+    String APPLICATION_DELETE_POD = "| ApplicationVersion Name | Tags |";
+    String APPLICATION_REDEPLOY = "| ApplicationVersion Name | Tags |";
     String DEPLOYMENT_DELETE_POD = "| Instance Name | Namespace | Deployment Name | Pod Name | Delete Operation Time |";
     String DEPLOYMENT_REDEPLOY = "| Instance Name | Namespace | Deployment Name | Redeploy Operation Time |";
     String REVOKE_USER_ACCOUNT_PERMISSION = "| Instance Name | Instance Type | Account Type | Account Name |";
@@ -34,10 +34,10 @@ public interface TableHeaderConstants {
     String LDAP_ROLE_PERMISSION = "| LDAP Role | Description |";
     String REVOKE_USER_PERMISSION = "| Username | Name | DisplayName | Email | Tags |";
     String USER_RESET_PASSWORD = "| Username | Name | Display Name | Mail |";
-    String APPLICATION_ELASTIC_SCALING = "| Application Name | Namespace | Current Replicas | Expected Replicas | Scaling Type |";
-    String APPLICATION_FRONTEND_CREATE = "| Application Name | Type | Level | Repository SSH URL | Web Site |";
+    String APPLICATION_ELASTIC_SCALING = "| ApplicationVersion Name | Namespace | Current Replicas | Expected Replicas | Scaling Type |";
+    String APPLICATION_FRONTEND_CREATE = "| ApplicationVersion Name | Type | Level | Repository SSH URL | Web Site |";
     String APPLICATION_DEPLOYMENT_SCALE = "| Instance Name | Namespace | Deployment | Current Replicas | Expected Replicas |";
     String RISK_CHANGE = "| Applicant | Title |";
-    String APPLICATION_DEPLOYMENT_JVM_SPEC = "| Application Name | Instance Name | Namespace | Deployment | Spec | New Java Opts |";
+    String APPLICATION_DEPLOYMENT_JVM_SPEC = "| ApplicationVersion Name | Instance Name | Namespace | Deployment | Spec | New Java Opts |";
 
 }

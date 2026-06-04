@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.KubernetesDeploymentAppVersionComparisonMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.KubernetesDeploymentAppVersionComparison">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="country_code" jdbcType="VARCHAR" property="countryCode" />
+    <result column="namespace" jdbcType="VARCHAR" property="namespace" />
+    <result column="dc_kubernetes_name" jdbcType="VARCHAR" property="dcKubernetesName" />
+    <result column="dc_kubernetes_instance_id" jdbcType="INTEGER" property="dcKubernetesInstanceId" />
+    <result column="dr_kubernetes_name" jdbcType="VARCHAR" property="drKubernetesName" />
+    <result column="dr_kubernetes_instance_id" jdbcType="INTEGER" property="drKubernetesInstanceId" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+</mapper>

@@ -144,7 +144,7 @@ public class ApplicationTest extends BaseUnit {
         return holder;
     }
 
-    public final static String[] APP_TABLE_FIELD_NAME = {"Application Name", "Deployment Name", "Replicas"};
+    public final static String[] APP_TABLE_FIELD_NAME = {"ApplicationVersion Name", "Deployment Name", "Replicas"};
 
     @Test
     void test1() {

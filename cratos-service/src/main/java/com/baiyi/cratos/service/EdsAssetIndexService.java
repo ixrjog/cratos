@@ -29,6 +29,14 @@ public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex
 
     List<EdsAssetIndex> queryIndexByNameAndValue(@NonNull String name, @NonNull String value);
 
+    /**
+     * 只能用于凭据泄漏查询
+     * @param name
+     * @param likeValue
+     * @return
+     */
+    List<EdsAssetIndex> queryIndexByNameAndValueLike(@NonNull String name, @NonNull String likeValue);
+
     List<EdsAssetIndex> queryIndexByParam(@NonNull Integer instanceId, @NonNull String value,
                                           @NonNull String assetType);
 

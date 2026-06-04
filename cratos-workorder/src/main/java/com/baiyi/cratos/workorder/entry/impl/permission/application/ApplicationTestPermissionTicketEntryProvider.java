@@ -96,7 +96,7 @@ public class ApplicationTestPermissionTicketEntryProvider extends BaseTicketEntr
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(namespaces)
-                .desc("Application permission")
+                .desc("ApplicationVersion permission")
                 .build();
     }
 

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/application/resource")
-@Tag(name = "Application")
+@Tag(name = "ApplicationVersion")
 @RequiredArgsConstructor
 public class ApplicationResourceController {
 

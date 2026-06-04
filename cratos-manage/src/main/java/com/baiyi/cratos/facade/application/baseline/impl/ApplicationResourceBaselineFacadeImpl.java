@@ -153,7 +153,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         // 重新检查标签
         Application application = applicationService.getByName(baseline.getApplicationName());
         if (application == null) {
-            ApplicationResourceBaselineException.runtime("Application does not exist.");
+            ApplicationResourceBaselineException.runtime("ApplicationVersion does not exist.");
         }
         Tag frameworkTag = tagService.getByTagKey(SysTagKeys.FRAMEWORK);
         BusinessTag uniqueKey = BusinessTag.builder()

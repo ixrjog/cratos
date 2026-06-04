@@ -60,11 +60,11 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
     @OnError
     public void onError(Session session, Throwable error) {
         if (error instanceof EOFException) {
-            log.info("Application kubernetes details webSocket connection closed by client: {}", session.getId());
+            log.info("ApplicationVersion kubernetes details webSocket connection closed by client: {}", session.getId());
             // 清理资源
             connectionTerminated(session);
         } else {
-            log.error("Application kubernetes details webSocket error", error);
+            log.error("ApplicationVersion kubernetes details webSocket error", error);
         }
     }
 

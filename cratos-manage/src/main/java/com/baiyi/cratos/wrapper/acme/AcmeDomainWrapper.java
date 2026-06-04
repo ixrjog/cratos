@@ -40,7 +40,7 @@ public class AcmeDomainWrapper extends BaseDataTableConverter<AcmeDomainVO.Domai
     private final EdsInstanceService edsInstanceService;
 
     @Override
-    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ACME_ACCOUNT, BusinessTypeEnum.EDS_INSTANCE})
+    @BusinessDecorator(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ACME_ACCOUNT, BusinessTypeEnum.EDS_INSTANCE, BusinessTypeEnum.ACME_ORDER})
     public void wrap(AcmeDomainVO.Domain vo) {
         vo.setResourceCount(makeResourceCountForAcmeOrder(vo));
         if (StringUtils.hasText(vo.getDcvType()) && StringUtils.hasText(vo.getDcvDelegationTarget())) {

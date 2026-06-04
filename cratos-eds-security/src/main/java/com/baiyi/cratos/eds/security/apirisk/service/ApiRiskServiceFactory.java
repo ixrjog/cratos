@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.secutity.apirisk.service;
+package com.baiyi.cratos.eds.security.apirisk.service;
 
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsApiRiskConfigModel;

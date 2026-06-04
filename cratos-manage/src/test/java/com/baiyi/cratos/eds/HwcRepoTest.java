@@ -5,6 +5,7 @@ import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcElbRepo;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcObsRepo;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.huaweicloud.sdk.elb.v3.model.CertificateInfo;
+import com.huaweicloud.sdk.elb.v3.model.LoadBalancer;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,14 @@ public class HwcRepoTest extends BaseEdsTest<EdsConfigs.Hwc> {
         EdsConfigs.Hwc hwc = getConfig(27);
         // eu-west-101 af-south-1
         List<CertificateInfo> list = HwcElbRepo.listCertificates("eu-west-101", hwc);
+        System.out.println(list);
+    }
+
+    @Test
+    void test3() {
+        EdsConfigs.Hwc hwc = getConfig(27);
+        // eu-west-101 af-south-1
+        List<LoadBalancer>  list = HwcElbRepo.listLoadBalancers("eu-west-101", hwc);
         System.out.println(list);
     }
 

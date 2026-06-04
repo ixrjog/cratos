@@ -23,4 +23,6 @@ public interface AcmeOrderService extends BaseUniqueKeyService<AcmeOrder, AcmeOr
 
     DataTable<AcmeOrder> queryAcmeOrderPage(AcmeOrderParam.OrderPageQuery pageQuery);
 
+    AcmeOrder getRecentOrder(int domainId);
+
 }

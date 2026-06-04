@@ -4,8 +4,10 @@ import com.baiyi.cratos.annotation.BusinessDecorator;
 import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.UserCredentialWebauthn;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.service.RbacUserRoleService;
+import com.baiyi.cratos.service.UserCredentialWebauthnService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
@@ -30,6 +32,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_USER_ROLE;
 public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> implements BaseWrapper<UserVO.User> {
 
     private final RbacUserRoleService rbacUserRoleService;
+    private final UserCredentialWebauthnService userCredentialWebauthnService;
     private final UserAvatarUtils userAvatarUtils;
 
     @Override
@@ -42,6 +45,14 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
         vo.setResourceCount(resourceCount);
         // 头像
         vo.setAvatar(userAvatarUtils.queryUserAvatar(vo.getUsername()));
+        // WebAuthn
+        vo.setWebAuths(userCredentialWebauthnService.queryByUsername(vo.getUsername())
+                               .stream()
+                               .filter(UserCredentialWebauthn::getValid)
+                               .map(e -> UserVO.WebAuthn.builder()
+                                       .deviceName(e.getDeviceName())
+                                       .build())
+                               .toList());
     }
 
     private Map<String, Integer> buildRbacUserRoleResourceCount(UserVO.User user) {

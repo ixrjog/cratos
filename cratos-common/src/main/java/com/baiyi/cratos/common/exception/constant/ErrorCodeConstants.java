@@ -77,4 +77,6 @@ public interface ErrorCodeConstants {
 
     int DATACENTER_NETWORK_ERROR = 65000;
 
+    int API_SECURITY_TEST_ERROR = 66000;
+
 }

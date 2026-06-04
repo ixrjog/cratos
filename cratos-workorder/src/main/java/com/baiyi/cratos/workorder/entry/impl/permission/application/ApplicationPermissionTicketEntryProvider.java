@@ -46,7 +46,7 @@ public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryPro
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
-        StringBuilder row = new StringBuilder("| Application Name |");
+        StringBuilder row = new StringBuilder("| ApplicationVersion Name |");
         businessPermission.getRoleMembers()
                 .forEach(e -> row.append(" Env:")
                         .append(e.getRole()
@@ -81,7 +81,7 @@ public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryPro
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(namespaces)
-                .desc("Application permission")
+                .desc("ApplicationVersion permission")
                 .build();
     }
 

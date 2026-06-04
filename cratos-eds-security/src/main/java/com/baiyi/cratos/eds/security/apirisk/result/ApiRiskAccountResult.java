@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.secutity.apirisk.result;
+package com.baiyi.cratos.eds.security.apirisk.result;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

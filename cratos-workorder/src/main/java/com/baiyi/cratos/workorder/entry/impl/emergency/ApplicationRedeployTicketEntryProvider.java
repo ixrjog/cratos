@@ -68,7 +68,7 @@ public class ApplicationRedeployTicketEntryProvider extends BaseTicketEntryProvi
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
-                .desc("Application")
+                .desc("ApplicationVersion")
                 .build();
     }
 

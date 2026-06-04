@@ -9,6 +9,8 @@ import com.baiyi.cratos.domain.constant.Global;
  */
 public interface EdsAssetIndexConstants {
 
+    String HASH_SHA256 = "hash.sha256";
+
     String DOMAIN_NAME = "domain.name";
     String DOMAIN_COMMON = "domain.common";
     String DOMAIN_MATCHING_IDENTITIES = "domain.matching.identities";

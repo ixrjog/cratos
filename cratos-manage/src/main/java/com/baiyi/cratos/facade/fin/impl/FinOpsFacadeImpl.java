@@ -45,7 +45,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
 
     private static final String PROD_NAMESPACE = "prod";
     public final static String[] COST_TABLE_FIELD_NAME = {"Business", "Share", "%"};
-    public final static String[] COST_DETAILS_TABLE_FIELD_NAME = {"Business", "Application Name", "Resources", "Share", "%"};
+    public final static String[] COST_DETAILS_TABLE_FIELD_NAME = {"Business", "ApplicationVersion Name", "Resources", "Share", "%"};
 
     @Override
     public FinOpsVO.AppCost queryAppCost(FinOpsParam.QueryAppCost queryAppCost) {
@@ -127,7 +127,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
         businessTags.forEach(businessTag -> {
             Application application = applicationService.getById(businessTag.getBusinessId());
             if (Objects.isNull(application)) {
-                log.warn("Application not found for business tag: {}", businessTag.getId());
+                log.warn("ApplicationVersion not found for business tag: {}", businessTag.getId());
                 return;
             }
             List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
