@@ -13,7 +13,9 @@ public class GenericCallService {
     private final WebClientGenericCall genericCall;
     
     public GenericCallService(WebClient.Builder webClientBuilder) {
-        this.genericCall = new WebClientGenericCall(webClientBuilder);
+        this.genericCall = new WebClientGenericCall(
+                webClientBuilder.codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024))
+        );
     }
     
     public Mono<Map<String, Object>> callDynamicApi(String apiUrl, String method, 

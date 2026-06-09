@@ -100,7 +100,13 @@ public class SshShellRunnable
             }
         }
         if (sshEnv.getEnv().containsKey(SSH_ENV_LINES)) {
-            terminalBuilder.type(sshEnv.getEnv().get(SSH_ENV_TERM));
+            String termType = sshEnv.getEnv().getOrDefault(SSH_ENV_TERM, "xterm-256color");
+            try {
+                org.jline.utils.InfoCmp.getInfoCmp(termType);
+            } catch (Exception e) {
+                termType = "xterm-256color";
+            }
+            terminalBuilder.type(termType);
         }
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              PrintStream ps = new PrintStream(baos, true, StandardCharsets.UTF_8);

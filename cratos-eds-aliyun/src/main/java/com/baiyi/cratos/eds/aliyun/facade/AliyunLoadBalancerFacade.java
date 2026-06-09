@@ -1,11 +1,15 @@
 package com.baiyi.cratos.eds.aliyun.facade;
 
+import com.aliyun.alb20200616.models.GetListenerAttributeResponseBody;
+import com.aliyun.alb20200616.models.ListAclEntriesResponseBody;
+import com.aliyun.alb20200616.models.ListListenersResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ProjectLoadBalancer;
 import com.baiyi.cratos.domain.view.project.ProjectLoadBalancerVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunAlb;
 import com.baiyi.cratos.eds.aliyun.model.AliyunClb;
 import com.baiyi.cratos.eds.aliyun.model.AliyunNlb;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunAlbRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunClbRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunNlbRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -13,17 +17,24 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsProviderHolderFactory;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2026/5/25 18:49
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AliyunLoadBalancerFacade {
@@ -67,8 +78,120 @@ public class AliyunLoadBalancerFacade {
     private ProjectLoadBalancerVO.LoadBalancer getLoadBalancer(EdsConfigs.Aliyun aliyun, String instanceName,
                                                                AliyunAlb.Alb aliyunAlb,
                                                                ProjectLoadBalancerVO.LbConfig lbConfig) throws Exception {
-        // TODO
-        return ProjectLoadBalancerVO.LoadBalancer.NO_DATA;
+        Map<String, List<ProjectLoadBalancerVO.Rule>> ruleMap = getRuleMap(aliyun, aliyunAlb);
+        List<ProjectLoadBalancerVO.Listener> listeners = AliyunAlbRepo.listListeners(
+                        aliyunAlb.getEndpoint(), aliyun, aliyunAlb.getLoadBalancers()
+                                .getLoadBalancerId()
+                )
+                .stream()
+                .map(e -> {
+                    List<ProjectLoadBalancerVO.Rule> ruleList = List.of();
+                    if (ruleMap.containsKey(e.getListenerId())) {
+                        ruleList = ruleMap.get(e.getListenerId());
+                    }
+                    return ProjectLoadBalancerVO.Listener.builder()
+                            .listenerProtocol(e.getListenerProtocol())
+                            .listenerPort(e.getListenerPort())
+                            .listenerDescription(e.getListenerDescription())
+                            .listenerStatus(e.getListenerStatus())
+                            .serverGroupServers(List.of())
+                            .aclList(listListeners(e, aliyun, aliyunAlb))
+                            .ruleList(ruleList)
+                            .build();
+                })
+                .toList();
+        return ProjectLoadBalancerVO.LoadBalancer.builder()
+                .instanceName(instanceName)
+                .loadBalancerType(EdsAssetTypeEnum.ALIYUN_ALB.name())
+                .loadBalancerId(aliyunAlb.getLoadBalancers()
+                                        .getLoadBalancerId())
+                .loadBalancerName(aliyunAlb.getLoadBalancers()
+                                          .getLoadBalancerName())
+                .dnsName(aliyunAlb.getLoadBalancers()
+                                 .getDNSName())
+                .regionId(aliyunAlb.getRegionId())
+                .listeners(listeners)
+                .lbConfig(lbConfig)
+                .build();
+    }
+
+    private Map<String, List<ProjectLoadBalancerVO.Rule>> getRuleMap(EdsConfigs.Aliyun aliyun,
+                                                                     AliyunAlb.Alb aliyunAlb) {
+        try {
+            List<ProjectLoadBalancerVO.Rule> rules = AliyunAlbRepo.listRules(
+                            aliyunAlb.getEndpoint(), aliyun, aliyunAlb.getLoadBalancers()
+                                    .getLoadBalancerId()
+                    )
+                    .stream()
+                    .map(r -> {
+                        List<ProjectLoadBalancerVO.RuleCondition> ruleConditions = r.getRuleConditions()
+                                .stream()
+                                .map(rc -> ProjectLoadBalancerVO.RuleCondition.builder()
+                                        .hostConfig(ProjectLoadBalancerVO.RuleConfig.of(rc.getHostConfig().values))
+                                        .pathConfig(ProjectLoadBalancerVO.RuleConfig.of(rc.getPathConfig().values))
+                                        .sourceIpConfig(
+                                                ProjectLoadBalancerVO.RuleConfig.of(rc.getSourceIpConfig().values))
+                                        .type(rc.getType())
+                                        .build())
+                                .toList();
+                        return ProjectLoadBalancerVO.Rule.builder()
+                                .ruleId(r.getRuleId())
+                                .ruleName(r.getRuleName())
+                                .ruleStatus(r.getRuleStatus())
+                                .listenerId(r.getListenerId())
+                                .loadBalancerId(r.getLoadBalancerId())
+                                .ruleConditions(ruleConditions)
+                                .build();
+                    })
+                    .toList();
+            return rules.stream()
+                    .collect(Collectors.groupingBy(ProjectLoadBalancerVO.Rule::getListenerId));
+        } catch (Exception e) {
+            return Map.of();
+        }
+    }
+
+    private List<ProjectLoadBalancerVO.Acl> listListeners(
+            ListListenersResponseBody.ListListenersResponseBodyListeners listeners, EdsConfigs.Aliyun aliyun,
+            AliyunAlb.Alb aliyunAlb) {
+        List<ProjectLoadBalancerVO.Acl> aclList = Lists.newArrayList();
+        try {
+            GetListenerAttributeResponseBody listenerAttribute = AliyunAlbRepo.getListenerAttribute(
+                    aliyunAlb.getEndpoint(), aliyun, listeners.getListenerId());
+            String aclType = Optional.ofNullable(listenerAttribute)
+                    .map(GetListenerAttributeResponseBody::getAclConfig)
+                    .map(GetListenerAttributeResponseBody.GetListenerAttributeResponseBodyAclConfig::getAclType)
+                    .orElse("--");
+            List<GetListenerAttributeResponseBody.GetListenerAttributeResponseBodyAclConfigAclRelations> aclRelations = Optional.ofNullable(
+                            listenerAttribute)
+                    .map(GetListenerAttributeResponseBody::getAclConfig)
+                    .map(GetListenerAttributeResponseBody.GetListenerAttributeResponseBodyAclConfig::getAclRelations)
+                    .orElse(List.of());
+            for (GetListenerAttributeResponseBody.GetListenerAttributeResponseBodyAclConfigAclRelations aclRelation : aclRelations) {
+                List<ListAclEntriesResponseBody.ListAclEntriesResponseBodyAclEntries> aclEntries = AliyunAlbRepo.listAclEntries(
+                        aliyunAlb.getEndpoint(), aliyun, aclRelation.getAclId());
+                if (!CollectionUtils.isEmpty(aclEntries)) {
+                    ProjectLoadBalancerVO.Acl acl = ProjectLoadBalancerVO.Acl.builder()
+                            .aclType(aclType)
+                            .aclId(aclRelation.getAclId())
+                            .aclEntries(aclEntries.stream()
+                                                .map(entry -> ProjectLoadBalancerVO.AclEntry.builder()
+                                                        .entry(entry.getEntry())
+                                                        .status(entry.getStatus())
+                                                        .description(entry.getDescription())
+                                                        .build())
+                                                .toList())
+                            .build();
+                    aclList.add(acl);
+                }
+            }
+        } catch (Exception ex) {
+            log.warn(
+                    "Failed to get listener attribute for listenerId={}: {}", listeners.getListenerId(),
+                    ex.getMessage()
+            );
+        }
+        return aclList;
     }
 
     private ProjectLoadBalancerVO.LoadBalancer getLoadBalancer(EdsConfigs.Aliyun aliyun, String instanceName,
