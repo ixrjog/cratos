@@ -14,7 +14,7 @@ import com.baiyi.cratos.domain.model.AliyunOnsV5Model;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunONSV5Repo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -106,8 +106,8 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
     private GetConsumerGroupResponseBody.GetConsumerGroupResponseBodyData getConsumerGroup(
             EdsConfigs.Aliyun aliyun, AliyunOnsV5Model.ConsumerGroup consumerGroup) {
         try {
-            return AliyunOnsV5Repo.getConsumerGroup(consumerGroup.getRegionId(), aliyun,
-                    consumerGroup.getOnsInstanceId(), consumerGroup.getConsumerGroupId());
+            return AliyunONSV5Repo.getConsumerGroup(consumerGroup.getRegionId(), aliyun,
+                                                    consumerGroup.getOnsInstanceId(), consumerGroup.getConsumerGroupId());
         } catch (Exception e) {
             throw new WorkOrderTicketException("Failed to get Aliyun ONS Topic err: {}", e.getMessage());
         }
@@ -130,8 +130,8 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
                     .remark(consumerGroup.getRemark())
                     .consumeRetryPolicy(consumeRetryPolicy)
                     .build();
-            AliyunOnsV5Repo.createConsumerGroup(consumerGroup.getRegionId(), aliyun, consumerGroup.getOnsInstanceId(),
-                    createConsumerGroup);
+            AliyunONSV5Repo.createConsumerGroup(consumerGroup.getRegionId(), aliyun, consumerGroup.getOnsInstanceId(),
+                                                createConsumerGroup);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Failed to create Aliyun ONS Consumer Group err: {}", e.getMessage());
         }

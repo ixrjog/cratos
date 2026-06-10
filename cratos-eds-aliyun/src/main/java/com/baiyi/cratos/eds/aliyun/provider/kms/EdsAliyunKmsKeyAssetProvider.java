@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunKMSRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -54,7 +54,7 @@ public class EdsAliyunKmsKeyAssetProvider extends BaseHasEndpointsEdsAssetProvid
     @Override
     protected List<AliyunKms.KmsKey> listEntities(String endpoint,
                                                   ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
-        List<ListKeysResponseBody.Key> keys = AliyunKmsRepo.listKeys(endpoint, instance.getConfig());
+        List<ListKeysResponseBody.Key> keys = AliyunKMSRepo.listKeys(endpoint, instance.getConfig());
         if (CollectionUtils.isEmpty(keys)) {
             return List.of();
         }
@@ -64,7 +64,7 @@ public class EdsAliyunKmsKeyAssetProvider extends BaseHasEndpointsEdsAssetProvid
     private List<AliyunKms.KmsKey> toKmsKey(String endpoint, EdsConfigs.Aliyun configModel,
                                             List<ListKeysResponseBody.Key> keys) {
         return keys.stream()
-                .map(e -> AliyunKmsRepo.describeKey(endpoint, configModel, e.getKeyId())
+                .map(e -> AliyunKMSRepo.describeKey(endpoint, configModel, e.getKeyId())
                         .map(keyMetadata -> {
                             AliyunKms.KeyMetadata metadata = BeanCopierUtils.copyProperties(
                                     keyMetadata,

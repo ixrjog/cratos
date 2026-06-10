@@ -21,6 +21,7 @@ public enum SysTagKeys {
     CREATED_BY("CreatedBy"),
     SERVER_ACCOUNT("ServerAccount"),
     GROUP("Group"),
+    ENV_GROUP("EnvGroup"),
     USER_GROUP("UserGroup"),
     ENV("Env"),
     NAME("Name"),

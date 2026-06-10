@@ -14,8 +14,8 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunDataWorksModel;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamAccessKeyRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMAccessKeyRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -49,11 +49,11 @@ import java.util.Objects;
 public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEntryProvider<AliyunDataWorksModel.AliyunAccount, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final AliyunRamUserRepo aliyunRamUserRepo;
+    private final AliyunRAMUserRepo aliyunRamUserRepo;
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
-    private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
+    private final AliyunRAMAccessKeyRepo aliyunRamAccessKeyRepo;
     private final UserService userService;
     private final CreateDataWorkAKNoticeSender createDataWorkAKNoticeSender;
     private final WorkOrderService workOrderService;
@@ -62,10 +62,10 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                                                          WorkOrderTicketService workOrderTicketService,
                                                          WorkOrderService workOrderService,
                                                          EdsInstanceService edsInstanceService,
-                                                         AliyunRamUserRepo aliyunRamUserRepo,
+                                                         AliyunRAMUserRepo aliyunRamUserRepo,
                                                          EdsProviderHolderFactory edsProviderHolderFactory,
                                                          BusinessTagFacade businessTagFacade, TagService tagService,
-                                                         AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo,
+                                                         AliyunRAMAccessKeyRepo aliyunRamAccessKeyRepo,
                                                          UserService userService,
                                                          CreateDataWorkAKNoticeSender createDataWorkAKNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);

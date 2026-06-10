@@ -41,16 +41,10 @@ public interface ProjectFacade {
 
     List<ProjectVO.LoadBalancer> queryLoadBalancersByTenantId(int tenantId);
 
-    List<ProjectVO.GroupDetail> queryGroupsByTenantId(int tenantId);
-
     void addProjectGroup(ProjectParam.AddProjectGroup param);
 
-    void updateProjectGroup(ProjectParam.UpdateProjectGroup param);
+    List<ProjectVO.GroupDetail> queryGroupsByTenantId(int tenantId);
 
     void deleteProjectGroupById(int id);
-
-    void addProjectGroupMember(ProjectParam.AddProjectGroupMember param);
-
-    void deleteProjectGroupMemberById(int id);
 
 }

@@ -75,6 +75,7 @@ public class OptionsVO {
         private Integer seq;
         private Object comment;
         private Boolean favorited;
+        private Integer size;
 
         @Override
         public int compareTo(@NonNull Option o) {

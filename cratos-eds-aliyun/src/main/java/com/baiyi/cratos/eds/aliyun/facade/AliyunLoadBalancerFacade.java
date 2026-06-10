@@ -3,15 +3,16 @@ package com.baiyi.cratos.eds.aliyun.facade;
 import com.aliyun.alb20200616.models.GetListenerAttributeResponseBody;
 import com.aliyun.alb20200616.models.ListAclEntriesResponseBody;
 import com.aliyun.alb20200616.models.ListListenersResponseBody;
+import com.aliyun.alb20200616.models.ListRulesResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ProjectLoadBalancer;
 import com.baiyi.cratos.domain.view.project.ProjectLoadBalancerVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunAlb;
 import com.baiyi.cratos.eds.aliyun.model.AliyunClb;
 import com.baiyi.cratos.eds.aliyun.model.AliyunNlb;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunAlbRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunClbRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunNlbRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunALBRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunCLBRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunNLBRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -79,7 +80,7 @@ public class AliyunLoadBalancerFacade {
                                                                AliyunAlb.Alb aliyunAlb,
                                                                ProjectLoadBalancerVO.LbConfig lbConfig) throws Exception {
         Map<String, List<ProjectLoadBalancerVO.Rule>> ruleMap = getRuleMap(aliyun, aliyunAlb);
-        List<ProjectLoadBalancerVO.Listener> listeners = AliyunAlbRepo.listListeners(
+        List<ProjectLoadBalancerVO.Listener> listeners = AliyunALBRepo.listListeners(
                         aliyunAlb.getEndpoint(), aliyun, aliyunAlb.getLoadBalancers()
                                 .getLoadBalancerId()
                 )
@@ -118,11 +119,11 @@ public class AliyunLoadBalancerFacade {
     private Map<String, List<ProjectLoadBalancerVO.Rule>> getRuleMap(EdsConfigs.Aliyun aliyun,
                                                                      AliyunAlb.Alb aliyunAlb) {
         try {
-            List<ProjectLoadBalancerVO.Rule> rules = AliyunAlbRepo.listRules(
-                            aliyunAlb.getEndpoint(), aliyun, aliyunAlb.getLoadBalancers()
-                                    .getLoadBalancerId()
-                    )
-                    .stream()
+            List<ListRulesResponseBody.ListRulesResponseBodyRules> rules = AliyunALBRepo.listRules(
+                    aliyunAlb.getEndpoint(), aliyun, aliyunAlb.getLoadBalancers()
+                            .getLoadBalancerId()
+            );
+           return rules.stream()
                     .map(r -> {
                         List<ProjectLoadBalancerVO.RuleCondition> ruleConditions = r.getRuleConditions()
                                 .stream()
@@ -134,6 +135,27 @@ public class AliyunLoadBalancerFacade {
                                         .type(rc.getType())
                                         .build())
                                 .toList();
+                        List<ProjectLoadBalancerVO.RuleAction> ruleActions = r.getRuleActions()
+                                .stream()
+                                .map(ra -> {
+                                    ProjectLoadBalancerVO.ForwardGroupConfig fgc = null;
+                                    if (ra.getForwardGroupConfig() != null && ra.getForwardGroupConfig().getServerGroupTuples() != null) {
+                                        List<ProjectLoadBalancerVO.ServerGroupTuple> tuples = ra.getForwardGroupConfig().getServerGroupTuples()
+                                                .stream()
+                                                .map(t -> ProjectLoadBalancerVO.ServerGroupTuple.builder()
+                                                        .serverGroupId(t.getServerGroupId())
+                                                        .weight(t.getWeight())
+                                                        .build())
+                                                .toList();
+                                        fgc = ProjectLoadBalancerVO.ForwardGroupConfig.builder()
+                                                .serverGroupTuples(tuples)
+                                                .build();
+                                    }
+                                    return ProjectLoadBalancerVO.RuleAction.builder()
+                                            .forwardGroupConfig(fgc)
+                                            .build();
+                                })
+                                .toList();
                         return ProjectLoadBalancerVO.Rule.builder()
                                 .ruleId(r.getRuleId())
                                 .ruleName(r.getRuleName())
@@ -141,10 +163,9 @@ public class AliyunLoadBalancerFacade {
                                 .listenerId(r.getListenerId())
                                 .loadBalancerId(r.getLoadBalancerId())
                                 .ruleConditions(ruleConditions)
+                                .ruleActions(ruleActions)
                                 .build();
                     })
-                    .toList();
-            return rules.stream()
                     .collect(Collectors.groupingBy(ProjectLoadBalancerVO.Rule::getListenerId));
         } catch (Exception e) {
             return Map.of();
@@ -156,7 +177,7 @@ public class AliyunLoadBalancerFacade {
             AliyunAlb.Alb aliyunAlb) {
         List<ProjectLoadBalancerVO.Acl> aclList = Lists.newArrayList();
         try {
-            GetListenerAttributeResponseBody listenerAttribute = AliyunAlbRepo.getListenerAttribute(
+            GetListenerAttributeResponseBody listenerAttribute = AliyunALBRepo.getListenerAttribute(
                     aliyunAlb.getEndpoint(), aliyun, listeners.getListenerId());
             String aclType = Optional.ofNullable(listenerAttribute)
                     .map(GetListenerAttributeResponseBody::getAclConfig)
@@ -168,7 +189,7 @@ public class AliyunLoadBalancerFacade {
                     .map(GetListenerAttributeResponseBody.GetListenerAttributeResponseBodyAclConfig::getAclRelations)
                     .orElse(List.of());
             for (GetListenerAttributeResponseBody.GetListenerAttributeResponseBodyAclConfigAclRelations aclRelation : aclRelations) {
-                List<ListAclEntriesResponseBody.ListAclEntriesResponseBodyAclEntries> aclEntries = AliyunAlbRepo.listAclEntries(
+                List<ListAclEntriesResponseBody.ListAclEntriesResponseBodyAclEntries> aclEntries = AliyunALBRepo.listAclEntries(
                         aliyunAlb.getEndpoint(), aliyun, aclRelation.getAclId());
                 if (!CollectionUtils.isEmpty(aclEntries)) {
                     ProjectLoadBalancerVO.Acl acl = ProjectLoadBalancerVO.Acl.builder()
@@ -197,7 +218,7 @@ public class AliyunLoadBalancerFacade {
     private ProjectLoadBalancerVO.LoadBalancer getLoadBalancer(EdsConfigs.Aliyun aliyun, String instanceName,
                                                                AliyunNlb.Nlb aliyunNlb,
                                                                ProjectLoadBalancerVO.LbConfig lbConfig) throws Exception {
-        List<ProjectLoadBalancerVO.Listener> listeners = AliyunNlbRepo.listListeners(
+        List<ProjectLoadBalancerVO.Listener> listeners = AliyunNLBRepo.listListeners(
                         aliyunNlb.getEndpoint(), aliyun, aliyunNlb.getLoadBalancers()
                                 .getLoadBalancerId()
                 )
@@ -206,7 +227,7 @@ public class AliyunLoadBalancerFacade {
                     List<ProjectLoadBalancerVO.Server> serverGroupServers = List.of();
                     if (StringUtils.hasText(e.getServerGroupId())) {
                         try {
-                            serverGroupServers = AliyunNlbRepo.listServerGroupServers(
+                            serverGroupServers = AliyunNLBRepo.listServerGroupServers(
                                             aliyunNlb.getEndpoint(), aliyun, e.getServerGroupId())
                                     .stream()
                                     .map(s -> ProjectLoadBalancerVO.Server.builder()
@@ -253,7 +274,7 @@ public class AliyunLoadBalancerFacade {
     private ProjectLoadBalancerVO.LoadBalancer getLoadBalancer(EdsConfigs.Aliyun aliyun, String instanceName,
                                                                AliyunClb.Clb aliyunClb,
                                                                ProjectLoadBalancerVO.LbConfig lbConfig) throws Exception {
-        List<ProjectLoadBalancerVO.Listener> listeners = AliyunClbRepo.describeLoadBalancerListeners(
+        List<ProjectLoadBalancerVO.Listener> listeners = AliyunCLBRepo.describeLoadBalancerListeners(
                         aliyunClb.getEndpoint(), aliyun, aliyunClb.getLoadBalancer()
                                 .getLoadBalancerId()
                 )
@@ -262,7 +283,7 @@ public class AliyunLoadBalancerFacade {
                     List<ProjectLoadBalancerVO.Server> serverGroupServers = List.of();
                     if (StringUtils.hasText(e.getVServerGroupId())) {
                         try {
-                            serverGroupServers = AliyunClbRepo.describeVServerGroupAttribute(
+                            serverGroupServers = AliyunCLBRepo.describeVServerGroupAttribute(
                                             aliyunClb.getEndpoint(), aliyun, e.getVServerGroupId())
                                     .stream()
                                     .map(s -> ProjectLoadBalancerVO.Server.builder()

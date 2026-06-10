@@ -51,7 +51,7 @@ public class EnvFacadeImpl implements EnvFacade {
 
     @Override
     public List<Env> queryEnv(String groupValue) {
-        Tag groupTag = tagService.getByTagKey(SysTagKeys.GROUP);
+        Tag groupTag = tagService.getByTagKey(SysTagKeys.ENV_GROUP);
         if (Objects.isNull(groupTag)) {
             return List.of();
         }

@@ -43,7 +43,7 @@ public class ProjectVO {
         private static final long serialVersionUID = 5852666891462917021L;
         private String docs;
         private List<ProjectLoadBalancerVO.LoadBalancer> loadBalancers;
-        private List<Group> groups;
+        private List<String> groups;
     }
 
     @Data
@@ -155,29 +155,7 @@ public class ProjectVO {
         private String name;
         private Boolean valid;
         private String comment;
-        private Date createTime;
-        private Date updateTime;
-        private List<GroupMemberDetail> members;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Schema
-    public static class GroupMemberDetail implements Serializable {
-        @Serial
-        private static final long serialVersionUID = 6918274650183746506L;
-        private Integer id;
-        private Integer groupId;
-        private String businessType;
-        private Integer businessId;
-        private String role;
-        private String name;
-        private Boolean valid;
-        private String comment;
-        private Date createTime;
-        private Date updateTime;
+        private int size;
     }
 
 }

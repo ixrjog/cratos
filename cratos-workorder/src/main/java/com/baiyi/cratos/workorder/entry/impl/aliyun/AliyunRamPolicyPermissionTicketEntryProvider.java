@@ -15,8 +15,8 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.AliyunModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMPolicyRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -53,8 +53,8 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_A
 public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntryProvider<AliyunModel.AliyunPolicy, WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final AliyunRamUserRepo aliyunRamUserRepo;
-    private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
+    private final AliyunRAMUserRepo aliyunRamUserRepo;
+    private final AliyunRAMPolicyRepo aliyunRamPolicyRepo;
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetIndexService edsAssetIndexService;
 
@@ -62,8 +62,8 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
                                                         WorkOrderTicketService workOrderTicketService,
                                                         WorkOrderService workOrderService,
                                                         EdsInstanceService edsInstanceService,
-                                                        AliyunRamUserRepo aliyunRamUserRepo,
-                                                        AliyunRamPolicyRepo aliyunRamPolicyRepo,
+                                                        AliyunRAMUserRepo aliyunRamUserRepo,
+                                                        AliyunRAMPolicyRepo aliyunRamPolicyRepo,
                                                         EdsProviderHolderFactory edsProviderHolderFactory,
                                                         EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);

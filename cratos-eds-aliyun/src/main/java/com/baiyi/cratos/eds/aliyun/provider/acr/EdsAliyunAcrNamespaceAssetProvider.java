@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.enums.DateFormatEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunACRRepo;
 import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -33,9 +33,9 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_NAMESPACE)
 public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aliyun, ListNamespaceResponse.NamespacesItem> {
 
-    private final AliyunAcrRepo aliyunAcrRepo;
+    private final AliyunACRRepo aliyunAcrRepo;
 
-    public EdsAliyunAcrNamespaceAssetProvider(EdsAssetProviderContext context, AliyunAcrRepo aliyunAcrRepo) {
+    public EdsAliyunAcrNamespaceAssetProvider(EdsAssetProviderContext context, AliyunACRRepo aliyunAcrRepo) {
         super(context);
         this.aliyunAcrRepo = aliyunAcrRepo;
     }

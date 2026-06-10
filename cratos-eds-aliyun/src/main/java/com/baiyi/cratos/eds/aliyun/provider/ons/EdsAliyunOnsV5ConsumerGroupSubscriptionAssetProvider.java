@@ -3,9 +3,9 @@ package com.baiyi.cratos.eds.aliyun.provider.ons;
 import com.aliyun.rocketmq20220801.models.ListConsumerGroupSubscriptionsResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.aliyun.client.AliyunOnsClient;
+import com.baiyi.cratos.eds.aliyun.client.AliyunONSClient;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunONSV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -71,7 +71,7 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                 return Collections.emptyList();
             } else {
                 List<EdsAsset> endpointConsumerGroups = edsAssetsOnsConsumerGroups.stream()
-                        .filter(e -> endpoint.equals(AliyunOnsClient.toEndpoint(e.getRegion())))
+                        .filter(e -> endpoint.equals(AliyunONSClient.toEndpoint(e.getRegion())))
                         .toList();
                 if (!CollectionUtils.isEmpty(edsAssetsOnsConsumerGroups)) {
                     for (EdsAsset endpointConsumerGroup : endpointConsumerGroups) {
@@ -86,7 +86,7 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                         }
                         final String instanceId = onsInstanceIndex.getValue();
                         final String consumerGroupId = endpointConsumerGroup.getAssetId();
-                        List<ListConsumerGroupSubscriptionsResponseBody.ListConsumerGroupSubscriptionsResponseBodyData> consumerGroupSubscriptions = AliyunOnsV5Repo.listConsumerGroupSubscriptions(
+                        List<ListConsumerGroupSubscriptionsResponseBody.ListConsumerGroupSubscriptionsResponseBodyData> consumerGroupSubscriptions = AliyunONSV5Repo.listConsumerGroupSubscriptions(
                                 endpoint, instance.getConfig(), instanceId, consumerGroupId);
                         if (!CollectionUtils.isEmpty(consumerGroupSubscriptions)) {
                             results.addAll(consumerGroupSubscriptions.stream()

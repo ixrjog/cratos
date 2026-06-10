@@ -8,6 +8,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="instance_id" jdbcType="INTEGER" property="instanceId"/>
         <result column="asset_id" jdbcType="INTEGER" property="assetId"/>
+        <result column="account_entity_id" jdbcType="INTEGER" property="accountEntityId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="registration_time" jdbcType="TIMESTAMP" property="registrationTime"/>
@@ -30,6 +31,9 @@
             </if>
             <if test="domainType != null and domainType != ''">
                 and domain_type = #{domainType}
+            </if>
+            <if test="accountEntityId != null and accountEntityId > 0">
+                and account_entity_id = #{accountEntityId}
             </if>
             <choose>
                 <when test="queryName != null and queryName != ''">

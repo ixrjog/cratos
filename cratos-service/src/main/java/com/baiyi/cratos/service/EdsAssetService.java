@@ -32,6 +32,8 @@ public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset, EdsAsset
 
     DataTable<EdsAsset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQueryParam param);
 
+    int countEdsInstanceAssets(EdsInstanceParam.AssetPageQueryParam param);
+
     List<EdsAsset> queryAssetByParam(String assetKey, String assetType);
 
     List<EdsAsset> queryByTypeAndName(@NonNull String assetType, @NonNull String name, boolean isPrefix);

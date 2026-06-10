@@ -12,7 +12,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.aliyun.model.AliyunEcs;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunECSRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunTagRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -39,7 +39,7 @@ import java.util.*;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ECS)
 public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, AliyunEcs.Ecs> {
 
-    private final AliyunEcsRepo aliyunEcsRepo;
+    private final AliyunECSRepo aliyunEcsRepo;
     private final AliyunTagRepo aliyunTagRepo;
     private final TagService tagService;
     private final BusinessTagFacade businessTagFacade;
@@ -49,7 +49,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     private static final SysTagKeys[] COMPUTER_TAGS = {SysTagKeys.GROUP, SysTagKeys.NAME, SysTagKeys.SERVER_ACCOUNT};
 
-    public EdsAliyunEcsAssetProvider(EdsAssetProviderContext context, AliyunEcsRepo aliyunEcsRepo,
+    public EdsAliyunEcsAssetProvider(EdsAssetProviderContext context, AliyunECSRepo aliyunEcsRepo,
                                      AliyunTagRepo aliyunTagRepo, TagService tagService,
                                      BusinessTagFacade businessTagFacade) {
         super(context);

@@ -51,6 +51,7 @@ public class DomainFacadeImpl implements DomainFacade {
         }
         domain.setExpiry(updateDomain.getExpiry());
         domain.setComment(updateDomain.getComment());
+        domain.setAccountEntityId(updateDomain.getAccountEntityId());
         domainService.updateByPrimaryKey(domain);
     }
 

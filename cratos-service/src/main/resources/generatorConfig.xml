@@ -99,7 +99,7 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="kubernetes_deployment_app_version_comparison">
+        <table tableName="api_scan_result">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

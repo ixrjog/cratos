@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider.vpc;
 import com.aliyuncs.ecs.model.v20140526.DescribeVpcsResponse;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunVpcRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunVPCRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -28,9 +28,9 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_CID
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_VPC)
 public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, DescribeVpcsResponse.Vpc> {
 
-    private final AliyunVpcRepo aliyunVpcRepo;
+    private final AliyunVPCRepo aliyunVpcRepo;
 
-    public EdsAliyunVpcAssetProvider(EdsAssetProviderContext context, AliyunVpcRepo aliyunVpcRepo) {
+    public EdsAliyunVpcAssetProvider(EdsAssetProviderContext context, AliyunVPCRepo aliyunVpcRepo) {
         super(context);
         this.aliyunVpcRepo = aliyunVpcRepo;
     }

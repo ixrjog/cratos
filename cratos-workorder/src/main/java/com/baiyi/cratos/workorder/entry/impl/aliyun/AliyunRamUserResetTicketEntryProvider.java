@@ -16,7 +16,8 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunIMSRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -43,7 +44,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.NO_PASSWORD_RESET_REQUIRED;
+import static com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo.NO_PASSWORD_RESET_REQUIRED;
 
 /**
  * &#064;Author  baiyi
@@ -57,7 +58,7 @@ import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.NO_PASSWORD_RES
 public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvider<AliyunModel.ResetAliyunAccount, WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final AliyunRamUserRepo aliyunRamUserRepo;
+    private final AliyunRAMUserRepo aliyunRamUserRepo;
     private final EdsProviderHolderFactory edsProviderHolderFactory;
 
     private final UserService userService;
@@ -71,7 +72,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                                                  WorkOrderTicketService workOrderTicketService,
                                                  WorkOrderService workOrderService,
                                                  EdsInstanceService edsInstanceService,
-                                                 AliyunRamUserRepo aliyunRamUserRepo,
+                                                 AliyunRAMUserRepo aliyunRamUserRepo,
                                                  EdsProviderHolderFactory edsProviderHolderFactory,
                                                  UserService userService,
                                                  ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender,
@@ -145,9 +146,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
     private void resetRAMUserPassword(EdsConfigs.Aliyun aliyun, String ramUsername, String newPassword) {
         try {
-            aliyunRamUserRepo.updateLoginProfile(aliyun, ramUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
-        } catch (ClientException clientException) {
-            WorkOrderTicketException.runtime(clientException.getMessage());
+            // aliyunRamUserRepo.updateLoginProfile(aliyun, ramUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
+            AliyunIMSRepo.updateLoginProfile(aliyun, ramUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
+        } catch (Exception exception) {
+            WorkOrderTicketException.runtime(exception.getMessage());
         }
     }
 

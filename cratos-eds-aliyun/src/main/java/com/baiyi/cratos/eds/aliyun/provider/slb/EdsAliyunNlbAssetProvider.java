@@ -4,7 +4,7 @@ package com.baiyi.cratos.eds.aliyun.provider.slb;
 import com.aliyun.nlb20220430.models.ListLoadBalancersResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.model.AliyunNlb;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunNlbRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunNLBRepo;
 import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -52,7 +52,7 @@ public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     protected List<AliyunNlb.Nlb> listEntities(String namespace,
                                                ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunNlbRepo.listLoadBalancers(namespace, instance.getConfig())
+            return AliyunNLBRepo.listLoadBalancers(namespace, instance.getConfig())
                     .stream()
                     .map(e -> toNlb(namespace, e))
                     .toList();

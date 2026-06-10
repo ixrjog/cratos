@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunKMSRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -83,12 +83,12 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
-        Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
+        Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKMSRepo.describeSecret(
                 updateSecret.getEndpoint(), aliyun, updateSecret.getSecretName());
         if (optionalDescribeSecretResponseBody.isPresent()) {
             // 如果存在则查询 versionId 是否冲突
-            boolean versionConflict = AliyunKmsRepo.listSecretVersionIds(updateSecret.getEndpoint(), aliyun,
-                            updateSecret.getSecretName())
+            boolean versionConflict = AliyunKMSRepo.listSecretVersionIds(updateSecret.getEndpoint(), aliyun,
+                                                                         updateSecret.getSecretName())
                     .stream()
                     .anyMatch(e -> updateSecret.getVersionId()
                             .equals(e.getVersionId()));
@@ -115,7 +115,7 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
                 .getConfig();
         // 解密 Secret 数据
         String secretData = stringEncryptor.decrypt(updateSecret.getSecretData());
-        Optional<PutSecretValueResponseBody> optionalPutSecretValueResponseBody = AliyunKmsRepo.putSecretValue(
+        Optional<PutSecretValueResponseBody> optionalPutSecretValueResponseBody = AliyunKMSRepo.putSecretValue(
                 updateSecret.getEndpoint(), aliyun, updateSecret.getSecretName(), updateSecret.getVersionId(),
                 secretData);
         if (optionalPutSecretValueResponseBody.isEmpty()) {

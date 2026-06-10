@@ -14,7 +14,7 @@ import com.baiyi.cratos.domain.model.AliyunOnsV5Model;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunONSV5Repo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -105,8 +105,8 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
     private GetTopicResponseBody.GetTopicResponseBodyData getTopic(EdsConfigs.Aliyun aliyun,
                                                                    AliyunOnsV5Model.Topic topic) {
         try {
-            return AliyunOnsV5Repo.getTopic(topic.getRegionId(), aliyun, topic.getOnsInstanceId(),
-                    topic.getTopicName());
+            return AliyunONSV5Repo.getTopic(topic.getRegionId(), aliyun, topic.getOnsInstanceId(),
+                                            topic.getTopicName());
         } catch (Exception e) {
             throw new WorkOrderTicketException("Failed to get Aliyun ONS Topic err: {}", e.getMessage());
         }
@@ -119,7 +119,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
                     .messageType(topic.getMessageType())
                     .remark(topic.getRemark())
                     .build();
-            AliyunOnsV5Repo.createTopic(topic.getRegionId(), aliyun, topic.getOnsInstanceId(), createTopic);
+            AliyunONSV5Repo.createTopic(topic.getRegionId(), aliyun, topic.getOnsInstanceId(), createTopic);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Failed to create Aliyun ONS topic err: {}", e.getMessage());
         }

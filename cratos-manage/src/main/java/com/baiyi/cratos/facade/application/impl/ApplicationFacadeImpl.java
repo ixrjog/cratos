@@ -15,7 +15,6 @@ import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.base.BaseValidService;
-import com.baiyi.cratos.wrapper.application.ApplicationResourceWrapper;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +38,6 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
     private final ApplicationService applicationService;
     private final ApplicationWrapper applicationWrapper;
     private final ApplicationResourceFacade applicationResourceFacade;
-    private final ApplicationResourceWrapper applicationResourceWrapper;
     private final UserPermissionFacade userPermissionFacade;
     private final UserFavoriteFacade userFavoriteFacade;
 

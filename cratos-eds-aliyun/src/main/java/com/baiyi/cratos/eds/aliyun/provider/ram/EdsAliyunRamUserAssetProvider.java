@@ -6,9 +6,9 @@ import com.baiyi.cratos.common.enums.DateFormatEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamAccessKeyRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMAccessKeyRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMPolicyRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
@@ -40,13 +40,13 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)
 public class EdsAliyunRamUserAssetProvider extends BaseEdsAssetProvider<EdsConfigs.Aliyun, GetUserResponse.User> {
 
-    private final AliyunRamUserRepo aliyunRamUserRepo;
-    private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
-    private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
+    private final AliyunRAMUserRepo aliyunRamUserRepo;
+    private final AliyunRAMPolicyRepo aliyunRamPolicyRepo;
+    private final AliyunRAMAccessKeyRepo aliyunRamAccessKeyRepo;
 
-    public EdsAliyunRamUserAssetProvider(EdsAssetProviderContext context, AliyunRamUserRepo aliyunRamUserRepo,
-                                         AliyunRamPolicyRepo aliyunRamPolicyRepo,
-                                         AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo) {
+    public EdsAliyunRamUserAssetProvider(EdsAssetProviderContext context, AliyunRAMUserRepo aliyunRamUserRepo,
+                                         AliyunRAMPolicyRepo aliyunRamPolicyRepo,
+                                         AliyunRAMAccessKeyRepo aliyunRamAccessKeyRepo) {
         super(context);
         this.aliyunRamUserRepo = aliyunRamUserRepo;
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;

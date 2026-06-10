@@ -13,6 +13,8 @@ public interface EdsAssetMapper extends Mapper<EdsAsset> {
 
     List<EdsAsset> queryPageByParam(EdsInstanceParam.AssetPageQueryParam param);
 
+    int countByParam(EdsInstanceParam.AssetPageQueryParam param);
+
     List<Integer> queryUserPermissionBusinessIds(EdsAssetQuery.QueryUserPermissionBusinessIdParam param);
 
     List<EdsAsset> queryUserPermissionPageByParam(EdsAssetQuery.UserPermissionPageQueryParam param);

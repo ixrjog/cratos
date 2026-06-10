@@ -4,7 +4,7 @@ import com.aliyuncs.cr.model.v20181201.ListInstanceResponse;
 import com.baiyi.cratos.common.enums.DateFormatEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunACRRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -28,9 +28,9 @@ import java.util.*;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE)
 public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, ListInstanceResponse.InstancesItem> {
 
-    private final AliyunAcrRepo aliyunAcrRepo;
+    private final AliyunACRRepo aliyunAcrRepo;
 
-    public EdsAliyunAcrInstanceAssetProvider(EdsAssetProviderContext context, AliyunAcrRepo aliyunAcrRepo) {
+    public EdsAliyunAcrInstanceAssetProvider(EdsAssetProviderContext context, AliyunACRRepo aliyunAcrRepo) {
         super(context);
         this.aliyunAcrRepo = aliyunAcrRepo;
     }

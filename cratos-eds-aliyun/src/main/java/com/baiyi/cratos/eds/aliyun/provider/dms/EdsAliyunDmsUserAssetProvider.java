@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.provider.dms;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.model.AliyunDms;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunDmsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunDMSRepo;
 import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -34,7 +34,7 @@ public class EdsAliyunDmsUserAssetProvider extends BaseEdsAssetProvider<EdsConfi
     protected List<AliyunDms.User> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunDmsRepo.listUser(instance.getConfig());
+            return AliyunDMSRepo.listUser(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

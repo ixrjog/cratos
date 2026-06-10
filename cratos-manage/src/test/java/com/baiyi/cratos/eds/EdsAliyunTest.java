@@ -64,12 +64,12 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     private UserService userService;
 
     @Resource
-    private AliyunRamUserRepo aliyunRamUserRepo;
+    private AliyunRAMUserRepo aliyunRamUserRepo;
 
     @Test
     void test2() {
         EdsConfigs.Aliyun aliyun = getConfig(2);
-        Optional<GetSecretValueResponseBody> opt = AliyunKmsRepo.getSecretValue(
+        Optional<GetSecretValueResponseBody> opt = AliyunKMSRepo.getSecretValue(
                 "kms.eu-central-1.aliyuncs.com", aliyun,
                 "acs:kms:eu-central-1:1859120988191686:secret/daily_finance-switch-channel_selcom_palmpay_secretKey"
         );
@@ -79,7 +79,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     @Test
     void test3() {
         EdsConfigs.Aliyun aliyun = getConfig(2);
-        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
+        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDNSRepo.describeDomainRecords(
                 aliyun, "palmpay-inc.com");
         System.out.println(records);
     }
@@ -202,7 +202,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
 
     private void processBuckets(String endpoint, EdsConfigs.Aliyun aliyun, Map<String, EdsAsset> ramUserMap,
                                 PrettyTable pt) {
-        List<Bucket> buckets = AliyunOssRepo.listBuckets(endpoint, aliyun);
+        List<Bucket> buckets = AliyunOSSRepo.listBuckets(endpoint, aliyun);
         buckets.stream()
                 .filter(Objects::nonNull)
                 .forEach(bucket -> processBucketPolicy(bucket, aliyun, ramUserMap, pt));
@@ -211,7 +211,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     private void processBucketPolicy(Bucket bucket, EdsConfigs.Aliyun aliyun, Map<String, EdsAsset> ramUserMap,
                                      PrettyTable pt) {
         try {
-            String policy = AliyunOssRepo.getBucketPolicy(bucket.getExtranetEndpoint(), aliyun, bucket.getName());
+            String policy = AliyunOSSRepo.getBucketPolicy(bucket.getExtranetEndpoint(), aliyun, bucket.getName());
             AliyunOss.BucketPolicy bucketPolicy = new ObjectMapper().readValue(policy, AliyunOss.BucketPolicy.class);
 
             Optional.ofNullable(bucketPolicy.getStatement())

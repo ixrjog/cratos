@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunDNSRepo;
 import com.baiyi.cratos.eds.context.DNSResolverContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -58,7 +58,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         // 获取阿里云配置
         EdsConfigs.Aliyun config = getEdsConfig(trafficRoute, getAssetTypeEnum());
         // 查询 DNS 记录
-        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
+        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDNSRepo.describeDomainRecords(
                 config, trafficRoute.getDomain());
         // 查找匹配的记录
         return findMatchedRecord(records, trafficRoute);
@@ -101,7 +101,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     @Override
     protected List<DescribeDomainRecordsResponseBody.Record> queryTrafficRouteRecords(EdsConfigs.Aliyun config,
                                                                                       TrafficRoute trafficRoute) {
-        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
+        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDNSRepo.describeDomainRecords(
                 config, trafficRoute.getDomain());
         if (CollectionUtils.isEmpty(records)) {
             return List.of();
@@ -124,7 +124,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 .get(conflictingDnsRRType.name());
         if (!CollectionUtils.isEmpty(conflictingMatchedRecords)) {
             for (DescribeDomainRecordsResponseBody.Record conflictingMatchedRecord : conflictingMatchedRecords) {
-                AliyunDnsRepo.deleteDomainRecord(context.getConfig(), conflictingMatchedRecord.getRecordId());
+                AliyunDNSRepo.deleteDomainRecord(context.getConfig(), conflictingMatchedRecord.getRecordId());
             }
         }
         List<DescribeDomainRecordsResponseBody.Record> records = context.getMatchedRecordMap()
@@ -149,7 +149,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     private void addNewRecord(
             SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
-        AliyunDnsRepo.addDomainRecord(
+        AliyunDNSRepo.addDomainRecord(
                 context.getConfig(), context.getDomain(), context.getRR(), context.getDnsRRType()
                         .name(), context.getRecordValue(), context.getTrafficRecordTarget()
                         .getTtl()
@@ -163,7 +163,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 .name()
                 .equals(record.getType()) || !record.getValue()
                 .equals(context.getRecordValue())) {
-            AliyunDnsRepo.updateDomainRecord(
+            AliyunDNSRepo.updateDomainRecord(
                     context.getConfig(), record.getRecordId(), context.getRR(), context.getDnsRRType()
                             .name(), context.getRecordValue(), context.getTTL()
             );
@@ -194,7 +194,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 .map(DescribeDomainRecordsResponseBody.Record::getRecordId)
                 .filter(id -> optionalRecord.isPresent() && !id.equals(optionalRecord.get()
                                                                                .getRecordId()))
-                .forEach(id -> AliyunDnsRepo.deleteDomainRecord(context.getConfig(), id));
+                .forEach(id -> AliyunDNSRepo.deleteDomainRecord(context.getConfig(), id));
     }
 
     private String buildFullRecordName(DescribeDomainRecordsResponseBody.Record record) {

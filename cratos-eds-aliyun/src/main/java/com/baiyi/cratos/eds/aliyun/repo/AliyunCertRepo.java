@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyun.cas20200407.Client;
 import com.aliyun.cas20200407.models.*;
-import com.baiyi.cratos.eds.aliyun.client.AliyunCasClient;
+import com.baiyi.cratos.eds.aliyun.client.AliyunCASClient;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.query.EdsRepoData;
 import com.baiyi.cratos.eds.core.query.EdsRepoPageQuery;
@@ -33,7 +33,7 @@ public class AliyunCertRepo {
         List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> userCertificateOrderList = Lists.newArrayList();
         while (total == 0 || total == userCertificateOrderList.size()) {
             request.setCurrentPage(pageNo);
-            Client aliyunClient = AliyunCasClient.createClient(aliyun);
+            Client aliyunClient = AliyunCASClient.createClient(aliyun);
             ListUserCertificateOrderResponse response = aliyunClient.listUserCertificateOrder(request);
             List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> results = Optional.of(
                             response)
@@ -60,7 +60,7 @@ public class AliyunCertRepo {
             EdsConfigs.Aliyun aliyun) throws Exception {
 
         List<ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> certList = new ArrayList<>();
-        Client aliyunClient = AliyunCasClient.createClient(aliyun);
+        Client aliyunClient = AliyunCASClient.createClient(aliyun);
         int currentPage = 1;
         int showSize = 100;
         long totalCount = 0;
@@ -93,7 +93,7 @@ public class AliyunCertRepo {
             EdsConfigs.Aliyun aliyun, String certificateName) throws Exception {
         ListCertificatesRequest request = new ListCertificatesRequest().setKeyword(certificateName)
                 .setShowSize(100);
-        Client aliyunClient = AliyunCasClient.createClient(aliyun);
+        Client aliyunClient = AliyunCASClient.createClient(aliyun);
         int currentPage = 1;
         int maxPages = 100; // 防止无限循环
         while (currentPage <= maxPages) {
@@ -124,7 +124,7 @@ public class AliyunCertRepo {
         ListCertRequest request = new ListCertRequest();
         request.setCurrentPage(edsRepoPageQuery.getPage());
         request.setShowSize(edsRepoPageQuery.getLength());
-        Client aliyunClient = AliyunCasClient.createClient(aliyun);
+        Client aliyunClient = AliyunCASClient.createClient(aliyun);
         ListCertResponse response = aliyunClient.listCert(request);
         List<ListCertResponseBody.ListCertResponseBodyCertList> results = Optional.of(response)
                 .map(ListCertResponse::getBody)
@@ -154,7 +154,7 @@ public class AliyunCertRepo {
         UploadUserCertificateRequest request = new UploadUserCertificateRequest().setName(name)
                 .setCert(cert)
                 .setKey(key);
-        Client aliyunClient = AliyunCasClient.createClient(aliyun);
+        Client aliyunClient = AliyunCASClient.createClient(aliyun);
         UploadUserCertificateResponse response = aliyunClient.uploadUserCertificate(request);
         return Optional.ofNullable(response)
                 .map(UploadUserCertificateResponse::getBody)
@@ -174,7 +174,7 @@ public class AliyunCertRepo {
     public List<ListCloudResourcesResponseBody.ListCloudResourcesResponseBodyData> listCloudResources(
             EdsConfigs.Aliyun aliyun, Long certId) throws Exception {
         List<ListCloudResourcesResponseBody.ListCloudResourcesResponseBodyData> result = Lists.newArrayList();
-        Client aliyunClient = AliyunCasClient.createClient(aliyun);
+        Client aliyunClient = AliyunCASClient.createClient(aliyun);
         int currentPage = 1;
         int showSize = 20;
         Long totalCount;

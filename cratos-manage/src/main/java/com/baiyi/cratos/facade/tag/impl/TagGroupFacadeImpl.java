@@ -61,8 +61,17 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 .tagId(tag.getId())
                 .queryTagValue(getGroupOptions.getQueryName())
                 .build();
-        List<String> tagGroupNames = businessTagService.queryByValue(query);
-        return OptionsVO.toOptions(tagGroupNames);
+        List<OptionsVO.Option> options = businessTagService.queryByValue(query)
+                .stream()
+                .map(name -> OptionsVO.Option.builder()
+                        .label(name)
+                        .value(name)
+                        .size(countGroupAssets(name))
+                        .build())
+                .toList();
+        return OptionsVO.Options.builder()
+                .options(options)
+                .build();
     }
 
     @Override
@@ -95,13 +104,30 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 .map(e -> OptionsVO.Option.builder()
                         .label(e)
                         .value(e)
-                        .favorited(userFavoriteFacade.isUserFavorited(username, BusinessTypeEnum.TAG_GROUP.name(),
-                                e.hashCode()))
+                        .favorited(userFavoriteFacade.isUserFavorited(
+                                username, BusinessTypeEnum.TAG_GROUP.name(),
+                                e.hashCode()
+                        ))
                         .build())
                 .toList();
         return OptionsVO.Options.builder()
                 .options(optionList)
                 .build();
+    }
+
+    @Override
+    public int countGroupAssets(String groupName) {
+        Tag tag = getGroupTag();
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .tagValue(groupName)
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .build();
+        List<Integer> businessIds = businessTagService.queryBusinessIdByTag(queryByTag);
+        EdsInstanceParam.AssetPageQueryParam param = EdsInstanceParam.AssetPageQueryParam.builder()
+                .idList(businessIds)
+                .build();
+        return edsAssetService.countEdsInstanceAssets(param);
     }
 
     @Override

@@ -10,8 +10,8 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMPolicyRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -37,12 +37,12 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)
 public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aliyun, GetUserResponse.User> {
 
-    private final AliyunRamUserRepo ramUserRepo;
-    private final AliyunRamPolicyRepo ramPolicyRepo;
+    private final AliyunRAMUserRepo ramUserRepo;
+    private final AliyunRAMPolicyRepo ramPolicyRepo;
     public final static boolean ENABLE_MFA = true;
 
-    public AliyunIdentityProvider(CloudIdentityProviderContext context, AliyunRamUserRepo ramUserRepo,
-                                  AliyunRamPolicyRepo ramPolicyRepo) {
+    public AliyunIdentityProvider(CloudIdentityProviderContext context, AliyunRAMUserRepo ramUserRepo,
+                                  AliyunRAMPolicyRepo ramPolicyRepo) {
         super(context);
         this.ramUserRepo = ramUserRepo;
         this.ramPolicyRepo = ramPolicyRepo;

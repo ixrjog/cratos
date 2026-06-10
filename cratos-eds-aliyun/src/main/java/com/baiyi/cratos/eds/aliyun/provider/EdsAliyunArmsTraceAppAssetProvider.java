@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.model.AliyunArms;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunArmsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunARMSRepo;
 import com.baiyi.cratos.eds.core.BaseEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -52,7 +52,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsAssetProvider<Eds
     protected List<AliyunArms.TraceApps> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunArmsRepo.listTraceApps(instance.getConfig())
+            return AliyunARMSRepo.listTraceApps(instance.getConfig())
                     .stream()
                     .map(e -> {
                         List<AliyunArms.Tags> tags = CollectionUtils.isEmpty(e.getTags()) ? List.of() : e.getTags()

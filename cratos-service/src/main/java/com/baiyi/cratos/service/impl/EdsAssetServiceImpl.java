@@ -137,6 +137,11 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     }
 
     @Override
+    public int countEdsInstanceAssets(EdsInstanceParam.AssetPageQueryParam param) {
+        return edsAssetMapper.countByParam(param);
+    }
+
+    @Override
     public List<EdsAsset> queryByTypeAndName(@NonNull String assetType, @NonNull String name, boolean isPrefix) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();

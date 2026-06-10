@@ -61,6 +61,8 @@ public class ApplicationConfigModel {
     public static class App {
         private String name;
         private String service;
+        private String contextPath;
+        private String port;
     }
 
     @Data

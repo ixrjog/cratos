@@ -22,7 +22,7 @@ import java.util.List;
 public class ProjectLoadBalancerVO {
 
     public static LbConfig loadAs(ProjectLoadBalancer projectLoadBalancer) {
-        if (projectLoadBalancer== null) {
+        if (projectLoadBalancer == null) {
             return LbConfig.EMPTY;
         }
         return loadAs(projectLoadBalancer.getConfig());
@@ -76,6 +76,91 @@ public class ProjectLoadBalancerVO {
         private String listenerStatus;
         private List<Server> serverGroupServers;
         private Integer forwardTo;
+        private List<Acl> aclList;
+        private List<Rule> ruleList;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class Rule implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 5811060258943787915L;
+        private String direction;
+        private String listenerId;
+        private String loadBalancerId;
+        private Integer priority;
+        private List<RuleCondition> ruleConditions;
+        private List<RuleAction> ruleActions;
+        private String ruleId;
+        private String ruleName;
+        private String ruleStatus;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class RuleCondition implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -4968669450546316547L;
+        private RuleConfig hostConfig;
+        private RuleConfig pathConfig;
+        private RuleConfig sourceIpConfig;
+        private String type;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class RuleAction implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -1343077567697128701L;
+        private ForwardGroupConfig forwardGroupConfig;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class ForwardGroupConfig implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -4311645150552836003L;
+        private List<ServerGroupTuple> serverGroupTuples;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class ServerGroupTuple implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 296574875981875273L;
+        private String serverGroupId;
+        private Integer weight;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class RuleConfig implements Serializable {
+        public static RuleConfig of(List<String> values) {
+            return RuleConfig.builder()
+                    .values(values)
+                    .build();
+        }
+        @Serial
+        private static final long serialVersionUID = -6221007981611622408L;
+        private List<String> values;
     }
 
     @Data
@@ -121,6 +206,33 @@ public class ProjectLoadBalancerVO {
         private String value;
         private String cdn;
         private Integer listenerPort;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class Acl implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 118342108099475651L;
+        private String name;
+        private String aclId;
+        private String aclType;
+        private List<AclEntry> aclEntries;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class AclEntry implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3161345737224082062L;
+        private String description;
+        private String entry;
+        private String status;
     }
 
 }

@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.model.AliyunAlb;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunAlbRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunALBRepo;
 import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -56,7 +56,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     protected List<AliyunAlb.Alb> listEntities(String namespace,
                                                ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunAlbRepo.listLoadBalancers(namespace, instance.getConfig())
+            return AliyunALBRepo.listLoadBalancers(namespace, instance.getConfig())
                     .stream()
                     .map(e -> toAlb(namespace, e))
                     .toList();

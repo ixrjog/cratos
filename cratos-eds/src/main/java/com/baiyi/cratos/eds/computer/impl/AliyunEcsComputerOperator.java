@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.computer.impl;
 
 import com.aliyuncs.ecs.model.v20140526.DescribeInstancesResponse;
 import com.baiyi.cratos.common.exception.CloudComputerOperationException;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunECSRepo;
 import com.baiyi.cratos.eds.computer.BaseCloudComputerOperator;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
 import com.baiyi.cratos.eds.context.CloudComputerOperatorContext;
@@ -21,9 +21,9 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ECS)
 public class AliyunEcsComputerOperator extends BaseCloudComputerOperator<EdsConfigs.Aliyun, DescribeInstancesResponse.Instance> {
 
-    private final AliyunEcsRepo aliyunEcsRepo;
+    private final AliyunECSRepo aliyunEcsRepo;
 
-    public AliyunEcsComputerOperator(CloudComputerOperatorContext context, AliyunEcsRepo aliyunEcsRepo) {
+    public AliyunEcsComputerOperator(CloudComputerOperatorContext context, AliyunECSRepo aliyunEcsRepo) {
         super(context);
         this.aliyunEcsRepo = aliyunEcsRepo;
     }

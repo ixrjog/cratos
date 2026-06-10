@@ -5,7 +5,7 @@ import com.aliyun.alb20200616.models.ListAclsResponseBody;
 import com.aliyuncs.ecs.model.v20140526.DescribeSecurityGroupAttributeResponse;
 import com.aliyuncs.ecs.model.v20140526.ListTagResourcesResponse;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunAlbRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunALBRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunSecurityGroupRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunTagRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -61,7 +61,7 @@ public class EdsAliyunEcsTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     void test4() {
         EdsConfigs.Aliyun aliyun = getConfig(2);
         try {
-            List<ListAclsResponseBody.ListAclsResponseBodyAcls> acls = AliyunAlbRepo.listAcls(
+            List<ListAclsResponseBody.ListAclsResponseBodyAcls> acls = AliyunALBRepo.listAcls(
                     "alb.eu-central-1.aliyuncs.com", aliyun, "acl-shaiyy6u1aul8vas07");
             System.out.println(acls);
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class EdsAliyunEcsTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     void test5() {
         EdsConfigs.Aliyun aliyun = getConfig(2);
         try {
-            List<ListAclEntriesResponseBody.ListAclEntriesResponseBodyAclEntries> aclEntries = AliyunAlbRepo.listAclEntries(
+            List<ListAclEntriesResponseBody.ListAclEntriesResponseBodyAclEntries> aclEntries = AliyunALBRepo.listAclEntries(
                     "alb.eu-central-1.aliyuncs.com", aliyun, "acl-shaiyy6u1aul8vas07");
             System.out.println(aclEntries);
         } catch (Exception e) {

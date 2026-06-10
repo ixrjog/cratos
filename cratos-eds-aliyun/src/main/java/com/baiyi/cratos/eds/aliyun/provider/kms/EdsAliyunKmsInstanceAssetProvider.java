@@ -4,7 +4,7 @@ import com.aliyun.sdk.service.kms20160120.models.ListKmsInstancesResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunKMSRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -50,8 +50,8 @@ public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetP
     @Override
     protected List<AliyunKms.KmsInstance> listEntities(String endpoint,
                                                        ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
-        List<ListKmsInstancesResponseBody.KmsInstance> instances = AliyunKmsRepo.listInstances(endpoint,
-                instance.getConfig());
+        List<ListKmsInstancesResponseBody.KmsInstance> instances = AliyunKMSRepo.listInstances(endpoint,
+                                                                                               instance.getConfig());
         if (CollectionUtils.isEmpty(instances)) {
             return List.of();
         }

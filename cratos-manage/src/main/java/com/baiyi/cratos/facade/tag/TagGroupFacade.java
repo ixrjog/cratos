@@ -20,4 +20,6 @@ public interface TagGroupFacade {
 
     DataTable<EdsAssetVO.Asset> queryMyGroupAssetPage(TagGroupParam.MyGroupAssetPageQuery pageQuery);
 
+    int countGroupAssets(String groupName);
+
 }

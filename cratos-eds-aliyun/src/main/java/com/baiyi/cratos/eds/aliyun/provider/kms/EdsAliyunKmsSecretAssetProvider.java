@@ -14,7 +14,7 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunKMSRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -69,7 +69,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     @Override
     protected List<AliyunKms.KmsSecret> listEntities(String endpoint,
                                                      ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
-        List<ListSecretsResponseBody.Secret> secrets = AliyunKmsRepo.listSecrets(endpoint, instance.getConfig());
+        List<ListSecretsResponseBody.Secret> secrets = AliyunKMSRepo.listSecrets(endpoint, instance.getConfig());
         if (CollectionUtils.isEmpty(secrets)) {
             return List.of();
         }
@@ -79,7 +79,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     private List<AliyunKms.KmsSecret> toKmsSecret(String endpoint, EdsConfigs.Aliyun configModel,
                                                   List<ListSecretsResponseBody.Secret> secrets) {
         return secrets.stream()
-                .map(e -> AliyunKmsRepo.describeSecret(endpoint, configModel, e.getSecretName())
+                .map(e -> AliyunKMSRepo.describeSecret(endpoint, configModel, e.getSecretName())
                         .map(response -> {
                             AliyunKms.SecretMetadata metadata = BeanCopierUtils.copyProperties(
                                     response,
@@ -124,7 +124,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
                                                AliyunKms.KmsSecret entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
-        Optional<GetSecretValueResponseBody> optionalGetSecretValueResponseBody = AliyunKmsRepo.getSecretValue(
+        Optional<GetSecretValueResponseBody> optionalGetSecretValueResponseBody = AliyunKMSRepo.getSecretValue(
                 entity.getEndpoint(), instance.getConfig(), entity.getSecret()
                         .getSecretName()
         );

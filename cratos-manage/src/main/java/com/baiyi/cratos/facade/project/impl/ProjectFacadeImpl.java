@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.aliyun.facade.AliyunLoadBalancerFacade;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.huaweicloud.cloud.facade.HwcLoadBalancerFacade;
 import com.baiyi.cratos.facade.project.ProjectFacade;
+import com.baiyi.cratos.facade.tag.TagGroupFacade;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.project.ProjectLoadBalancerWrapper;
 import com.google.common.collect.Lists;
@@ -33,9 +34,9 @@ public class ProjectFacadeImpl implements ProjectFacade {
     private final ProjectTenantService projectTenantService;
     private final ProjectLoadBalancerService projectLoadBalancerService;
     private final ProjectGroupService projectGroupService;
-    private final ProjectGroupMemberService projectGroupMemberService;
     private final EdsInstanceService edsInstanceService;
     private final ProjectLoadBalancerWrapper projectLoadBalancerWrapper;
+    private final TagGroupFacade tagGroupFacade;
 
     @Override
     public ProjectVO.TenantView queryProjectTenantView(ProjectParam.ProjectTenantViewQuery queryParam) {
@@ -71,31 +72,10 @@ public class ProjectFacadeImpl implements ProjectFacade {
                 .build();
     }
 
-    private List<ProjectVO.Group> getGroups(int tenantId) {
+    private List<String> getGroups(int tenantId) {
         return projectGroupService.queryByTenantId(tenantId)
                 .stream()
-                .map(group -> {
-                    List<ProjectVO.GroupMember> members = projectGroupMemberService.queryByGroupId(group.getId())
-                            .stream()
-                            .map(member -> ProjectVO.GroupMember.builder()
-                                    .groupId(group.getId())
-                                    .businessType(member.getBusinessType())
-                                    .businessId(member.getBusinessId())
-                                    .role(member.getRole())
-                                    .name(member.getName())
-                                    .valid(member.getValid())
-                                    .comment(member.getComment())
-                                    .build())
-                            .toList();
-                    return ProjectVO.Group.builder()
-                            .name(group.getName())
-                            .projectId(group.getId())
-                            .tenantId(group.getTenantId())
-                            .valid(group.getValid())
-                            .comment(group.getComment())
-                            .members(members)
-                            .build();
-                })
+                .map(ProjectGroup::getName)
                 .toList();
     }
 
@@ -267,58 +247,30 @@ public class ProjectFacadeImpl implements ProjectFacade {
     }
 
     @Override
-    public List<ProjectVO.GroupDetail> queryGroupsByTenantId(int tenantId) {
-        return projectGroupService.queryByTenantId(tenantId).stream()
-                .map(group -> {
-                    List<ProjectVO.GroupMemberDetail> members = projectGroupMemberService.queryByGroupId(group.getId())
-                            .stream()
-                            .map(m -> ProjectVO.GroupMemberDetail.builder()
-                                    .id(m.getId()).groupId(m.getGroupId())
-                                    .businessType(m.getBusinessType()).businessId(m.getBusinessId())
-                                    .role(m.getRole()).name(m.getName()).valid(m.getValid()).comment(m.getComment())
-                                    .createTime(m.getCreateTime()).updateTime(m.getUpdateTime())
-                                    .build())
-                            .toList();
-                    return ProjectVO.GroupDetail.builder()
-                            .id(group.getId()).projectId(group.getProjectId()).tenantId(group.getTenantId())
-                            .name(group.getName()).valid(group.getValid()).comment(group.getComment())
-                            .createTime(group.getCreateTime()).updateTime(group.getUpdateTime())
-                            .members(members)
-                            .build();
-                })
-                .toList();
-    }
-
-    @Override
     public void addProjectGroup(ProjectParam.AddProjectGroup param) {
         ProjectGroup group = param.toTarget();
         projectGroupService.add(group);
     }
 
     @Override
-    public void updateProjectGroup(ProjectParam.UpdateProjectGroup param) {
-        ProjectGroup group = projectGroupService.getById(param.getId());
-        if (group == null) return;
-        group.setName(param.getName());
-        group.setValid(param.getValid());
-        group.setComment(param.getComment());
-        projectGroupService.updateByPrimaryKey(group);
+    public List<ProjectVO.GroupDetail> queryGroupsByTenantId(int tenantId) {
+        return projectGroupService.queryByTenantId(tenantId)
+                .stream()
+                .map(group -> ProjectVO.GroupDetail.builder()
+                        .id(group.getId())
+                        .projectId(group.getProjectId())
+                        .tenantId(group.getTenantId())
+                        .name(group.getName())
+                        .valid(group.getValid())
+                        .comment(group.getComment())
+                        .size(tagGroupFacade.countGroupAssets(group.getName()))
+                        .build())
+                .toList();
     }
 
     @Override
     public void deleteProjectGroupById(int id) {
         projectGroupService.deleteById(id);
-    }
-
-    @Override
-    public void addProjectGroupMember(ProjectParam.AddProjectGroupMember param) {
-        ProjectGroupMember member = param.toTarget();
-        projectGroupMemberService.add(member);
-    }
-
-    @Override
-    public void deleteProjectGroupMemberById(int id) {
-        projectGroupMemberService.deleteById(id);
     }
 
 }

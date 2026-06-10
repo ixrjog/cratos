@@ -125,6 +125,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- https://api.aliyun.com/api-tools/sdk/Ims?version=2019-08-15&language=java-async-tea&tab=primer-doc -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>ims20190815</artifactId>
+            <version>3.4.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-ecs -->
         <dependency>
             <groupId>com.aliyun</groupId>

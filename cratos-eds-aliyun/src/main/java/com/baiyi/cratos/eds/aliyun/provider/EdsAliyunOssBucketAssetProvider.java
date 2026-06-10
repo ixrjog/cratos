@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.aliyun.oss.model.Bucket;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunOssRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunOSSRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -46,7 +46,7 @@ public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetPro
     @Override
     protected List<Bucket> listEntities(String endpoint,
                                         ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
-        return AliyunOssRepo.listBuckets(endpoint, instance.getConfig());
+        return AliyunOSSRepo.listBuckets(endpoint, instance.getConfig());
     }
 
     @Override

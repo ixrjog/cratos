@@ -36,6 +36,7 @@ public class DomainParam {
         @Schema(description = "查询名称")
         private String queryName;
         private String domainType;
+        private Integer accountEntityId;
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
 
@@ -45,6 +46,7 @@ public class DomainParam {
                     .length(getLength())
                     .queryName(queryName)
                     .domainType(domainType)
+                    .accountEntityId(accountEntityId)
                     .idList(idList)
                     .build();
         }
@@ -58,6 +60,7 @@ public class DomainParam {
     public static class DomainPageQueryParam extends PageParam {
         private String queryName;
         private String domainType;
+        private Integer accountEntityId;
         private List<Integer> idList;
     }
 
@@ -80,6 +83,7 @@ public class DomainParam {
         @Schema(description = "到期")
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiry;
+        private Integer accountEntityId;
         private String domainType;
         private String comment;
         @Schema(description = "Import from assetId")
@@ -105,6 +109,7 @@ public class DomainParam {
         @Schema(description = "到期")
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiry;
+        private Integer accountEntityId;
         private String domainType;
         private String comment;
         @Schema(description = "Import from assetId")

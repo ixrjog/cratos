@@ -4,7 +4,7 @@ import com.aliyun.rocketmq20220801.models.ListConsumerGroupsResponseBody;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunONSV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -63,7 +63,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
                 return Collections.emptyList();
             } else {
                 for (EdsAsset edsAssetsOnsInstance : edsAssetsOnsInstances) {
-                    List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> consumerGroups = AliyunOnsV5Repo.listConsumerGroups(
+                    List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> consumerGroups = AliyunONSV5Repo.listConsumerGroups(
                             endpoint, instance.getConfig(), edsAssetsOnsInstance.getAssetId());
                     if (!CollectionUtils.isEmpty(consumerGroups)) {
                         results.addAll(consumerGroups);

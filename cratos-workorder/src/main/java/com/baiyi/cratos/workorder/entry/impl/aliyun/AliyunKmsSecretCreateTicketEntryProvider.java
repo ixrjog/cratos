@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunKMSRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -92,7 +92,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
-        Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
+        Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKMSRepo.describeSecret(
                 createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
         // 校验secretName是否合规
         if (!ValidationUtils.isAliyunKMSSecretName(createSecret.getSecretName())) {
@@ -123,14 +123,14 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         // 解密 Secret 数据
         String secretData = stringEncryptor.decrypt(createSecret.getSecretData());
         try {
-            Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKmsRepo.createSecret(
+            Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKMSRepo.createSecret(
                     createSecret.getEndpoint(), aliyun, createSecret.getKmsInstance()
                             .getAssetId(), createSecret.getSecretName(), createSecret.getVersionId(),
                     createSecret.getEncryptionKeyId(), secretData, tags, createSecret.getDescription());
             if (optionalCreateSecretResponseBody.isEmpty()) {
                 WorkOrderTicketException.runtime("Failed to create KMS secret: " + createSecret.getSecretName());
             }
-            Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
+            Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKMSRepo.describeSecret(
                     createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
             if (optionalDescribeSecretResponseBody.isEmpty()) {
                 WorkOrderTicketException.runtime("Failed to describe KMS secret: " + createSecret.getSecretName());

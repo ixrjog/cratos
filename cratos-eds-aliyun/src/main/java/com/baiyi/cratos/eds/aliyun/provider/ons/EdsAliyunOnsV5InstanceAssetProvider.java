@@ -5,7 +5,7 @@ import com.aliyun.rocketmq20220801.models.ListInstancesResponseBody;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunONSV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -56,7 +56,7 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
     protected List<ListInstancesResponseBody.ListInstancesResponseBodyDataList> listEntities(String endpoint,
                                                                                              ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunOnsV5Repo.listInstances(endpoint, instance.getConfig());
+            return AliyunONSV5Repo.listInstances(endpoint, instance.getConfig());
         } catch (Exception ex) {
             throw new EdsQueryEntitiesException(ex.getMessage());
         }
@@ -85,7 +85,7 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
             ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            GetInstanceResponse instanceResponse = AliyunOnsV5Repo.getInstance(entity.getRegionId(),
+            GetInstanceResponse instanceResponse = AliyunONSV5Repo.getInstance(entity.getRegionId(),
                                                                                instance.getConfig(), entity.getInstanceId());
             instanceResponse.getBody().getData().getNetworkInfo().endpoints.forEach(endpoint -> {
 

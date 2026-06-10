@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOss;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunOssRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunOSSRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -94,7 +94,7 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
                 .stream()
                 .collect(Collectors.toMap(EdsAsset::getAssetId, Function.identity(), (a, b) -> a));
 
-        return AliyunOssRepo.listBuckets(endpoint, aliyun)
+        return AliyunOSSRepo.listBuckets(endpoint, aliyun)
                 .stream()
                 .flatMap(bucket -> processBucket(bucket, aliyun, ramUserMap, instance.getInstanceName()));
     }
@@ -102,7 +102,7 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
     private Stream<AliyunOss.Policy> processBucket(Bucket bucket, EdsConfigs.Aliyun aliyun,
                                                               Map<String, EdsAsset> ramUserMap, String instanceName) {
         try {
-            String policyJson = AliyunOssRepo.getBucketPolicy(bucket.getExtranetEndpoint(), aliyun, bucket.getName());
+            String policyJson = AliyunOSSRepo.getBucketPolicy(bucket.getExtranetEndpoint(), aliyun, bucket.getName());
             if (policyJson == null) {
                 return Stream.empty();
             }

@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.account.AccountEntityVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,7 +34,7 @@ public class DomainVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.DOMAIN)
-    public static class Domain extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Domain extends BaseVO implements AccountEntityVO.HasAccountEntity, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
         @Serial
         private static final long serialVersionUID = -7504148829629508983L;
         private Integer id;
@@ -41,6 +42,7 @@ public class DomainVO {
         private Integer instanceId;
         private Integer assetId;
         private String instanceName;
+        private Integer accountEntityId;
 
         private String name;
         private Boolean valid;
@@ -49,6 +51,8 @@ public class DomainVO {
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiry;
         private String domainType;
+
+        private AccountEntityVO.AccountEntity accountEntity;
         private String comment;
 
         @Override

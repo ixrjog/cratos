@@ -1,7 +1,7 @@
-package com.baiyi.cratos.eds;
+package com.baiyi.cratos.eds.cloudflare;
 
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.eds.cloudflare.CloudFlareServiceFactory;
+import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareCert;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareDns;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;

@@ -4,7 +4,7 @@ import com.aliyun.slb20140515.models.DescribeLoadBalancerAttributeResponseBody;
 import com.aliyun.slb20140515.models.DescribeLoadBalancersResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.model.AliyunClb;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunClbRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunCLBRepo;
 import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -52,7 +52,7 @@ public class EdsAliyunClbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     protected List<AliyunClb.Clb> listEntities(String namespace,
                                                ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunClbRepo.describeLoadBalancers(namespace, instance.getConfig())
+            return AliyunCLBRepo.describeLoadBalancers(namespace, instance.getConfig())
                     .stream()
                     .map(e -> {
                         try {
@@ -69,7 +69,7 @@ public class EdsAliyunClbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
 
     private AliyunClb.Clb toClb(String endpoint, EdsConfigs.Aliyun aliyun,
                                 DescribeLoadBalancersResponseBody.DescribeLoadBalancersResponseBodyLoadBalancersLoadBalancer loadBalancer) throws Exception {
-        DescribeLoadBalancerAttributeResponseBody attribute = AliyunClbRepo.describeLoadBalancerAttribute(
+        DescribeLoadBalancerAttributeResponseBody attribute = AliyunCLBRepo.describeLoadBalancerAttribute(
                 endpoint, aliyun, loadBalancer.getLoadBalancerId());
         return AliyunClb.Clb.builder()
                 .endpoint(endpoint)

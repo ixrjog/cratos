@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.eds.acme.dns.BaseAcmeDNSResolver;
 import com.baiyi.cratos.eds.acme.model.AcmeDnsRecord;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunDNSRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -51,7 +51,7 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
         List<AcmeDnsRecord> acmeDnsRecords = getAcmeDnsRecords(order);
         // 查询 DNS 记录
         List<DescribeDomainRecordsResponseBody.Record> records = findMatchedRecord(
-                acmeDnsRecords, AliyunDnsRepo.describeDomainRecords(
+                acmeDnsRecords, AliyunDNSRepo.describeDomainRecords(
                         config, acmeDomain.getDomain())
         );
         if (CollectionUtils.isEmpty(records)) {
@@ -62,7 +62,7 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
         }
         // 删除所有匹配的记录
         for (DescribeDomainRecordsResponseBody.Record record : records) {
-            AliyunDnsRepo.deleteDomainRecord(config, record.getRecordId());
+            AliyunDNSRepo.deleteDomainRecord(config, record.getRecordId());
             log.info("Deleted ACME challenge record: {}", record.getRr());
         }
     }
@@ -101,7 +101,7 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
                 rr = acmeDnsRecord.getRecordName() + "." + StringUtils.removeEnd(
                         acmeDnsRecord.getDomain(), "." + acmeDomain.getDomain());
             }
-            AliyunDnsRepo.addDomainRecord(
+            AliyunDNSRepo.addDomainRecord(
                     config, acmeDomain.getDomain(), rr, DnsRRType.TXT.name(), acmeDnsRecord.getDigest(), 600L);
         }
     }
@@ -110,7 +110,7 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
     public boolean hasDcvChallengeRecord(AcmeDomain acmeDomain, String dcvRecordValue) {
         String fullDcvRecordValue = acmeDomain.getDomain() + "." + dcvRecordValue;
         EdsConfigs.Aliyun config = getEdsConfig(acmeDomain);
-        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
+        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDNSRepo.describeDomainRecords(
                 config, acmeDomain.getDomain());
         String dcv = ACME_CHALLENGE_NAME + "." + acmeDomain.getDomain();
         for (DescribeDomainRecordsResponseBody.Record record : records) {
@@ -127,7 +127,7 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
     protected void addDcvChallengeRecord(AcmeDomain acmeDomain, String dcvRecordValue) {
         // 获取 Aliyun 配置
         EdsConfigs.Aliyun config = getEdsConfig(acmeDomain);
-        AliyunDnsRepo.addDomainRecord(
+        AliyunDNSRepo.addDomainRecord(
                 config, acmeDomain.getDomain(), ACME_CHALLENGE_NAME, DnsRRType.CNAME.name(), dcvRecordValue, 600L);
     }
 

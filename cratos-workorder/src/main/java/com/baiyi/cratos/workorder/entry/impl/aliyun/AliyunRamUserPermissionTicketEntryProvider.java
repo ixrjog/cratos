@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.model.AliyunModel;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -39,8 +39,8 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.CREATE_LOGIN_PROFILE;
-import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.ENABLE_MFA;
+import static com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo.CREATE_LOGIN_PROFILE;
+import static com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo.ENABLE_MFA;
 
 /**
  * &#064;Author  baiyi
@@ -53,7 +53,7 @@ import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.ENABLE_MFA;
 public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryProvider<AliyunModel.AliyunAccount, WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
-    private final AliyunRamUserRepo aliyunRamUserRepo;
+    private final AliyunRAMUserRepo aliyunRamUserRepo;
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
@@ -65,7 +65,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                                                       WorkOrderTicketService workOrderTicketService,
                                                       WorkOrderService workOrderService,
                                                       EdsInstanceService edsInstanceService,
-                                                      AliyunRamUserRepo aliyunRamUserRepo,
+                                                      AliyunRAMUserRepo aliyunRamUserRepo,
                                                       EdsProviderHolderFactory edsProviderHolderFactory,
                                                       BusinessTagFacade businessTagFacade, TagService tagService,
                                                       UserService userService,

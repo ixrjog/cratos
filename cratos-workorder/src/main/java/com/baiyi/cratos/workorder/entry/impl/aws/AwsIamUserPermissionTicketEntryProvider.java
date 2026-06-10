@@ -42,7 +42,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.CREATE_LOGIN_PROFILE;
+import static com.baiyi.cratos.eds.aliyun.repo.AliyunRAMUserRepo.CREATE_LOGIN_PROFILE;
 import static com.baiyi.cratos.eds.aws.repo.iam.AwsMFADeviceRepo.SERIAL_NUMBER_TPL;
 
 /**

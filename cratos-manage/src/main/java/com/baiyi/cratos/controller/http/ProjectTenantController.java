@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES;
 import static com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum.CLOUD_LB_TYPES;
 
 @RestController
@@ -34,13 +33,15 @@ public class ProjectTenantController {
 
     @Operation(summary = "Query project tenant view")
     @PostMapping(value = "/tenant/view/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<ProjectVO.TenantView> queryProjectTenantView(@RequestBody @Valid ProjectParam.ProjectTenantViewQuery queryParam) {
+    public HttpResult<ProjectVO.TenantView> queryProjectTenantView(
+            @RequestBody @Valid ProjectParam.ProjectTenantViewQuery queryParam) {
         return new HttpResult<>(projectFacade.queryProjectTenantView(queryParam));
     }
 
     @Operation(summary = "Pagination query project tenant")
     @PostMapping(value = "/tenant/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<ProjectVO.TenantDetail>> queryProjectTenantPage(@RequestBody @Valid ProjectParam.ProjectTenantPageQuery pageQuery) {
+    public HttpResult<DataTable<ProjectVO.TenantDetail>> queryProjectTenantPage(
+            @RequestBody @Valid ProjectParam.ProjectTenantPageQuery pageQuery) {
         return HttpResult.of(projectFacade.queryProjectTenantPage(pageQuery));
     }
 
@@ -53,7 +54,8 @@ public class ProjectTenantController {
 
     @Operation(summary = "Update project tenant")
     @PutMapping(value = "/tenant/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateProjectTenant(@RequestBody @Valid ProjectParam.UpdateProjectTenant updateProjectTenant) {
+    public HttpResult<Boolean> updateProjectTenant(
+            @RequestBody @Valid ProjectParam.UpdateProjectTenant updateProjectTenant) {
         projectFacade.updateProjectTenant(updateProjectTenant);
         return HttpResult.SUCCESS;
     }
@@ -80,7 +82,8 @@ public class ProjectTenantController {
 
     @Operation(summary = "Update project load balancer")
     @PutMapping(value = "/lb/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateProjectLoadBalancer(@RequestBody @Valid ProjectParam.UpdateProjectLoadBalancer param) {
+    public HttpResult<Boolean> updateProjectLoadBalancer(
+            @RequestBody @Valid ProjectParam.UpdateProjectLoadBalancer param) {
         projectFacade.updateProjectLoadBalancer(param);
         return HttpResult.SUCCESS;
     }
@@ -100,14 +103,6 @@ public class ProjectTenantController {
                                                          .toList()));
     }
 
-    @Operation(summary = "Get member type options")
-    @GetMapping(value = "/member/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<OptionsVO.Options> getMemberTypeOptions() {
-        return HttpResult.of(OptionsVO.toOptions(CLOUD_COMPUTER_TYPES.stream()
-                                                         .map(Enum::name)
-                                                         .toList()));
-    }
-
     @Operation(summary = "Query groups by tenant id")
     @GetMapping(value = "/group/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<ProjectVO.GroupDetail>> queryGroupsByTenantId(@RequestParam int tenantId) {
@@ -121,31 +116,10 @@ public class ProjectTenantController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Update project group")
-    @PutMapping(value = "/group/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateProjectGroup(@RequestBody @Valid ProjectParam.UpdateProjectGroup param) {
-        projectFacade.updateProjectGroup(param);
-        return HttpResult.SUCCESS;
-    }
-
     @Operation(summary = "Delete project group by id")
     @DeleteMapping(value = "/group/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteProjectGroupById(@RequestParam int id) {
         projectFacade.deleteProjectGroupById(id);
-        return HttpResult.SUCCESS;
-    }
-
-    @Operation(summary = "Add project group member")
-    @PostMapping(value = "/group/member/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addProjectGroupMember(@RequestBody @Valid ProjectParam.AddProjectGroupMember param) {
-        projectFacade.addProjectGroupMember(param);
-        return HttpResult.SUCCESS;
-    }
-
-    @Operation(summary = "Delete project group member by id")
-    @DeleteMapping(value = "/group/member/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteProjectGroupMemberById(@RequestParam int id) {
-        projectFacade.deleteProjectGroupMemberById(id);
         return HttpResult.SUCCESS;
     }
 

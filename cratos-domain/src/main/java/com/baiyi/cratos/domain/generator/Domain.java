@@ -38,6 +38,9 @@ public class Domain implements HasValid, ToBusinessTarget, HasIntegerPrimaryKey,
     @Column(name = "asset_id")
     private Integer assetId;
 
+    @Column(name = "account_entity_id")
+    private Integer accountEntityId;
+
     /**
      * 名称
      */
