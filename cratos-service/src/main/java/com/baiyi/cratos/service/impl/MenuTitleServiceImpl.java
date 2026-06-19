@@ -9,8 +9,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
@@ -41,6 +43,18 @@ public class MenuTitleServiceImpl implements MenuTitleService {
         Example example = new Example(MenuTitle.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("menuId", menuId);
+        example.setOrderByClause("lang");
+        return menuTitleMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<MenuTitle> queryByMenuIds(List<Integer> menuIds) {
+        if (CollectionUtils.isEmpty(menuIds)) {
+            return Collections.emptyList();
+        }
+        Example example = new Example(MenuTitle.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("menuId", menuIds);
         example.setOrderByClause("lang");
         return menuTitleMapper.selectByExample(example);
     }

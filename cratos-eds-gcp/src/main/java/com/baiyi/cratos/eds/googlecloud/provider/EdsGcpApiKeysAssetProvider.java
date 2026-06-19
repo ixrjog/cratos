@@ -96,14 +96,14 @@ public class EdsGcpApiKeysAssetProvider extends BaseEdsAssetProvider<EdsConfigs.
     protected void processAssetTags(EdsAsset asset, ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
                                     GcpApiKeysModel.Key entity, List<EdsAssetIndex> indices) {
         SecurityLevel level = evaluateSecurityLevel(entity.getRestrictions());
-        BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
+        BusinessTagParam.SaveBusinessTag securityLevelBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
                 .tagId(tagService.getByTagKey(SysTagKeys.SECURITY_LEVEL.getKey())
                                .getId())
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(asset.getId())
                 .tagValue(level.name())
                 .build();
-        businessTagFacade.saveBusinessTag(saveBusinessTag);
+        businessTagFacade.saveBusinessTag(securityLevelBusinessTag);
     }
 
     /**

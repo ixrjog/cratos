@@ -65,4 +65,39 @@ public class EdsKubernetesConfigModel {
         private List<String> exclude;
     }
 
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class KubernetesGrafana {
+        private GrafanaKubernetes kubernetes;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class GrafanaKubernetes {
+        private String overview;
+        private String workload;
+        private GrafanaKubernetesPod pod;
+        private GrafanaKubernetesNode node;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class GrafanaKubernetesPod {
+        private String overview;
+        private String topN;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class GrafanaKubernetesNode {
+        private String overview;
+        private String topN;
+        private String summary;
+        private String pool;
+    }
+
 }

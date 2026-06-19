@@ -22,6 +22,8 @@ public interface MenuService extends BaseUniqueKeyService<Menu, MenuMapper>, Bas
 
     List<Menu> queryMySubMenu(int parentId, List<Integer> myMenuIds);
 
+    List<Menu> queryByIds(List<Integer> menuIds);
+
     List<Menu> queryMainMenu(List<Integer> menuIds);
 
     List<Menu> queryMainMenu();

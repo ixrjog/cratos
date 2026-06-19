@@ -43,6 +43,14 @@ public class AwsCloudFrontRepo {
         return distributionSummaryList;
     }
 
+    public static DistributionConfig getDistributionConfig(String regionId, EdsConfigs.Aws aws, String distributionId) {
+        GetDistributionConfigRequest request = new GetDistributionConfigRequest();
+        request.setId(distributionId);
+        GetDistributionConfigResult result = AmazonCloudFrontService.buildAmazonCloudFront(regionId, aws)
+                .getDistributionConfig(request);
+        return result.getDistributionConfig();
+    }
+
     public static List<ConflictingAlias> listConflictingAliases(EdsConfigs.Aws aws, String distributionId) {
         return listConflictingAliases(aws.getRegionId(), aws, distributionId);
     }

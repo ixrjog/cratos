@@ -35,6 +35,8 @@ public class TrafficLayerIngressParam {
     public static class QueryIngressServiceDetails {
         @NotBlank
         private String queryService;
+        // 精确匹配
+        private Boolean exactMatch;
     }
 
     @Data

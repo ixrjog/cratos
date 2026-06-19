@@ -1,6 +1,8 @@
 package com.baiyi.cratos.eds.security.apirisk.service;
 
+import com.baiyi.cratos.eds.security.apirisk.result.ApiRiskApiResult;
 import com.baiyi.cratos.eds.security.apirisk.result.ApiRiskAccountResult;
+import com.baiyi.cratos.eds.security.apirisk.result.ApiRiskWeaknessResult;
 import com.baiyi.cratos.eds.security.apirisk.result.base.ApiRiskResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.HttpExchange;
@@ -18,5 +20,13 @@ public interface ApiRiskService {
 
     @PostExchange("/audit-apiv2/openApi/v3/account/list")
     ApiRiskResponse<ApiRiskAccountResult.Account> listAccount(@RequestBody Map<String, String> param);
+
+    // API
+    @PostExchange("/audit-apiv2/openApi/v3/api/list")
+    ApiRiskResponse<ApiRiskApiResult.Api> listApi(@RequestBody Map<String, String> param);
+
+    // Weakness
+    @PostExchange("/audit-apiv2/openApi/v3/weakness/list")
+    ApiRiskResponse<ApiRiskWeaknessResult.Weakness> listWeakness(@RequestBody Map<String, String> param);
 
 }

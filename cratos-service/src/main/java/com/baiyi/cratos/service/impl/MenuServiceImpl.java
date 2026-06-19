@@ -14,8 +14,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
@@ -63,6 +65,17 @@ public class MenuServiceImpl implements MenuService {
         criteria.andEqualTo("parentId", parentId)
                 .andEqualTo("menuType", MenuTypeEnum.SUB.name())
                 .andIn("id", myMenuIds);
+        return menuMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<Menu> queryByIds(List<Integer> menuIds) {
+        if (CollectionUtils.isEmpty(menuIds)) {
+            return Collections.emptyList();
+        }
+        Example example = new Example(Menu.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", menuIds);
         return menuMapper.selectByExample(example);
     }
 

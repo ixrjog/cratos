@@ -50,6 +50,26 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
     private final String[] SIGN_HEADERS = {"pp_req_sign", "pp_req_sign_2", "pp_req_sign_v2", "sign"};
     private final String[] TIMESTAMP_HEADERS = {"pp_timestamp", "timestamp"};
 
+    public void defenseAgainstSSRF(String url) {
+        if (!StringUtils.hasText(url)) {
+            ApiSecurityTestException.runtime("URL is empty");
+        }
+        String host ="";
+        try {
+            host = java.net.URI.create(url)
+                    .getHost();
+        } catch (Exception e) {
+            ApiSecurityTestException.runtime("Invalid URL format");
+        }
+        if (!StringUtils.hasText(host)) {
+            ApiSecurityTestException.runtime("Host is empty");
+        }
+        if (trafficLayerDomainRecordService.queryByRecordName(host)
+                .isEmpty()) {
+            ApiSecurityTestException.runtime("The test URL={} is not in the whitelist", url);
+        }
+    }
+
     @Override
     public GenericCall.Response callTestApi(ApiTestParam.CallApi callApi) {
         GenericCall.Request request = HttpRequestParser.parse(callApi.getRequestMessage());
@@ -67,24 +87,7 @@ public class ApiSecurityTestFacadeImpl implements ApiSecurityTestFacade {
         long start = System.currentTimeMillis();
         GenericCall.Response resp = null;
         // URL白名单校验, 防止 SSRF
-        String url = request.getUrl();
-        if (!StringUtils.hasText(url)) {
-            ApiSecurityTestException.runtime("URL is empty");
-        }
-        String host = "";
-        try {
-            host = java.net.URI.create(url)
-                    .getHost();
-        } catch (Exception e) {
-            ApiSecurityTestException.runtime("Invalid URL format");
-        }
-        if (!StringUtils.hasText(host)) {
-            ApiSecurityTestException.runtime("Host is empty");
-        }
-        if (trafficLayerDomainRecordService.queryByRecordName(host)
-                .isEmpty()) {
-            ApiSecurityTestException.runtime("The test URL={} is not in the whitelist", request.getUrl());
-        }
+        defenseAgainstSSRF(request.getUrl());
         try {
             Mono<GenericCall.Response> response = genericCallService.callDynamicApiWithResponse(
                     request.getUrl(),

@@ -57,4 +57,5 @@ public class EdsCloudFlareIPv4AssetProvider extends BaseHasNamespaceEdsAssetProv
         return CloudFlareIPRepo.getIpsV4();
     }
 
+
 }

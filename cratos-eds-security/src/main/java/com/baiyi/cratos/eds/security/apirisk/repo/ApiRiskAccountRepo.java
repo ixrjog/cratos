@@ -27,7 +27,6 @@ public class ApiRiskAccountRepo {
                 .put("page", page)
                 .put("size", size)
                 .build();
-        ;
         return apiRiskService.listAccount(param);
     }
 

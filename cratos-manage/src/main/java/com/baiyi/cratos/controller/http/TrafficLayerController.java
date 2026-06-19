@@ -2,13 +2,13 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.http.traffic.TrafficIngressTrafficLimitParam;
-import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
-import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerIngressParam;
-import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
+import com.baiyi.cratos.domain.param.http.traffic.*;
+import com.baiyi.cratos.domain.view.project.ProjectLoadBalancerVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerTopologyVO;
+import com.baiyi.cratos.eds.aliyun.facade.AliyunLoadBalancerFacade;
 import com.baiyi.cratos.facade.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,6 +35,8 @@ public class TrafficLayerController {
     private final TrafficLayerFacade trafficLayerFacade;
     private final TrafficLayerIngressFacade trafficLayerIngressFacade;
     private final TrafficLayerIngressTrafficLimitFacade trafficLayerIngressTrafficLimitFacade;
+    private final TrafficLayerTopologyFacade trafficLayerTopologyFacade;
+    private final AliyunLoadBalancerFacade aliyunLoadBalancerFacade;
 
     @Operation(summary = "Pagination query traffic layer domain")
     @PostMapping(value = "/domain/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -102,35 +104,35 @@ public class TrafficLayerController {
     }
 
     @Operation(summary = "Query traffic layer record details")
-    @PostMapping(value = "/record/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/record/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerRecordVO.RecordDetails> queryRecordDetails(
             @RequestBody @Valid TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
         return HttpResult.of(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress host details")
-    @PostMapping(value = "/ingress/host/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/ingress/host/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails) {
         return HttpResult.of(trafficLayerIngressFacade.queryIngressHostDetails(queryIngressHostDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress details")
-    @PostMapping(value = "/ingress/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/ingress/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails) {
         return HttpResult.of(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress traffic-limit")
-    @PostMapping(value = "/ingress/traffic-limit/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/ingress/traffic-limit/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficLayerIngressVO.IngressTrafficLimit>> queryIngressTrafficLimitPage(
             @RequestBody @Valid TrafficIngressTrafficLimitParam.IngressTrafficLimitPageQuery pageQuery) {
         return HttpResult.of(trafficLayerIngressTrafficLimitFacade.queryIngressTrafficLimitPage(pageQuery));
     }
 
     @Operation(summary = "Update traffic layer ingress traffic-limit")
-    @PutMapping(value = "/ingress/traffic-limit/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/ingress/traffic-limit/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateIngressTrafficLimit(
             @RequestBody @Valid TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
         trafficLayerIngressTrafficLimitFacade.updateIngressTrafficLimit(updateIngressTrafficLimit);
@@ -139,10 +141,24 @@ public class TrafficLayerController {
 
     // service
     @Operation(summary = "Query traffic layer ingress service details")
-    @PostMapping(value = "/service/ingress/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/service/ingress/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressServiceDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressServiceDetails queryIngressDetails) {
         return HttpResult.of(trafficLayerIngressFacade.queryIngressServiceDetails(queryIngressDetails));
+    }
+
+    @Operation(summary = "Query service topology")
+    @PostMapping(value = "/service/topology/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<TrafficLayerTopologyVO.Topology> queryServiceTopology(
+            @RequestBody @Valid TrafficLayerTopologyParam.QueryTrafficLayerTopology queryTrafficLayerTopology) {
+        return HttpResult.of(trafficLayerTopologyFacade.queryTrafficLayerTopology(queryTrafficLayerTopology));
+    }
+
+    @Operation(summary = "Get topology loadBalancer")
+    @GetMapping(value = "/service/topology/lb/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<ProjectLoadBalancerVO.LoadBalancer> queryServiceTopologyLoadBalancer(
+            @RequestParam int assetId) throws Exception {
+        return HttpResult.of(aliyunLoadBalancerFacade.getLoadBalancer(assetId));
     }
 
 }

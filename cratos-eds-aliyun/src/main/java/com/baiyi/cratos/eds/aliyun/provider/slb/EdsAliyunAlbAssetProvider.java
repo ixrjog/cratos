@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunALBRepo;
 import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.context.EdsAssetProviderContext;
@@ -101,6 +102,11 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
         } catch (Exception ignored) {
         }
         return indices;
+    }
+
+    @Override
+    protected boolean isAssetUnchanged(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.DIFFERENT;
     }
 
 }

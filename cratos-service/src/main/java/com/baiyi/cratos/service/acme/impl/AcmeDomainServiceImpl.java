@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.acme.impl;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
+import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
 import com.baiyi.cratos.mapper.AcmeDomainMapper;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
 import com.github.pagehelper.Page;
@@ -46,6 +47,16 @@ public class AcmeDomainServiceImpl implements AcmeDomainService {
         Page<AcmeDomain> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<AcmeDomain> data = acmeDomainMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal(), pageQuery);
+    }
+
+    @Override
+    public List<AcmeDomainVO.DomainGroup> queryDistinctDomain() {
+        return acmeDomainMapper.queryDistinctDomain();
+    }
+
+    @Override
+    public List<String> queryDistinctDomains(String domain) {
+        return acmeDomainMapper.queryDistinctDomains(domain);
     }
 
 }

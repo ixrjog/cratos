@@ -60,7 +60,11 @@ public interface AcmeFacade {
 
     DataTable<AcmeDomainVO.Domain> queryDomainPage(AcmeDomainParam.DomainPageQuery pageQuery);
 
+    java.util.List<AcmeDomainVO.DomainGroup> queryDistinctDomain();
+
     DataTable<AcmeOrderVO.Order> queryOrderPage(AcmeOrderParam.OrderPageQuery pageQuery);
+
+    java.util.List<String> queryDistinctOrderDomains(String domain);
 
     AcmeCertificateVO.Certificate getAcmeCertificateById(int id);
 

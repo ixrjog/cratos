@@ -4,6 +4,7 @@ import com.aliyun.alb20200616.models.GetListenerAttributeResponseBody;
 import com.aliyun.alb20200616.models.ListAclEntriesResponseBody;
 import com.aliyun.alb20200616.models.ListListenersResponseBody;
 import com.aliyun.alb20200616.models.ListRulesResponseBody;
+import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ProjectLoadBalancer;
 import com.baiyi.cratos.domain.view.project.ProjectLoadBalancerVO;
@@ -21,6 +22,7 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -42,6 +44,8 @@ public class AliyunLoadBalancerFacade {
 
     private final EdsProviderHolderFactory edsProviderHolderFactory;
     private final EdsAssetService edsAssetService;
+
+    private static final ProjectLoadBalancerVO.LbConfig NO_CONFIG = null;
 
     @SuppressWarnings("unchecked")
     public ProjectLoadBalancerVO.LoadBalancer getLoadBalancer(
@@ -72,6 +76,25 @@ public class AliyunLoadBalancerFacade {
             AliyunNlb.Nlb aliyunNlb = (AliyunNlb.Nlb) holder.getProvider()
                     .loadAsset(asset.getOriginalModel());
             return getLoadBalancer(aliyun, instanceName, aliyunNlb, lbConfig);
+        }
+        return ProjectLoadBalancerVO.LoadBalancer.NO_DATA;
+    }
+
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.VERY_SHORT, key = "'EDS:ALIYUN:LB:ASSETID:' + #assetId", unless = "#result == null")
+    public ProjectLoadBalancerVO.LoadBalancer getLoadBalancer(int assetId) throws Exception {
+        EdsAsset asset = edsAssetService.getById(assetId);
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ?>) edsProviderHolderFactory.createHolder(
+                asset.getInstanceId(), asset.getAssetType());
+        String instanceName = holder.getInstance()
+                .getEdsInstance()
+                .getInstanceName();
+        EdsConfigs.Aliyun aliyun = holder.getInstance()
+                .getConfig();
+        if (EdsAssetTypeEnum.ALIYUN_ALB.name()
+                .equals(asset.getAssetType())) {
+            AliyunAlb.Alb aliyunAlb = (AliyunAlb.Alb) holder.getProvider()
+                    .loadAsset(asset.getOriginalModel());
+            return getLoadBalancer(aliyun, instanceName, aliyunAlb, NO_CONFIG);
         }
         return ProjectLoadBalancerVO.LoadBalancer.NO_DATA;
     }
@@ -123,7 +146,7 @@ public class AliyunLoadBalancerFacade {
                     aliyunAlb.getEndpoint(), aliyun, aliyunAlb.getLoadBalancers()
                             .getLoadBalancerId()
             );
-           return rules.stream()
+            return rules.stream()
                     .map(r -> {
                         List<ProjectLoadBalancerVO.RuleCondition> ruleConditions = r.getRuleConditions()
                                 .stream()
@@ -139,8 +162,10 @@ public class AliyunLoadBalancerFacade {
                                 .stream()
                                 .map(ra -> {
                                     ProjectLoadBalancerVO.ForwardGroupConfig fgc = null;
-                                    if (ra.getForwardGroupConfig() != null && ra.getForwardGroupConfig().getServerGroupTuples() != null) {
-                                        List<ProjectLoadBalancerVO.ServerGroupTuple> tuples = ra.getForwardGroupConfig().getServerGroupTuples()
+                                    if (ra.getForwardGroupConfig() != null && ra.getForwardGroupConfig()
+                                            .getServerGroupTuples() != null) {
+                                        List<ProjectLoadBalancerVO.ServerGroupTuple> tuples = ra.getForwardGroupConfig()
+                                                .getServerGroupTuples()
                                                 .stream()
                                                 .map(t -> ProjectLoadBalancerVO.ServerGroupTuple.builder()
                                                         .serverGroupId(t.getServerGroupId())

@@ -111,7 +111,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
             final String newPassword = PasswordGenerator.generatePassword();
             if (existLoginProfile) {
                 // 重置密码
-                resetRAMUserPassword(aliyun, ramUsername, newPassword);
+                resetRAMUserPassword(aliyun, ramLoginUsername, newPassword);
             } else {
                 // 创建RAM用户登录配置
                 createRAMUserLoginProfile(aliyun, ramUsername, newPassword, ENABLE_MFA);
@@ -144,10 +144,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         }
     }
 
-    private void resetRAMUserPassword(EdsConfigs.Aliyun aliyun, String ramUsername, String newPassword) {
+    private void resetRAMUserPassword(EdsConfigs.Aliyun aliyun, String ramLoginUsername, String newPassword) {
         try {
             // aliyunRamUserRepo.updateLoginProfile(aliyun, ramUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
-            AliyunIMSRepo.updateLoginProfile(aliyun, ramUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
+            AliyunIMSRepo.updateLoginProfile(aliyun, ramLoginUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
         } catch (Exception exception) {
             WorkOrderTicketException.runtime(exception.getMessage());
         }

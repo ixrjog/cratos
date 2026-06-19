@@ -4,8 +4,10 @@ import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsKubernetesNodeParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesNodeVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -17,12 +19,14 @@ import com.baiyi.cratos.facade.kubernetes.builder.KubernetesNodeBuilder;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import io.fabric8.kubernetes.api.model.Node;
+import io.fabric8.kubernetes.api.model.NodeAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -60,10 +64,43 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
             return KubernetesNodeVO.KubernetesNodeDetails.builder()
                     .kubernetesInstance(edsInstanceWrapper.wrapToTarget(kubernetesInstance))
                     .nodes(makeNodes(kubernetes))
+                    .grafana(toKubernetesGrafana(kubernetes.getGrafana()))
                     .build();
         } catch (KubernetesException kubernetesException) {
             return KubernetesNodeVO.KubernetesNodeDetails.failed(kubernetesException.getMessage());
         }
+    }
+
+    public static KubernetesNodeVO.KubernetesGrafana toKubernetesGrafana(
+            EdsKubernetesConfigModel.KubernetesGrafana grafana) {
+        if (grafana == null || grafana.getKubernetes() == null) {
+            return null;
+        }
+        EdsKubernetesConfigModel.GrafanaKubernetes source = grafana.getKubernetes();
+        KubernetesNodeVO.GrafanaKubernetes target = new KubernetesNodeVO.GrafanaKubernetes();
+        target.setOverview(source.getOverview());
+        target.setWorkload(source.getWorkload());
+        if (source.getPod() != null) {
+            KubernetesNodeVO.GrafanaKubernetesPod pod = new KubernetesNodeVO.GrafanaKubernetesPod();
+            pod.setTopN(source.getPod()
+                                .getTopN());
+            target.setPod(pod);
+        }
+        if (source.getNode() != null) {
+            KubernetesNodeVO.GrafanaKubernetesNode node = new KubernetesNodeVO.GrafanaKubernetesNode();
+            node.setOverview(source.getNode()
+                                     .getOverview());
+            node.setTopN(source.getNode()
+                                 .getTopN());
+            node.setSummary(source.getNode()
+                                    .getSummary());
+            node.setPool(source.getNode()
+                                 .getPool());
+            target.setNode(node);
+        }
+        KubernetesNodeVO.KubernetesGrafana result = new KubernetesNodeVO.KubernetesGrafana();
+        result.setKubernetes(target);
+        return result;
     }
 
     private Map<String, List<KubernetesNodeVO.Node>> makeNodes(EdsConfigs.Kubernetes kubernetes) {
@@ -72,10 +109,18 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
             return Map.of();
         }
         Map<String, KubernetesNodeVO.NodeUsage> nodeUsageMap = makeNodeUsage(kubernetes);
+
+        String nodeOverview = Optional.of(kubernetes)
+                .map(EdsConfigs.Kubernetes::getGrafana)
+                .map(EdsKubernetesConfigModel.KubernetesGrafana::getKubernetes)
+                .map(EdsKubernetesConfigModel.GrafanaKubernetes::getNode)
+                .map(EdsKubernetesConfigModel.GrafanaKubernetesNode::getOverview)
+                .orElse("");
         return nodeList.stream()
-                .map(e->
-                    toNode(e,nodeUsageMap.get(e.getMetadata().getName()))
-                )
+                .map(e -> toNode(
+                        e, nodeUsageMap.get(e.getMetadata()
+                                                    .getName()), nodeOverview
+                ))
                 .collect(Collectors.groupingBy(KubernetesNodeVO.Node::getZone));
     }
 
@@ -83,10 +128,32 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
         return kubernetesNodeRepo.queryNodeUsageMap(kubernetes);
     }
 
-    private KubernetesNodeVO.Node toNode(Node node,KubernetesNodeVO.NodeUsage nodeUsage) {
+    private KubernetesNodeVO.Node toNode(Node node, KubernetesNodeVO.NodeUsage nodeUsage, String nodeOverview) {
+        KubernetesNodeVO.NodeExtendedValue ext = null;
+        Optional<NodeAddress> nodeAddressOptional = node.getStatus()
+                .getAddresses()
+                .stream()
+                .filter(e -> "InternalIP".equals(e.getType()))
+                .findFirst();
+        if (nodeAddressOptional.isPresent()) {
+            String grafanaNodeOverview = StringFormatter.format(
+                    nodeOverview, nodeAddressOptional.get()
+                            .getAddress()
+            );
+            KubernetesNodeVO.GrafanaKubernetesNode grafanaKubernetesNode = KubernetesNodeVO.GrafanaKubernetesNode.of(
+                    grafanaNodeOverview);
+            KubernetesNodeVO.GrafanaKubernetes grafanaKubernetes = KubernetesNodeVO.GrafanaKubernetes.of(
+                    grafanaKubernetesNode);
+            KubernetesNodeVO.KubernetesGrafana kubernetesGrafana = KubernetesNodeVO.KubernetesGrafana.of(
+                    grafanaKubernetes);
+            ext = KubernetesNodeVO.NodeExtendedValue.builder()
+                    .grafana(kubernetesGrafana)
+                    .build();
+        }
         return KubernetesNodeBuilder.newBuilder()
                 .withNode(node)
                 .withNodeUsage(nodeUsage)
+                .withExt(ext)
                 .build();
     }
 

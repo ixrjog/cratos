@@ -153,6 +153,13 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
+    public List<EdsAssetIndex> queryIndexByIngressServiceQueryName(@NonNull String serviceName,
+                                                                   @NonNull String assetType, int size) {
+        int limit = Math.min(size, 500);
+        return edsAssetIndexMapper.queryIndexByIngressServiceQueryName(serviceName, assetType, limit);
+    }
+
+    @Override
     public List<EdsAssetIndex> queryIndexByIngressServiceName(@NonNull String serviceName, @NonNull String assetType,
                                                               int size) {
         int limit = Math.min(size, 500);

@@ -336,6 +336,9 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_ASSET)
     public DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery) {
+        if (pageQuery.getQueryByTag() != null && IdentityUtils.hasIdentity(pageQuery.getQueryByTag().getTagId()) && CollectionUtils.isEmpty(pageQuery.getIdList())) {
+            return DataTable.NO_DATA;
+        }
         DataTable<EdsAsset> table = edsAssetService.queryEdsInstanceAssetPage(pageQuery.toParam());
         return edsAssetWrapper.wrapToTarget(table);
     }
@@ -488,7 +491,7 @@ public class EdsFacadeImpl implements EdsFacade {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void migrateAsset(int assetId, int toInstanceId,String assetType) {
+    public void migrateAsset(int assetId, int toInstanceId, String assetType) {
         EdsAsset edsAsset = edsAssetService.getById(assetId);
         int instanceId = edsAsset.getInstanceId();
         if (instanceId == toInstanceId) {

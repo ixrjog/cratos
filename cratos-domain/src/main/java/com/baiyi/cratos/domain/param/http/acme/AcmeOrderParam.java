@@ -23,6 +23,8 @@ public class AcmeOrderParam {
     @Schema
     public static class OrderPageQuery extends PageParam {
         private Integer acmeDomainId;
+        private String domain;
+        private String domains;
     }
 
 }

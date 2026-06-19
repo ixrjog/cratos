@@ -15,4 +15,6 @@ public interface MenuTitleService extends BaseUniqueKeyService<MenuTitle, MenuTi
 
     List<MenuTitle> queryByMenuId(int menuId);
 
+    List<MenuTitle> queryByMenuIds(List<Integer> menuIds);
+
 }

@@ -74,11 +74,7 @@ public class AcmeOrderServiceImpl implements AcmeOrderService {
     @Override
     public DataTable<AcmeOrder> queryAcmeOrderPage(AcmeOrderParam.OrderPageQuery pageQuery) {
         Page<AcmeOrder> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        Example example = new Example(AcmeOrder.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("domainId", pageQuery.getAcmeDomainId());
-        example.setOrderByClause("id DESC");
-        List<AcmeOrder> data = acmeOrderMapper.selectByExample(example);
+        List<AcmeOrder> data = acmeOrderMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal(), pageQuery);
     }
 

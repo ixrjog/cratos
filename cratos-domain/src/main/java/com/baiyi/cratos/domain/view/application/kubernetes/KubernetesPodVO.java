@@ -37,6 +37,18 @@ public class KubernetesPodVO {
         private List<KubernetesContainerVO.ContainerStatus> containerStatuses;
         @Schema(description = "Kubernetes node, has region & zone")
         private EdsAssetVO.Asset node;
+        private PodExtendedValue ext;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class PodExtendedValue implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -6956631025452957752L;
+        private KubernetesNodeVO.KubernetesGrafana grafana;
     }
 
     @Data

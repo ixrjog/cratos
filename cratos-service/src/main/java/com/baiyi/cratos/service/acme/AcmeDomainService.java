@@ -3,9 +3,12 @@ package com.baiyi.cratos.service.acme;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
+import com.baiyi.cratos.domain.view.acme.AcmeDomainVO;
 import com.baiyi.cratos.mapper.AcmeDomainMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -15,5 +18,9 @@ import com.baiyi.cratos.service.base.BaseValidService;
 public interface AcmeDomainService extends BaseValidService<AcmeDomain, AcmeDomainMapper>, BaseUniqueKeyService<AcmeDomain, AcmeDomainMapper> {
 
     DataTable<AcmeDomain> queryAcmeDomainPage(AcmeDomainParam.DomainPageQuery pageQuery);
+
+    List<AcmeDomainVO.DomainGroup> queryDistinctDomain();
+
+    List<String> queryDistinctDomains(String domain);
 
 }

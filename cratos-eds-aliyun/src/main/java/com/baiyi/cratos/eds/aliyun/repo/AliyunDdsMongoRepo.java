@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyun.dds20151201.models.DescribeDBInstancesRequest;
 import com.aliyun.dds20151201.models.DescribeDBInstancesResponse;
 import com.aliyun.dds20151201.models.DescribeDBInstancesResponseBody;
-import com.baiyi.cratos.eds.aliyun.client.AliyunDdsClient;
+import com.baiyi.cratos.eds.aliyun.client.AliyunDDSClient;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ public class AliyunDdsMongoRepo {
             String endpoint, EdsConfigs.Aliyun aliyun) throws Exception {
         DescribeDBInstancesRequest request = new DescribeDBInstancesRequest().setPageNumber(1)
                 .setPageSize(100);
-        com.aliyun.dds20151201.Client client = AliyunDdsClient.createClient(endpoint, aliyun);
+        com.aliyun.dds20151201.Client client = AliyunDDSClient.createClient(endpoint, aliyun);
         List<DescribeDBInstancesResponseBody.DescribeDBInstancesResponseBodyDBInstancesDBInstance> instanceList = Lists.newArrayList();
 
         int totalCount = Integer.MAX_VALUE;

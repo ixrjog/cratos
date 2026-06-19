@@ -1,13 +1,16 @@
 package com.baiyi.cratos.facade.project.impl;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.project.ProjectParam;
+import com.baiyi.cratos.domain.param.http.tag.TagGroupParam;
 import com.baiyi.cratos.domain.view.project.ProjectLoadBalancerVO;
 import com.baiyi.cratos.domain.view.project.ProjectVO;
 import com.baiyi.cratos.eds.aliyun.facade.AliyunLoadBalancerFacade;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.huaweicloud.cloud.facade.HwcLoadBalancerFacade;
+import com.baiyi.cratos.facade.UserFavoriteFacade;
 import com.baiyi.cratos.facade.project.ProjectFacade;
 import com.baiyi.cratos.facade.tag.TagGroupFacade;
 import com.baiyi.cratos.service.*;
@@ -36,6 +39,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
     private final ProjectGroupService projectGroupService;
     private final EdsInstanceService edsInstanceService;
     private final ProjectLoadBalancerWrapper projectLoadBalancerWrapper;
+    private final UserFavoriteFacade userFavoriteFacade;
     private final TagGroupFacade tagGroupFacade;
 
     @Override
@@ -72,10 +76,41 @@ public class ProjectFacadeImpl implements ProjectFacade {
                 .build();
     }
 
-    private List<String> getGroups(int tenantId) {
+    private List<ProjectVO.Group> getGroups(int tenantId) {
         return projectGroupService.queryByTenantId(tenantId)
                 .stream()
-                .map(ProjectGroup::getName)
+                .map(group -> ProjectVO.Group.builder()
+                        .id(group.getId())
+                        .projectId(group.getProjectId())
+                        .tenantId(group.getTenantId())
+                        .name(group.getName())
+                        .valid(group.getValid())
+                        .comment(group.getComment())
+                        .members(queryGroupMembers(group.getName()))
+                        .build())
+                .toList();
+    }
+
+    /**
+     * 查询服务组下的成员(服务器/资产)。
+     * 复用 Edit Tenant 页面"查询组下成员"的同一接口:按 GROUP 标签值(=组名)查标签分组资产。
+     */
+    private List<ProjectVO.GroupMember> queryGroupMembers(String groupName) {
+        TagGroupParam.GroupAssetPageQuery query = TagGroupParam.GroupAssetPageQuery.builder()
+                .tagGroup(groupName)
+                .page(1)
+                .length(500)
+                .build();
+        return tagGroupFacade.queryGroupAssetPage(query)
+                .getData()
+                .stream()
+                .map(asset -> ProjectVO.GroupMember.builder()
+                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                        .businessId(asset.getId())
+                        .role(asset.getAssetType())
+                        .name(asset.getName())
+                        .comment(asset.getAssetKey())
+                        .build())
                 .toList();
     }
 
@@ -263,7 +298,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
                         .name(group.getName())
                         .valid(group.getValid())
                         .comment(group.getComment())
-                        .size(tagGroupFacade.countGroupAssets(group.getName()))
+                        .size(userFavoriteFacade.countGroupAssets(group.getName()))
                         .build())
                 .toList();
     }

@@ -80,4 +80,15 @@ public class AcmeDomainVO {
         }
     }
 
+    @Data
+    @Schema
+    public static class DomainGroup implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3525022281699968895L;
+        @Schema(description = "Distinct domain")
+        private String domain;
+        @Schema(description = "Member count of the domain")
+        private Integer count;
+    }
+
 }

@@ -5,9 +5,14 @@ import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ApiSecurityRisk;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.security.ApiSecurityRiskParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskReportVO;
 import com.baiyi.cratos.domain.view.security.ApiSecurityRiskVO;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.security.ApiSecurityRiskFacade;
 import com.baiyi.cratos.service.security.ApiSecurityRiskService;
 import com.baiyi.cratos.wrapper.security.ApiSecurityRiskWrapper;
@@ -30,6 +35,7 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
 
     private final ApiSecurityRiskService apiSecurityRiskService;
     private final ApiSecurityRiskWrapper apiSecurityRiskWrapper;
+    private final EdsFacade edsFacade;
 
     @Override
     public DataTable<ApiSecurityRiskVO.Risk> queryRiskPage(ApiSecurityRiskParam.RiskPageQuery pageQuery) {
@@ -81,10 +87,13 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
 
         // Overview
         int total = all.size();
-        int completed = (int) all.stream().filter(r -> Boolean.TRUE.equals(r.getCompleted())).count();
+        int completed = (int) all.stream()
+                .filter(r -> Boolean.TRUE.equals(r.getCompleted()))
+                .count();
         int incomplete = total - completed;
         int newThisMonth = (int) all.stream()
-                .filter(r -> r.getDiscoveredTime() != null && r.getDiscoveredTime().after(monthStart))
+                .filter(r -> r.getDiscoveredTime() != null && r.getDiscoveredTime()
+                        .after(monthStart))
                 .count();
 
         // Risk level distribution
@@ -107,28 +116,59 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
         List<ApiSecurityRiskVO.Risk> highRisks = all.stream()
                 .filter(r -> !Boolean.TRUE.equals(r.getCompleted()))
                 .filter(r -> "CRITICAL".equals(r.getRiskLevel()) || "HIGH".equals(r.getRiskLevel()))
-                .sorted(Comparator.comparing(ApiSecurityRisk::getDiscoveredTime, Comparator.nullsLast(Comparator.reverseOrder())))
+                .sorted(Comparator.comparing(
+                        ApiSecurityRisk::getDiscoveredTime, Comparator.nullsLast(Comparator.reverseOrder())))
                 .map(apiSecurityRiskWrapper::convert)
                 .toList();
 
         // Overdue risks
         List<ApiSecurityRiskVO.Risk> overdueRisks = all.stream()
                 .filter(r -> !Boolean.TRUE.equals(r.getCompleted()))
-                .filter(r -> r.getExpectedTime() != null && r.getExpectedTime().before(now))
+                .filter(r -> r.getExpectedTime() != null && r.getExpectedTime()
+                        .before(now))
                 .sorted(Comparator.comparing(ApiSecurityRisk::getExpectedTime))
                 .map(apiSecurityRiskWrapper::convert)
                 .toList();
 
         return ApiSecurityRiskReportVO.Report.builder()
                 .overview(ApiSecurityRiskReportVO.Overview.builder()
-                        .total(total).completed(completed).incomplete(incomplete).newThisMonth(newThisMonth)
-                        .build())
+                                  .total(total)
+                                  .completed(completed)
+                                  .incomplete(incomplete)
+                                  .newThisMonth(newThisMonth)
+                                  .build())
                 .riskLevelDistribution(riskLevelDist)
                 .progressDistribution(progressDist)
                 .monthlyTrends(trends)
                 .analystStats(analystStats)
                 .highRisks(highRisks)
                 .overdueRisks(overdueRisks)
+                .dataSecApiRisk(buildDataSecApiRisk())
+                .build();
+    }
+
+    private ApiSecurityRiskReportVO.DataSecApiRisk buildDataSecApiRisk() {
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(84)
+                .tagValue("待确认")
+                .build();
+        EdsInstanceParam.AssetPageQuery assetPageQuery = EdsInstanceParam.AssetPageQuery.builder()
+                .page(1)
+                .length(1)
+                .instanceId(174)
+                .assetType(EdsAssetTypeEnum.APIRISK_WEAKNESS.name())
+                .queryByTag(queryByTag)
+                .build();
+        DataTable<EdsAssetVO.Asset> dataTable1 = edsFacade.queryEdsInstanceAssetPage(assetPageQuery);
+        queryByTag.setTagValue("待修复");
+        DataTable<EdsAssetVO.Asset> dataTable2 = edsFacade.queryEdsInstanceAssetPage(assetPageQuery);
+        long pendingConfirmation = dataTable1.getTotalNum();
+        long pending = dataTable2.getTotalNum();
+        return ApiSecurityRiskReportVO.DataSecApiRisk.builder()
+                // 弱点总数 = 待确认 + 待修复
+                .total(pendingConfirmation + pending)
+                .pendingConfirmation(pendingConfirmation)
+                .pending(pending)
                 .build();
     }
 
@@ -180,28 +220,40 @@ public class ApiSecurityRiskFacadeImpl implements ApiSecurityRiskFacade {
                 .map(r -> sdf.format(r.getUpdateTime()))
                 .filter(monthMap::containsKey)
                 .forEach(month -> monthMap.get(month)[1]++);
-        return monthMap.entrySet().stream()
+        return monthMap.entrySet()
+                .stream()
                 .map(e -> ApiSecurityRiskReportVO.MonthlyTrend.builder()
-                        .month(e.getKey()).discovered(e.getValue()[0]).fixed(e.getValue()[1])
+                        .month(e.getKey())
+                        .discovered(e.getValue()[0])
+                        .fixed(e.getValue()[1])
                         .build())
                 .toList();
     }
 
     private List<ApiSecurityRiskReportVO.AnalystStat> buildAnalystStats(List<ApiSecurityRisk> all) {
         Map<String, List<ApiSecurityRisk>> grouped = all.stream()
-                .filter(r -> r.getSecurityOfficer() != null && !r.getSecurityOfficer().isEmpty())
+                .filter(r -> r.getSecurityOfficer() != null && !r.getSecurityOfficer()
+                        .isEmpty())
                 .collect(Collectors.groupingBy(ApiSecurityRisk::getSecurityOfficer));
-        return grouped.entrySet().stream()
+        return grouped.entrySet()
+                .stream()
                 .map(e -> {
-                    int t = e.getValue().size();
-                    int c = (int) e.getValue().stream().filter(r -> Boolean.TRUE.equals(r.getCompleted())).count();
+                    int t = e.getValue()
+                            .size();
+                    int c = (int) e.getValue()
+                            .stream()
+                            .filter(r -> Boolean.TRUE.equals(r.getCompleted()))
+                            .count();
                     return ApiSecurityRiskReportVO.AnalystStat.builder()
                             .securityOfficer(e.getKey())
-                            .total(t).completed(c).incomplete(t - c)
+                            .total(t)
+                            .completed(c)
+                            .incomplete(t - c)
                             .completionRate(t > 0 ? Math.round(c * 100.0 / t) : 0)
                             .build();
                 })
-                .sorted(Comparator.comparingInt(ApiSecurityRiskReportVO.AnalystStat::getTotal).reversed())
+                .sorted(Comparator.comparingInt(ApiSecurityRiskReportVO.AnalystStat::getTotal)
+                                .reversed())
                 .toList();
     }
 

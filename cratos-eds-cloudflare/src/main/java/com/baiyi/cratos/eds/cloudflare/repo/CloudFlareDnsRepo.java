@@ -26,7 +26,6 @@ public class CloudFlareDnsRepo {
     // 回源
     public static final boolean DIRECT = false;
 
-
     public static List<CloudFlareDns.DnsRecord> listDnsRecords(EdsConfigs.Cloudflare config, String zoneId) {
         List<CloudFlareDns.DnsRecord> results = Lists.newArrayList();
         int page = 1;

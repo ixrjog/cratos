@@ -4,9 +4,11 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareCert;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareDns;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlarePageRules;
 import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareCertRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareDnsRepo;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlarePageRulesRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareZoneRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -179,8 +181,6 @@ public class EdsCloudFlareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
                     .build();
 
             trafficRecordTargetService.add(target2);
-
-
         }
     }
 
@@ -196,6 +196,13 @@ public class EdsCloudFlareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
             return 93;
         }
         return 0;
+    }
+
+    @Test
+    void zoneTest222() {
+        EdsConfigs.Cloudflare cf = getConfig(5);
+        List<CloudFlarePageRules.PageRule> rt = CloudFlarePageRulesRepo.listPageRules(cf, "5243357f773b873952f7f99090841934");
+        System.out.println(rt);
     }
 
 }

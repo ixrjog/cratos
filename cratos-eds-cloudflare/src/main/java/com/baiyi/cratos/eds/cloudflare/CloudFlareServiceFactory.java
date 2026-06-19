@@ -2,10 +2,7 @@ package com.baiyi.cratos.eds.cloudflare;
 
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.eds.cloudflare.converter.StringToListHttpMessageConverter;
-import com.baiyi.cratos.eds.cloudflare.service.CloudFlareCertificateService;
-import com.baiyi.cratos.eds.cloudflare.service.CloudFlareDnsService;
-import com.baiyi.cratos.eds.cloudflare.service.CloudFlareIPsService;
-import com.baiyi.cratos.eds.cloudflare.service.CloudFlareZoneService;
+import com.baiyi.cratos.eds.cloudflare.service.*;
 import com.baiyi.cratos.eds.cloudflare.service.base.CloudFlareService;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
@@ -40,6 +37,10 @@ public class CloudFlareServiceFactory {
 
     public static CloudFlareDnsService createDnsService(EdsConfigs.Cloudflare config) {
         return createAuthenticatedService(config, CloudFlareDnsService.class);
+    }
+
+    public static CloudFlarePageRulesService createPageRulesService(EdsConfigs.Cloudflare config) {
+        return createAuthenticatedService(config, CloudFlarePageRulesService.class);
     }
 
     private static <T extends CloudFlareService> T createAuthenticatedService(EdsConfigs.Cloudflare config,

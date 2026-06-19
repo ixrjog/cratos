@@ -132,6 +132,9 @@ public enum EdsAssetTypeEnum {
     SRE_EVENTBRIDGE_EVENT("Event Bridge", 1),
     @CloudComputer CUSTOM_IDC_HOST("Host", 1),
 
+    APIRISK_API("API", 1),
+    APIRISK_WEAKNESS("Weakness", 2),
+
     DEF("Default", 9999);
 
     private final String displayName;

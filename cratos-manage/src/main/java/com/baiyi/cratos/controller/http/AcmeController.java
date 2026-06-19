@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2026/3/27 15:40
@@ -59,6 +61,12 @@ public class AcmeController {
         return HttpResult.of(acmeFacade.queryDomainPage(pageQuery));
     }
 
+    @Operation(summary = "Query distinct acme domain list")
+    @GetMapping(value = "/domain/distinct/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<AcmeDomainVO.DomainGroup>> queryDistinctAcmeDomain() {
+        return HttpResult.of(acmeFacade.queryDistinctDomain());
+    }
+
     @Operation(summary = "Recover acme domain dcv delegation")
     @PutMapping(value = "/domain/dcv/relegation/recover", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> recoverDcvDelegation(@RequestParam @Valid int acmeDomainId) {
@@ -78,6 +86,12 @@ public class AcmeController {
     public HttpResult<DataTable<AcmeOrderVO.Order>> queryAcmeOrderPage(
             @RequestBody @Valid AcmeOrderParam.OrderPageQuery pageQuery) {
         return HttpResult.of(acmeFacade.queryOrderPage(pageQuery));
+    }
+
+    @Operation(summary = "Query distinct acme order domains")
+    @GetMapping(value = "/order/domains/distinct/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<String>> queryDistinctOrderDomains(@RequestParam(required = false) String domain) {
+        return HttpResult.of(acmeFacade.queryDistinctOrderDomains(domain));
     }
 
     @Operation(summary = "Delete acme order by id")

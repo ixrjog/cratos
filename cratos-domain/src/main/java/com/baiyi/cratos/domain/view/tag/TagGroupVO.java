@@ -30,8 +30,8 @@ public class TagGroupVO {
         private final String businessType = BusinessTypeEnum.TAG_GROUP.name();
         private String name;
         private Integer businessId;
-
         private Boolean favorited;
+        private int size;
     }
 
 }

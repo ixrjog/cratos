@@ -24,4 +24,6 @@ public interface UserFavoriteFacade {
 
     void favorite(String name, String businessType, int businessId);
 
+    int countGroupAssets(String groupName);
+
 }

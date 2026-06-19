@@ -34,7 +34,7 @@ cratos:
 
 springdoc:
   swagger-ui:
-    enabled: on
+    enabled: off
 
 spring:
   config:

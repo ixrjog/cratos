@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentV
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerLifecycleBuilder;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerProbeBuilder;
@@ -32,9 +33,15 @@ public class KubernetesDeploymentBuilder {
     private List<Pod> pods;
     private List<BusinessTagVO.BusinessTag> businessTags;
     private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
+    private EdsKubernetesConfigModel.KubernetesGrafana grafana;
 
     public static KubernetesDeploymentBuilder newBuilder() {
         return new KubernetesDeploymentBuilder();
+    }
+
+    public KubernetesDeploymentBuilder withGrafana(EdsKubernetesConfigModel.KubernetesGrafana grafana) {
+        this.grafana = grafana;
+        return this;
     }
 
     public KubernetesDeploymentBuilder withAssetId(Integer assetId) {
@@ -181,6 +188,7 @@ public class KubernetesDeploymentBuilder {
                 .map(e -> KubernetesPodBuilder.newBuilder()
                         .withDeployment(this.deployment)
                         .withPod(e)
+                        .withGrafana(this.grafana)
                         .build())
                 .toList();
     }

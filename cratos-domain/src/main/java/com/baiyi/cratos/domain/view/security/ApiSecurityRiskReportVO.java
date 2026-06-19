@@ -33,6 +33,26 @@ public class ApiSecurityRiskReportVO {
         private List<AnalystStat> analystStats;
         private List<ApiSecurityRiskVO.Risk> highRisks;
         private List<ApiSecurityRiskVO.Risk> overdueRisks;
+        private DataSecApiRisk dataSecApiRisk;
+    }
+
+    /**
+     * 全知科技 API 安全平台
+     */
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class DataSecApiRisk implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3181894415768808892L;
+        // 弱点总数
+        private long total;
+        // 待确认 弱点
+        private long pendingConfirmation;
+        // 待修复 弱点
+        private long pending;
     }
 
     @Data

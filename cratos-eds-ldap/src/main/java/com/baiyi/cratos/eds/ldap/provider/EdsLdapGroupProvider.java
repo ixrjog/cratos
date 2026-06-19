@@ -29,12 +29,12 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_GR
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.LDAP, assetTypeOf = EdsAssetTypeEnum.LDAP_GROUP)
-public class LdapGroupProvider extends BaseEdsAssetProvider<EdsConfigs.Ldap, LdapGroup.Group> {
+public class EdsLdapGroupProvider extends BaseEdsAssetProvider<EdsConfigs.Ldap, LdapGroup.Group> {
 
     private final LdapGroupRepo ldapGroupRepo;
     private static final String USER_DN_TPL = "{}={},{},{}";
 
-    public LdapGroupProvider(EdsAssetProviderContext context, LdapGroupRepo ldapGroupRepo) {
+    public EdsLdapGroupProvider(EdsAssetProviderContext context, LdapGroupRepo ldapGroupRepo) {
         super(context);
         this.ldapGroupRepo = ldapGroupRepo;
     }

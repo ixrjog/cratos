@@ -40,6 +40,8 @@ public class KubernetesNodeVO {
                     .build();
         }
 
+        private KubernetesGrafana grafana;
+
         private Map<String, List<Node>> nodes;
         @Builder.Default
         private boolean success = true;
@@ -62,6 +64,18 @@ public class KubernetesNodeVO {
         @Schema(description = "属性")
         private Map<String, String> attributes;
         private NodeUsage usage;
+        private NodeExtendedValue ext;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class NodeExtendedValue implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -6956631025452957752L;
+        private KubernetesGrafana grafana;
     }
 
     @Data
@@ -139,6 +153,78 @@ public class KubernetesNodeVO {
         private String reason;
         private String status;
         private String type;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class KubernetesGrafana {
+        public static KubernetesGrafana of(GrafanaKubernetes kubernetes) {
+            return KubernetesGrafana.builder()
+                    .kubernetes(kubernetes)
+                    .build();
+        }
+
+        private GrafanaKubernetes kubernetes;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class GrafanaKubernetes {
+        public static GrafanaKubernetes of(GrafanaKubernetesNode node) {
+            return GrafanaKubernetes.builder()
+                    .node(node)
+                    .build();
+        }
+
+        public static GrafanaKubernetes of(GrafanaKubernetesPod pod) {
+            return GrafanaKubernetes.builder()
+                    .pod(pod)
+                    .build();
+        }
+
+        private String overview;
+        private String workload;
+        private GrafanaKubernetesPod pod;
+        private GrafanaKubernetesNode node;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class GrafanaKubernetesPod {
+        public static GrafanaKubernetesPod of(String overview) {
+            return GrafanaKubernetesPod.builder()
+                    .overview(overview)
+                    .build();
+        }
+        private String topN;
+        private String overview;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class GrafanaKubernetesNode {
+        public static GrafanaKubernetesNode of(String overview) {
+            return GrafanaKubernetesNode.builder()
+                    .overview(overview)
+                    .build();
+        }
+
+        private String overview;
+        private String topN;
+        private String summary;
+        private String pool;
     }
 
 }

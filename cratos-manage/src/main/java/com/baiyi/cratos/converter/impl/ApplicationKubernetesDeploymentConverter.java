@@ -65,7 +65,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         List<CompletableFuture<KubernetesDeploymentVO.Deployment>> futures = resources.stream()
                 .map(resource -> CompletableFuture.supplyAsync(() -> {
                     try {
-                        return to(edsInstanceConfigMap, resource);
+                        return toDeployment(edsInstanceConfigMap, resource);
                     } catch (Exception e) {
                         log.warn("Failed to convert resource {}: {}", resource.getName(), e.getMessage());
                         return null;
@@ -79,8 +79,8 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .toList();
     }
 
-    private KubernetesDeploymentVO.Deployment to(Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap,
-                                                 ApplicationResource resource) {
+    private KubernetesDeploymentVO.Deployment toDeployment(Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap,
+                                                           ApplicationResource resource) {
         int assetId = resource.getBusinessId();
         EdsAsset edsAsset = edsAssetService.getById(assetId);
         if (Objects.isNull(edsAsset)) {
@@ -119,6 +119,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .withDeployment(deployment)
                 .withPods(pods)
                 .withEnvName(namespace)
+                .withGrafana(kubernetes.getGrafana())
                 .build();
         vo.setReplicaSets(toReplicaSetList(activeReplicaSets));
         self.wrap(vo);

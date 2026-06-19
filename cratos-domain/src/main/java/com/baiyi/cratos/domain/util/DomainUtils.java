@@ -16,6 +16,49 @@ import java.util.regex.Pattern;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DomainUtils {
 
+    private static final java.util.regex.Pattern LABEL_PATTERN = java.util.regex.Pattern.compile(
+            "[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?");
+
+    /**
+     * 判断是否为有效的域名(主机名)。
+     * 规则:
+     * - 总长度 ≤ 253,允许末尾根域点(FQDN);
+     * - 由 '.' 分隔的多个标签,至少两段(如 example.com);
+     * - 每个标签 1~63 字符,只含字母/数字/连字符,且不能以连字符开头或结尾;
+     * - 顶级域(最后一段)必须是 ≥2 位的纯字母(排除 IP、全数字 TLD)。
+     *
+     * @param domainName 待校验字符串
+     * @return 是否为有效域名
+     */
+    public static boolean isValidDomainName(String domainName) {
+        if (domainName == null) {
+            return false;
+        }
+        // 去掉末尾的根域点(FQDN 形式)
+        String name = domainName.endsWith(".") ? domainName.substring(0, domainName.length() - 1) : domainName;
+        if (name.isEmpty() || name.length() > 253) {
+            return false;
+        }
+        String[] labels = name.split("\\.", -1);
+        if (labels.length < 2) {
+            return false;
+        }
+        for (String label : labels) {
+            if (label.length() < 1 || label.length() > 63) {
+                return false;
+            }
+            if (!LABEL_PATTERN.matcher(label)
+                    .matches()) {
+                return false;
+            }
+        }
+        // 顶级域必须为 ≥2 位纯字母
+        String tld = labels[labels.length - 1];
+        return tld.length() >= 2 && tld.chars()
+                .allMatch(Character::isLetter);
+    }
+
+
     public static String extractRegisteredDomain(String url) {
         String domain = url.trim();
         try {

@@ -502,9 +502,19 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
+    public java.util.List<AcmeDomainVO.DomainGroup> queryDistinctDomain() {
+        return acmeDomainService.queryDistinctDomain();
+    }
+
+    @Override
     public DataTable<AcmeOrderVO.Order> queryOrderPage(AcmeOrderParam.OrderPageQuery pageQuery) {
         DataTable<AcmeOrder> dataTable = acmeOrderService.queryAcmeOrderPage(pageQuery);
         return acmeOrderWrapper.wrapToTarget(dataTable);
+    }
+
+    @Override
+    public java.util.List<String> queryDistinctOrderDomains(String domain) {
+        return acmeDomainService.queryDistinctDomains(domain);
     }
 
     @Override

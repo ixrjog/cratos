@@ -269,6 +269,7 @@ public class EdsConfigs {
         private EdsKubernetesConfigModel.AmazonEks amazonEks;
         private EdsKubernetesConfigModel.Kubeconfig kubeconfig;
         private EdsKubernetesConfigModel.Filter filter;
+        private EdsKubernetesConfigModel.KubernetesGrafana grafana;
         private EdsInstance edsInstance;
     }
 

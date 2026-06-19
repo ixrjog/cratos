@@ -21,6 +21,10 @@ public interface EdsAssetIndexMapper extends Mapper<EdsAssetIndex> {
                                                        @Param("assetType") String assetType,
                                                        @Param("limit") Integer limit);
 
+    List<EdsAssetIndex> queryIndexByIngressServiceQueryName(@Param("serviceName") String serviceName,
+                                                            @Param("assetType") String assetType,
+                                                            @Param("limit") Integer limit);
+
     List<EdsAssetIndex> queryInvalidIndex();
 
 }

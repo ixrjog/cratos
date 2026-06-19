@@ -1,15 +1,18 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
+import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.generator.UserFavorite;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.domain.view.tag.TagGroupVO;
 import com.baiyi.cratos.facade.UserFavoriteFacade;
-import com.baiyi.cratos.service.ApplicationService;
-import com.baiyi.cratos.service.UserFavoriteService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
 import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
@@ -32,6 +35,9 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
 
     private final UserFavoriteService userFavoriteService;
     private final ApplicationService applicationService;
+    private final BusinessTagService businessTagService;
+    private final EdsAssetService edsAssetService;
+    private final TagService tagService;
 
     @Override
     public List<ApplicationVO.Application> getMyFavoriteApplication() {
@@ -39,8 +45,10 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
         if (!StringUtils.hasText(username)) {
             return List.of();
         }
-        List<Integer> businessIds = userFavoriteService.queryUserFavoriteBusinessIds(username,
-                BusinessTypeEnum.APPLICATION.name());
+        List<Integer> businessIds = userFavoriteService.queryUserFavoriteBusinessIds(
+                username,
+                BusinessTypeEnum.APPLICATION.name()
+        );
         if (CollectionUtils.isEmpty(businessIds)) {
             return List.of();
         }
@@ -48,8 +56,10 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
                 .map(applicationService::getById)
                 .filter(Objects::nonNull)
                 .map(app -> {
-                    ApplicationVO.Application application = BeanCopierUtils.copyProperties(app,
-                            ApplicationVO.Application.class);
+                    ApplicationVO.Application application = BeanCopierUtils.copyProperties(
+                            app,
+                            ApplicationVO.Application.class
+                    );
                     application.setFavorited(Boolean.TRUE);
                     return application;
                 })
@@ -62,8 +72,10 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
         if (!StringUtils.hasText(username)) {
             return List.of();
         }
-        List<UserFavorite> userFavorites = userFavoriteService.queryUserFavorites(username,
-                BusinessTypeEnum.TAG_GROUP.name());
+        List<UserFavorite> userFavorites = userFavoriteService.queryUserFavorites(
+                username,
+                BusinessTypeEnum.TAG_GROUP.name()
+        );
         if (CollectionUtils.isEmpty(userFavorites)) {
             return List.of();
         }
@@ -72,6 +84,7 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
                         .name(userFavorite.getName())
                         .businessId(userFavorite.getBusinessId())
                         .favorited(Boolean.TRUE)
+                        .size(countGroupAssets(userFavorite.getName()))
                         .build())
                 .toList();
     }
@@ -87,10 +100,10 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
         boolean isExist = isUserFavorited(SessionUtils.getUsername(), businessType, businessId);
         if (isExist) {
             UserFavorite userFavorite = userFavoriteService.getByUniqueKey(UserFavorite.builder()
-                    .username(SessionUtils.getUsername())
-                    .businessType(businessType)
-                    .businessId(businessId)
-                    .build());
+                                                                                   .username(SessionUtils.getUsername())
+                                                                                   .businessType(businessType)
+                                                                                   .businessId(businessId)
+                                                                                   .build());
             userFavorite.setSeq(userFavorite.getSeq() + 1);
             userFavoriteService.updateByPrimaryKey(userFavorite);
         } else {
@@ -122,10 +135,10 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
         boolean isExist = isUserFavorited(SessionUtils.getUsername(), businessType, businessId);
         if (isExist) {
             UserFavorite userFavorite = userFavoriteService.getByUniqueKey(UserFavorite.builder()
-                    .username(SessionUtils.getUsername())
-                    .businessType(businessType)
-                    .businessId(businessId)
-                    .build());
+                                                                                   .username(SessionUtils.getUsername())
+                                                                                   .businessType(businessType)
+                                                                                   .businessId(businessId)
+                                                                                   .build());
             userFavorite.setSeq(userFavorite.getSeq() + 1);
             userFavoriteService.updateByPrimaryKey(userFavorite);
         } else {
@@ -172,6 +185,28 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
         if (Objects.nonNull(userFavorite)) {
             userFavoriteService.deleteById(userFavorite.getId());
         }
+    }
+
+    @Override
+    public int countGroupAssets(String groupName) {
+        Tag tag = getGroupTag();
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .tagValue(groupName)
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .build();
+        List<Integer> businessIds = businessTagService.queryBusinessIdByTag(queryByTag);
+        if (CollectionUtils.isEmpty(businessIds)) {
+            return 0;
+        }
+        EdsInstanceParam.AssetPageQueryParam param = EdsInstanceParam.AssetPageQueryParam.builder()
+                .idList(businessIds)
+                .build();
+        return edsAssetService.countEdsInstanceAssets(param);
+    }
+
+    private Tag getGroupTag() {
+        return tagService.getByTagKey(SysTagKeys.GROUP.getKey());
     }
 
 }

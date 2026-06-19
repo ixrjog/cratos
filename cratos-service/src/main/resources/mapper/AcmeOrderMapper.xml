@@ -20,4 +20,25 @@
     <result column="error_message" jdbcType="LONGVARCHAR" property="errorMessage" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
   </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.http.acme.AcmeOrderParam$OrderPageQuery"
+          resultMap="BaseResultMap">
+    select o.* from acme_order o
+    <if test="domain != null and domain != ''">
+        join acme_domain d on o.domain_id = d.id
+    </if>
+    <where>
+        <if test="acmeDomainId != null">
+            and o.domain_id = #{acmeDomainId}
+        </if>
+        <if test="domain != null and domain != ''">
+            and d.domain = #{domain}
+        </if>
+        <if test="domains != null and domains != ''">
+            and o.domains = #{domains}
+        </if>
+    </where>
+    order by o.id desc
+  </select>
 </mapper>

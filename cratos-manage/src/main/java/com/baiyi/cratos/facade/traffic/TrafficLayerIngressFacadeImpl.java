@@ -55,16 +55,25 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
     @Override
     public TrafficLayerIngressVO.IngressDetails queryIngressHostDetails(
             TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails) {
-        List<EdsAssetIndex> indices = indexService.queryIndexByParam(queryIngressHostDetails.getQueryHost(),
-                EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), MAX_SIZE);
+        List<EdsAssetIndex> indices = indexService.queryIndexByParam(
+                queryIngressHostDetails.getQueryHost(),
+                EdsAssetTypeEnum.KUBERNETES_INGRESS.name(),
+                MAX_SIZE
+        );
         return of(indices);
     }
 
     @Override
     public TrafficLayerIngressVO.IngressDetails queryIngressServiceDetails(
             TrafficLayerIngressParam.QueryIngressServiceDetails queryIngressServiceDetails) {
-        List<EdsAssetIndex> indices = indexService.queryIndexByIngressServiceName(
-                queryIngressServiceDetails.getQueryService(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), 500);
+        List<EdsAssetIndex> indices;
+        if (Boolean.TRUE.equals(queryIngressServiceDetails.getExactMatch())) {
+            indices = indexService.queryIndexByIngressServiceName(
+                    queryIngressServiceDetails.getQueryService(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), 500);
+        } else {
+            indices = indexService.queryIndexByIngressServiceQueryName(
+                    queryIngressServiceDetails.getQueryService(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), 500);
+        }
         return of(indices);
     }
 
@@ -106,8 +115,10 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
     @Override
     public TrafficLayerIngressVO.IngressDetails queryIngressDetails(
             TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails) {
-        List<EdsAsset> ingressAssets = assetService.queryAssetByParam(queryIngressDetails.getName(),
-                EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
+        List<EdsAsset> ingressAssets = assetService.queryAssetByParam(
+                queryIngressDetails.getName(),
+                EdsAssetTypeEnum.KUBERNETES_INGRESS.name()
+        );
         if (CollectionUtils.isEmpty(ingressAssets)) {
             return TrafficLayerIngressVO.IngressDetails.NO_DATA;
         }
@@ -130,12 +141,12 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
                                     .map(EdsAssetIndex::getValue)
                                     .orElse("null");
                             ingressEntries.add(IngressDetailsModel.IngressEntry.builder()
-                                    .kubernetes(kubernetesInstance)
-                                    .ingress(ingress)
-                                    .rule(rule)
-                                    .service(service)
-                                    .lb(lb)
-                                    .build());
+                                                       .kubernetes(kubernetesInstance)
+                                                       .ingress(ingress)
+                                                       .rule(rule)
+                                                       .service(service)
+                                                       .lb(lb)
+                                                       .build());
                         });
             }
         });

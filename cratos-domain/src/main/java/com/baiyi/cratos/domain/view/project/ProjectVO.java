@@ -43,7 +43,7 @@ public class ProjectVO {
         private static final long serialVersionUID = 5852666891462917021L;
         private String docs;
         private List<ProjectLoadBalancerVO.LoadBalancer> loadBalancers;
-        private List<String> groups;
+        private List<Group> groups;
     }
 
     @Data

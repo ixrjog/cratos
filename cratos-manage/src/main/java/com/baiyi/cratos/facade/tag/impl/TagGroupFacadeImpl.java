@@ -66,7 +66,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 .map(name -> OptionsVO.Option.builder()
                         .label(name)
                         .value(name)
-                        .size(countGroupAssets(name))
+                        .size(userFavoriteFacade.countGroupAssets(name))
                         .build())
                 .toList();
         return OptionsVO.Options.builder()
@@ -108,26 +108,12 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                                 username, BusinessTypeEnum.TAG_GROUP.name(),
                                 e.hashCode()
                         ))
+                        .size(userFavoriteFacade.countGroupAssets(e))
                         .build())
                 .toList();
         return OptionsVO.Options.builder()
                 .options(optionList)
                 .build();
-    }
-
-    @Override
-    public int countGroupAssets(String groupName) {
-        Tag tag = getGroupTag();
-        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
-                .tagId(tag.getId())
-                .tagValue(groupName)
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .build();
-        List<Integer> businessIds = businessTagService.queryBusinessIdByTag(queryByTag);
-        EdsInstanceParam.AssetPageQueryParam param = EdsInstanceParam.AssetPageQueryParam.builder()
-                .idList(businessIds)
-                .build();
-        return edsAssetService.countEdsInstanceAssets(param);
     }
 
     @Override

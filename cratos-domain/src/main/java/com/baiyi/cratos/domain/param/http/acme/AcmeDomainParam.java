@@ -63,6 +63,7 @@ public class AcmeDomainParam {
     @Schema
     public static class DomainPageQuery extends PageParam {
         private String queryName;
+        private String domain;
     }
 
 }

@@ -46,6 +46,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/com.aliyun/cs20151215 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>cs20151215</artifactId>
+            <version>6.7.0</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.aliyun/tea-openapi -->
         <dependency>
             <groupId>com.aliyun</groupId>

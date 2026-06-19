@@ -30,13 +30,13 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_US
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.LDAP, assetTypeOf = EdsAssetTypeEnum.LDAP_PERSON)
-public class LdapPersonProvider extends BaseEdsAssetProvider<EdsConfigs.Ldap, LdapPerson.Person> {
+public class EdsLdapPersonProvider extends BaseEdsAssetProvider<EdsConfigs.Ldap, LdapPerson.Person> {
 
     private final LdapPersonRepo ldapPersonRepo;
     private final LdapGroupRepo ldapGroupRepo;
 
-    public LdapPersonProvider(EdsAssetProviderContext context, LdapPersonRepo ldapPersonRepo,
-                              LdapGroupRepo ldapGroupRepo) {
+    public EdsLdapPersonProvider(EdsAssetProviderContext context, LdapPersonRepo ldapPersonRepo,
+                                 LdapGroupRepo ldapGroupRepo) {
         super(context);
         this.ldapPersonRepo = ldapPersonRepo;
         this.ldapGroupRepo = ldapGroupRepo;

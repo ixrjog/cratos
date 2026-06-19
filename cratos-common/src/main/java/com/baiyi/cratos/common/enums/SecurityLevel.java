@@ -9,6 +9,7 @@ public enum SecurityLevel {
 
     HIGH,
     MEDIUM,
-    LOW
+    LOW,
+    UNKNOWN;
 
 }

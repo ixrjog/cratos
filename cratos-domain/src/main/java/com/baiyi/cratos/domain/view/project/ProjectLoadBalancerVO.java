@@ -205,6 +205,8 @@ public class ProjectLoadBalancerVO {
         private String recodeType;
         private String value;
         private String cdn;
+        // 主机标头覆盖
+        private String hostHeaderOverride;
         private Integer listenerPort;
     }
 

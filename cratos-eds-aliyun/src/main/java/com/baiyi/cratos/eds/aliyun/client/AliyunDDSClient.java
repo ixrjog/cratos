@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class AliyunDdsClient {
+public class AliyunDDSClient {
 
     /**
      * 使用AK&SK初始化账号Client

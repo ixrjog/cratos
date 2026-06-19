@@ -26,11 +26,39 @@
             resultMap="BaseResultMap">
         select * from acme_domain
         <where>
+            <if test="domain != null and domain != ''">
+                and domain = #{domain}
+            </if>
             <if test="queryName != null and queryName != ''">
                 and ( domain like "%" #{queryName} "%" or name like "%" #{queryName} "%" )
-                order by replace(domain, #{queryName}, '')
             </if>
         </where>
+        <if test="queryName != null and queryName != ''">
+            order by replace(domain, #{queryName}, '')
+        </if>
+    </select>
+
+    <resultMap id="DomainGroupMap" type="com.baiyi.cratos.domain.view.acme.AcmeDomainVO$DomainGroup">
+        <result column="domain" jdbcType="VARCHAR" property="domain"/>
+        <result column="cnt" jdbcType="INTEGER" property="count"/>
+    </resultMap>
+
+    <select id="queryDistinctDomain" resultMap="DomainGroupMap">
+        select domain, count(*) as cnt
+        from acme_domain
+        group by domain
+        order by domain
+    </select>
+
+    <select id="queryDistinctDomains" resultType="java.lang.String">
+        select distinct domains from acme_domain
+        <where>
+            <if test="domain != null and domain != ''">
+                and domain = #{domain}
+            </if>
+            and domains is not null and domains != ''
+        </where>
+        order by domains
     </select>
 
 </mapper>
